@@ -8,6 +8,7 @@ book:
   chapters:
     - index.qmd
     - intro.qmd
+    - code_coverage.qmd
     - summary.qmd
     - references.qmd
 

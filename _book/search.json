@@ -2,9 +2,9 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "test book",
+    "title": "Pip Technical Guidelines",
     "section": "",
-    "text": "Preface\nThis is a Quarto book.\nTo learn more about Quarto books visit https://quarto.org/docs/books.\n\n1 + 1\n\n[1] 2",
+    "text": "Preface\nThis is a Quarto book. In this book we intend to write technical information about PIP projects.",
     "crumbs": [
       "Preface"
     ]
@@ -37,6 +37,16 @@
     "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
     "crumbs": [
       "References"
+    ]
+  },
+  {
+    "objectID": "code_coverage.html",
+    "href": "code_coverage.html",
+    "title": "2  Add code coverage badge to your GitHub Repository.",
+    "section": "",
+    "text": "In this article we will learn how to add code coverage badge to your GitHub repository.\n\n2.0.1 Codecov.io\n\nCreate an account at https://about.codecov.io/ , sign up with your GitHub account if you don’t have an account already. Codecov is a popular tool for measuring and visualizing code coverage in software projects. It integrates with GitHub, GitLab, Bitbucket, and other CI/CD systems to provide insights into how much of your code is tested by your test suite.\nYou can sync your private Github repositories on codecov platform to get started. If you want to add code coverage badge to a repository which is part of an organization (like PIP-Technical-Team, GPID-WB etc) then you need to be an admin of that organization. Admin role is needed because to sync the communication between Codecov.io with GitHub we need to generate a token which can only be done by admins.\n\n\n\n2.0.2 GitHub",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Add code coverage badge to your GitHub Repository.</span>"
     ]
   }
 ]
