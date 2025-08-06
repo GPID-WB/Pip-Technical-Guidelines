@@ -1,5 +1,8 @@
 project:
   type: book
+  
+execute:
+  freeze: auto
 
 book:
   title: "Pip Technical Guidelines"
@@ -23,5 +26,3 @@ format:
     documentclass: scrreprt
 
 editor: visual
-
-output-dir: docs
