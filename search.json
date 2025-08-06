@@ -10,6 +10,16 @@
     ]
   },
   {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "1  Introduction",
+    "section": "",
+    "text": "The purpose of this book is to gather all the technical knowledge specific to PIP in one place.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
     "objectID": "code_coverage.html",
     "href": "code_coverage.html",
     "title": "2  Add code coverage badge to your GitHub Repository.",
