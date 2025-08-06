@@ -24,3 +24,4 @@ format:
 
 editor: visual
 
+output-dir: docs
