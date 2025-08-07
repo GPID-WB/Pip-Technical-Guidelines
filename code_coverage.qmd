@@ -1,8 +1,8 @@
-# Add code coverage badge to your GitHub Repository. 
+# Add code coverage badge to your GitHub Repository.
 
 In this article we will learn how to add code coverage badge to your GitHub repository.
 
-### Codecov.io
+## Codecov.io
 
 -   Create an account at <https://about.codecov.io/> , sign up with your GitHub account if you don't have an account already. **Codecov** is a popular tool for measuring and visualizing **code coverage** in software projects. It integrates with GitHub, GitLab, Bitbucket, and other CI/CD systems to provide insights into how much of your code is tested by your test suite.
 
@@ -16,7 +16,7 @@ In this article we will learn how to add code coverage badge to your GitHub repo
 
 -   You can ignore rest of the steps mentioned on that page since those are very generic language agnostic steps and since we want to setup this for R packages, we have a better option which I will share below.
 
-### GitHub
+## GitHub
 
 -   Now, moving to GitHub go to your repository. Click on Settings -\> Secrets and Variables -\> Actions -\> Repository Secrets add the new token with name `CODECOV_TOKEN` and copy the token value which was generated in the previous step.
 
@@ -28,7 +28,7 @@ In this article we will learn how to add code coverage badge to your GitHub repo
 
 -   The new workflow file looks like below
 
-    ```         
+    ``` yaml
     name: R-CMD-check and Codecov
 
     on:
@@ -74,7 +74,7 @@ In this article we will learn how to add code coverage badge to your GitHub repo
 
 -   One tip that I can share is to check if this workflow file works on your local branch before running on `master` branch. To do that you should temporarily enable the workflow file to run on your local branch. This can be done as below -
 
-    ```         
+    ``` yaml
     on:
       push:
         branches: [master, your-branch]
