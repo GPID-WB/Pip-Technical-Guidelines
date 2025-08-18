@@ -48,5 +48,35 @@
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Add code coverage badge to your GitHub Repository.</span>"
     ]
+  },
+  {
+    "objectID": "github_actions.html",
+    "href": "github_actions.html",
+    "title": "3  Setting up Github Actions for Auto Deployment of Quarto book",
+    "section": "",
+    "text": "3.1 Introduction\nOne of the best parts of using Quarto for websites, blogs, or reports is how easily it integrates with GitHub Pages. With a simple GitHub Actions workflow, you can automatically render and publish your site every time you update your repository. In this post we are going to learn how we have enabled auto deployment for this quarto book.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Setting up Github Actions for Auto Deployment of Quarto book</span>"
+    ]
+  },
+  {
+    "objectID": "github_actions.html#workflow",
+    "href": "github_actions.html#workflow",
+    "title": "3  Setting up Github Actions for Auto Deployment of Quarto book",
+    "section": "3.2 Workflow",
+    "text": "3.2 Workflow\nThis is the workflow that we are using in Github Actions . Let’s look at it one by one.\non:\n  workflow_dispatch:\n  push:\n    branches: main\n\nname: Quarto Publish\n\njobs:\n  build-deploy:\n    runs-on: ubuntu-latest\n    permissions:\n      contents: write\n    steps:\n      - name: Check out repository\n        uses: actions/checkout@v4\n\n      - name: Set up Quarto\n        uses: quarto-dev/quarto-actions/setup@v2\n        env:\n          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n        with:\n          tinytex: true\n      - name: Render and Publish\n        uses: quarto-dev/quarto-actions/publish@v2\n        with:\n          target: gh-pages\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n\n3.2.1 Triggering the Workflow\non:\n  workflow_dispatch:\n  push:\n    branches: main\nThis tells GitHub Actions when to run the workflow. There are two triggers here:\n\npush to main – Any time you commit or merge changes into the main branch, the workflow runs\nworkflow_dispatch – Allows you to manually trigger the workflow from the GitHub Actions tab in your repository. This is useful when you want to force a rebuild and republish without committing new changes.\n\n\n\n3.2.2 Naming the workflow\nname: Quarto Publish\nThis gives the workflow a friendly name that will appear in the Actions tab.\n\n\n3.2.3 Defining the job\njobs:\n  build-deploy:\n    runs-on: ubuntu-latest\n    permissions:\n      contents: write\nHere we’re defining a single job called build-deploy.\n\nruns-on: ubuntu-latest – The job will run inside an Ubuntu-based virtual machine provided by GitHub.\npermissions: contents: write – The workflow needs permission to write to the repository (required for publishing to the gh-pages branch).\n\n\n\n3.2.4 The Steps\n\n3.2.4.1 1. Check out the repository\n- name: Check out repository\n  uses: actions/checkout@v4\nThis makes your repository’s files available in the workflow environment so Quarto can render your project.\n\n\n3.2.4.2 2. Set up Quarto\n- name: Set up Quarto\n  uses: quarto-dev/quarto-actions/setup@v2\n  env:\n    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n  with:\n    tinytex: true\nThis installs Quarto in the workflow environment. The tinytex: true option ensures LaTeX support is available for rendering PDFs. The GH_TOKEN is github token repository secret that is added in Repo settings -&gt; Secrets and Variables -&gt; Actions . It is used for authentication when publishing.\n\n\n3.2.4.3 3. Render and Publish\n- name: Render and Publish\n  uses: quarto-dev/quarto-actions/publish@v2\n  with:\n    target: gh-pages\n  env:\n    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\nThis step does two things:\n\nRenders your Quarto project (turns .qmd files into HTML, PDF, or other output formats).\nPublishes the output to the gh-pages branch, which GitHub Pages uses to serve your site. The target: gh-pages option ensures everything is pushed to the right branch.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Setting up Github Actions for Auto Deployment of Quarto book</span>"
+    ]
+  },
+  {
+    "objectID": "github_actions.html#conclusion",
+    "href": "github_actions.html#conclusion",
+    "title": "3  Setting up Github Actions for Auto Deployment of Quarto book",
+    "section": "3.3 Conclusion :",
+    "text": "3.3 Conclusion :\nWith this workflow in place, the Quarto book will automatically rebuild and deploy whenever a push is made to the main branch—or whenever we manually trigger the workflow. No more running commands locally or remembering to push generated files.\nThis is a clean, reproducible, and automated way to publish your Quarto projects using GitHub Pages.\nFor reference the Quarto book is published here.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Setting up Github Actions for Auto Deployment of Quarto book</span>"
+    ]
   }
 ]
