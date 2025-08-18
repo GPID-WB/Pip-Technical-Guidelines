@@ -1,0 +1,128 @@
+# Setting up Github Actions for Auto Deployment of Quarto book
+
+## Introduction
+
+One of the best parts of using Quarto for websites, blogs, or reports is how easily it integrates with GitHub Pages. With a simple GitHub Actions workflow, you can automatically render and publish your site every time you update your repository. In this post we are going to learn how we have enabled auto deployment for this quarto book.
+
+## Workflow
+
+This is the workflow that we are using in Github Actions . Let's look at it one by one.
+
+```yaml         
+on:
+  workflow_dispatch:
+  push:
+    branches: main
+
+name: Quarto Publish
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tinytex: true
+      - name: Render and Publish
+        uses: quarto-dev/quarto-actions/publish@v2
+        with:
+          target: gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+### Triggering the Workflow
+
+```yaml         
+on:
+  workflow_dispatch:
+  push:
+    branches: main
+```
+
+This tells GitHub Actions when to run the workflow. There are two triggers here:
+
+-   **`push` to `main`** – Any time you commit or merge changes into the `main` branch, the workflow runs
+
+-   **`workflow_dispatch`** – Allows you to manually trigger the workflow from the GitHub Actions tab in your repository. This is useful when you want to force a rebuild and republish without committing new changes.
+
+### Naming the workflow
+
+```yaml         
+name: Quarto Publish
+```
+
+This gives the workflow a friendly name that will appear in the Actions tab.
+
+### Defining the job
+
+```yaml         
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+```
+
+Here we’re defining a single job called `build-deploy`.
+
+-   **`runs-on: ubuntu-latest`** – The job will run inside an Ubuntu-based virtual machine provided by GitHub.
+
+-   **`permissions: contents: write`** – The workflow needs permission to write to the repository (required for publishing to the `gh-pages` branch).
+
+### The Steps
+
+#### 1. Check out the repository
+
+``` yaml
+- name: Check out repository
+  uses: actions/checkout@v4
+```
+
+This makes your repository’s files available in the workflow environment so Quarto can render your project.
+
+#### 2. Set up Quarto
+
+```yaml         
+- name: Set up Quarto
+  uses: quarto-dev/quarto-actions/setup@v2
+  env:
+    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  with:
+    tinytex: true
+```
+
+This installs Quarto in the workflow environment. The `tinytex: true` option ensures LaTeX support is available for rendering PDFs. The `GH_TOKEN` is github token repository secret that is added in Repo settings -\> Secrets and Variables -\> Actions . It is used for authentication when publishing.
+
+#### 3. Render and Publish
+
+```yaml         
+- name: Render and Publish
+  uses: quarto-dev/quarto-actions/publish@v2
+  with:
+    target: gh-pages
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+This step does two things:
+
+1.  **Renders** your Quarto project (turns `.qmd` files into HTML, PDF, or other output formats).
+
+2.  **Publishes** the output to the `gh-pages` branch, which GitHub Pages uses to serve your site. The `target: gh-pages` option ensures everything is pushed to the right branch.
+
+## Conclusion :
+
+With this workflow in place, the Quarto book will automatically rebuild and deploy whenever a push is made to the `main` branch—or whenever we manually trigger the workflow. No more running commands locally or remembering to push generated files.
+
+This is a clean, reproducible, and automated way to publish your Quarto projects using GitHub Pages.
+
+For reference the Quarto book is published [here](https://gpid-wb.github.io/Pip-Technical-Guidelines/ "PIP Technical Guideline").

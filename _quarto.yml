@@ -12,6 +12,7 @@ book:
     - index.qmd
     - intro.qmd
     - code_coverage.qmd
+    - github_actions.qmd
     - summary.qmd
     - references.qmd
 
