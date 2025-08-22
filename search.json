@@ -70,11 +70,21 @@
     ]
   },
   {
+    "objectID": "github_actions.html#dont-ignore-the-.gitignore-file",
+    "href": "github_actions.html#dont-ignore-the-.gitignore-file",
+    "title": "3  Setting up Github Actions for Auto Deployment of Quarto book",
+    "section": "3.3 Don’t ignore the .gitignore file",
+    "text": "3.3 Don’t ignore the .gitignore file\nMake sure that your .gitignore file excludes _book, _site folders. These are the folders where Quarto renders HTML/PDF files when testing them locally. These files should not be tracked since Github Actions will build them with our auto deployment process.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Setting up Github Actions for Auto Deployment of Quarto book</span>"
+    ]
+  },
+  {
     "objectID": "github_actions.html#conclusion",
     "href": "github_actions.html#conclusion",
     "title": "3  Setting up Github Actions for Auto Deployment of Quarto book",
-    "section": "3.3 Conclusion :",
-    "text": "3.3 Conclusion :\nWith this workflow in place, the Quarto book will automatically rebuild and deploy whenever a push is made to the main branch—or whenever we manually trigger the workflow. No more running commands locally or remembering to push generated files.\nThis is a clean, reproducible, and automated way to publish your Quarto projects using GitHub Pages.\nFor reference the Quarto book is published here.",
+    "section": "3.4 Conclusion :",
+    "text": "3.4 Conclusion :\nWith this workflow in place, the Quarto book will automatically rebuild and deploy whenever a push is made to the main branch or whenever we manually trigger the workflow. No more running commands locally or remembering to push generated files.\nThis is a clean, reproducible, and automated way to publish your Quarto projects using GitHub Pages. As a side not usethis package has a lot of good utility functions that helps you to set up similar workflow. You may explore using them. A good starting point is usethis::use_github_action(\"render-quarto\").\nFor reference the Quarto book is published here.",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Setting up Github Actions for Auto Deployment of Quarto book</span>"
     ]

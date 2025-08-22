@@ -196,7 +196,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#defining-the-job" id="toc-defining-the-job" class="nav-link" data-scroll-target="#defining-the-job"><span class="header-section-number">3.2.3</span> Defining the job</a></li>
   <li><a href="#the-steps" id="toc-the-steps" class="nav-link" data-scroll-target="#the-steps"><span class="header-section-number">3.2.4</span> The Steps</a></li>
   </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">3.3</span> Conclusion :</a></li>
+  <li><a href="#dont-ignore-the-.gitignore-file" id="toc-dont-ignore-the-.gitignore-file" class="nav-link" data-scroll-target="#dont-ignore-the-.gitignore-file"><span class="header-section-number">3.3</span> Don’t ignore the <code>.gitignore</code> file</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">3.4</span> Conclusion :</a></li>
   </ul>
 </nav>
     </div>
@@ -321,10 +322,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 </section>
 </section>
-<section id="conclusion" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">3.3</span> Conclusion :</h2>
-<p>With this workflow in place, the Quarto book will automatically rebuild and deploy whenever a push is made to the <code>main</code> branch—or whenever we manually trigger the workflow. No more running commands locally or remembering to push generated files.</p>
-<p>This is a clean, reproducible, and automated way to publish your Quarto projects using GitHub Pages.</p>
+<section id="dont-ignore-the-.gitignore-file" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="dont-ignore-the-.gitignore-file"><span class="header-section-number">3.3</span> Don’t ignore the <code>.gitignore</code> file</h2>
+<p>Make sure that your <code>.gitignore</code> file excludes <code>_book</code>, <code>_site</code> folders. These are the folders where Quarto renders HTML/PDF files when testing them locally. These files should not be tracked since Github Actions will build them with our auto deployment process.</p>
+</section>
+<section id="conclusion" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">3.4</span> Conclusion :</h2>
+<p>With this workflow in place, the Quarto book will automatically rebuild and deploy whenever a push is made to the <code>main</code> branch or whenever we manually trigger the workflow. No more running commands locally or remembering to push generated files.</p>
+<p>This is a clean, reproducible, and automated way to publish your Quarto projects using GitHub Pages. As a side not <code>usethis</code> package has a lot of good utility functions that helps you to set up similar workflow. You may explore using them. A good starting point is <code>usethis::use_github_action("render-quarto")</code>.</p>
 <p>For reference the Quarto book is published <a href="https://gpid-wb.github.io/Pip-Technical-Guidelines/" title="PIP Technical Guideline">here</a>.</p>
 
 
