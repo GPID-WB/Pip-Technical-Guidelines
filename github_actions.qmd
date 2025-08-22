@@ -119,10 +119,15 @@ This step does two things:
 
 2.  **Publishes** the output to the `gh-pages` branch, which GitHub Pages uses to serve your site. The `target: gh-pages` option ensures everything is pushed to the right branch.
 
+
+## Don't ignore the `.gitignore` file
+
+Make sure that your `.gitignore` file excludes `_book`, `_site` folders. These are the folders where Quarto renders HTML/PDF files when testing them locally. These files should not be tracked since Github Actions will build them with our auto deployment process. 
+
 ## Conclusion :
 
-With this workflow in place, the Quarto book will automatically rebuild and deploy whenever a push is made to the `main` branch—or whenever we manually trigger the workflow. No more running commands locally or remembering to push generated files.
+With this workflow in place, the Quarto book will automatically rebuild and deploy whenever a push is made to the `main` branch or whenever we manually trigger the workflow. No more running commands locally or remembering to push generated files.
 
-This is a clean, reproducible, and automated way to publish your Quarto projects using GitHub Pages.
+This is a clean, reproducible, and automated way to publish your Quarto projects using GitHub Pages. As a side not `usethis` package has a lot of good utility functions that helps you to set up similar workflow. You may explore using them. A good starting point is `usethis::use_github_action("render-quarto")`. 
 
 For reference the Quarto book is published [here](https://gpid-wb.github.io/Pip-Technical-Guidelines/ "PIP Technical Guideline").
