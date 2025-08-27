@@ -6,13 +6,16 @@ execute:
 
 book:
   title: "Pip Technical Guidelines"
-  author: "R. Andres Castenada and Ronak Shah"
+  author:
+    - R.Andres Castenada
+    - Ronak Shah
   date: "8/3/2025"
   chapters:
     - index.qmd
     - intro.qmd
     - code_coverage.qmd
     - github_actions.qmd
+    - Increase_performance_WB_laptop.qmd
     - summary.qmd
     - references.qmd
 
