@@ -1,0 +1,54 @@
+# Improve Efficiency of a WB Laptop
+
+There are a few things you can do to improve the efficiency of a WB laptop. These tips won’t make your laptop *fast*, but they will help optimize performance and make it feel more responsive.
+
+---
+
+## Modify System Properties for Performance
+
+1. Open the Windows menu, type **Run**, and click on the *Run* app.  
+   ![](images/Increase_performance_WB_laptop/run.png)
+
+2. In the Run app, type the following command and hit **Enter**:  
+
+```text
+   systempropertiesperformance.exe
+```
+
+![](images/Increase_performance_WB_laptop/run_box.png)
+
+3. In the *Performance Options* window, select the **Visual Effects** tab.
+
+   * Click on **Adjust for best performance**.
+   * Make sure all the checkboxes are unchecked.
+   * Click **Apply** and then **OK**.
+
+   ![](images/Increase_performance_WB_laptop/performance_options.png)
+
+::: {.callout-warning}
+**Note:** This may affect the appearance of your system, since many visual effects will be disabled.
+:::
+
+---
+
+## Battery Settings
+
+1. Open **Battery Settings**.
+   ![](images/Increase_performance_WB_laptop/battery_settings.png)
+
+2. Set the battery mode to **Best performance**.
+   ![](images/Increase_performance_WB_laptop/battery_best_performance.png)
+
+---
+
+## Google Chrome Settings
+
+1. In Google Chrome, type the following in the address bar:
+
+   ```text
+   chrome://settings/performance
+   ```
+
+2. Under the **Memory** section, select **Maximum**.
+   ![](images/Increase_performance_WB_laptop/google_max_performance.png)
+
