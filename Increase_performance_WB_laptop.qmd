@@ -1,0 +1,16 @@
+# Improve efficiency of WB laptop
+
+There are a few things that you can do to improve the efficiency of a WB laptop. These tips won't make your laptop fast, but at least they will help to optimize its performance and make it feel more responsive.
+
+
+
+type "run" in the windows search, click on it and execute the following conmand
+
+ 
+2. Go to battery settings and make sure it is set up to Best performance
+ 
+3. In google Chrome settings, make sure memory is set up to "Maximum"
+ 
+ 
+Those three things improved the performance of my computer dramatically. 
+ 
