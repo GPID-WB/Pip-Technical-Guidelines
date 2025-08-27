@@ -88,5 +88,45 @@
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Setting up Github Actions for Auto Deployment of Quarto book</span>"
     ]
+  },
+  {
+    "objectID": "Increase_performance_WB_laptop.html",
+    "href": "Increase_performance_WB_laptop.html",
+    "title": "4  Improve Efficiency of a WB Laptop",
+    "section": "",
+    "text": "4.1 Modify System Properties for Performance\nThere are a few things you can do to improve the efficiency of a WB laptop. These tips won’t make your laptop fast, but they will help optimize performance and make it feel more responsive.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Improve Efficiency of a WB Laptop</span>"
+    ]
+  },
+  {
+    "objectID": "Increase_performance_WB_laptop.html#modify-system-properties-for-performance",
+    "href": "Increase_performance_WB_laptop.html#modify-system-properties-for-performance",
+    "title": "4  Improve Efficiency of a WB Laptop",
+    "section": "",
+    "text": "Open the Windows menu, type Run, and click on the Run app.\n\nIn the Run app, type the following command and hit Enter:\n\n   systempropertiesperformance.exe\n\n\nIn the Performance Options window, select the Visual Effects tab.\n\nClick on Adjust for best performance.\nMake sure all the checkboxes are unchecked.\nClick Apply and then OK.\n\n\n\n\n\n\n\n\n\nWarning\n\n\n\nNote: This may affect the appearance of your system, since many visual effects will be disabled.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Improve Efficiency of a WB Laptop</span>"
+    ]
+  },
+  {
+    "objectID": "Increase_performance_WB_laptop.html#battery-settings",
+    "href": "Increase_performance_WB_laptop.html#battery-settings",
+    "title": "4  Improve Efficiency of a WB Laptop",
+    "section": "4.2 Battery Settings",
+    "text": "4.2 Battery Settings\n\nOpen Battery Settings. \nSet the battery mode to Best performance.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Improve Efficiency of a WB Laptop</span>"
+    ]
+  },
+  {
+    "objectID": "Increase_performance_WB_laptop.html#google-chrome-settings",
+    "href": "Increase_performance_WB_laptop.html#google-chrome-settings",
+    "title": "4  Improve Efficiency of a WB Laptop",
+    "section": "4.3 Google Chrome Settings",
+    "text": "4.3 Google Chrome Settings\n\nIn Google Chrome, type the following in the address bar:\nchrome://settings/performance\nUnder the Memory section, select Maximum.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Improve Efficiency of a WB Laptop</span>"
+    ]
   }
 ]
