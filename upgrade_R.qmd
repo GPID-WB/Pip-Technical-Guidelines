@@ -12,7 +12,7 @@ Before upgrading you should save the name of all the packages
 #| eval: false
 pdkgs_names <- installed.packages() |> 
     _[,1]
-save
+saveRDS(pdkgs_names, "C:/some/dir/R_pkgs.RDS")
 ```
 
 
@@ -29,4 +29,10 @@ Once you have restarted the R session and are working now in a vanilla session, 
 #| eval: false
 rm(.Last) 
 ```
+
+
+
+Make sure the directory fot he new version of R exists  in your folder. 
+`e:/PovcalNet/01.personal/wb384996/R/win-library/`
+
 
