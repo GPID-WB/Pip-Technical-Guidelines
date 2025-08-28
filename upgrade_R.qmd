@@ -1,0 +1,32 @@
+# How to upgrade R
+
+
+R saves packages from minor versions and above. 
+
+set the .Renviron to read from a defined folder
+
+Before upgrading you should save the name of all the packages 
+
+
+```{r}
+#| eval: false
+pdkgs_names <- installed.packages() |> 
+    _[,1]
+save
+```
+
+
+Ideally, once you have upgraded you should start a vanilla R sessions
+
+```{r}
+#| eval: false
+.Last <- function() system("R --vanilla")
+```
+
+Once you have restarted the R session and are working now in a vanilla session, you have to remove the `.Last()` function if you don't want to work on vanilla forever.
+
+```{r}
+#| eval: false
+rm(.Last) 
+```
+
