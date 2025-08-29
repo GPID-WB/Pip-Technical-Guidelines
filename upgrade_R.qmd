@@ -23,7 +23,7 @@ saveRDS(pdkgs_names, "C:/some/dir/R_pkgs.RDS")
 Ideally, once you have upgraded you should start a vanilla R session, which will ensure that the installation of packages does not conflict with each other. I recommend modifying your .Rprofile in the following way:
 
 ```{r}
-next_session <- \(mode = c("regular", "vanilla"),
+next_R_session <- \(mode = c("regular", "vanilla"),
                   toggle_file = "~/.Rsession_toggle") {
   mode <- match.arg(mode)
   writeLines(mode, toggle_file)
@@ -41,12 +41,50 @@ if (file.exists(toggle_file)) {
 }
 
 
-if (mode == "vanilla") {
-  message("Starting vanilla session...")
-  # do not load  usual .RData, .Rprofile, packages, etc.
-  # You can enforce by skipping initialization here.
-  writeLines("regular", toggle_file)  # next session will be regular
+if (identical(mode, "vanilla")) {
+  message("[startup] Vanilla-like session")
+
+  ## 1) Flip the flag for next session
+  writeLines("regular", toggle_file)
+
+  ## 2) Clear the global environment (in case .RData was auto-restored)
+  if (length(ls(envir = .GlobalEnv, all.names = TRUE))) {
+    rm(list = ls(envir = .GlobalEnv, all.names = TRUE), envir = .GlobalEnv)
+  }
+
+  ## 3) Detach non-default attached packages
+  keep_attached <- paste0("package:", c("stats","graphics","grDevices",
+                                        "utils","datasets","methods","base"))
+  for (att in setdiff(search(), keep_attached)) {
+    # detaching “tools:…” or “Autoloads” can error; ignore failures
+    try(detach(att, character.only = TRUE), silent = TRUE)
+  }
+
+  ## 4) Unload non-base namespaces
+  keep_ns <- c("base","stats","graphics","grDevices","utils","datasets","methods")
+  for (ns in setdiff(loadedNamespaces(), keep_ns)) {
+    # some namespaces refuse to unload; ignore failures
+    try(unloadNamespace(ns), silent = TRUE)
+  }
+
+  ## 5) Disable history writes this session
+  if (.Platform$OS.type == "windows") {
+    Sys.setenv(R_HISTFILE = "NUL")
+  } else {
+    Sys.setenv(R_HISTFILE = "/dev/null")
+  }
+
+  ## 6) Reduce noisy prompts/saves (approximate --no-save)
+  # You can wrap quit() yourself if you want to enforce no-save on exit:
+  # quit <- function(save = "no", ...) base::quit(save = save, ...)
+
+  ## 7) Prevent renv auto-activation in projects
+  Sys.setenv(RENV_CONFIG_AUTOLOADER_ENABLED = "FALSE")
+  options(renv.consent = FALSE)
+
   message("Next session will be 'regular'. use `next_session()` to init vanilla")
+  ## 8) IMPORTANT: DO NOT ADD anything else in this bracket
+  ## Put ALL normal startup (options, library(), etc.) inside the else{} below.
 } else {
   cli::cli_inform("Starting regular session...")
   
@@ -57,7 +95,7 @@ if (mode == "vanilla") {
 ```
 
 
-As you can see, the `next_session()` function allows to start a "sort of" vanilla session where you load nothing from the .Rprofile. 
+As you can see, the `next_R_session()` function allows to start a "sort of" vanilla session where you load nothing from the .Rprofile. 
 
 Once you have restarted the R session and are working now in a vanilla session, you have to remove the `.Last()` function if you don't want to work on vanilla forever.
 
