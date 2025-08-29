@@ -1,4 +1,9 @@
-# How to upgrade R
+---
+title: "How to upgrade R"
+execute:
+  eval: false
+---
+
 
 
 R saves packages from minor versions and above. 
@@ -9,24 +14,54 @@ Before upgrading you should save the name of all the packages
 
 
 ```{r}
-#| eval: false
 pdkgs_names <- installed.packages() |> 
     _[,1]
 saveRDS(pdkgs_names, "C:/some/dir/R_pkgs.RDS")
 ```
 
 
-Ideally, once you have upgraded you should start a vanilla R sessions
+Ideally, once you have upgraded you should start a vanilla R session, which will ensure that the installation of packages does not conflict with each other. I recommend modifying your .Rprofile in the following way:
 
 ```{r}
-#| eval: false
-.Last <- function() system("R --vanilla")
+next_session <- \(mode = c("regular", "vanilla"),
+                  toggle_file = "~/.Rsession_toggle") {
+  mode <- match.arg(mode)
+  writeLines(mode, toggle_file)
+  msg <- paste("Next session will be", mode)
+  message(msg)
+  invisible(msg)
+}
+
+toggle_file <- "~/.Rsession_toggle"
+
+if (file.exists(toggle_file)) {
+  mode <- readLines(toggle_file, warn = FALSE)
+} else {
+  mode <- "regular"
+}
+
+
+if (mode == "vanilla") {
+  message("Starting vanilla session...")
+  # do not load  usual .RData, .Rprofile, packages, etc.
+  # You can enforce by skipping initialization here.
+  writeLines("regular", toggle_file)  # next session will be regular
+  message("Next session will be 'regular'. use `next_session()` to init vanilla")
+} else {
+  cli::cli_inform("Starting regular session...")
+  
+  # Here you add your regular .Rprofile code.
+}
+
+
 ```
+
+
+As you can see, the `next_session()` function allows to start a "sort of" vanilla session where you load nothing from the .Rprofile. 
 
 Once you have restarted the R session and are working now in a vanilla session, you have to remove the `.Last()` function if you don't want to work on vanilla forever.
 
 ```{r}
-#| eval: false
 rm(.Last) 
 ```
 
@@ -34,5 +69,25 @@ rm(.Last)
 
 Make sure the directory fot he new version of R exists  in your folder. 
 `e:/PovcalNet/01.personal/wb384996/R/win-library/`
+
+
+Once you're in a new version of R, you need to make sure that the most important packages are already installed. This is what I do, 
+
+
+```{r}
+install.packages(c("devtools", "roxygen2", "cli", "fs", "pak", "qs", "fst"))
+
+```
+
+
+```{r}
+dir <- "P:/02.personal/wb384996/temporal/R/R_pkgs.RDS"
+to_pkgs <- readRDS(dir)
+in_pkgs <- installed.packages() |> 
+  _[,1]
+
+```
+
+
 
 
