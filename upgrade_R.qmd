@@ -4,21 +4,17 @@ execute:
   eval: false
 ---
 
-
-
-R saves packages from minor versions and above. 
+R saves packages from minor versions and above.
 
 set the .Renviron to read from a defined folder
 
-Before upgrading you should save the name of all the packages 
-
+Before upgrading you should save the name of all the packages
 
 ```{r}
 pdkgs_names <- installed.packages() |> 
     _[,1]
 saveRDS(pdkgs_names, "C:/some/dir/R_pkgs.RDS")
 ```
-
 
 Ideally, once you have upgraded you should start a vanilla R session, which will ensure that the installation of packages does not conflict with each other. I recommend modifying your .Rprofile in the following way:
 
@@ -94,8 +90,7 @@ if (identical(mode, "vanilla")) {
 
 ```
 
-
-As you can see, the `next_R_session()` function allows to start a "sort of" vanilla session where you load nothing from the .Rprofile. 
+As you can see, the `next_R_session()` function allows to start a "sort of" vanilla session where you load nothing from the .Rprofile.
 
 Once you have restarted the R session and are working now in a vanilla session, you have to remove the `.Last()` function if you don't want to work on vanilla forever.
 
@@ -103,20 +98,14 @@ Once you have restarted the R session and are working now in a vanilla session, 
 rm(.Last) 
 ```
 
+Make sure the directory fot he new version of R exists in your folder. `e:/PovcalNet/01.personal/wb384996/R/win-library/`
 
-
-Make sure the directory fot he new version of R exists  in your folder. 
-`e:/PovcalNet/01.personal/wb384996/R/win-library/`
-
-
-Once you're in a new version of R, you need to make sure that the most important packages are already installed. This is what I do, 
-
+Once you're in a new version of R, you need to make sure that the most important packages are already installed. This is what I do,
 
 ```{r}
 install.packages(c("devtools", "roxygen2", "cli", "fs", "pak", "qs", "fst"))
 
 ```
-
 
 ```{r}
 dir <- "P:/02.personal/wb384996/temporal/R/R_pkgs.RDS"
@@ -126,10 +115,7 @@ in_pkgs <- installed.packages() |>
 
 ```
 
-
-
-
-you can make use of your new library resambles the old one by folowing this 
+you can make use of your new library resambles the old one by folowing this
 
 ```{r}
 # ------------------ R 4.5 migration helper (Windows-friendly) ------------------
@@ -298,3 +284,95 @@ message("\nMigration attempt finished. New lib: ", new_lib)
 
 ```
 
+Improved version
+
+```{R}
+local({
+  r <- getOption("repos")
+  # r["CRAN"] <- "https://cran.microsoft.com"
+  r["CRAN"] = "https://cran.rstudio.com/"
+  options(repos = r)
+})
+
+
+
+# 1) Ensure prerequisite installers are present --------------------------------
+safe_install_cran <- function(pkgs, lib = new_lib) {
+  if (!length(pkgs)) return(invisible())
+
+  repos <- getOption("repos")
+  if (is.null(repos) || is.na(repos["CRAN"]) || repos["CRAN"] == "@CRAN@") {
+    options(repos = c(CRAN = "https://cloud.r-project.org"))
+  }
+  # Windows: prefer binaries
+  utils::install.packages(pkgs, lib = lib, type = "binary", dependencies = TRUE)
+  #.rs.restartR()
+}
+
+need <- \(pkg) {
+  !requireNamespace(pkg, quietly = TRUE)
+}
+
+
+# Check library path
+
+check_user_libs <- \() {
+  current_lib <- .libPaths()[1] |>
+    dirname()
+  user_lib <-  Sys.getenv("R_LIBS_USER") |>
+    dirname()
+
+  if (!identical(current_lib, user_lib))  {
+    stop("th edirectories of Sys.getenv('R_LIBS_USER') and .libPaths()[1] do not coincide.
+         you may encounter issues in your installation of packages")
+  }
+  .libPaths()[1]
+}
+# 2 Install basic packages.
+new_lib <- check_user_libs()
+
+if (need("fs"))         safe_install_cran("fs")
+if (need("fs"))         safe_install_cran("fs")
+if (need("pak"))        safe_install_cran("pak")
+if (need("remotes"))    safe_install_cran("remotes")
+
+
+
+# 3 Identify old librearies
+
+libdir  <- dirname(new_lib)
+ver     <- basename(new_lib)
+
+older_versions <- fs::dir_ls(libdir) |>
+  fs::path_file() |>
+  setdiff(ver)
+
+previous_version <-
+  older_versions[older_versions < ver] |>
+  max(0)
+
+if (previous_versions == 0) {
+  stop("Could not infer previous library path. Set `old_lib` manually, e.g.:
+       old_lib <- 'C:/Users/<you>/R/win-library/4.4'")
+}
+
+old_lib <- fs::path(libdir, previous_version)
+old_lib <- new_lib
+
+
+# 4) Discover packages in the old library
+ip_old <- installed.packages(lib.loc = old_lib) |>
+  as.data.frame(stringsAsFactors = FALSE) |>
+  # Exclude base/recommended
+  subset(is.na(Priority) | Priority == "")
+
+# Already installed in new_lib?
+ip_new <- rownames(installed.packages(lib.loc = new_lib))
+todo   <- setdiff(ip_old$Package, ip_new)
+
+if (length(todo) == 0) {
+  stop("Everything from the old library is already present in the new library.")
+}
+
+
+```
