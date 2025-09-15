@@ -376,3 +376,29 @@ if (length(todo) == 0) {
 
 
 ```
+
+
+## check folders
+```r
+# Print possible startup file locations
+cat("Site .Renviron:", file.path(R.home("etc"), "Renviron"), "\n")
+cat("User .Renviron:", path.expand("~/.Renviron"), "\n")
+cat("Project .Renviron:", file.path(getwd(), ".Renviron"), "\n")
+cat("Site .Rprofile:", file.path(R.home("etc"), "Rprofile"), "\n")
+cat("User .Rprofile:", path.expand("~/.Rprofile"), "\n")
+cat("Project .Rprofile:", file.path(getwd(), ".Rprofile"), "\n")
+
+# Check which files exist
+files <- c(
+  file.path(R.home("etc"), "Renviron"),
+  path.expand("~/.Renviron"),
+  file.path(getwd(), ".Renviron"),
+  file.path(R.home("etc"), "Rprofile"),
+  path.expand("~/.Rprofile"),
+  file.path(getwd(), ".Rprofile")
+)
+existing_files <- files[file.exists(files)]
+cat("Startup files found and sourced in this session:\n")
+print(existing_files)
+
+```
