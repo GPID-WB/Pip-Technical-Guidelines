@@ -1,0 +1,213 @@
+---
+title: "How to interact with the Virtual Machine (VM) that hosts PIP"
+execute:
+  eval: false
+---
+
+## login to the VM
+
+You need to log in to [PRIVX](https://privx.worldbank.org/) and make use of SSO login using the Authenticator app.
+
+Go to the tab **connections** and select the VM you want to connect to. They all have a name string `Linux-wzlxTpip01.worldbank.org` where T stantds for the environment (d=development, q=QA, p=Prod).
+
+You need to run the commands as `srvpip` user, so after logging in as your own user, you need to switch to `srvpip` user:
+
+```bash
+sudo su - srvpip
+```
+
+
+### copy and paste
+In linux terminal, you can copy text by selecting it with your mouse (it is automatically copied to clipboard). To paste, you need to use `Shift + Ctrl + V`. Alternatively, you can right click and select paste. Also, you can use `Shift + Insert` to paste.
+
+### Ctrl + C, Ctrl + V and Ctrl + D in Linux terminal
+* `Ctrl + C` stops the current command (if it is running)
+* `Ctrl + V` is used to insert special characters (e.g. `Ctrl + V` then `Tab` inserts a tab character)
+* `Ctrl + D` logs you out of the current terminal session (if you are at the command prompt). You need to login again as `srvpip` user.
+
+
+## Basics
+
+List containers (all, running or stopped):
+
+```bash
+sudo docker ps -a
+```
+
+Stream live logs from a container:
+
+```bash
+sudo docker logs -f CONTAINER_NAME_OR_ID
+```
+
+Show only the last N lines (e.g., 200):
+
+```bash
+sudo docker logs --tail 200 CONTAINER_NAME_OR_ID
+```
+
+## manage data 
+
+## 1. Data stored **outside** containers (on the VM filesystem)
+
+This is the “normal” Linux filesystem. Think `/home`, `/srv`, `/var`, etc.
+To explore:
+
+```bash
+# Where you are now
+pwd
+
+# Show files and directories (with sizes, human readable)
+ls -lh
+
+# Show all including hidden
+ls -lah
+
+# Check usage of current directory
+du -sh .
+
+# Check subdirectories sorted by size
+du -h --max-depth=1 | sort -h
+```
+
+Once you identify a directory/file you *really want to delete*:
+
+```bash
+sudo docker rm -rf /path/to/unwanted_directory
+sudo docker rm -f /path/to/unwanted_file
+```
+
+::: {.callout-warning}
+Be careful: `rm -rf` is irreversible. Always double-check the path.
+:::
+
+
+### 2. Data stored **inside containers**
+
+Docker containers are ephemeral: if you delete/recreate them, anything written *inside* the container filesystem is lost.
+But many apps mount **volumes** or **bind-mount directories** from the host to persist data.
+
+Check your containers:
+
+```bash
+# List all containers
+sudo docker ps -a
+
+# Inspect one container (replace NAME_OR_ID)
+sudo docker inspect NAME_OR_ID
+```
+
+#### Where is the data? Look at this section:
+
+```json
+"Mounts": [
+  {
+    "Type": "bind",
+    "Source": "/Data/pip/files/data",
+    "Destination": "/Data",
+    "RW": true
+  }
+]
+```
+
+That means:
+
+* **Inside the container**  R code sees `/Data`.
+* But that directory is actually a **bind-mount** from the host VM:
+
+```
+/Data/pip/files/data
+```
+* So the *real data* is stored **outside the container**, on the VM’s filesystem.
+  Containers are just using it.
+
+#### How to inspect what’s in there
+
+On the VM, just browse that host path:
+
+```bash
+ls -lh /Data/pip/files/data
+du -sh /Data/pip/files/data/*
+```
+
+That will show you files, sizes, and subdirectories.
+
+If the code above gives you trouble because it request pasword, you can  look inside from the container’s perspective:
+
+```bash
+sudo docker exec -it povertyscoreapi ls -lh /Data
+sudo docker exec -it povertyscoreapi du -sh /Data
+```
+
+…but since `/Data` is a mount, both commands show the **same files**.
+
+
+#### How to delete specific files/directories
+
+From the **VM host**:
+
+```bash
+rm -f /Data/pip/files/data/unwanted_file.qs
+rm -rf /Data/pip/files/data/old_directory
+```
+
+From **inside the container**:
+
+```bash
+sudo docker exec -it povertyscoreapi rm -rf /Data/unwanted_folder
+sudo docker exec -it povertyscoreapi rm -f /Data/unwanted_file.qs
+```
+
+Both do the same thing, because `/Data` inside the container is `/Data/pip/files/data` on the host.
+
+### Delete multiple folders
+
+**Delete two specific directories:**
+
+```bash
+rm -rf /Data/pip/files/data/folder1 /Data/pip/files/data/folder2
+```
+
+**Delete a list of folders with a common prefix:**
+
+```bash
+rm -rf /Data/pip/files/data/project_*
+```
+
+(This removes all directories/files that start with `project_`.)
+
+**Delete everything inside `/Data/pip/files/data` but keep the parent folder:**
+
+```bash
+rm -rf /Data/pip/files/data/*
+```
+
+### ⚠️ Safety tips
+
+* Always **double-check** with `ls` first:
+
+```bash
+ls -d /Data/pip/files/data/folder1 /Data/pip/files/data/folder2
+```
+* Or preview a pattern (NOTICE the `-d` flag):
+
+```bash
+ls -d /Data/pip/files/data/project_*
+```
+* If you’re not 100% sure, move to a trash folder instead of deleting:
+
+```bash
+mkdir -p /Data/pip/files/trash
+mv /Data/pip/files/data/folder1 /Data/pip/files/data/folder2 /Data/pip/files/trash/
+```
+
+
+#### Safety tips before deleting
+
+* Always run `ls` and `du` first to confirm what’s there.
+* If you’re not 100% sure, move files into a temporary folder instead of deleting:
+
+```bash
+mkdir -p /Data/pip/files/trash
+mv /Data/pip/files/data/old_dataset.qs /Data/pip/files/trash/
+```
