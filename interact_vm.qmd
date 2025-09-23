@@ -48,7 +48,7 @@ sudo docker logs --tail 200 CONTAINER_NAME_OR_ID
 
 ## manage data 
 
-## 1. Data stored **outside** containers (on the VM filesystem)
+### 1. Data stored **outside** containers (on the VM filesystem)
 
 This is the “normal” Linux filesystem. Think `/home`, `/srv`, `/var`, etc.
 To explore:
@@ -202,7 +202,7 @@ mv /Data/pip/files/data/folder1 /Data/pip/files/data/folder2 /Data/pip/files/tra
 ```
 
 
-#### Safety tips before deleting
+### Safety tips before deleting
 
 * Always run `ls` and `du` first to confirm what’s there.
 * If you’re not 100% sure, move files into a temporary folder instead of deleting:
@@ -211,3 +211,67 @@ mv /Data/pip/files/data/folder1 /Data/pip/files/data/folder2 /Data/pip/files/tra
 mkdir -p /Data/pip/files/trash
 mv /Data/pip/files/data/old_dataset.qs /Data/pip/files/trash/
 ```
+
+## Deployment OK, BUT API is not working
+
+### See the exact error (no filesystem poking)
+
+```bash
+# 1) What happened last time?
+sudo docker logs --tail 200 povertyscoreapi
+```
+```bash
+# 2) What happened when launched
+sudo docker logs povertyscoreapi | head -n 100
+```
+
+### Reproduce interactively to watch the error live
+
+To run R code on the VM, start a new container interactively with `/bin/bash` as the entrypoint.  
+This gives you a shell prompt **inside** the container, where you can execute commands directly.
+
+```bash
+sudo docker run --rm -it \
+  --name povertyscoreapi-debug \
+  -p 8080 \
+  -v /Data/pip/files/data:/Data \
+  itsesippscoreregistrydev.azurecr.io/povertyscoreapi:latest \
+  /bin/bash
+
+```
+
+You can run things like:
+```bash
+Rscript -e "1+1"
+Rscript -e "print(getRversion())"
+```
+When you’re done, type exit (or hit Ctrl+D) → that container stops and is removed (because of --rm).
+
+
+```bash
+# Inside the container:
+which Rscript
+ls -l /app/main.R /Data
+Rscript /app/main.R   # <-- watch the stack trace
+```
+That launches the API in the foreground, attached to your terminal. When you hit Ctrl+C or close the shell, the process (and API) dies.
+
+## Execute API endpoints from inside the container
+
+You need to execute `curl`
+```bach
+curl http://localhost:80/api/v1/health-check
+```
+
+
+But you can  loop through multiple endpoints and hit them one after another with curl. 
+
+```bash
+for ep in health-check pkgs-version data-signature gh-hash; do
+  echo "---- Testing $ep ----"
+  curl -s http://localhost:80/api/v1/$ep
+  echo
+done
+
+```
+
