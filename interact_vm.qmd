@@ -56,19 +56,46 @@ To explore:
 ```bash
 # Where you are now
 pwd
+```
+Make sure you’re in the right place. For example, `/Data/pip/files/data` is where PIP data is stored.
+If you're not then, then type
 
+```bash
+cd /Data/pip/files/data
+```
+
+To the disk usage type this.
+```bash
+df -h | grep Data 
+```
+
+`df -h` lists all mounted filesystems and their disk usage in a human-readable format (e.g., GB, MB).
+The output is piped (`|`) to `grep Data`, which filters and shows only the lines that contain the word "Data".
+
+```bash
 # Show files and directories (with sizes, human readable)
 ls -lh
 
 # Show all including hidden
 ls -lah
+```
 
+To see the total size of each folder (directory), use:
+```bash
 # Check usage of current directory
 du -sh .
+
+# Check usage of current directory
+du -sh *
 
 # Check subdirectories sorted by size
 du -h --max-depth=1 | sort -h
 ```
+-`du` = disk usage
+-`s` = summarize (show only the total for each argument)
+-`h` = human-readable (KB, MB, GB)
+-`*` = all files and folders in the current directory
+
 
 Once you identify a directory/file you *really want to delete*:
 
@@ -182,7 +209,7 @@ rm -rf /Data/pip/files/data/project_*
 rm -rf /Data/pip/files/data/*
 ```
 
-### ⚠️ Safety tips
+### Safety tips
 
 * Always **double-check** with `ls` first:
 
@@ -256,15 +283,29 @@ Rscript /app/main.R   # <-- watch the stack trace
 ```
 That launches the API in the foreground, attached to your terminal. When you hit Ctrl+C or close the shell, the process (and API) dies.
 
+### Delete old images
+You should always have only ONE image running in the VM. If you have multiple images, you should delete the old ones.
+
+check how many images you have on the VM with 
+```bash
+sudo docker images
+```
+
+Delete the old ones with
+```bash
+sudo docker image prune -a
+```
+
+
 ## Execute API endpoints from inside the container
 
 You need to execute `curl`
-```bach
+```bash
 curl http://localhost:80/api/v1/health-check
 ```
 
 
-But you can  loop through multiple endpoints and hit them one after another with curl. 
+But you can loop through multiple endpoints and hit them one after another with curl.
 
 ```bash
 for ep in health-check pkgs-version data-signature gh-hash; do
