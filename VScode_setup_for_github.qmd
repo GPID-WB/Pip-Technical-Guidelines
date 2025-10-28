@@ -5,20 +5,6 @@ execute:
   eval: false
 ---
 
-# Overview
-
-This guide walks you from zero to a smooth Git/GitHub workflow inside VS Code:
-
-* Install & verify Git
-* Configure identity and line endings
-* Authenticate to GitHub (HTTPS + Credential Manager or SSH)
-* Clone or publish repos from VS Code
-* Daily workflow (branch → commit → push → PR → review → merge)
-* Power-ups with **GitLens**, **Git Graph**, **GitHub Pull Requests & Issues**, **Copilot** and **Copilot Chat**
-* Useful `.gitignore` / `.gitattributes` and optional Git LFS
-* Common troubleshooting
-
----
 
 ## Prerequisites
 
@@ -128,7 +114,7 @@ Also, make sure you understand and follow the instructions in the General [Githu
   * “Generate a `.gitignore` for Stata + VS Code”
   * “Draft a release note from merged PRs since vX.Y”
 
----
+
 ## Team conventions (recommended)
 
 * **Branching**: feature branches from `main`; short, descriptive names.
@@ -137,7 +123,6 @@ Also, make sure you understand and follow the instructions in the General [Githu
 * **Merging**: prefer **squash** to keep history clean (unless you need merge commits).
 * **CI**: make PR green before merge; don’t push directly to `main`.
 
----
 
 ## Quick reference (commands)
 
@@ -163,9 +148,7 @@ git checkout main
 git pull --ff-only
 ```
 
----
-
-### Appendix: Suggested VS Code settings (optional)
+## Suggested VS Code settings (optional)
 
 Create `.vscode/settings.json` in your repo to nudge consistent behavior:
 
