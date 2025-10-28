@@ -128,5 +128,115 @@
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Improve Efficiency of a WB Laptop</span>"
     ]
+  },
+  {
+    "objectID": "interact_vm.html",
+    "href": "interact_vm.html",
+    "title": "5  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "",
+    "text": "5.1 Access and Session Management",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html#access-and-session-management",
+    "href": "interact_vm.html#access-and-session-management",
+    "title": "5  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "",
+    "text": "5.1.1 Login to the VM\n\nGo to PrivX.\nUse SSO login (World Bank Authenticator App).\nIn the Connections tab, select the VM you want:\n\nDevelopment: Linux-wzlxdpip01.worldbank.org\nQA: Linux-wzlxqpip01.worldbank.org\nProduction: Linux-wzlxppip01.worldbank.org\n\nOnce connected, switch to the srvpip user:\nsudo su - srvpip\n\n\n\n5.1.2 Copy, Paste, and Keyboard Shortcuts\n\n\n\n\n\n\n\n\nShortcut\nAction\nNotes\n\n\n\n\nCtrl + C\nStop the current running process\ne.g. stop an infinite loop or hanging R process\n\n\nCtrl + D\nLog out of the current shell\nEnds your session as srvpip\n\n\nShift + Ctrl + V\nPaste from clipboard\nWorks in most PrivX terminals\n\n\nShift + Insert\nPaste (alternative)\nOften easier in remote shells\n\n\n\nNotice that Ctrl + C does not copy text in terminal. You only need to highlight with your mouse the section you want to copy. Once you stopped highlighting, the text is copied to your clipboard automatically.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html#understanding-the-environment",
+    "href": "interact_vm.html#understanding-the-environment",
+    "title": "5  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "5.2 Understanding the Environment",
+    "text": "5.2 Understanding the Environment\n\n5.2.1 Users and Permissions\n\nYour account: initial login via PrivX (not root)\nsrvpip user: used to manage Docker containers\nroot user: required for system-level commands; use only with sudo\n\nCommon prefixes:\n\ndocker → run Docker as normal user (often fails without permissions)\nsudo docker → correct way when managing containers\nsudo su - srvpip → switch to service account context\n\n\n\n5.2.2 Architecture Overview\n+-------------------------------------------------------------+\n|                      Linux VM (Host)                        |\n|                                                             |\n|  Persistent Data:                                           |\n|    /Data/pip/files/data   &lt;---+                             |\n|                               | (bind mount)                |\n|                               v                             |\n|  ---------------------------------------------------------  |\n|  |               Docker Container: povertyscoreapi       |  |\n|  |                                                     |  |\n|  |   - Mounts /Data/pip/files/data → /Data             |  |\n|  |   - Runs: Rscript /app/main.R                       |  |\n|  |   - Listens on port 8080 (internal)                 |  |\n|  ---------------------------------------------------------  |\n|                               ^                             |\n|                               |                             |\n|  Host Port 80  &lt;--------------+  (mapped to container 8080) |\n+-------------------------------------------------------------+\n\nLegend: - Data written to /Data inside the container is actually stored on the host at /Data/pip/files/data. - The API runs inside the container on port 8080, but is accessible from outside the VM on port 80.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html#essential-docker-commands-cheat-sheet",
+    "href": "interact_vm.html#essential-docker-commands-cheat-sheet",
+    "title": "5  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "5.3 Essential Docker Commands (Cheat Sheet)",
+    "text": "5.3 Essential Docker Commands (Cheat Sheet)\n\n\n\n\n\n\n\n\n\nTask\nCommand\nNotes\n\n\n\n\n\nList all containers\nsudo docker ps -a\nShows running & stopped\n\n\n\nView logs\nsudo docker logs -f povertyscoreapi\nAdd --tail 200 to see last lines\n\n\n\nEnter container shell\nsudo docker exec -it povertyscoreapi /bin/bash\nFor interactive debugging\n\n\n\nCheck mounted volumes\nsudo docker inspect povertyscoreapi             | grep Mounts -A 5\nSee /Data source\n\n\n\nDelete stopped containers\nsudo docker container prune\nCleans unused ones\n\n\n\nDelete old images\nsudo docker image prune -a\nBe cautious — removes all unused\n\n\n\nCheck Docker service status\nsudo systemctl status docker\nConfirms Docker is active",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html#managing-data",
+    "href": "interact_vm.html#managing-data",
+    "title": "5  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "5.4 Managing Data",
+    "text": "5.4 Managing Data\n\n5.4.1 Data on the VM (Persistent)\n\nMain data location:\ncd /Data/pip/files/data\nInspect space usage:\ndf -h | grep Data\ndu -h --max-depth=1 | sort -h\nPreview files safely:\nls -lah\nView folder sizes:\ndu -sh *\n\n\n5.4.1.1 🔍 Find large or old files\nfind /Data/pip/files/data -type f -mtime +365 | head -n 20\n\n\n\n\n5.4.2 Data Inside Containers (Ephemeral)\nCheck where containers mount volumes:\nsudo docker inspect povertyscoreapi | grep Mounts -A 5\nYou’ll see:\n\"Mounts\": [\n  {\n    \"Type\": \"bind\",\n    \"Source\": \"/Data/pip/files/data\",\n    \"Destination\": \"/Data\"\n  }\n]\nThat means:\n\nInside container → /Data\nOn host → /Data/pip/files/data\n\n\n5.4.2.1 Access via container shell:\nsudo docker exec -it povertyscoreapi ls -lh /Data\n\n\n\n\n5.4.3 Safe Deletion and Cleanup\nPreview first:\nls -d /Data/pip/files/data/project_*\nDelete specific folders:\nrm -rf /Data/pip/files/data/folder1 /Data/pip/files/data/folder2\nDelete all contents but keep parent folder:\nrm -rf /Data/pip/files/data/*\nMove to trash instead of deleting:\nmkdir -p /Data/pip/files/trash\nmv /Data/pip/files/data/folder1 /Data/pip/files/trash/\n⚠️ Caution: rm -rf is irreversible — always check with ls first.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html#diagnosing-api-or-container-issues",
+    "href": "interact_vm.html#diagnosing-api-or-container-issues",
+    "title": "5  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "5.5 Diagnosing API or Container Issues",
+    "text": "5.5 Diagnosing API or Container Issues\n\n5.5.1 Check Container State\nsudo docker ps -a\nGet detailed exit info:\nsudo docker inspect povertyscoreapi --format='ExitCode={{.State.ExitCode}} OOMKilled={{.State.OOMKilled}}'\n\nExitCode=0 → normal exit\nExitCode=137 → killed (likely out of memory)\n\n\n\n\n5.5.2 View Logs\nsudo docker logs povertyscoreapi | head -n 20   # startup logs\nsudo docker logs --tail 200 povertyscoreapi     # recent logs\n\n\n\n5.5.3 Reproduce Interactively\nStart an interactive debug session:\nsudo docker run --rm -it \\\n  --name povertyscoreapi-debug \\\n  -p 8080 \\\n  -v /Data/pip/files/data:/Data \\\n  itsesippscoreregistryprod.azurecr.io/povertyscoreapi:latest \\\n  /bin/bash\nInside:\nRscript /app/main.R\nPress Ctrl + C to stop and exit to leave.\n\n\n\n5.5.4 Restart or Rebuild Containers\nsudo docker restart povertyscoreapi\nOr rebuild completely:\nsudo docker stop povertyscoreapi\nsudo docker rm povertyscoreapi\nsudo docker pull itsesippscoreregistryprod.azurecr.io/povertyscoreapi:latest\nsudo docker run -d --name povertyscoreapi \\\n  -p 80:8080 \\\n  -v /Data/pip/files/data:/Data \\\n  itsesippscoreregistryprod.azurecr.io/povertyscoreapi:latest",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html#testing-api-endpoints",
+    "href": "interact_vm.html#testing-api-endpoints",
+    "title": "5  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "5.6 Testing API Endpoints",
+    "text": "5.6 Testing API Endpoints\n\n5.6.1 From Inside the Container\ncurl http://localhost:80/api/v1/health-check\n\n\n5.6.2 Loop through common endpoints\nfor ep in health-check pkgs-version data-signature gh-hash; do\n  echo \"---- Testing $ep ----\"\n  curl -s http://localhost:80/api/v1/$ep\n  echo\ndone\n\n\n5.6.3 From Outside (VM host or browser)\ncurl http://wzlxdpip01.worldbank.org/api/v1/health-check",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html#troubleshooting-common-errors",
+    "href": "interact_vm.html#troubleshooting-common-errors",
+    "title": "5  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "5.7 Troubleshooting Common Errors",
+    "text": "5.7 Troubleshooting Common Errors\n\n\n\n\n\n\n\n\nSymptom\nLikely Cause\nFix\n\n\n\n\ncurl: (7) Failed connect\nContainer not running or wrong port\nsudo docker ps -a\n\n\nExited (137)\nOut of memory (OOMKilled)\nIncrease VM memory or limit API load\n\n\nauthentication required\nNot logged in to Azure Container Registry\nsudo az acr login --name itsesippscoreregistryprod\n\n\npermission denied on /Data\nWrong user ownership\nsudo chown -R srvpip /Data\n\n\nNo logs shown\nContainer failed before startup\nRun sudo docker inspect povertyscoreapi\n\n\nPort 8080 works but 80 doesn’t\nPort not mapped\nRun container with -p 80:8080",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html#understanding-ports-80-vs-8080",
+    "href": "interact_vm.html#understanding-ports-80-vs-8080",
+    "title": "5  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "5.8 Understanding Ports (80 vs 8080)",
+    "text": "5.8 Understanding Ports (80 vs 8080)\n\nInside Docker, the API runs on 8080:\npipapi::start_api(port = 8080, host = \"0.0.0.0\")\nOutside Docker (host or browser), you can map any port using:\n-p 80:8080\nThis means:\nhost_port:container_port\nSo users access:\nhttp://wzlxdpip01.worldbank.org/api/v1/...\neven though internally it listens on 8080.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html#monitoring-resource-usage",
+    "href": "interact_vm.html#monitoring-resource-usage",
+    "title": "5  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "5.9 Monitoring Resource Usage",
+    "text": "5.9 Monitoring Resource Usage\nWatch real-time CPU and memory:\nsudo docker stats povertyscoreapi\nOr globally:\ntop -u srvpip",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html#appendix",
+    "href": "interact_vm.html#appendix",
+    "title": "5  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "5.10 Appendix",
+    "text": "5.10 Appendix\n\n5.10.1 Check Disk Usage Quickly\ndf -h | grep Data\n\n\n5.10.2 Check Docker Service Logs\nsudo journalctl -u docker --since \"2025-09-23 17:00\"\n\n\n5.10.3 Check R version inside container\nsudo docker exec -it povertyscoreapi Rscript -e \"R.version.string\"",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
   }
 ]
