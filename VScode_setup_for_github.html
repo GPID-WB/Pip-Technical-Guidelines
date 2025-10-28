@@ -6,11 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="R.Andres Castenada">
-<meta name="author" content="Ronak Shah">
-<meta name="dcterms.date" content="2025-08-03">
 
-<title>Pip Technical Guidelines</title>
+<title>7&nbsp; SetUp Git &amp; GitHub in VS Code – Pip Technical Guidelines</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -33,7 +65,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./intro.html" rel="next">
+<link href="./summary.html" rel="next">
+<link href="./VScode_Setup_for_stata.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -85,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Preface</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./VScode_setup_for_github.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -114,7 +147,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
@@ -156,7 +189,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./VScode_setup_for_github.html" class="sidebar-item-text sidebar-link">
+  <a href="./VScode_setup_for_github.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></span></a>
   </div>
 </li>
@@ -182,7 +215,24 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link active" data-scroll-target="#prerequisites"><span class="header-section-number">7.1</span> Prerequisites</a></li>
+  <li><a href="#install-vscode-and-stata-extensions" id="toc-install-vscode-and-stata-extensions" class="nav-link" data-scroll-target="#install-vscode-and-stata-extensions"><span class="header-section-number">7.2</span> Install VScode and Stata Extensions</a></li>
+  <li><a href="#first-time-git-configuration-one-time" id="toc-first-time-git-configuration-one-time" class="nav-link" data-scroll-target="#first-time-git-configuration-one-time"><span class="header-section-number">7.3</span> First-time Git configuration (one-time)</a></li>
+  <li><a href="#authenticate-to-github" id="toc-authenticate-to-github" class="nav-link" data-scroll-target="#authenticate-to-github"><span class="header-section-number">7.4</span> Authenticate to GitHub</a></li>
+  <li><a href="#clone-or-publish-a-repository-in-vs-code" id="toc-clone-or-publish-a-repository-in-vs-code" class="nav-link" data-scroll-target="#clone-or-publish-a-repository-in-vs-code"><span class="header-section-number">7.5</span> Clone or publish a repository in VS Code</a>
+  <ul class="collapse">
+  <li><a href="#clone-an-existing-repository" id="toc-clone-an-existing-repository" class="nav-link" data-scroll-target="#clone-an-existing-repository"><span class="header-section-number">7.5.1</span> Clone an existing repository</a></li>
+  <li><a href="#publish-create-a-new-github-repo-from-a-local-folder" id="toc-publish-create-a-new-github-repo-from-a-local-folder" class="nav-link" data-scroll-target="#publish-create-a-new-github-repo-from-a-local-folder"><span class="header-section-number">7.5.2</span> Publish (create a new GitHub repo from a local folder)</a></li>
+  </ul></li>
+  <li><a href="#power-ups" id="toc-power-ups" class="nav-link" data-scroll-target="#power-ups"><span class="header-section-number">7.6</span> Power-ups</a>
+  <ul class="collapse">
+  <li><a href="#gitlens-highlights" id="toc-gitlens-highlights" class="nav-link" data-scroll-target="#gitlens-highlights"><span class="header-section-number">7.6.1</span> GitLens highlights</a></li>
+  <li><a href="#git-graph-highlights" id="toc-git-graph-highlights" class="nav-link" data-scroll-target="#git-graph-highlights"><span class="header-section-number">7.6.2</span> Git Graph highlights</a></li>
+  <li><a href="#copilot-copilot-chat" id="toc-copilot-copilot-chat" class="nav-link" data-scroll-target="#copilot-copilot-chat"><span class="header-section-number">7.6.3</span> Copilot &amp; Copilot Chat</a></li>
+  </ul></li>
+  <li><a href="#team-conventions-recommended" id="toc-team-conventions-recommended" class="nav-link" data-scroll-target="#team-conventions-recommended"><span class="header-section-number">7.7</span> Team conventions (recommended)</a></li>
+  <li><a href="#quick-reference-commands" id="toc-quick-reference-commands" class="nav-link" data-scroll-target="#quick-reference-commands"><span class="header-section-number">7.8</span> Quick reference (commands)</a></li>
+  <li><a href="#suggested-vs-code-settings-optional" id="toc-suggested-vs-code-settings-optional" class="nav-link" data-scroll-target="#suggested-vs-code-settings-optional"><span class="header-section-number">7.9</span> Suggested VS Code settings (optional)</a></li>
   </ul>
 </nav>
     </div>
@@ -191,39 +241,186 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Pip Technical Guidelines</h1>
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Authors</div>
-    <div class="quarto-title-meta-contents">
-             <p>R.Andres Castenada </p>
-             <p>Ronak Shah </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">August 3, 2025</p>
-    </div>
-  </div>
   
     
   </div>
   
+<div>
+  <div class="abstract">
+    <div class="block-title">Abstract</div>
+    Practical steps to integrate Git and GitHub in VS Code using first-party and helper extensions.
+  </div>
+</div>
 
 
 </header>
 
 
-<section id="preface" class="level1 unnumbered">
-<h1 class="unnumbered">Preface</h1>
-<p>This is a Quarto book. In this book we intend to write technical information about PIP projects.</p>
+<section id="prerequisites" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="prerequisites"><span class="header-section-number">7.1</span> Prerequisites</h2>
+<ul>
+<li><strong>Git for Windows</strong> installed (includes Git Credential Manager).</li>
+<li><strong>VS Code</strong> installed.</li>
+<li>Make sure you’re added to the <a href="https://worldbankgroup.service-now.com/wbg?id=wbg_sc_catalog&amp;sys_id=910e1739db1a54903c5960ab13961912">World Bank GitHub organization</a> using eservices/ request.</li>
+</ul>
+<hr>
+</section>
+<section id="install-vscode-and-stata-extensions" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="install-vscode-and-stata-extensions"><span class="header-section-number">7.2</span> Install VScode and Stata Extensions</h2>
+<ol type="1">
+<li><p>Open “Company Portal” app on your computer.</p></li>
+<li><p>Search for <a href="companyportal:ApplicationId=d5aba730-00d4-4a78-a224-7b8170ac0eb0">VS Code</a> and install it.</p></li>
+<li><p>Search for <a href="companyportal:ApplicationId=b9da6be7-f510-438d-9fd0-b1df8213b3c6">GitForWindows</a> and install it. (Make sure Git Credential Manager is selected)</p></li>
+<li><p>Open VS Code → Extensions (left sidebar), and install:</p>
+<ul>
+<li><strong>Stata Enhanced</strong> (syntax highlighting).</li>
+<li><strong>Git Graph</strong> (visualize branches).</li>
+<li><strong>GitLens</strong> (blame/insight).</li>
+<li><strong>GitHub Pull Requests and Issues</strong>.</li>
+<li><strong>GitHub Copilot</strong> (optional).</li>
+<li><strong>GitHub Copilot Chat</strong> (optional).</li>
+</ul></li>
+</ol>
+<hr>
+</section>
+<section id="first-time-git-configuration-one-time" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="first-time-git-configuration-one-time"><span class="header-section-number">7.3</span> First-time Git configuration (one-time)</h2>
+<p>Open <strong>Terminal</strong> in VS Code (Ctrl+`) and run:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify yourself in commits</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.name  <span class="st">"Your Name"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.email <span class="st">"your_email@domain.com"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Use main as default branch for new repos</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> init.defaultBranch main</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Line endings: recommended on Windows</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> core.autocrlf true  <span class="co"># checkout CRLF, commit LF</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Improve diffs for common texty files</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> diff.renameLimit 99999</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> fetch.prune true</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+<section id="authenticate-to-github" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="authenticate-to-github"><span class="header-section-number">7.4</span> Authenticate to GitHub</h2>
+<p>Go to your profile on VScode and login to GitHub.</p>
+<p>Trying to <strong>clone/push</strong> over HTTPS will trigger a secure web flow:</p>
+<ol type="1">
+<li>Use a GitHub <strong>personal access token (PAT)</strong> or organization SSO as prompted.</li>
+<li>Git Credential Manager securely stores/refreshes credentials.</li>
+</ol>
+</section>
+<section id="clone-or-publish-a-repository-in-vs-code" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="clone-or-publish-a-repository-in-vs-code"><span class="header-section-number">7.5</span> Clone or publish a repository in VS Code</h2>
+<section id="clone-an-existing-repository" class="level3" data-number="7.5.1">
+<h3 data-number="7.5.1" class="anchored" data-anchor-id="clone-an-existing-repository"><span class="header-section-number">7.5.1</span> Clone an existing repository</h3>
+<ul>
+<li>Command Palette → <strong>Git: Clone</strong> → paste repo URL (HTTPS or SSH).</li>
+<li>Choose a local folder → VS Code offers to open the folder.</li>
+</ul>
+</section>
+<section id="publish-create-a-new-github-repo-from-a-local-folder" class="level3" data-number="7.5.2">
+<h3 data-number="7.5.2" class="anchored" data-anchor-id="publish-create-a-new-github-repo-from-a-local-folder"><span class="header-section-number">7.5.2</span> Publish (create a new GitHub repo from a local folder)</h3>
+<ol type="1">
+<li><p>Open your project folder in VS Code.</p></li>
+<li><p>Source Control view → <strong>Initialize Repository</strong>.</p></li>
+<li><p>Commit initial files.</p></li>
+<li><p>Click <strong>Publish to GitHub</strong> (or run Command Palette → <strong>Publish to GitHub</strong>).</p>
+<ul>
+<li>Choose a name, visibility (private/public), and org/user.</li>
+</ul></li>
+</ol>
+</section>
+</section>
+<section id="power-ups" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="power-ups"><span class="header-section-number">7.6</span> Power-ups</h2>
+<section id="gitlens-highlights" class="level3" data-number="7.6.1">
+<h3 data-number="7.6.1" class="anchored" data-anchor-id="gitlens-highlights"><span class="header-section-number">7.6.1</span> GitLens highlights</h3>
+<ul>
+<li><strong>Inline blame</strong> (who/when changed this line)</li>
+<li><strong>File &amp; line history</strong> with rich diffs</li>
+<li><strong>Visualize &amp; compare branches</strong>; open <strong>Repositories</strong> view</li>
+<li><strong>Open PR associated with a line/commit</strong></li>
+<li><strong>Code authorship heatmaps</strong> and <strong>commit search</strong> by message, author, time</li>
+</ul>
+</section>
+<section id="git-graph-highlights" class="level3" data-number="7.6.2">
+<h3 data-number="7.6.2" class="anchored" data-anchor-id="git-graph-highlights"><span class="header-section-number">7.6.2</span> Git Graph highlights</h3>
+<ul>
+<li><strong>Graph view</strong> of all branches/tags</li>
+<li><strong>Drag &amp; drop merges/rebases</strong> (careful: follow team policy)</li>
+<li>Quick <strong>reset</strong>, <strong>cherry-pick</strong>, <strong>revert</strong> from context menu</li>
+</ul>
+</section>
+<section id="copilot-copilot-chat" class="level3" data-number="7.6.3">
+<h3 data-number="7.6.3" class="anchored" data-anchor-id="copilot-copilot-chat"><span class="header-section-number">7.6.3</span> Copilot &amp; Copilot Chat</h3>
+<p>In order to access Copilot and Copilot Chat, You need to be added to the <a href="https://worldbankgroup.service-now.com/wbg?id=wbg_sc_catalog&amp;sys_id=910e1739db1a54903c5960ab13961912">World Bank GitHub organization</a> using eservices/ request.</p>
+<p>Make sure you read the <a href="https://github.com/worldbank/ospo/blob/main/guidelines/Copilot%20Getting%20started.md">Getting Started Guide</a> with GIthub Copilot.</p>
+<p>Also, make sure you understand and follow the instructions in the General <a href="https://github.com/worldbank/ospo/blob/main/guidelines/copilot.md">Github Copilot Usage Policy and guide</a>.</p>
+<ul>
+<li><p>Copilot inline suggestions: code, tests, small refactors</p></li>
+<li><p>Copilot Chat for:</p>
+<ul>
+<li>“Explain this diff” / “Write a PR description”</li>
+<li>“Generate a <code>.gitignore</code> for Stata + VS Code”</li>
+<li>“Draft a release note from merged PRs since vX.Y”</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="team-conventions-recommended" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="team-conventions-recommended"><span class="header-section-number">7.7</span> Team conventions (recommended)</h2>
+<ul>
+<li><strong>Branching</strong>: feature branches from <code>main</code>; short, descriptive names.</li>
+<li><strong>Commits</strong>: small, frequent, imperative subject line; reference issues (<code>#123</code>).</li>
+<li><strong>PRs</strong>: clear description (what/why), checklist, reviewers; keep PRs small.</li>
+<li><strong>Merging</strong>: prefer <strong>squash</strong> to keep history clean (unless you need merge commits).</li>
+<li><strong>CI</strong>: make PR green before merge; don’t push directly to <code>main</code>.</li>
+</ul>
+</section>
+<section id="quick-reference-commands" class="level2" data-number="7.8">
+<h2 data-number="7.8" class="anchored" data-anchor-id="quick-reference-commands"><span class="header-section-number">7.8</span> Quick reference (commands)</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start a repo</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> init</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Initial commit"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch <span class="at">-M</span> main</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> remote add origin <span class="op">&lt;</span>ssh-or-https-url<span class="op">&gt;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin main</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Typical feature flow</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> feature/my-change</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># ...edit...</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add <span class="at">-A</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Implement my change"</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin feature/my-change</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># open PR in VS Code (GitHub PRs extension)</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Sync main</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout main</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull <span class="at">--ff-only</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="suggested-vs-code-settings-optional" class="level2" data-number="7.9">
+<h2 data-number="7.9" class="anchored" data-anchor-id="suggested-vs-code-settings-optional"><span class="header-section-number">7.9</span> Suggested VS Code settings (optional)</h2>
+<p>Create <code>.vscode/settings.json</code> in your repo to nudge consistent behavior:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"git.enableSmartCommit"</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"git.confirmSync"</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"git.autofetch"</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"git.openRepositoryInParentFolders"</span><span class="fu">:</span> <span class="st">"always"</span><span class="fu">,</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"files.eol"</span><span class="fu">:</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span><span class="fu">,</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"editor.renderWhitespace"</span><span class="fu">:</span> <span class="st">"boundary"</span><span class="fu">,</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"editor.rulers"</span><span class="fu">:</span> <span class="ot">[</span><span class="dv">100</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"diffEditor.ignoreTrimWhitespace"</span><span class="fu">:</span> <span class="kw">false</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 </section>
@@ -631,10 +828,13 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./VScode_Setup_for_stata.html" class="pagination-link" aria-label="SetUp Vscode to work with Stata">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">SetUp Vscode to work with Stata</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./intro.html" class="pagination-link" aria-label="Introduction">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./summary.html" class="pagination-link" aria-label="Summary">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -318,5 +318,105 @@
     "crumbs": [
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>SetUp Vscode to work with Stata</span>"
     ]
+  },
+  {
+    "objectID": "VScode_setup_for_github.html",
+    "href": "VScode_setup_for_github.html",
+    "title": "7  SetUp Git & GitHub in VS Code",
+    "section": "",
+    "text": "7.1 Prerequisites",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+    ]
+  },
+  {
+    "objectID": "VScode_setup_for_github.html#prerequisites",
+    "href": "VScode_setup_for_github.html#prerequisites",
+    "title": "7  SetUp Git & GitHub in VS Code",
+    "section": "",
+    "text": "Git for Windows installed (includes Git Credential Manager).\nVS Code installed.\nMake sure you’re added to the World Bank GitHub organization using eservices/ request.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+    ]
+  },
+  {
+    "objectID": "VScode_setup_for_github.html#install-vscode-and-stata-extensions",
+    "href": "VScode_setup_for_github.html#install-vscode-and-stata-extensions",
+    "title": "7  SetUp Git & GitHub in VS Code",
+    "section": "7.2 Install VScode and Stata Extensions",
+    "text": "7.2 Install VScode and Stata Extensions\n\nOpen “Company Portal” app on your computer.\nSearch for VS Code and install it.\nSearch for GitForWindows and install it. (Make sure Git Credential Manager is selected)\nOpen VS Code → Extensions (left sidebar), and install:\n\nStata Enhanced (syntax highlighting).\nGit Graph (visualize branches).\nGitLens (blame/insight).\nGitHub Pull Requests and Issues.\nGitHub Copilot (optional).\nGitHub Copilot Chat (optional).",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+    ]
+  },
+  {
+    "objectID": "VScode_setup_for_github.html#first-time-git-configuration-one-time",
+    "href": "VScode_setup_for_github.html#first-time-git-configuration-one-time",
+    "title": "7  SetUp Git & GitHub in VS Code",
+    "section": "7.3 First-time Git configuration (one-time)",
+    "text": "7.3 First-time Git configuration (one-time)\nOpen Terminal in VS Code (Ctrl+`) and run:\n# Identify yourself in commits\ngit config --global user.name  \"Your Name\"\ngit config --global user.email \"your_email@domain.com\"\n\n# Use main as default branch for new repos\ngit config --global init.defaultBranch main\n\n# Line endings: recommended on Windows\ngit config --global core.autocrlf true  # checkout CRLF, commit LF\n\n# Improve diffs for common texty files\ngit config --global diff.renameLimit 99999\ngit config --global fetch.prune true",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+    ]
+  },
+  {
+    "objectID": "VScode_setup_for_github.html#authenticate-to-github",
+    "href": "VScode_setup_for_github.html#authenticate-to-github",
+    "title": "7  SetUp Git & GitHub in VS Code",
+    "section": "7.4 Authenticate to GitHub",
+    "text": "7.4 Authenticate to GitHub\nGo to your profile on VScode and login to GitHub.\nTrying to clone/push over HTTPS will trigger a secure web flow:\n\nUse a GitHub personal access token (PAT) or organization SSO as prompted.\nGit Credential Manager securely stores/refreshes credentials.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+    ]
+  },
+  {
+    "objectID": "VScode_setup_for_github.html#clone-or-publish-a-repository-in-vs-code",
+    "href": "VScode_setup_for_github.html#clone-or-publish-a-repository-in-vs-code",
+    "title": "7  SetUp Git & GitHub in VS Code",
+    "section": "7.5 Clone or publish a repository in VS Code",
+    "text": "7.5 Clone or publish a repository in VS Code\n\n7.5.1 Clone an existing repository\n\nCommand Palette → Git: Clone → paste repo URL (HTTPS or SSH).\nChoose a local folder → VS Code offers to open the folder.\n\n\n\n7.5.2 Publish (create a new GitHub repo from a local folder)\n\nOpen your project folder in VS Code.\nSource Control view → Initialize Repository.\nCommit initial files.\nClick Publish to GitHub (or run Command Palette → Publish to GitHub).\n\nChoose a name, visibility (private/public), and org/user.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+    ]
+  },
+  {
+    "objectID": "VScode_setup_for_github.html#power-ups",
+    "href": "VScode_setup_for_github.html#power-ups",
+    "title": "7  SetUp Git & GitHub in VS Code",
+    "section": "7.6 Power-ups",
+    "text": "7.6 Power-ups\n\n7.6.1 GitLens highlights\n\nInline blame (who/when changed this line)\nFile & line history with rich diffs\nVisualize & compare branches; open Repositories view\nOpen PR associated with a line/commit\nCode authorship heatmaps and commit search by message, author, time\n\n\n\n7.6.2 Git Graph highlights\n\nGraph view of all branches/tags\nDrag & drop merges/rebases (careful: follow team policy)\nQuick reset, cherry-pick, revert from context menu\n\n\n\n7.6.3 Copilot & Copilot Chat\nIn order to access Copilot and Copilot Chat, You need to be added to the World Bank GitHub organization using eservices/ request.\nMake sure you read the Getting Started Guide with GIthub Copilot.\nAlso, make sure you understand and follow the instructions in the General Github Copilot Usage Policy and guide.\n\nCopilot inline suggestions: code, tests, small refactors\nCopilot Chat for:\n\n“Explain this diff” / “Write a PR description”\n“Generate a .gitignore for Stata + VS Code”\n“Draft a release note from merged PRs since vX.Y”",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+    ]
+  },
+  {
+    "objectID": "VScode_setup_for_github.html#team-conventions-recommended",
+    "href": "VScode_setup_for_github.html#team-conventions-recommended",
+    "title": "7  SetUp Git & GitHub in VS Code",
+    "section": "7.7 Team conventions (recommended)",
+    "text": "7.7 Team conventions (recommended)\n\nBranching: feature branches from main; short, descriptive names.\nCommits: small, frequent, imperative subject line; reference issues (#123).\nPRs: clear description (what/why), checklist, reviewers; keep PRs small.\nMerging: prefer squash to keep history clean (unless you need merge commits).\nCI: make PR green before merge; don’t push directly to main.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+    ]
+  },
+  {
+    "objectID": "VScode_setup_for_github.html#quick-reference-commands",
+    "href": "VScode_setup_for_github.html#quick-reference-commands",
+    "title": "7  SetUp Git & GitHub in VS Code",
+    "section": "7.8 Quick reference (commands)",
+    "text": "7.8 Quick reference (commands)\n# Start a repo\ngit init\ngit add .\ngit commit -m \"Initial commit\"\ngit branch -M main\ngit remote add origin &lt;ssh-or-https-url&gt;\ngit push -u origin main\n\n# Typical feature flow\ngit checkout -b feature/my-change\n# ...edit...\ngit add -A\ngit commit -m \"Implement my change\"\ngit push -u origin feature/my-change\n# open PR in VS Code (GitHub PRs extension)\n\n# Sync main\ngit checkout main\ngit pull --ff-only",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+    ]
+  },
+  {
+    "objectID": "VScode_setup_for_github.html#suggested-vs-code-settings-optional",
+    "href": "VScode_setup_for_github.html#suggested-vs-code-settings-optional",
+    "title": "7  SetUp Git & GitHub in VS Code",
+    "section": "7.9 Suggested VS Code settings (optional)",
+    "text": "7.9 Suggested VS Code settings (optional)\nCreate .vscode/settings.json in your repo to nudge consistent behavior:\n{\n  \"git.enableSmartCommit\": true,\n  \"git.confirmSync\": false,\n  \"git.autofetch\": true,\n  \"git.openRepositoryInParentFolders\": \"always\",\n  \"files.eol\": \"\\n\",\n  \"editor.renderWhitespace\": \"boundary\",\n  \"editor.rulers\": [100],\n  \"diffEditor.ignoreTrimWhitespace\": false\n}",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+    ]
   }
 ]
