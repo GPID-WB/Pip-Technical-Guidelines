@@ -1,44 +1,199 @@
 ---
-title: "SetUp Vscode to work with Stata and Github"
-abstract: Steps to configure VScode for Stata development with GitHub integration.
+title: "SetUp Vscode to work with Stata"
+abstract: Steps to configure VScode for Stata development.
 execute:
   eval: false
 ---
 
 
 ## Install VScode and Stata Extensions
+
 1. Open "Company Portal" app on your computer.
+
 2. Search for [VS Code](companyportal:ApplicationId=d5aba730-00d4-4a78-a224-7b8170ac0eb0) and install it.
+
 3. Search for [GitForWindows](companyportal:ApplicationId=b9da6be7-f510-438d-9fd0-b1df8213b3c6) and install it.
 
-4. Open VScode, go to Extensions (left sidebar), and install:
-   - "Stata Enhanced" by Adam Mezzetti
-   - "Code Runner" by Jun Han
-   - "Git Graph" by mhutchie
-   - "GitLens" by Eric Amodio
-   - "GitHub Pull Requests and Issues" by GitHub
-   - "Github Copilot" by GitHub
-   - "Github Copilot Chat" by GitHub
+4. Open VS Code → Extensions (left sidebar), and install:
 
+   * **Stata Enhanced** (syntax highlighting).
+   * **Git Graph** (visualize branches).
+   * **GitLens** (blame/insight).
+   * **GitHub Pull Requests and Issues**.
+   * **GitHub Copilot** (optional).
+   * **GitHub Copilot Chat** (optional).
 
-## Configure `Rundo` and `Rundoline` files
-All the information of this section is taken from Friedrich Hueble's [blog post](https://huebler.blogspot.com/2008/04/stata.html). So if you need more details, please refer to it.
-1. Although these files are available at Hueble's website above, we also make them available for convenience [here](https://github.com/GPID-WB/Pip-Technical-Guidelines/raw/refs/heads/main/_data/rundofiles.zip)
-2. Extract the contents of the zip file in `C:\ado\personal`. The zip file contains six files, you will modify ONLY two of them:
-   - `Rundo.ini`
-   - `Rundoline.ini`
-3. Open the `Rundo.ini` file in Notepad or VScode (or any text editor) and make the following changes:
-   - Change the `stata_path` to the path of your Stata installation (e.g., `c:\Program Files\StataNow19\StataMP-64.exe`).
-   - Modify the `statawin` to the exact title of your Stata installation. In my case, it is "StataNow/MP 19.5". The window title is shown in the center or left corner of the title bar of the main Stata program window.
-   ![](images/StataName.png).
-   - You can leave the other settings as they are. But if you want to customize further, refer to the blog post linked above.
-4. Open the `Rundoline.ini` and copy ALL the contents of the `Rundo.ini` file into the `Rundoline.ini` file. Basically, both files are identical except for the name. 
+---
 
+## Configure `rundo` and `rundolines`
 
-## Configure Stata Enhanced Extension
-1. Open VScode settings (File > Preferences > Settings) or type `Ctrl + ,`.
-2. Search for "Run Code configuration" and click on it in the left panel. Or type "@ext:formulahendry.code-runner" so you get directly. Now configure the following settings:
-   - **Stata Path:** Set the path to your Stata executable (e.g., `C:\Program Files\Stata17\StataSE.exe`).
-   - **Stata Arguments:** Add any command-line arguments you want to use (e.g., `-b` for batch mode).
+All the information in this section is based on Friedrich Huebler’s [article](https://huebler.blogspot.com/2008/04/stata.html). If you need more detail, see his blog.
 
+1. For convenience, we also mirror the files here: [https://github.com/GPID-WB/Pip-Technical-Guidelines/raw/refs/heads/main/_data/rundofiles.zip](https://github.com/GPID-WB/Pip-Technical-Guidelines/raw/refs/heads/main/_data/rundofiles.zip)
+2. Extract the ZIP into `C:\ado\personal`. You’ll see six files; you only need to modify two of them:
+   - `rundo.ini`
+   - `rundolines.ini`
+3. Open **`rundo.ini`** and **`rundolines.ini`** and set:
 
+   * `statapath` → full path to your Stata EXE, e.g.:
+     `statapath = "C:\Program Files\Stata19\StataMP-64.exe"`
+   * `statawin` → **exact** Stata window title, e.g.:
+     `statawin  = "Stata/MP 19.5"`
+     ![](images/StataName.png)
+   * `statacmd` → shortcut that focuses Stata’s **Command** window (default is `^1` = Ctrl+1).
+4. The two INIs should be **identical** except for the filename. Keep both updated.
+
+### Recommended `.ini` tuning (for snappier runs)
+
+These delays are safe and faster than the defaults:
+
+```ini
+[Delays]
+clippause = 60   ; ms after copying selection to clipboard (40–80 is a good range)
+winpause  = 120  ; ms between window ops (80–140 is a good range)
+keypause  = 0    ; ms between keystrokes to Stata
+```
+
+If you ever get a “nothing happened” run, bump **winpause** up by ~20–40 ms.
+
+**Checklist**
+
+* Make sure the **window title** matches exactly (minor version changes matter).
+* Keep **Stata open** before your first send (cold attaches are slower).
+
+---
+
+## Set up **User Tasks** (global, once) to call `rundolines` / `rundo`
+
+> We use **User Tasks** so you don’t have to repeat this per workspace.
+
+1. Open **Command Palette** (`Ctrl+Shift+P`) → type: **Tasks: Open User Tasks**.
+2. Paste this JSON (adjust paths to match your machine). NOTE:
+  - Use double backslashes `\\` in paths.
+  - If `"tasks"` already exists, just add the two task objects inside the array.
+
+```json
+{
+"version": "2.0.0",
+  "tasks": [
+      {
+        "label": "Stata: Run selection/line (rundolines)",
+        "type": "shell",
+        "command": "\"C:\\ado\\personal\\rundolines.exe\""
+    },
+    {
+        "label": "Stata: Do current file (rundo)",
+        "type": "shell",
+        "command": "\"C:\\ado\\personal\\rundo.exe\"",
+        "args": ["\"${file}\""]
+    }
+  ]
+}
+```
+
+* **rundolines** sends the current **selection** (or current line if nothing is selected).
+* **rundo** runs the **entire file** (saves first).
+
+---
+
+## Bind your **keyboard shortcuts** (global, once)
+
+1. Open **Command Palette** (`Ctrl+Shift+P`) → type: **Keyboard Shortcuts** → select: **Open Keyboard Shortcuts (JSON)**.
+2. Add (or adapt keys if you already use F9/F10 or if you don't want to use F9/F10):
+3. Houbler suggests not use any shortcut with the key `Ctrl` as it may get "stuck".
+
+```json
+[
+  {
+    "key": "f9",
+    "command": "workbench.action.tasks.runTask",
+    "args": "Stata: Run selection/line (rundolines)",
+    "when": "editorTextFocus && (resourceExtname =~ /\\.(do|ado|mata)$/)"
+  },
+  {
+    "key": "f10",
+    "command": "workbench.action.tasks.runTask",
+    "args": "Stata: Do current file (rundo)",
+    "when": "editorTextFocus && (resourceExtname =~ /\\.(do|ado)$/)"
+  }
+]
+```
+
+* The **when** clauses limit these keys to Stata files.
+* If you already mapped F9/F10 to something else, either change those or pick different keys (e.g., `f8` / `f9`).
+
+> **Tip:** If you still have Code Runner installed, remove any bindings that clash (search “Run Code” in Keyboard Shortcuts and delete its keybindings). You can also disable/uninstall Code Runner entirely—you don’t need it.
+
+---
+
+## (Optional) Running **Mata** files directly
+
+Two clean options; pick one.
+
+### A) Wrapper `.do` (recommended for standalone `.mata` files)
+
+Create `.vscode/_run_mata.do` in your repo (or anywhere stable):
+
+```stata
+// _run_mata.do
+args mfile
+mata:
+mata clear
+mata do "`mfile'"
+end
+```
+
+Add a **User Task** to invoke it with the current file:
+
+```json
+{
+  "label": "Stata: Mata do current file",
+  "type": "shell",
+  "command": "\"C:\\Program Files\\Stata19\\StataMP-64.exe\"",
+  "args": ["/e", "do", "\"${workspaceFolder}\\.vscode\\_run_mata.do\"", "\"${file}\""]
+}
+```
+
+And a keybinding for `.mata` files:
+
+```json
+{
+  "key": "f8",
+  "command": "workbench.action.tasks.runTask",
+  "args": "Stata: Mata do current file",
+  "when": "editorTextFocus && (resourceExtname =~ /\\.(mata)$/)"
+}
+```
+
+### B) Mata blocks inside a `.do`
+
+Place your Mata code inside a `mata: … end` block in a `.do`, then use **F9** (selection) or **F10** (whole file).
+
+---
+
+## Quick sanity test (30 seconds)
+
+1. Open a `.do`. Type and **select**:
+
+   ```stata
+   display "hello from VS Code"
+   ```
+2. Press **F9** → Stata should execute the selection.
+3. Press **F10** → Stata should run the entire file.
+
+If nothing happens, check:
+
+* **Tasks names** match your keybinding `args` exactly.
+* You edited **User Tasks** (not workspace `.vscode/tasks.json`).
+* No conflicting keybinding is intercepting F9/F10.
+
+---
+
+## Troubleshooting & Performance
+
+* **First run is slower** (1–3 s) due to task runner warm-up and first attach. Subsequent runs are often **sub-second** with tuned INIs.
+* If sends are flaky, raise `winpause` slightly (e.g., from 120 → 140 ms).
+* Verify `statawin` matches the **exact** window title (minor versions matter).
+* Keep Stata open; cold-launches add seconds.
+* Avoid network paths for ado/working dirs when possible.
+* Consider AV exclusions for the Stata EXE, `rundolines.exe`, `rundo.exe`, and your ado/workspace.

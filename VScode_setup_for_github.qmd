@@ -1,0 +1,23 @@
+---
+title: "SetUp Vscode to work with Stata"
+abstract: Steps to configure VScode for Stata development.
+execute:
+  eval: false
+---
+
+## Install VScode and Stata Extensions
+
+1.  Open "Company Portal" app on your computer.
+
+2.  Search for [VS Code](companyportal:ApplicationId=d5aba730-00d4-4a78-a224-7b8170ac0eb0) and install it.
+
+3.  Search for [GitForWindows](companyportal:ApplicationId=b9da6be7-f510-438d-9fd0-b1df8213b3c6) and install it.
+
+4.  Open VS Code → Extensions (left sidebar), and install:
+
+    -   **Stata Enhanced** (syntax highlighting).
+    -   **Git Graph** (visualize branches).
+    -   **GitLens** (blame/insight).
+    -   **GitHub Pull Requests and Issues**.
+    -   **GitHub Copilot** (optional).
+    -   **GitHub Copilot Chat** (optional).
