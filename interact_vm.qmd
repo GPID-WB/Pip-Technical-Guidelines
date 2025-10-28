@@ -119,10 +119,20 @@ Check your containers:
 ```bash
 # List all containers
 sudo docker ps -a
+```
+If the container is not running, inspect what is going on
+```bash
+sudo docker logs povertyscoreapi
+```
 
-# Inspect one container (replace NAME_OR_ID)
+
+If it is running, you can inspect one container (replace NAME_OR_ID)
+```bash
 sudo docker inspect NAME_OR_ID
 ```
+
+
+
 
 #### Where is the data? Look at this section:
 
@@ -249,7 +259,7 @@ sudo docker logs --tail 200 povertyscoreapi
 ```
 ```bash
 # 2) What happened when launched
-sudo docker logs povertyscoreapi | head -n 100
+sudo docker logs povertyscoreapi | head -n 20
 ```
 
 ### Reproduce interactively to watch the error live
