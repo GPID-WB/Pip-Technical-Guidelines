@@ -1,0 +1,34 @@
+---
+title: "SetUp Vscode to work with Stata and Github"
+abstract: Steps to configure VScode for Stata development with GitHub integration.
+execute:
+  eval: false
+---
+
+
+## Install VScode and Stata Extensions
+1. Open "Company Portal" app on your computer.
+2. Search for [VS Code](companyportal:ApplicationId=d5aba730-00d4-4a78-a224-7b8170ac0eb0) and install it.
+3. Search for [GitForWindows](companyportal:ApplicationId=b9da6be7-f510-438d-9fd0-b1df8213b3c6) and install it.
+
+4. Open VScode, go to Extensions (left sidebar), and install:
+   - "Stata Enhanced" by Adam Mezzetti
+   - "Code Runner" by Jun Han
+   - "Git Graph" by mhutchie
+   - "GitLens" by Eric Amodio
+   - "GitHub Pull Requests and Issues" by GitHub
+   - "Github Copilot" by GitHub
+   - "Github Copilot Chat" by GitHub
+
+
+## Configure `Rundo` and `Rundoline` files
+1. 
+
+
+## Configure Stata Enhanced Extension
+1. Open VScode settings (File > Preferences > Settings) or type `Ctrl + ,`.
+2. Search for "Run Code configuration" and click on it in the left panel. Or type "@ext:formulahendry.code-runner" so you get directly. Now configure the following settings:
+   - **Stata Path:** Set the path to your Stata executable (e.g., `C:\Program Files\Stata17\StataSE.exe`).
+   - **Stata Arguments:** Add any command-line arguments you want to use (e.g., `-b` for batch mode).
+
+

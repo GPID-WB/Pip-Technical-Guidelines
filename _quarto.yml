@@ -17,6 +17,7 @@ book:
     - github_actions.qmd
     - Increase_performance_WB_laptop.qmd
     - interact_vm.qmd
+    - VScode_Setup_for_stata.qmd
     - summary.qmd
     - references.qmd
 
