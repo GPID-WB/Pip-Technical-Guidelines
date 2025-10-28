@@ -1,0 +1,166 @@
+---
+title: "SetUp Git & GitHub in VS Code"
+abstract: Practical steps to integrate Git and GitHub in VS Code using first-party and helper extensions.
+execute:
+  eval: false
+---
+
+
+## Prerequisites
+
+* **Git for Windows** installed (includes Git Credential Manager).
+* **VS Code** installed.
+* Make sure you're added to the [World Bank GitHub organization](https://worldbankgroup.service-now.com/wbg?id=wbg_sc_catalog&sys_id=910e1739db1a54903c5960ab13961912) using eservices/ request.
+
+---
+
+## Install VScode and Stata Extensions
+
+1.  Open "Company Portal" app on your computer.
+
+2.  Search for [VS Code](companyportal:ApplicationId=d5aba730-00d4-4a78-a224-7b8170ac0eb0) and install it.
+
+3.  Search for [GitForWindows](companyportal:ApplicationId=b9da6be7-f510-438d-9fd0-b1df8213b3c6) and install it. (Make sure Git Credential Manager is selected)
+
+4.  Open VS Code → Extensions (left sidebar), and install:
+
+    -   **Stata Enhanced** (syntax highlighting).
+    -   **Git Graph** (visualize branches).
+    -   **GitLens** (blame/insight).
+    -   **GitHub Pull Requests and Issues**.
+    -   **GitHub Copilot** (optional).
+    -   **GitHub Copilot Chat** (optional).
+
+
+---
+
+## First-time Git configuration (one-time)
+
+Open **Terminal** in VS Code (Ctrl+`) and run:
+
+```bash
+# Identify yourself in commits
+git config --global user.name  "Your Name"
+git config --global user.email "your_email@domain.com"
+
+# Use main as default branch for new repos
+git config --global init.defaultBranch main
+
+# Line endings: recommended on Windows
+git config --global core.autocrlf true  # checkout CRLF, commit LF
+
+# Improve diffs for common texty files
+git config --global diff.renameLimit 99999
+git config --global fetch.prune true
+```
+
+---
+
+## Authenticate to GitHub 
+Go to your profile on VScode and login to GitHub.
+
+Trying to **clone/push** over HTTPS will trigger a secure web flow:
+
+1. Use a GitHub **personal access token (PAT)** or organization SSO as prompted.
+2. Git Credential Manager securely stores/refreshes credentials.
+
+
+## Clone or publish a repository in VS Code
+
+### Clone an existing repository
+
+* Command Palette → **Git: Clone** → paste repo URL (HTTPS or SSH).
+* Choose a local folder → VS Code offers to open the folder.
+
+### Publish (create a new GitHub repo from a local folder)
+
+1. Open your project folder in VS Code.
+2. Source Control view → **Initialize Repository**.
+3. Commit initial files.
+4. Click **Publish to GitHub** (or run Command Palette → **Publish to GitHub**).
+
+   * Choose a name, visibility (private/public), and org/user.
+
+## Power-ups
+
+### GitLens highlights
+
+* **Inline blame** (who/when changed this line)
+* **File & line history** with rich diffs
+* **Visualize & compare branches**; open **Repositories** view
+* **Open PR associated with a line/commit**
+* **Code authorship heatmaps** and **commit search** by message, author, time
+
+### Git Graph highlights
+
+* **Graph view** of all branches/tags
+* **Drag & drop merges/rebases** (careful: follow team policy)
+* Quick **reset**, **cherry-pick**, **revert** from context menu
+
+
+### Copilot & Copilot Chat
+
+In order to access Copilot and Copilot Chat, You need to be added to the [World Bank GitHub organization](https://worldbankgroup.service-now.com/wbg?id=wbg_sc_catalog&sys_id=910e1739db1a54903c5960ab13961912) using eservices/ request. 
+
+Make sure you read the [Getting Started Guide](https://github.com/worldbank/ospo/blob/main/guidelines/Copilot%20Getting%20started.md) with GIthub Copilot. 
+
+Also, make sure you understand and follow the instructions in the General [Github Copilot Usage Policy and guide](https://github.com/worldbank/ospo/blob/main/guidelines/copilot.md).
+
+
+* Copilot inline suggestions: code, tests, small refactors
+* Copilot Chat for:
+
+  * “Explain this diff” / “Write a PR description”
+  * “Generate a `.gitignore` for Stata + VS Code”
+  * “Draft a release note from merged PRs since vX.Y”
+
+
+## Team conventions (recommended)
+
+* **Branching**: feature branches from `main`; short, descriptive names.
+* **Commits**: small, frequent, imperative subject line; reference issues (`#123`).
+* **PRs**: clear description (what/why), checklist, reviewers; keep PRs small.
+* **Merging**: prefer **squash** to keep history clean (unless you need merge commits).
+* **CI**: make PR green before merge; don’t push directly to `main`.
+
+
+## Quick reference (commands)
+
+```bash
+# Start a repo
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin <ssh-or-https-url>
+git push -u origin main
+
+# Typical feature flow
+git checkout -b feature/my-change
+# ...edit...
+git add -A
+git commit -m "Implement my change"
+git push -u origin feature/my-change
+# open PR in VS Code (GitHub PRs extension)
+
+# Sync main
+git checkout main
+git pull --ff-only
+```
+
+## Suggested VS Code settings (optional)
+
+Create `.vscode/settings.json` in your repo to nudge consistent behavior:
+
+```json
+{
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "git.autofetch": true,
+  "git.openRepositoryInParentFolders": "always",
+  "files.eol": "\n",
+  "editor.renderWhitespace": "boundary",
+  "editor.rulers": [100],
+  "diffEditor.ignoreTrimWhitespace": false
+}
+```

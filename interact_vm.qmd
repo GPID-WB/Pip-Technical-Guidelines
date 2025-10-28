@@ -73,18 +73,16 @@ Notice that **Ctrl + C** does **not** copy text in terminal. You only need to hi
 |                               |                             |
 |  Host Port 80  <--------------+  (mapped to container 8080) |
 +-------------------------------------------------------------+
-
 ```
-Legend:
-- Data written to /Data inside the container is actually stored on the host at /Data/pip/files/data.
-- The API runs inside the container on port 8080, but is accessible from outside the VM on port 80.
+
+Legend: - Data written to /Data inside the container is actually stored on the host at /Data/pip/files/data. - The API runs inside the container on port 8080, but is accessible from outside the VM on port 80.
 
 ------------------------------------------------------------------------
 
 ## Essential Docker Commands (Cheat Sheet)
 
 | Task | Command | Notes |   |
-|-----------------|---------------------|-----------------|-----------------|
+|------------------|--------------------|------------------|------------------|
 | List all containers | `sudo docker ps -a` | Shows running & stopped |  |
 | View logs | `sudo docker logs -f povertyscoreapi` | Add `--tail 200` to see last lines |  |
 | Enter container shell | `sudo docker exec -it povertyscoreapi /bin/bash` | For interactive debugging |  |
