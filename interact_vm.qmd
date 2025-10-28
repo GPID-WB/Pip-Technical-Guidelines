@@ -1,328 +1,373 @@
 ---
 title: "How to interact with the Virtual Machine (VM) that hosts PIP"
+abstract: This guide explains how to connect to, inspect, and maintain the Linux Virtual Machines (VMs) hosting the PIP (Poverty & Inequality Platform) APIs. It covers user access, Docker container management, data storage, debugging, and safe cleanup procedures. This document is written for users with limited Linux/Docker experience who need to operate, inspect, or troubleshoot the PIP infrastructure safely.
 execute:
   eval: false
 ---
 
-## login to the VM
+## Access and Session Management
 
-You need to log in to [PRIVX](https://privx.worldbank.org/) and make use of SSO login using the Authenticator app.
+### Login to the VM
 
-Go to the tab **connections** and select the VM you want to connect to. They all have a name string `Linux-wzlxTpip01.worldbank.org` where T stantds for the environment (d=development, q=QA, p=Prod).
+1.  Go to [PrivX](https://privx.worldbank.org/).
 
-You need to run the commands as `srvpip` user, so after logging in as your own user, you need to switch to `srvpip` user:
+2.  Use **SSO login** (World Bank Authenticator App).
 
-```bash
-sudo su - srvpip
+3.  In the **Connections** tab, select the VM you want:
+
+    -   **Development:** `Linux-wzlxdpip01.worldbank.org`
+    -   **QA:** `Linux-wzlxqpip01.worldbank.org`
+    -   **Production:** `Linux-wzlxppip01.worldbank.org`
+
+4.  Once connected, switch to the `srvpip` user:
+
+    ``` bash
+    sudo su - srvpip
+    ```
+
+### Copy, Paste, and Keyboard Shortcuts
+
+| Shortcut | Action | Notes |
+|------------------|----------------------|--------------------------------|
+| **Ctrl + C** | Stop the current running process | e.g. stop an infinite loop or hanging R process |
+| **Ctrl + D** | Log out of the current shell | Ends your session as `srvpip` |
+| **Shift + Ctrl + V** | Paste from clipboard | Works in most PrivX terminals |
+| **Shift + Insert** | Paste (alternative) | Often easier in remote shells |
+
+Notice that **Ctrl + C** does **not** copy text in terminal. You only need to highlight with your mouse the section you want to copy. Once you stopped highlighting, the text is copied to your clipboard automatically.
+
+------------------------------------------------------------------------
+
+## Understanding the Environment
+
+### Users and Permissions
+
+-   **Your account:** initial login via PrivX (not root)
+-   **`srvpip` user:** used to manage Docker containers
+-   **`root` user:** required for system-level commands; use only with `sudo`
+
+**Common prefixes:**
+
+-   `docker` → run Docker as normal user (often fails without permissions)
+-   `sudo docker` → correct way when managing containers
+-   `sudo su - srvpip` → switch to service account context
+
+### Architecture Overview
+
+```         
++-------------------------------------------------------------+
+|                      Linux VM (Host)                        |
+|                                                             |
+|  Persistent Data:                                           |
+|    /Data/pip/files/data   <---+                             |
+|                               | (bind mount)                |
+|                               v                             |
+|  ---------------------------------------------------------  |
+|  |               Docker Container: povertyscoreapi       |  |
+|  |                                                     |  |
+|  |   - Mounts /Data/pip/files/data → /Data             |  |
+|  |   - Runs: Rscript /app/main.R                       |  |
+|  |   - Listens on port 8080 (internal)                 |  |
+|  ---------------------------------------------------------  |
+|                               ^                             |
+|                               |                             |
+|  Host Port 80  <--------------+  (mapped to container 8080) |
++-------------------------------------------------------------+
+
+```
+Legend:
+- Data written to /Data inside the container is actually stored on the host at /Data/pip/files/data.
+- The API runs inside the container on port 8080, but is accessible from outside the VM on port 80.
+
+------------------------------------------------------------------------
+
+## Essential Docker Commands (Cheat Sheet)
+
+| Task | Command | Notes |   |
+|-----------------|---------------------|-----------------|-----------------|
+| List all containers | `sudo docker ps -a` | Shows running & stopped |  |
+| View logs | `sudo docker logs -f povertyscoreapi` | Add `--tail 200` to see last lines |  |
+| Enter container shell | `sudo docker exec -it povertyscoreapi /bin/bash` | For interactive debugging |  |
+| Check mounted volumes | `sudo docker inspect povertyscoreapi             | grep Mounts -A 5` | See `/Data` source |  |
+| Delete stopped containers | `sudo docker container prune` | Cleans unused ones |  |
+| Delete old images | `sudo docker image prune -a` | Be cautious — removes all unused |  |
+| Check Docker service status | `sudo systemctl status docker` | Confirms Docker is active |  |
+
+------------------------------------------------------------------------
+
+## Managing Data
+
+### Data on the VM (Persistent)
+
+-   Main data location:
+
+    ``` bash
+    cd /Data/pip/files/data
+    ```
+
+-   Inspect space usage:
+
+    ``` bash
+    df -h | grep Data
+    du -h --max-depth=1 | sort -h
+    ```
+
+-   Preview files safely:
+
+    ``` bash
+    ls -lah
+    ```
+
+-   View folder sizes:
+
+    ``` bash
+    du -sh *
+    ```
+
+#### 🔍 Find large or old files
+
+``` bash
+find /Data/pip/files/data -type f -mtime +365 | head -n 20
 ```
 
+------------------------------------------------------------------------
 
-### copy and paste
-In linux terminal, you can copy text by selecting it with your mouse (it is automatically copied to clipboard). To paste, you need to use `Shift + Ctrl + V`. Alternatively, you can right click and select paste. Also, you can use `Shift + Insert` to paste.
+### Data Inside Containers (Ephemeral)
 
-### Ctrl + C, Ctrl + V and Ctrl + D in Linux terminal
-* `Ctrl + C` stops the current command (if it is running)
-* `Ctrl + V` is used to insert special characters (e.g. `Ctrl + V` then `Tab` inserts a tab character)
-* `Ctrl + D` logs you out of the current terminal session (if you are at the command prompt). You need to login again as `srvpip` user.
+Check where containers mount volumes:
 
-
-## Basics
-
-List containers (all, running or stopped):
-
-```bash
-sudo docker ps -a
+``` bash
+sudo docker inspect povertyscoreapi | grep Mounts -A 5
 ```
 
-Stream live logs from a container:
+You’ll see:
 
-```bash
-sudo docker logs -f CONTAINER_NAME_OR_ID
-```
-
-Show only the last N lines (e.g., 200):
-
-```bash
-sudo docker logs --tail 200 CONTAINER_NAME_OR_ID
-```
-
-## manage data 
-
-### 1. Data stored **outside** containers (on the VM filesystem)
-
-This is the “normal” Linux filesystem. Think `/home`, `/srv`, `/var`, etc.
-To explore:
-
-```bash
-# Where you are now
-pwd
-```
-Make sure you’re in the right place. For example, `/Data/pip/files/data` is where PIP data is stored.
-If you're not then, then type
-
-```bash
-cd /Data/pip/files/data
-```
-
-To the disk usage type this.
-```bash
-df -h | grep Data 
-```
-
-`df -h` lists all mounted filesystems and their disk usage in a human-readable format (e.g., GB, MB).
-The output is piped (`|`) to `grep Data`, which filters and shows only the lines that contain the word "Data".
-
-```bash
-# Show files and directories (with sizes, human readable)
-ls -lh
-
-# Show all including hidden
-ls -lah
-```
-
-To see the total size of each folder (directory), use:
-```bash
-# Check usage of current directory
-du -sh .
-
-# Check usage of current directory
-du -sh *
-
-# Check subdirectories sorted by size
-du -h --max-depth=1 | sort -h
-```
--`du` = disk usage
--`s` = summarize (show only the total for each argument)
--`h` = human-readable (KB, MB, GB)
--`*` = all files and folders in the current directory
-
-
-Once you identify a directory/file you *really want to delete*:
-
-```bash
-sudo docker rm -rf /path/to/unwanted_directory
-sudo docker rm -f /path/to/unwanted_file
-```
-
-::: {.callout-warning}
-Be careful: `rm -rf` is irreversible. Always double-check the path.
-:::
-
-
-### 2. Data stored **inside containers**
-
-Docker containers are ephemeral: if you delete/recreate them, anything written *inside* the container filesystem is lost.
-But many apps mount **volumes** or **bind-mount directories** from the host to persist data.
-
-Check your containers:
-
-```bash
-# List all containers
-sudo docker ps -a
-```
-If the container is not running, inspect what is going on
-```bash
-sudo docker logs povertyscoreapi
-```
-
-
-If it is running, you can inspect one container (replace NAME_OR_ID)
-```bash
-sudo docker inspect NAME_OR_ID
-```
-
-
-
-
-#### Where is the data? Look at this section:
-
-```json
+``` json
 "Mounts": [
   {
     "Type": "bind",
     "Source": "/Data/pip/files/data",
-    "Destination": "/Data",
-    "RW": true
+    "Destination": "/Data"
   }
 ]
 ```
 
 That means:
 
-* **Inside the container**  R code sees `/Data`.
-* But that directory is actually a **bind-mount** from the host VM:
+-   Inside container → `/Data`
+-   On host → `/Data/pip/files/data`
 
-```
-/Data/pip/files/data
-```
-* So the *real data* is stored **outside the container**, on the VM’s filesystem.
-  Containers are just using it.
+#### Access via container shell:
 
-#### How to inspect what’s in there
-
-On the VM, just browse that host path:
-
-```bash
-ls -lh /Data/pip/files/data
-du -sh /Data/pip/files/data/*
-```
-
-That will show you files, sizes, and subdirectories.
-
-If the code above gives you trouble because it request pasword, you can  look inside from the container’s perspective:
-
-```bash
+``` bash
 sudo docker exec -it povertyscoreapi ls -lh /Data
-sudo docker exec -it povertyscoreapi du -sh /Data
 ```
 
-…but since `/Data` is a mount, both commands show the **same files**.
+------------------------------------------------------------------------
 
+### Safe Deletion and Cleanup
 
-#### How to delete specific files/directories
+**Preview first:**
 
-From the **VM host**:
-
-```bash
-rm -f /Data/pip/files/data/unwanted_file.qs
-rm -rf /Data/pip/files/data/old_directory
+``` bash
+ls -d /Data/pip/files/data/project_*
 ```
 
-From **inside the container**:
+**Delete specific folders:**
 
-```bash
-sudo docker exec -it povertyscoreapi rm -rf /Data/unwanted_folder
-sudo docker exec -it povertyscoreapi rm -f /Data/unwanted_file.qs
-```
-
-Both do the same thing, because `/Data` inside the container is `/Data/pip/files/data` on the host.
-
-### Delete multiple folders
-
-**Delete two specific directories:**
-
-```bash
+``` bash
 rm -rf /Data/pip/files/data/folder1 /Data/pip/files/data/folder2
 ```
 
-**Delete a list of folders with a common prefix:**
+**Delete all contents but keep parent folder:**
 
-```bash
-rm -rf /Data/pip/files/data/project_*
-```
-
-(This removes all directories/files that start with `project_`.)
-
-**Delete everything inside `/Data/pip/files/data` but keep the parent folder:**
-
-```bash
+``` bash
 rm -rf /Data/pip/files/data/*
 ```
 
-### Safety tips
+**Move to trash instead of deleting:**
 
-* Always **double-check** with `ls` first:
-
-```bash
-ls -d /Data/pip/files/data/folder1 /Data/pip/files/data/folder2
-```
-* Or preview a pattern (NOTICE the `-d` flag):
-
-```bash
-ls -d /Data/pip/files/data/project_*
-```
-* If you’re not 100% sure, move to a trash folder instead of deleting:
-
-```bash
+``` bash
 mkdir -p /Data/pip/files/trash
-mv /Data/pip/files/data/folder1 /Data/pip/files/data/folder2 /Data/pip/files/trash/
+mv /Data/pip/files/data/folder1 /Data/pip/files/trash/
 ```
 
+⚠️ **Caution:** `rm -rf` is irreversible — always check with `ls` first.
 
-### Safety tips before deleting
+------------------------------------------------------------------------
 
-* Always run `ls` and `du` first to confirm what’s there.
-* If you’re not 100% sure, move files into a temporary folder instead of deleting:
+## Diagnosing API or Container Issues
 
-```bash
-mkdir -p /Data/pip/files/trash
-mv /Data/pip/files/data/old_dataset.qs /Data/pip/files/trash/
+### Check Container State
+
+``` bash
+sudo docker ps -a
 ```
 
-## Deployment OK, BUT API is not working
+Get detailed exit info:
 
-### See the exact error (no filesystem poking)
-
-```bash
-# 1) What happened last time?
-sudo docker logs --tail 200 povertyscoreapi
-```
-```bash
-# 2) What happened when launched
-sudo docker logs povertyscoreapi | head -n 20
+``` bash
+sudo docker inspect povertyscoreapi --format='ExitCode={{.State.ExitCode}} OOMKilled={{.State.OOMKilled}}'
 ```
 
-### Reproduce interactively to watch the error live
+-   `ExitCode=0` → normal exit
+-   `ExitCode=137` → killed (likely out of memory)
 
-To run R code on the VM, start a new container interactively with `/bin/bash` as the entrypoint.  
-This gives you a shell prompt **inside** the container, where you can execute commands directly.
+------------------------------------------------------------------------
 
-```bash
+### View Logs
+
+``` bash
+sudo docker logs povertyscoreapi | head -n 20   # startup logs
+sudo docker logs --tail 200 povertyscoreapi     # recent logs
+```
+
+------------------------------------------------------------------------
+
+### Reproduce Interactively
+
+Start an interactive debug session:
+
+``` bash
 sudo docker run --rm -it \
   --name povertyscoreapi-debug \
   -p 8080 \
   -v /Data/pip/files/data:/Data \
-  itsesippscoreregistrydev.azurecr.io/povertyscoreapi:latest \
+  itsesippscoreregistryprod.azurecr.io/povertyscoreapi:latest \
   /bin/bash
-
 ```
 
-You can run things like:
-```bash
-Rscript -e "1+1"
-Rscript -e "print(getRversion())"
-```
-When you’re done, type exit (or hit Ctrl+D) → that container stops and is removed (because of --rm).
+Inside:
 
-
-```bash
-# Inside the container:
-which Rscript
-ls -l /app/main.R /Data
-Rscript /app/main.R   # <-- watch the stack trace
-```
-That launches the API in the foreground, attached to your terminal. When you hit Ctrl+C or close the shell, the process (and API) dies.
-
-### Delete old images
-You should always have only ONE image running in the VM. If you have multiple images, you should delete the old ones.
-
-check how many images you have on the VM with 
-```bash
-sudo docker images
+``` bash
+Rscript /app/main.R
 ```
 
-Delete the old ones with
-```bash
-sudo docker image prune -a
+Press `Ctrl + C` to stop and `exit` to leave.
+
+------------------------------------------------------------------------
+
+### Restart or Rebuild Containers
+
+``` bash
+sudo docker restart povertyscoreapi
 ```
 
+Or rebuild completely:
 
-## Execute API endpoints from inside the container
+``` bash
+sudo docker stop povertyscoreapi
+sudo docker rm povertyscoreapi
+sudo docker pull itsesippscoreregistryprod.azurecr.io/povertyscoreapi:latest
+sudo docker run -d --name povertyscoreapi \
+  -p 80:8080 \
+  -v /Data/pip/files/data:/Data \
+  itsesippscoreregistryprod.azurecr.io/povertyscoreapi:latest
+```
 
-You need to execute `curl`
-```bash
+------------------------------------------------------------------------
+
+## Testing API Endpoints
+
+### From Inside the Container
+
+``` bash
 curl http://localhost:80/api/v1/health-check
 ```
 
+### Loop through common endpoints
 
-But you can loop through multiple endpoints and hit them one after another with curl.
-
-```bash
+``` bash
 for ep in health-check pkgs-version data-signature gh-hash; do
   echo "---- Testing $ep ----"
   curl -s http://localhost:80/api/v1/$ep
   echo
 done
-
 ```
 
+### From Outside (VM host or browser)
+
+``` bash
+curl http://wzlxdpip01.worldbank.org/api/v1/health-check
+```
+
+------------------------------------------------------------------------
+
+## Troubleshooting Common Errors
+
+| Symptom | Likely Cause | Fix |
+|------------------|------------------------|------------------------------|
+| `curl: (7) Failed connect` | Container not running or wrong port | `sudo docker ps -a` |
+| `Exited (137)` | Out of memory (OOMKilled) | Increase VM memory or limit API load |
+| `authentication required` | Not logged in to Azure Container Registry | `sudo az acr login --name itsesippscoreregistryprod` |
+| `permission denied` on `/Data` | Wrong user ownership | `sudo chown -R srvpip /Data` |
+| No logs shown | Container failed before startup | Run `sudo docker inspect povertyscoreapi` |
+| Port 8080 works but 80 doesn’t | Port not mapped | Run container with `-p 80:8080` |
+
+------------------------------------------------------------------------
+
+## Understanding Ports (80 vs 8080)
+
+-   Inside Docker, the API runs on **8080**:
+
+    ``` r
+    pipapi::start_api(port = 8080, host = "0.0.0.0")
+    ```
+
+-   Outside Docker (host or browser), you can map any port using:
+
+    ``` bash
+    -p 80:8080
+    ```
+
+    This means:
+
+    ```         
+    host_port:container_port
+    ```
+
+    So users access:
+
+    ```         
+    http://wzlxdpip01.worldbank.org/api/v1/...
+    ```
+
+    even though internally it listens on 8080.
+
+------------------------------------------------------------------------
+
+## Monitoring Resource Usage
+
+Watch real-time CPU and memory:
+
+``` bash
+sudo docker stats povertyscoreapi
+```
+
+Or globally:
+
+``` bash
+top -u srvpip
+```
+
+------------------------------------------------------------------------
+
+## Appendix
+
+### Check Disk Usage Quickly
+
+``` bash
+df -h | grep Data
+```
+
+### Check Docker Service Logs
+
+``` bash
+sudo journalctl -u docker --since "2025-09-23 17:00"
+```
+
+### Check R version inside container
+
+``` bash
+sudo docker exec -it povertyscoreapi Rscript -e "R.version.string"
+```
