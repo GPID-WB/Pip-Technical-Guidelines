@@ -22,7 +22,17 @@ execute:
 
 
 ## Configure `Rundo` and `Rundoline` files
-1. 
+All the information of this section is taken from Friedrich Hueble's [blog post](https://huebler.blogspot.com/2008/04/stata.html). So if you need more details, please refer to it.
+1. Although these files are available at Hueble's website above, we also make them available for convenience [here](https://github.com/GPID-WB/Pip-Technical-Guidelines/raw/refs/heads/main/_data/rundofiles.zip)
+2. Extract the contents of the zip file in `C:\ado\personal`. The zip file contains six files, you will modify ONLY two of them:
+   - `Rundo.ini`
+   - `Rundoline.ini`
+3. Open the `Rundo.ini` file in Notepad or VScode (or any text editor) and make the following changes:
+   - Change the `stata_path` to the path of your Stata installation (e.g., `c:\Program Files\StataNow19\StataMP-64.exe`).
+   - Modify the `statawin` to the exact title of your Stata installation. In my case, it is "StataNow/MP 19.5". The window title is shown in the center or left corner of the title bar of the main Stata program window.
+   ![](images/StataName.png).
+   - You can leave the other settings as they are. But if you want to customize further, refer to the blog post linked above.
+4. Open the `Rundoline.ini` and copy ALL the contents of the `Rundo.ini` file into the `Rundoline.ini` file. Basically, both files are identical except for the name. 
 
 
 ## Configure Stata Enhanced Extension
