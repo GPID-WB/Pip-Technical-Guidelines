@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="PIP Technical Team">
+<meta name="dcterms.date" content="2025-11-03">
 
-<title>3&nbsp; Setting up Github Actions for Auto Deployment of Quarto book – Pip Technical Guidelines</title>
+<title>5&nbsp; Setting Up R, RStudio, and Positron to Use the Same Configuration Files – Pip Technical Guidelines</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,8 +67,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./Increase_performance_WB_laptop.html" rel="next">
-<link href="./code_coverage.html" rel="prev">
+<link href="./interact_vm.html" rel="next">
+<link href="./Increase_performance_WB_laptop.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -118,7 +120,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./github_actions.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Setting up Github Actions for Auto Deployment of Quarto book</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./setupR.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -165,7 +167,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./github_actions.html" class="sidebar-item-text sidebar-link active">
+  <a href="./github_actions.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Setting up Github Actions for Auto Deployment of Quarto book</span></span></a>
   </div>
 </li>
@@ -177,7 +179,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./setupR.html" class="sidebar-item-text sidebar-link">
+  <a href="./setupR.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></span></a>
   </div>
 </li>
@@ -221,16 +223,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">3.1</span> Introduction</a></li>
-  <li><a href="#workflow" id="toc-workflow" class="nav-link" data-scroll-target="#workflow"><span class="header-section-number">3.2</span> Workflow</a>
+  <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro"><span class="header-section-number">5.1</span> Intro</a></li>
+  <li><a href="#step-1.-choose-a-canonical-r-configuration-directory" id="toc-step-1.-choose-a-canonical-r-configuration-directory" class="nav-link" data-scroll-target="#step-1.-choose-a-canonical-r-configuration-directory"><span class="header-section-number">5.2</span> Step 1. Choose a canonical R configuration directory</a></li>
+  <li><a href="#step-2.-create-or-update-your-configuration-files" id="toc-step-2.-create-or-update-your-configuration-files" class="nav-link" data-scroll-target="#step-2.-create-or-update-your-configuration-files"><span class="header-section-number">5.3</span> Step 2. Create (or update) your configuration files</a>
   <ul class="collapse">
-  <li><a href="#triggering-the-workflow" id="toc-triggering-the-workflow" class="nav-link" data-scroll-target="#triggering-the-workflow"><span class="header-section-number">3.2.1</span> Triggering the Workflow</a></li>
-  <li><a href="#naming-the-workflow" id="toc-naming-the-workflow" class="nav-link" data-scroll-target="#naming-the-workflow"><span class="header-section-number">3.2.2</span> Naming the workflow</a></li>
-  <li><a href="#defining-the-job" id="toc-defining-the-job" class="nav-link" data-scroll-target="#defining-the-job"><span class="header-section-number">3.2.3</span> Defining the job</a></li>
-  <li><a href="#the-steps" id="toc-the-steps" class="nav-link" data-scroll-target="#the-steps"><span class="header-section-number">3.2.4</span> The Steps</a></li>
+  <li><a href="#renviron" id="toc-renviron" class="nav-link" data-scroll-target="#renviron"><span class="header-section-number">5.3.1</span> <code>.Renviron</code></a></li>
+  <li><a href="#rprofile" id="toc-rprofile" class="nav-link" data-scroll-target="#rprofile"><span class="header-section-number">5.3.2</span> <code>.Rprofile</code></a></li>
   </ul></li>
-  <li><a href="#dont-ignore-the-.gitignore-file" id="toc-dont-ignore-the-.gitignore-file" class="nav-link" data-scroll-target="#dont-ignore-the-.gitignore-file"><span class="header-section-number">3.3</span> Don’t ignore the <code>.gitignore</code> file</a></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">3.4</span> Conclusion :</a></li>
+  <li><a href="#step-3.-tell-windows-and-r-where-to-find-these-files" id="toc-step-3.-tell-windows-and-r-where-to-find-these-files" class="nav-link" data-scroll-target="#step-3.-tell-windows-and-r-where-to-find-these-files"><span class="header-section-number">5.4</span> Step 3. Tell Windows and R where to find these files</a></li>
+  <li><a href="#step-4.-verify-the-configuration" id="toc-step-4.-verify-the-configuration" class="nav-link" data-scroll-target="#step-4.-verify-the-configuration"><span class="header-section-number">5.5</span> Step 4. Verify the configuration</a></li>
+  <li><a href="#step-5.-optional-cleanup" id="toc-step-5.-optional-cleanup" class="nav-link" data-scroll-target="#step-5.-optional-cleanup"><span class="header-section-number">5.6</span> Step 5. Optional cleanup</a></li>
   </ul>
 </nav>
     </div>
@@ -239,14 +241,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Setting up Github Actions for Auto Deployment of Quarto book</span></h1>
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></h1>
+<p class="subtitle lead">A unified and robust configuration setup for consistent R behavior across IDEs</p>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>PIP Technical Team </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 3, 2025</p>
+    </div>
+  </div>
   
     
   </div>
@@ -256,114 +271,89 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="introduction" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">3.1</span> Introduction</h2>
-<p>One of the best parts of using Quarto for websites, blogs, or reports is how easily it integrates with GitHub Pages. With a simple GitHub Actions workflow, you can automatically render and publish your site every time you update your repository. In this post we are going to learn how we have enabled auto deployment for this quarto book.</p>
+<section id="intro" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="intro"><span class="header-section-number">5.1</span> Intro</h2>
+<p>When working with R, <strong>your environment files</strong> (<code>.Renviron</code> and <code>.Rprofile</code>) control how R behaves on startup—what packages it loads, what paths it uses, and how it connects to external resources (like CRAN mirrors or proxies).<br>
+However, depending on which IDE you use (RStudio, Positron, VS Code, or command-line R), these files might not always point to the same location.</p>
+<p>A clean, unified setup ensures: - Reproducible environments across IDEs.<br>
+- Consistent library paths (<code>.libPaths()</code> output).<br>
+- Fewer surprises when running automated scripts, R Markdown documents, or package builds.<br>
+- Fewer “it works on my RStudio but not on Positron” headaches.</p>
+<p>This guide describes the <strong>recommended setup</strong> for aligning your R environment across IDEs, including RStudio and Positron.</p>
+<hr>
 </section>
-<section id="workflow" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="workflow"><span class="header-section-number">3.2</span> Workflow</h2>
-<p>This is the workflow that we are using in Github Actions . Let’s look at it one by one.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">on</span><span class="kw">:</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">workflow_dispatch</span><span class="kw">:</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> main</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Quarto Publish</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">jobs</span><span class="kw">:</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">build-deploy</span><span class="kw">:</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">permissions</span><span class="kw">:</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">contents</span><span class="kw">:</span><span class="at"> write</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">steps</span><span class="kw">:</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Check out repository</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v4</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Set up Quarto</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> quarto-dev/quarto-actions/setup@v2</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">env</span><span class="kw">:</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">GH_TOKEN</span><span class="kw">:</span><span class="at"> ${{ secrets.GITHUB_TOKEN }}</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">tinytex</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Render and Publish</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> quarto-dev/quarto-actions/publish@v2</span></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">with</span><span class="kw">:</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">target</span><span class="kw">:</span><span class="at"> gh-pages</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">env</span><span class="kw">:</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="at">          </span><span class="fu">GITHUB_TOKEN</span><span class="kw">:</span><span class="at"> ${{ secrets.GITHUB_TOKEN }}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<section id="triggering-the-workflow" class="level3" data-number="3.2.1">
-<h3 data-number="3.2.1" class="anchored" data-anchor-id="triggering-the-workflow"><span class="header-section-number">3.2.1</span> Triggering the Workflow</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">on</span><span class="kw">:</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">workflow_dispatch</span><span class="kw">:</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">push</span><span class="kw">:</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">branches</span><span class="kw">:</span><span class="at"> main</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This tells GitHub Actions when to run the workflow. There are two triggers here:</p>
+<section id="step-1.-choose-a-canonical-r-configuration-directory" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="step-1.-choose-a-canonical-r-configuration-directory"><span class="header-section-number">5.2</span> Step 1. Choose a canonical R configuration directory</h2>
+<p>Decide on a single folder that will store your personal R configuration files.<br>
+We recommend creating a dedicated folder at the root of your working directory, for example:</p>
+<pre><code>C:\WBG\R
+</code></pre>
+<p>Inside that folder, you’ll have:</p>
+<pre><code>C:\WBG\R.Renviron
+C:\WBG\R.Rprofile</code></pre>
+<hr>
+</section>
+<section id="step-2.-create-or-update-your-configuration-files" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="step-2.-create-or-update-your-configuration-files"><span class="header-section-number">5.3</span> Step 2. Create (or update) your configuration files</h2>
+<section id="renviron" class="level3" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="renviron"><span class="header-section-number">5.3.1</span> <code>.Renviron</code></h3>
+<p>Create a text file named <code>.Renviron</code> at <code>C:\WBG\R\.Renviron</code> and add your preferred settings:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># C:/WBG/R/.Renviron</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">R_LIBS</span><span class="op">=</span>C:/WBG/R/r-packages/%v</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="va">R_USER</span><span class="op">=</span>C:/WBG/R</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="va">R_LIBS_USER</span><span class="op">=</span>C:/WBG/R/r-packages/%v</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="va">RENV_PATHS_LIBRARY_ROOT</span><span class="op">=</span>C:/WBG/R/r-packages/.renv/library</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="va">LANG</span><span class="op">=</span>en_US.UTF-8</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="va">TZ</span><span class="op">=</span>UTC</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="va">RENVIRON_LOADED_FROM</span><span class="op">=</span>C:/WBG/R/.Renviron</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This file defines <strong>environment variables</strong> that R reads at startup — for example, custom library locations, locale settings, or proxy credentials.</p>
+</section>
+<section id="rprofile" class="level3" data-number="5.3.2">
+<h3 data-number="5.3.2" class="anchored" data-anchor-id="rprofile"><span class="header-section-number">5.3.2</span> <code>.Rprofile</code></h3>
+<p>Create a text file named <code>.Rprofile</code> at <code>C:\WBG\R\.Rprofile</code> and add the R code that should run automatically at startup:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># C:/WBG/R/.Rprofile</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">local</span>({</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  r <span class="ot">&lt;-</span> <span class="fu">getOption</span>(<span class="st">"repos"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  r[<span class="st">"CRAN"</span>] <span class="ot">&lt;-</span> <span class="st">"https://cran.rstudio.com/"</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">options</span>(<span class="at">repos =</span> r)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: print which file was loaded (for debugging)</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"[.Rprofile loaded from: %s]</span><span class="sc">\n</span><span class="st">"</span>, <span class="fu">normalizePath</span>(<span class="fu">sys.frame</span>(<span class="dv">1</span>)<span class="sc">$</span>ofile, <span class="at">mustWork =</span> <span class="cn">FALSE</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+</section>
+<section id="step-3.-tell-windows-and-r-where-to-find-these-files" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="step-3.-tell-windows-and-r-where-to-find-these-files"><span class="header-section-number">5.4</span> Step 3. Tell Windows and R where to find these files</h2>
+<p>The most reliable method is to set <strong>persistent user environment variables</strong> using <code>setx</code>, which works even in secure or constrained PowerShell environments (like corporate devices).</p>
+<p>Open <strong>PowerShell</strong> or <strong>Command Prompt</strong> or <strong>Terminal in Vscode</strong> (no admin rights needed) and run:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bat code-with-copy"><code class="sourceCode dosbat"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>setx R_ENVIRON_USER <span class="st">"C:\WBG\R\.Renviron"</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>setx R_PROFILE_USER <span class="st">"C:\WBG\R\.Rprofile"</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>setx HOME <span class="st">"C:\WBG\R"</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>setx R_USER <span class="st">"C:\WBG\R"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>These commands instruct R to always look for <code>.Renviron</code> and <code>.Rprofile</code> in that directory, no matter which IDE you open.</p>
+<p>Then <strong>close and reopen</strong> RStudio, Positron, or any terminal using R.</p>
+<hr>
+</section>
+<section id="step-4.-verify-the-configuration" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="step-4.-verify-the-configuration"><span class="header-section-number">5.5</span> Step 4. Verify the configuration</h2>
+<p>After restarting R (in any IDE), run the following to confirm the setup:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">path.expand</span>(<span class="st">"~"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">normalizePath</span>(<span class="st">"~/.Renviron"</span>, <span class="at">mustWork =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">normalizePath</span>(<span class="st">"~/.Rprofile"</span>, <span class="at">mustWork =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.getenv</span>(<span class="fu">c</span>(<span class="st">"R_ENVIRON_USER"</span>, <span class="st">"R_PROFILE_USER"</span>, <span class="st">"R_LIBS_USER"</span>, <span class="st">"LANG"</span>, <span class="st">"TZ"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Expected results:</p>
 <ul>
-<li><p><strong><code>push</code> to <code>main</code></strong> – Any time you commit or merge changes into the <code>main</code> branch, the workflow runs</p></li>
-<li><p><strong><code>workflow_dispatch</code></strong> – Allows you to manually trigger the workflow from the GitHub Actions tab in your repository. This is useful when you want to force a rebuild and republish without committing new changes.</p></li>
+<li><code>~</code> resolves to <code>C:/WBG/R</code></li>
+<li><code>.Renviron</code> and <code>.Rprofile</code> point to the same files in that folder</li>
+<li>Your environment variables (<code>R_LIBS_USER</code>, etc.) are correctly loaded</li>
 </ul>
+<hr>
 </section>
-<section id="naming-the-workflow" class="level3" data-number="3.2.2">
-<h3 data-number="3.2.2" class="anchored" data-anchor-id="naming-the-workflow"><span class="header-section-number">3.2.2</span> Naming the workflow</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">name</span><span class="kw">:</span><span class="at"> Quarto Publish</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This gives the workflow a friendly name that will appear in the Actions tab.</p>
-</section>
-<section id="defining-the-job" class="level3" data-number="3.2.3">
-<h3 data-number="3.2.3" class="anchored" data-anchor-id="defining-the-job"><span class="header-section-number">3.2.3</span> Defining the job</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">jobs</span><span class="kw">:</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">build-deploy</span><span class="kw">:</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">runs-on</span><span class="kw">:</span><span class="at"> ubuntu-latest</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">permissions</span><span class="kw">:</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">contents</span><span class="kw">:</span><span class="at"> write</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Here we’re defining a single job called <code>build-deploy</code>.</p>
-<ul>
-<li><p><strong><code>runs-on: ubuntu-latest</code></strong> – The job will run inside an Ubuntu-based virtual machine provided by GitHub.</p></li>
-<li><p><strong><code>permissions: contents: write</code></strong> – The workflow needs permission to write to the repository (required for publishing to the <code>gh-pages</code> branch).</p></li>
-</ul>
-</section>
-<section id="the-steps" class="level3" data-number="3.2.4">
-<h3 data-number="3.2.4" class="anchored" data-anchor-id="the-steps"><span class="header-section-number">3.2.4</span> The Steps</h3>
-<section id="check-out-the-repository" class="level4" data-number="3.2.4.1">
-<h4 data-number="3.2.4.1" class="anchored" data-anchor-id="check-out-the-repository"><span class="header-section-number">3.2.4.1</span> 1. Check out the repository</h4>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Check out repository</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> actions/checkout@v4</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This makes your repository’s files available in the workflow environment so Quarto can render your project.</p>
-</section>
-<section id="set-up-quarto" class="level4" data-number="3.2.4.2">
-<h4 data-number="3.2.4.2" class="anchored" data-anchor-id="set-up-quarto"><span class="header-section-number">3.2.4.2</span> 2. Set up Quarto</h4>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Set up Quarto</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> quarto-dev/quarto-actions/setup@v2</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">env</span><span class="kw">:</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">GH_TOKEN</span><span class="kw">:</span><span class="at"> ${{ secrets.GITHUB_TOKEN }}</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">with</span><span class="kw">:</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">tinytex</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This installs Quarto in the workflow environment. The <code>tinytex: true</code> option ensures LaTeX support is available for rendering PDFs. The <code>GH_TOKEN</code> is github token repository secret that is added in Repo settings -&gt; Secrets and Variables -&gt; Actions . It is used for authentication when publishing.</p>
-</section>
-<section id="render-and-publish" class="level4" data-number="3.2.4.3">
-<h4 data-number="3.2.4.3" class="anchored" data-anchor-id="render-and-publish"><span class="header-section-number">3.2.4.3</span> 3. Render and Publish</h4>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Render and Publish</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">uses</span><span class="kw">:</span><span class="at"> quarto-dev/quarto-actions/publish@v2</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">with</span><span class="kw">:</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">target</span><span class="kw">:</span><span class="at"> gh-pages</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">env</span><span class="kw">:</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">GITHUB_TOKEN</span><span class="kw">:</span><span class="at"> ${{ secrets.GITHUB_TOKEN }}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This step does two things:</p>
-<ol type="1">
-<li><p><strong>Renders</strong> your Quarto project (turns <code>.qmd</code> files into HTML, PDF, or other output formats).</p></li>
-<li><p><strong>Publishes</strong> the output to the <code>gh-pages</code> branch, which GitHub Pages uses to serve your site. The <code>target: gh-pages</code> option ensures everything is pushed to the right branch.</p></li>
-</ol>
-</section>
-</section>
-</section>
-<section id="dont-ignore-the-.gitignore-file" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="dont-ignore-the-.gitignore-file"><span class="header-section-number">3.3</span> Don’t ignore the <code>.gitignore</code> file</h2>
-<p>Make sure that your <code>.gitignore</code> file excludes <code>_book</code>, <code>_site</code> folders. These are the folders where Quarto renders HTML/PDF files when testing them locally. These files should not be tracked since Github Actions will build them with our auto deployment process.</p>
-</section>
-<section id="conclusion" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">3.4</span> Conclusion :</h2>
-<p>With this workflow in place, the Quarto book will automatically rebuild and deploy whenever a push is made to the <code>main</code> branch or whenever we manually trigger the workflow. No more running commands locally or remembering to push generated files.</p>
-<p>This is a clean, reproducible, and automated way to publish your Quarto projects using GitHub Pages. As a side not <code>usethis</code> package has a lot of good utility functions that helps you to set up similar workflow. You may explore using them. A good starting point is <code>usethis::use_github_action("render-quarto")</code>.</p>
-<p>For reference the Quarto book is published <a href="https://gpid-wb.github.io/Pip-Technical-Guidelines/" title="PIP Technical Guideline">here</a>.</p>
+<section id="step-5.-optional-cleanup" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="step-5.-optional-cleanup"><span class="header-section-number">5.6</span> Step 5. Optional cleanup</h2>
+<p>If you previously had <code>.Rprofile</code> files in other locations (like your <code>Documents</code> or <code>OneDrive</code> folder), remove or rename them by adding a <code>.bak</code> at the end (e.g., <code>.Rprofile.bak</code>). R automatically runs the <strong>first <code>.Rprofile</code></strong> it finds, so duplicate files can cause confusion or run twice.</p>
+<p>By following this setup, your R environment becomes predictable, portable, and IDE-agnostic — a professional-grade configuration for serious R development.</p>
 
 
 </section>
@@ -771,13 +761,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./code_coverage.html" class="pagination-link" aria-label="Add code coverage badge to your GitHub Repository.">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Add code coverage badge to your GitHub Repository.</span></span>
+      <a href="./Increase_performance_WB_laptop.html" class="pagination-link" aria-label="Improve Efficiency of a WB Laptop">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Improve Efficiency of a WB Laptop</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./Increase_performance_WB_laptop.html" class="pagination-link" aria-label="Improve Efficiency of a WB Laptop">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Improve Efficiency of a WB Laptop</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./interact_vm.html" class="pagination-link" aria-label="How to interact with the Virtual Machine (VM) that hosts PIP">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">How to interact with the Virtual Machine (VM) that hosts PIP</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
