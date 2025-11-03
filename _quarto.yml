@@ -16,6 +16,7 @@ book:
     - code_coverage.qmd
     - github_actions.qmd
     - Increase_performance_WB_laptop.qmd
+    - setupR.qmd
     - interact_vm.qmd
     - VScode_Setup_for_stata.qmd
     - VScode_setup_for_github.qmd

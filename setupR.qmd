@@ -1,0 +1,123 @@
+---
+title: "Setting Up R, RStudio, and Positron to Use the Same Configuration Files"
+subtitle: "A unified and robust configuration setup for consistent R behavior across IDEs"
+author: "PIP Technical Team"
+date: 2025-11-03
+---
+
+## Intro
+
+When working with R, **your environment files** (`.Renviron` and `.Rprofile`) control how R behaves on startup—what packages it loads, what paths it uses, and how it connects to external resources (like CRAN mirrors or proxies).  
+However, depending on which IDE you use (RStudio, Positron, VS Code, or command-line R), these files might not always point to the same location.  
+
+A clean, unified setup ensures:
+- Reproducible environments across IDEs.  
+- Consistent library paths (`.libPaths()` output).  
+- Fewer surprises when running automated scripts, R Markdown documents, or package builds.  
+- Fewer “it works on my RStudio but not on Positron” headaches.
+
+This guide describes the **recommended setup** for aligning your R environment across IDEs, including RStudio and Positron.
+
+---
+
+## Step 1. Choose a canonical R configuration directory
+
+Decide on a single folder that will store your personal R configuration files.  
+We recommend creating a dedicated folder at the root of your working directory, for example:
+
+```
+C:\WBG\R
+
+```
+
+Inside that folder, you’ll have:
+
+```
+C:\WBG\R.Renviron
+C:\WBG\R.Rprofile
+```
+
+---
+
+## Step 2. Create (or update) your configuration files
+
+### `.Renviron`
+
+Create a text file named `.Renviron` at `C:\WBG\R\.Renviron` and add your preferred settings:
+
+```bash
+# C:/WBG/R/.Renviron
+R_LIBS=C:/WBG/R/r-packages/%v
+R_USER=C:/WBG/R
+R_LIBS_USER=C:/WBG/R/r-packages/%v
+RENV_PATHS_LIBRARY_ROOT=C:/WBG/R/r-packages/.renv/library
+LANG=en_US.UTF-8
+TZ=UTC
+RENVIRON_LOADED_FROM=C:/WBG/R/.Renviron
+```
+
+This file defines **environment variables** that R reads at startup — for example, custom library locations, locale settings, or proxy credentials.
+
+### `.Rprofile`
+
+Create a text file named `.Rprofile` at `C:\WBG\R\.Rprofile` and add the R code that should run automatically at startup:
+
+```r
+# C:/WBG/R/.Rprofile
+local({
+  r <- getOption("repos")
+  r["CRAN"] <- "https://cran.rstudio.com/"
+  options(repos = r)
+})
+
+# Optional: print which file was loaded (for debugging)
+cat(sprintf("[.Rprofile loaded from: %s]\n", normalizePath(sys.frame(1)$ofile, mustWork = FALSE)))
+```
+
+---
+
+## Step 3. Tell Windows and R where to find these files
+
+The most reliable method is to set **persistent user environment variables** using `setx`, which works even in secure or constrained PowerShell environments (like corporate devices).
+
+Open **PowerShell** or **Command Prompt** or **Terminal in Vscode** (no admin rights needed) and run:
+
+```bat
+setx R_ENVIRON_USER "C:\WBG\R\.Renviron"
+setx R_PROFILE_USER "C:\WBG\R\.Rprofile"
+setx HOME "C:\WBG\R"
+setx R_USER "C:\WBG\R"
+```
+
+These commands instruct R to always look for `.Renviron` and `.Rprofile` in that directory, no matter which IDE you open.
+
+Then **close and reopen** RStudio, Positron, or any terminal using R.
+
+---
+
+## Step 4. Verify the configuration
+
+After restarting R (in any IDE), run the following to confirm the setup:
+
+```r
+path.expand("~")
+normalizePath("~/.Renviron", mustWork = FALSE)
+normalizePath("~/.Rprofile", mustWork = FALSE)
+Sys.getenv(c("R_ENVIRON_USER", "R_PROFILE_USER", "R_LIBS_USER", "LANG", "TZ"))
+```
+
+Expected results:
+
+* `~` resolves to `C:/WBG/R`
+* `.Renviron` and `.Rprofile` point to the same files in that folder
+* Your environment variables (`R_LIBS_USER`, etc.) are correctly loaded
+
+---
+
+## Step 5. Optional cleanup
+
+If you previously had `.Rprofile` files in other locations (like your `Documents` or `OneDrive` folder), remove or rename them by adding a `.bak` at the end (e.g., `.Rprofile.bak`).
+R automatically runs the **first `.Rprofile`** it finds, so duplicate files can cause confusion or run twice.
+
+By following this setup, your R environment becomes predictable, portable, and IDE-agnostic — a professional-grade configuration for serious R development.
+
