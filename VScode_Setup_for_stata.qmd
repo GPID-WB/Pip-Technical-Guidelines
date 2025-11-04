@@ -75,18 +75,28 @@ If you ever get a “nothing happened” run, bump **winpause** up by \~20–40 
 
 ``` json
 {
-"version": "2.0.0",
+  "version": "2.0.0",
   "tasks": [
-      {
-        "label": "Stata: Run selection/line (rundolines)",
-        "type": "shell",
-        "command": "\"C:\\ado\\personal\\rundolines.exe\""
+    {
+      "label": "Stata: Run selection/line (rundolines)",
+      "type": "shell",
+      "command": "\"C:\\ado\\personal\\rundolines.exe\"",
+      "presentation": {
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": false
+      }
     },
     {
-        "label": "Stata: Do current file (rundo)",
-        "type": "shell",
-        "command": "\"C:\\ado\\personal\\rundo.exe\"",
-        "args": ["\"${file}\""]
+      "label": "Stata: Do current file (rundo)",
+      "type": "shell",
+      "command": "\"C:\\ado\\personal\\rundo.exe\"",
+      "args": ["\"${file}\""],
+      "presentation": {
+        "focus": false,
+        "panel": "dedicated",
+        "showReuseMessage": false
+      }
     }
   ]
 }
@@ -109,13 +119,13 @@ If you ever get a “nothing happened” run, bump **winpause** up by \~20–40 
     "key": "f9",
     "command": "workbench.action.tasks.runTask",
     "args": "Stata: Run selection/line (rundolines)",
-    "when": "editorTextFocus && (resourceExtname =~ /\\.(do|ado|mata)$/)"
+    "when": "editorTextFocus && (resourceExtname =~ /\\.(do|ado|mata)$/ || (resourceScheme == 'untitled' && editorLangId == 'stata'))"
   },
   {
     "key": "f10",
     "command": "workbench.action.tasks.runTask",
     "args": "Stata: Do current file (rundo)",
-    "when": "editorTextFocus && (resourceExtname =~ /\\.(do|ado)$/)"
+    "when": "editorTextFocus && (resourceExtname =~ /\\.(do|ado|mata)$/ || (resourceScheme == 'untitled' && editorLangId == 'stata'))"
   }
 ]
 ```
