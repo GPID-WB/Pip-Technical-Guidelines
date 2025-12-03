@@ -1,6 +1,12 @@
 project:
   type: book
-  
+
+preview:
+ host: 127.0.0.1
+ port: 8081   
+ browser: true
+ navigate: true
+
 execute:
   freeze: auto
 
@@ -35,4 +41,4 @@ format:
   pdf:
     documentclass: scrreprt
 
-editor: visual
+editor: source
