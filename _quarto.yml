@@ -15,7 +15,7 @@ book:
   author:
     - R.Andres Castenada
     - Ronak Shah
-  date: "8/3/2025"
+  date: "`r Sys.Date()`"
   chapters:
     - index.qmd
     - part: "R Setup and efficiency"
