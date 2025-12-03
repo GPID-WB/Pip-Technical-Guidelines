@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>7&nbsp; SetUp Vscode to work with Stata – Pip Technical Guidelines</title>
+<title>2&nbsp; SetUp Vscode to work with Stata – Pip Technical Guidelines</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -66,7 +66,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./VScode_setup_for_github.html" rel="next">
-<link href="./interact_vm.html" rel="prev">
+<link href="./setupR.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -74,7 +74,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-0dd2bd5de344125cf763a379ddc3eb04.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -107,6 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
+<link rel="stylesheet" href="css/tachyons.css">
 </head>
 
 <body class="nav-sidebar floating quarto-light">
@@ -118,7 +119,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./VScode_Setup_for_stata.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SetUp Vscode to work with Stata</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./VScode_Setup_for_stata.html">VSCode Setup</a></li><li class="breadcrumb-item"><a href="./VScode_Setup_for_stata.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">SetUp Vscode to work with Stata</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -131,9 +132,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="./index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Pip Technical Guidelines</a> 
     </div>
@@ -151,66 +150,121 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./code_coverage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Add code coverage badge to your GitHub Repository.</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./github_actions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Setting up Github Actions for Auto Deployment of Quarto book</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Increase_performance_WB_laptop.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Improve Efficiency of a WB Laptop</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">R Setup and efficiency</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./setupR.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./interact_vm.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">How to interact with the Virtual Machine (VM) that hosts PIP</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">VSCode Setup</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./VScode_Setup_for_stata.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SetUp Vscode to work with Stata</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">SetUp Vscode to work with Stata</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./VScode_setup_for_github.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Copilot and AI Tools</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  <a href="./copilot_protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Mandatory Protocols for Using GitHub Copilot in Technical Work</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./copilot_guidelines.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Suggested Guidelines for Using GitHub Copilot in Technical Work</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">MISC Tools and Tips</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code_coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Add code coverage badge to your GitHub Repository.</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./github_actions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Setting up Github Actions for Auto Deployment of Quarto book</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Increase_performance_WB_laptop.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Improve Efficiency of a WB Laptop</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./interact_vm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">How to interact with the Virtual Machine (VM) that hosts PIP</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
 </li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -221,29 +275,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#install-vscode-and-stata-extensions" id="toc-install-vscode-and-stata-extensions" class="nav-link active" data-scroll-target="#install-vscode-and-stata-extensions"><span class="header-section-number">7.1</span> Install VScode and Stata Extensions</a></li>
-  <li><a href="#configure-rundo-and-rundolines" id="toc-configure-rundo-and-rundolines" class="nav-link" data-scroll-target="#configure-rundo-and-rundolines"><span class="header-section-number">7.2</span> Configure <code>rundo</code> and <code>rundolines</code></a>
+  <li><a href="#install-vscode-and-stata-extensions" id="toc-install-vscode-and-stata-extensions" class="nav-link active" data-scroll-target="#install-vscode-and-stata-extensions"><span class="header-section-number">2.1</span> Install VScode and Stata Extensions</a></li>
+  <li><a href="#configure-rundo-and-rundolines" id="toc-configure-rundo-and-rundolines" class="nav-link" data-scroll-target="#configure-rundo-and-rundolines"><span class="header-section-number">2.2</span> Configure <code>rundo</code> and <code>rundolines</code></a>
   <ul class="collapse">
-  <li><a href="#recommended-.ini-tuning-for-snappier-runs" id="toc-recommended-.ini-tuning-for-snappier-runs" class="nav-link" data-scroll-target="#recommended-.ini-tuning-for-snappier-runs"><span class="header-section-number">7.2.1</span> Recommended <code>.ini</code> tuning (for snappier runs)</a></li>
+  <li><a href="#recommended-.ini-tuning-for-snappier-runs" id="toc-recommended-.ini-tuning-for-snappier-runs" class="nav-link" data-scroll-target="#recommended-.ini-tuning-for-snappier-runs"><span class="header-section-number">2.2.1</span> Recommended <code>.ini</code> tuning (for snappier runs)</a></li>
   </ul></li>
-  <li><a href="#set-up-user-tasks-global-once-to-call-rundolines-rundo" id="toc-set-up-user-tasks-global-once-to-call-rundolines-rundo" class="nav-link" data-scroll-target="#set-up-user-tasks-global-once-to-call-rundolines-rundo"><span class="header-section-number">7.3</span> Set up <strong>User Tasks</strong> (global, once) to call <code>rundolines</code> / <code>rundo</code></a></li>
-  <li><a href="#bind-your-keyboard-shortcuts-global-once" id="toc-bind-your-keyboard-shortcuts-global-once" class="nav-link" data-scroll-target="#bind-your-keyboard-shortcuts-global-once"><span class="header-section-number">7.4</span> Bind your <strong>keyboard shortcuts</strong> (global, once)</a></li>
-  <li><a href="#optional-running-mata-files-directly" id="toc-optional-running-mata-files-directly" class="nav-link" data-scroll-target="#optional-running-mata-files-directly"><span class="header-section-number">7.5</span> (Optional) Running <strong>Mata</strong> files directly</a>
+  <li><a href="#set-up-user-tasks-global-once-to-call-rundolines-rundo" id="toc-set-up-user-tasks-global-once-to-call-rundolines-rundo" class="nav-link" data-scroll-target="#set-up-user-tasks-global-once-to-call-rundolines-rundo"><span class="header-section-number">2.3</span> Set up <strong>User Tasks</strong> (global, once) to call <code>rundolines</code> / <code>rundo</code></a></li>
+  <li><a href="#bind-your-keyboard-shortcuts-global-once" id="toc-bind-your-keyboard-shortcuts-global-once" class="nav-link" data-scroll-target="#bind-your-keyboard-shortcuts-global-once"><span class="header-section-number">2.4</span> Bind your <strong>keyboard shortcuts</strong> (global, once)</a></li>
+  <li><a href="#optional-running-mata-files-directly" id="toc-optional-running-mata-files-directly" class="nav-link" data-scroll-target="#optional-running-mata-files-directly"><span class="header-section-number">2.5</span> (Optional) Running <strong>Mata</strong> files directly</a>
   <ul class="collapse">
-  <li><a href="#a-wrapper-.do-recommended-for-standalone-.mata-files" id="toc-a-wrapper-.do-recommended-for-standalone-.mata-files" class="nav-link" data-scroll-target="#a-wrapper-.do-recommended-for-standalone-.mata-files"><span class="header-section-number">7.5.1</span> A) Wrapper <code>.do</code> (recommended for standalone <code>.mata</code> files)</a></li>
-  <li><a href="#b-mata-blocks-inside-a-.do" id="toc-b-mata-blocks-inside-a-.do" class="nav-link" data-scroll-target="#b-mata-blocks-inside-a-.do"><span class="header-section-number">7.5.2</span> B) Mata blocks inside a <code>.do</code></a></li>
+  <li><a href="#a-wrapper-.do-recommended-for-standalone-.mata-files" id="toc-a-wrapper-.do-recommended-for-standalone-.mata-files" class="nav-link" data-scroll-target="#a-wrapper-.do-recommended-for-standalone-.mata-files"><span class="header-section-number">2.5.1</span> A) Wrapper <code>.do</code> (recommended for standalone <code>.mata</code> files)</a></li>
+  <li><a href="#b-mata-blocks-inside-a-.do" id="toc-b-mata-blocks-inside-a-.do" class="nav-link" data-scroll-target="#b-mata-blocks-inside-a-.do"><span class="header-section-number">2.5.2</span> B) Mata blocks inside a <code>.do</code></a></li>
   </ul></li>
-  <li><a href="#quick-sanity-test-30-seconds" id="toc-quick-sanity-test-30-seconds" class="nav-link" data-scroll-target="#quick-sanity-test-30-seconds"><span class="header-section-number">7.6</span> Quick sanity test (30 seconds)</a></li>
-  <li><a href="#troubleshooting-performance" id="toc-troubleshooting-performance" class="nav-link" data-scroll-target="#troubleshooting-performance"><span class="header-section-number">7.7</span> Troubleshooting &amp; Performance</a></li>
+  <li><a href="#quick-sanity-test-30-seconds" id="toc-quick-sanity-test-30-seconds" class="nav-link" data-scroll-target="#quick-sanity-test-30-seconds"><span class="header-section-number">2.6</span> Quick sanity test (30 seconds)</a></li>
+  <li><a href="#troubleshooting-performance" id="toc-troubleshooting-performance" class="nav-link" data-scroll-target="#troubleshooting-performance"><span class="header-section-number">2.7</span> Troubleshooting &amp; Performance</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./VScode_Setup_for_stata.html">VSCode Setup</a></li><li class="breadcrumb-item"><a href="./VScode_Setup_for_stata.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">SetUp Vscode to work with Stata</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SetUp Vscode to work with Stata</span></h1>
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">SetUp Vscode to work with Stata</span></h1>
 </div>
 
 
@@ -266,8 +320,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="install-vscode-and-stata-extensions" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="install-vscode-and-stata-extensions"><span class="header-section-number">7.1</span> Install VScode and Stata Extensions</h2>
+<section id="install-vscode-and-stata-extensions" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="install-vscode-and-stata-extensions"><span class="header-section-number">2.1</span> Install VScode and Stata Extensions</h2>
 <ol type="1">
 <li><p>Open “Company Portal” app on your computer.</p></li>
 <li><p>Search for <a href="companyportal:ApplicationId=d5aba730-00d4-4a78-a224-7b8170ac0eb0">VS Code</a> and install it.(Make sure Git Credential Manager is selected)</p></li>
@@ -284,8 +338,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 <hr>
 </section>
-<section id="configure-rundo-and-rundolines" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="configure-rundo-and-rundolines"><span class="header-section-number">7.2</span> Configure <code>rundo</code> and <code>rundolines</code></h2>
+<section id="configure-rundo-and-rundolines" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="configure-rundo-and-rundolines"><span class="header-section-number">2.2</span> Configure <code>rundo</code> and <code>rundolines</code></h2>
 <p>All the information in this section is based on Friedrich Huebler’s <a href="https://huebler.blogspot.com/2008/04/stata.html">article</a>. If you need more detail, see his blog.</p>
 <ol type="1">
 <li><p>For convenience, we also mirror the files here: <a href="https://github.com/GPID-WB/Pip-Technical-Guidelines/raw/refs/heads/main/_data/rundofiles.zip" class="uri">https://github.com/GPID-WB/Pip-Technical-Guidelines/raw/refs/heads/main/_data/rundofiles.zip</a></p></li>
@@ -302,8 +356,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul></li>
 <li><p>The two INIs should be <strong>identical</strong> except for the filename. Keep both updated.</p></li>
 </ol>
-<section id="recommended-.ini-tuning-for-snappier-runs" class="level3" data-number="7.2.1">
-<h3 data-number="7.2.1" class="anchored" data-anchor-id="recommended-.ini-tuning-for-snappier-runs"><span class="header-section-number">7.2.1</span> Recommended <code>.ini</code> tuning (for snappier runs)</h3>
+<section id="recommended-.ini-tuning-for-snappier-runs" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="recommended-.ini-tuning-for-snappier-runs"><span class="header-section-number">2.2.1</span> Recommended <code>.ini</code> tuning (for snappier runs)</h3>
 <p>These delays are safe and faster than the defaults:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode ini code-with-copy"><code class="sourceCode ini"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[Delays]</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">clippause </span><span class="ot">=</span><span class="st"> 60   ; ms after copying selection to clipboard (40–80 is a good range)</span></span>
@@ -318,8 +372,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="set-up-user-tasks-global-once-to-call-rundolines-rundo" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="set-up-user-tasks-global-once-to-call-rundolines-rundo"><span class="header-section-number">7.3</span> Set up <strong>User Tasks</strong> (global, once) to call <code>rundolines</code> / <code>rundo</code></h2>
+<section id="set-up-user-tasks-global-once-to-call-rundolines-rundo" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="set-up-user-tasks-global-once-to-call-rundolines-rundo"><span class="header-section-number">2.3</span> Set up <strong>User Tasks</strong> (global, once) to call <code>rundolines</code> / <code>rundo</code></h2>
 <blockquote class="blockquote">
 <p>We use <strong>User Tasks</strong> so you don’t have to repeat this per workspace.</p>
 </blockquote>
@@ -363,8 +417,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="bind-your-keyboard-shortcuts-global-once" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="bind-your-keyboard-shortcuts-global-once"><span class="header-section-number">7.4</span> Bind your <strong>keyboard shortcuts</strong> (global, once)</h2>
+<section id="bind-your-keyboard-shortcuts-global-once" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="bind-your-keyboard-shortcuts-global-once"><span class="header-section-number">2.4</span> Bind your <strong>keyboard shortcuts</strong> (global, once)</h2>
 <ol type="1">
 <li>Open <strong>Command Palette</strong> (<code>Ctrl+Shift+P</code>) → type: <strong>Keyboard Shortcuts</strong> → select: <strong>Open Keyboard Shortcuts (JSON)</strong>.</li>
 <li>Add (or adapt keys if you already use F9/F10 or if you don’t want to use F9/F10):</li>
@@ -393,11 +447,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </blockquote>
 <hr>
 </section>
-<section id="optional-running-mata-files-directly" class="level2" data-number="7.5">
-<h2 data-number="7.5" class="anchored" data-anchor-id="optional-running-mata-files-directly"><span class="header-section-number">7.5</span> (Optional) Running <strong>Mata</strong> files directly</h2>
+<section id="optional-running-mata-files-directly" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="optional-running-mata-files-directly"><span class="header-section-number">2.5</span> (Optional) Running <strong>Mata</strong> files directly</h2>
 <p>Two clean options; pick one.</p>
-<section id="a-wrapper-.do-recommended-for-standalone-.mata-files" class="level3" data-number="7.5.1">
-<h3 data-number="7.5.1" class="anchored" data-anchor-id="a-wrapper-.do-recommended-for-standalone-.mata-files"><span class="header-section-number">7.5.1</span> A) Wrapper <code>.do</code> (recommended for standalone <code>.mata</code> files)</h3>
+<section id="a-wrapper-.do-recommended-for-standalone-.mata-files" class="level3" data-number="2.5.1">
+<h3 data-number="2.5.1" class="anchored" data-anchor-id="a-wrapper-.do-recommended-for-standalone-.mata-files"><span class="header-section-number">2.5.1</span> A) Wrapper <code>.do</code> (recommended for standalone <code>.mata</code> files)</h3>
 <p>Create <code>.vscode/_run_mata.do</code> in your repo (or anywhere stable):</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// _run_mata.do</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">args</span> mfile</span>
@@ -420,14 +474,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"when"</span><span class="fu">:</span> <span class="st">"editorTextFocus &amp;&amp; (resourceExtname =~ /</span><span class="ch">\\</span><span class="st">.(mata)$/)"</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="b-mata-blocks-inside-a-.do" class="level3" data-number="7.5.2">
-<h3 data-number="7.5.2" class="anchored" data-anchor-id="b-mata-blocks-inside-a-.do"><span class="header-section-number">7.5.2</span> B) Mata blocks inside a <code>.do</code></h3>
+<section id="b-mata-blocks-inside-a-.do" class="level3" data-number="2.5.2">
+<h3 data-number="2.5.2" class="anchored" data-anchor-id="b-mata-blocks-inside-a-.do"><span class="header-section-number">2.5.2</span> B) Mata blocks inside a <code>.do</code></h3>
 <p>Place your Mata code inside a <code>mata: … end</code> block in a <code>.do</code>, then use <strong>F9</strong> (selection) or <strong>F10</strong> (whole file).</p>
 <hr>
 </section>
 </section>
-<section id="quick-sanity-test-30-seconds" class="level2" data-number="7.6">
-<h2 data-number="7.6" class="anchored" data-anchor-id="quick-sanity-test-30-seconds"><span class="header-section-number">7.6</span> Quick sanity test (30 seconds)</h2>
+<section id="quick-sanity-test-30-seconds" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="quick-sanity-test-30-seconds"><span class="header-section-number">2.6</span> Quick sanity test (30 seconds)</h2>
 <ol type="1">
 <li><p>Open a <code>.do</code>. Type and <strong>select</strong>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">display</span> <span class="st">"hello from VS Code"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
@@ -442,8 +496,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="troubleshooting-performance" class="level2" data-number="7.7">
-<h2 data-number="7.7" class="anchored" data-anchor-id="troubleshooting-performance"><span class="header-section-number">7.7</span> Troubleshooting &amp; Performance</h2>
+<section id="troubleshooting-performance" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="troubleshooting-performance"><span class="header-section-number">2.7</span> Troubleshooting &amp; Performance</h2>
 <ul>
 <li><strong>First run is slower</strong> (1–3 s) due to task runner warm-up and first attach. Subsequent runs are often <strong>sub-second</strong> with tuned INIs.</li>
 <li>If sends are flaky, raise <code>winpause</code> slightly (e.g., from 120 → 140 ms).</li>
@@ -859,13 +913,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./interact_vm.html" class="pagination-link" aria-label="How to interact with the Virtual Machine (VM) that hosts PIP">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">How to interact with the Virtual Machine (VM) that hosts PIP</span></span>
+      <a href="./setupR.html" class="pagination-link" aria-label="Setting Up R, RStudio, and Positron to Use the Same Configuration Files">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./VScode_setup_for_github.html" class="pagination-link" aria-label="SetUp Git &amp; GitHub in VS Code">
-        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

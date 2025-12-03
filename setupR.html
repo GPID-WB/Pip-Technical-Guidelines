@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="PIP Technical Team">
 <meta name="dcterms.date" content="2025-11-03">
 
-<title>5&nbsp; Setting Up R, RStudio, and Positron to Use the Same Configuration Files – Pip Technical Guidelines</title>
+<title>1&nbsp; Setting Up R, RStudio, and Positron to Use the Same Configuration Files – Pip Technical Guidelines</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -67,8 +67,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./interact_vm.html" rel="next">
-<link href="./Increase_performance_WB_laptop.html" rel="prev">
+<link href="./VScode_Setup_for_stata.html" rel="next">
+<link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -76,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-0dd2bd5de344125cf763a379ddc3eb04.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -109,6 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
+<link rel="stylesheet" href="css/tachyons.css">
 </head>
 
 <body class="nav-sidebar floating quarto-light">
@@ -120,7 +121,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./setupR.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./setupR.html">R Setup and efficiency</a></li><li class="breadcrumb-item"><a href="./setupR.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -133,9 +134,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="./index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Pip Technical Guidelines</a> 
     </div>
@@ -153,66 +152,121 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./code_coverage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Add code coverage badge to your GitHub Repository.</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./github_actions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Setting up Github Actions for Auto Deployment of Quarto book</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Increase_performance_WB_laptop.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Improve Efficiency of a WB Laptop</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">R Setup and efficiency</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./setupR.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./interact_vm.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">How to interact with the Virtual Machine (VM) that hosts PIP</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">VSCode Setup</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./VScode_Setup_for_stata.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SetUp Vscode to work with Stata</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">SetUp Vscode to work with Stata</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./VScode_setup_for_github.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Copilot and AI Tools</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  <a href="./copilot_protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Mandatory Protocols for Using GitHub Copilot in Technical Work</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./copilot_guidelines.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Suggested Guidelines for Using GitHub Copilot in Technical Work</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">MISC Tools and Tips</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code_coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Add code coverage badge to your GitHub Repository.</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./github_actions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Setting up Github Actions for Auto Deployment of Quarto book</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Increase_performance_WB_laptop.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Improve Efficiency of a WB Laptop</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./interact_vm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">How to interact with the Virtual Machine (VM) that hosts PIP</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
 </li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -223,25 +277,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro"><span class="header-section-number">5.1</span> Intro</a></li>
-  <li><a href="#step-1.-choose-a-canonical-r-configuration-directory" id="toc-step-1.-choose-a-canonical-r-configuration-directory" class="nav-link" data-scroll-target="#step-1.-choose-a-canonical-r-configuration-directory"><span class="header-section-number">5.2</span> Step 1. Choose a canonical R configuration directory</a></li>
-  <li><a href="#step-2.-create-or-update-your-configuration-files" id="toc-step-2.-create-or-update-your-configuration-files" class="nav-link" data-scroll-target="#step-2.-create-or-update-your-configuration-files"><span class="header-section-number">5.3</span> Step 2. Create (or update) your configuration files</a>
+  <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro"><span class="header-section-number">1.1</span> Intro</a></li>
+  <li><a href="#step-1.-choose-a-canonical-r-configuration-directory" id="toc-step-1.-choose-a-canonical-r-configuration-directory" class="nav-link" data-scroll-target="#step-1.-choose-a-canonical-r-configuration-directory"><span class="header-section-number">1.2</span> Step 1. Choose a canonical R configuration directory</a></li>
+  <li><a href="#step-2.-create-or-update-your-configuration-files" id="toc-step-2.-create-or-update-your-configuration-files" class="nav-link" data-scroll-target="#step-2.-create-or-update-your-configuration-files"><span class="header-section-number">1.3</span> Step 2. Create (or update) your configuration files</a>
   <ul class="collapse">
-  <li><a href="#renviron" id="toc-renviron" class="nav-link" data-scroll-target="#renviron"><span class="header-section-number">5.3.1</span> <code>.Renviron</code></a></li>
-  <li><a href="#rprofile" id="toc-rprofile" class="nav-link" data-scroll-target="#rprofile"><span class="header-section-number">5.3.2</span> <code>.Rprofile</code></a></li>
+  <li><a href="#renviron" id="toc-renviron" class="nav-link" data-scroll-target="#renviron"><span class="header-section-number">1.3.1</span> <code>.Renviron</code></a></li>
+  <li><a href="#rprofile" id="toc-rprofile" class="nav-link" data-scroll-target="#rprofile"><span class="header-section-number">1.3.2</span> <code>.Rprofile</code></a></li>
   </ul></li>
-  <li><a href="#step-3.-tell-windows-and-r-where-to-find-these-files" id="toc-step-3.-tell-windows-and-r-where-to-find-these-files" class="nav-link" data-scroll-target="#step-3.-tell-windows-and-r-where-to-find-these-files"><span class="header-section-number">5.4</span> Step 3. Tell Windows and R where to find these files</a></li>
-  <li><a href="#step-4.-verify-the-configuration" id="toc-step-4.-verify-the-configuration" class="nav-link" data-scroll-target="#step-4.-verify-the-configuration"><span class="header-section-number">5.5</span> Step 4. Verify the configuration</a></li>
-  <li><a href="#step-5.-optional-cleanup" id="toc-step-5.-optional-cleanup" class="nav-link" data-scroll-target="#step-5.-optional-cleanup"><span class="header-section-number">5.6</span> Step 5. Optional cleanup</a></li>
+  <li><a href="#step-3.-tell-windows-and-r-where-to-find-these-files" id="toc-step-3.-tell-windows-and-r-where-to-find-these-files" class="nav-link" data-scroll-target="#step-3.-tell-windows-and-r-where-to-find-these-files"><span class="header-section-number">1.4</span> Step 3. Tell Windows and R where to find these files</a></li>
+  <li><a href="#step-4.-verify-the-configuration" id="toc-step-4.-verify-the-configuration" class="nav-link" data-scroll-target="#step-4.-verify-the-configuration"><span class="header-section-number">1.5</span> Step 4. Verify the configuration</a></li>
+  <li><a href="#step-5.-optional-cleanup" id="toc-step-5.-optional-cleanup" class="nav-link" data-scroll-target="#step-5.-optional-cleanup"><span class="header-section-number">1.6</span> Step 5. Optional cleanup</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./setupR.html">R Setup and efficiency</a></li><li class="breadcrumb-item"><a href="./setupR.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></h1>
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></h1>
 <p class="subtitle lead">A unified and robust configuration setup for consistent R behavior across IDEs</p>
 </div>
 
@@ -271,8 +325,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="intro" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="intro"><span class="header-section-number">5.1</span> Intro</h2>
+<section id="intro" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="intro"><span class="header-section-number">1.1</span> Intro</h2>
 <p>When working with R, <strong>your environment files</strong> (<code>.Renviron</code> and <code>.Rprofile</code>) control how R behaves on startup—what packages it loads, what paths it uses, and how it connects to external resources (like CRAN mirrors or proxies).<br>
 However, depending on which IDE you use (RStudio, Positron, VS Code, or command-line R), these files might not always point to the same location.</p>
 <p>A clean, unified setup ensures: - Reproducible environments across IDEs.<br>
@@ -282,8 +336,8 @@ However, depending on which IDE you use (RStudio, Positron, VS Code, or command-
 <p>This guide describes the <strong>recommended setup</strong> for aligning your R environment across IDEs, including RStudio and Positron.</p>
 <hr>
 </section>
-<section id="step-1.-choose-a-canonical-r-configuration-directory" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="step-1.-choose-a-canonical-r-configuration-directory"><span class="header-section-number">5.2</span> Step 1. Choose a canonical R configuration directory</h2>
+<section id="step-1.-choose-a-canonical-r-configuration-directory" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="step-1.-choose-a-canonical-r-configuration-directory"><span class="header-section-number">1.2</span> Step 1. Choose a canonical R configuration directory</h2>
 <p>Decide on a single folder that will store your personal R configuration files.<br>
 We recommend creating a dedicated folder at the root of your working directory, for example:</p>
 <pre><code>C:\WBG\R
@@ -293,10 +347,10 @@ We recommend creating a dedicated folder at the root of your working directory, 
 C:\WBG\R.Rprofile</code></pre>
 <hr>
 </section>
-<section id="step-2.-create-or-update-your-configuration-files" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="step-2.-create-or-update-your-configuration-files"><span class="header-section-number">5.3</span> Step 2. Create (or update) your configuration files</h2>
-<section id="renviron" class="level3" data-number="5.3.1">
-<h3 data-number="5.3.1" class="anchored" data-anchor-id="renviron"><span class="header-section-number">5.3.1</span> <code>.Renviron</code></h3>
+<section id="step-2.-create-or-update-your-configuration-files" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="step-2.-create-or-update-your-configuration-files"><span class="header-section-number">1.3</span> Step 2. Create (or update) your configuration files</h2>
+<section id="renviron" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="renviron"><span class="header-section-number">1.3.1</span> <code>.Renviron</code></h3>
 <p>Create a text file named <code>.Renviron</code> at <code>C:\WBG\R\.Renviron</code> and add your preferred settings:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># C:/WBG/R/.Renviron</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">R_LIBS</span><span class="op">=</span>C:/WBG/R/r-packages/%v</span>
@@ -308,8 +362,8 @@ C:\WBG\R.Rprofile</code></pre>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="va">RENVIRON_LOADED_FROM</span><span class="op">=</span>C:/WBG/R/.Renviron</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This file defines <strong>environment variables</strong> that R reads at startup — for example, custom library locations, locale settings, or proxy credentials.</p>
 </section>
-<section id="rprofile" class="level3" data-number="5.3.2">
-<h3 data-number="5.3.2" class="anchored" data-anchor-id="rprofile"><span class="header-section-number">5.3.2</span> <code>.Rprofile</code></h3>
+<section id="rprofile" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="rprofile"><span class="header-section-number">1.3.2</span> <code>.Rprofile</code></h3>
 <p>Create a text file named <code>.Rprofile</code> at <code>C:\WBG\R\.Rprofile</code> and add the R code that should run automatically at startup:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># C:/WBG/R/.Rprofile</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">local</span>({</span>
@@ -323,8 +377,8 @@ C:\WBG\R.Rprofile</code></pre>
 <hr>
 </section>
 </section>
-<section id="step-3.-tell-windows-and-r-where-to-find-these-files" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="step-3.-tell-windows-and-r-where-to-find-these-files"><span class="header-section-number">5.4</span> Step 3. Tell Windows and R where to find these files</h2>
+<section id="step-3.-tell-windows-and-r-where-to-find-these-files" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="step-3.-tell-windows-and-r-where-to-find-these-files"><span class="header-section-number">1.4</span> Step 3. Tell Windows and R where to find these files</h2>
 <p>The most reliable method is to set <strong>persistent user environment variables</strong> using <code>setx</code>, which works even in secure or constrained PowerShell environments (like corporate devices).</p>
 <p>Open <strong>PowerShell</strong> or <strong>Command Prompt</strong> or <strong>Terminal in Vscode</strong> (no admin rights needed) and run:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bat code-with-copy"><code class="sourceCode dosbat"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>setx R_ENVIRON_USER <span class="st">"C:\WBG\R\.Renviron"</span></span>
@@ -335,8 +389,8 @@ C:\WBG\R.Rprofile</code></pre>
 <p>Then <strong>close and reopen</strong> RStudio, Positron, or any terminal using R.</p>
 <hr>
 </section>
-<section id="step-4.-verify-the-configuration" class="level2" data-number="5.5">
-<h2 data-number="5.5" class="anchored" data-anchor-id="step-4.-verify-the-configuration"><span class="header-section-number">5.5</span> Step 4. Verify the configuration</h2>
+<section id="step-4.-verify-the-configuration" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="step-4.-verify-the-configuration"><span class="header-section-number">1.5</span> Step 4. Verify the configuration</h2>
 <p>After restarting R (in any IDE), run the following to confirm the setup:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">path.expand</span>(<span class="st">"~"</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">normalizePath</span>(<span class="st">"~/.Renviron"</span>, <span class="at">mustWork =</span> <span class="cn">FALSE</span>)</span>
@@ -350,8 +404,8 @@ C:\WBG\R.Rprofile</code></pre>
 </ul>
 <hr>
 </section>
-<section id="step-5.-optional-cleanup" class="level2" data-number="5.6">
-<h2 data-number="5.6" class="anchored" data-anchor-id="step-5.-optional-cleanup"><span class="header-section-number">5.6</span> Step 5. Optional cleanup</h2>
+<section id="step-5.-optional-cleanup" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="step-5.-optional-cleanup"><span class="header-section-number">1.6</span> Step 5. Optional cleanup</h2>
 <p>If you previously had <code>.Rprofile</code> files in other locations (like your <code>Documents</code> or <code>OneDrive</code> folder), remove or rename them by adding a <code>.bak</code> at the end (e.g., <code>.Rprofile.bak</code>). R automatically runs the <strong>first <code>.Rprofile</code></strong> it finds, so duplicate files can cause confusion or run twice.</p>
 <p>By following this setup, your R environment becomes predictable, portable, and IDE-agnostic — a professional-grade configuration for serious R development.</p>
 
@@ -761,13 +815,13 @@ C:\WBG\R.Rprofile</code></pre>
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./Increase_performance_WB_laptop.html" class="pagination-link" aria-label="Improve Efficiency of a WB Laptop">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Improve Efficiency of a WB Laptop</span></span>
+      <a href="./index.html" class="pagination-link" aria-label="Preface">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./interact_vm.html" class="pagination-link" aria-label="How to interact with the Virtual Machine (VM) that hosts PIP">
-        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">How to interact with the Virtual Machine (VM) that hosts PIP</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./VScode_Setup_for_stata.html" class="pagination-link" aria-label="SetUp Vscode to work with Stata">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">SetUp Vscode to work with Stata</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

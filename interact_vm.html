@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>6&nbsp; How to interact with the Virtual Machine (VM) that hosts PIP – Pip Technical Guidelines</title>
+<title>9&nbsp; How to interact with the Virtual Machine (VM) that hosts PIP – Pip Technical Guidelines</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,8 +65,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./VScode_Setup_for_stata.html" rel="next">
-<link href="./setupR.html" rel="prev">
+<link href="./references.html" rel="next">
+<link href="./Increase_performance_WB_laptop.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -74,7 +74,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-0dd2bd5de344125cf763a379ddc3eb04.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -107,6 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
+<link rel="stylesheet" href="css/tachyons.css">
 </head>
 
 <body class="nav-sidebar floating quarto-light">
@@ -118,7 +119,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./interact_vm.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">How to interact with the Virtual Machine (VM) that hosts PIP</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./code_coverage.html">MISC Tools and Tips</a></li><li class="breadcrumb-item"><a href="./interact_vm.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">How to interact with the Virtual Machine (VM) that hosts PIP</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -131,9 +132,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="./index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Pip Technical Guidelines</a> 
     </div>
@@ -151,66 +150,121 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./code_coverage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Add code coverage badge to your GitHub Repository.</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./github_actions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Setting up Github Actions for Auto Deployment of Quarto book</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Increase_performance_WB_laptop.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Improve Efficiency of a WB Laptop</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">R Setup and efficiency</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./setupR.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./interact_vm.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">How to interact with the Virtual Machine (VM) that hosts PIP</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">VSCode Setup</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./VScode_Setup_for_stata.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SetUp Vscode to work with Stata</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">SetUp Vscode to work with Stata</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./VScode_setup_for_github.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Copilot and AI Tools</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  <a href="./copilot_protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Mandatory Protocols for Using GitHub Copilot in Technical Work</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./copilot_guidelines.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Suggested Guidelines for Using GitHub Copilot in Technical Work</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">MISC Tools and Tips</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code_coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Add code coverage badge to your GitHub Repository.</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./github_actions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Setting up Github Actions for Auto Deployment of Quarto book</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Increase_performance_WB_laptop.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Improve Efficiency of a WB Laptop</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./interact_vm.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">How to interact with the Virtual Machine (VM) that hosts PIP</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
 </li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -221,44 +275,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#access-and-session-management" id="toc-access-and-session-management" class="nav-link active" data-scroll-target="#access-and-session-management"><span class="header-section-number">6.1</span> Access and Session Management</a>
+  <li><a href="#access-and-session-management" id="toc-access-and-session-management" class="nav-link active" data-scroll-target="#access-and-session-management"><span class="header-section-number">9.1</span> Access and Session Management</a>
   <ul class="collapse">
-  <li><a href="#login-to-the-vm" id="toc-login-to-the-vm" class="nav-link" data-scroll-target="#login-to-the-vm"><span class="header-section-number">6.1.1</span> Login to the VM</a></li>
-  <li><a href="#copy-paste-and-keyboard-shortcuts" id="toc-copy-paste-and-keyboard-shortcuts" class="nav-link" data-scroll-target="#copy-paste-and-keyboard-shortcuts"><span class="header-section-number">6.1.2</span> Copy, Paste, and Keyboard Shortcuts</a></li>
+  <li><a href="#login-to-the-vm" id="toc-login-to-the-vm" class="nav-link" data-scroll-target="#login-to-the-vm"><span class="header-section-number">9.1.1</span> Login to the VM</a></li>
+  <li><a href="#copy-paste-and-keyboard-shortcuts" id="toc-copy-paste-and-keyboard-shortcuts" class="nav-link" data-scroll-target="#copy-paste-and-keyboard-shortcuts"><span class="header-section-number">9.1.2</span> Copy, Paste, and Keyboard Shortcuts</a></li>
   </ul></li>
-  <li><a href="#understanding-the-environment" id="toc-understanding-the-environment" class="nav-link" data-scroll-target="#understanding-the-environment"><span class="header-section-number">6.2</span> Understanding the Environment</a>
+  <li><a href="#understanding-the-environment" id="toc-understanding-the-environment" class="nav-link" data-scroll-target="#understanding-the-environment"><span class="header-section-number">9.2</span> Understanding the Environment</a>
   <ul class="collapse">
-  <li><a href="#users-and-permissions" id="toc-users-and-permissions" class="nav-link" data-scroll-target="#users-and-permissions"><span class="header-section-number">6.2.1</span> Users and Permissions</a></li>
-  <li><a href="#architecture-overview" id="toc-architecture-overview" class="nav-link" data-scroll-target="#architecture-overview"><span class="header-section-number">6.2.2</span> Architecture Overview</a></li>
+  <li><a href="#users-and-permissions" id="toc-users-and-permissions" class="nav-link" data-scroll-target="#users-and-permissions"><span class="header-section-number">9.2.1</span> Users and Permissions</a></li>
+  <li><a href="#architecture-overview" id="toc-architecture-overview" class="nav-link" data-scroll-target="#architecture-overview"><span class="header-section-number">9.2.2</span> Architecture Overview</a></li>
   </ul></li>
-  <li><a href="#essential-docker-commands-cheat-sheet" id="toc-essential-docker-commands-cheat-sheet" class="nav-link" data-scroll-target="#essential-docker-commands-cheat-sheet"><span class="header-section-number">6.3</span> Essential Docker Commands (Cheat Sheet)</a></li>
-  <li><a href="#managing-data" id="toc-managing-data" class="nav-link" data-scroll-target="#managing-data"><span class="header-section-number">6.4</span> Managing Data</a>
+  <li><a href="#essential-docker-commands-cheat-sheet" id="toc-essential-docker-commands-cheat-sheet" class="nav-link" data-scroll-target="#essential-docker-commands-cheat-sheet"><span class="header-section-number">9.3</span> Essential Docker Commands (Cheat Sheet)</a></li>
+  <li><a href="#managing-data" id="toc-managing-data" class="nav-link" data-scroll-target="#managing-data"><span class="header-section-number">9.4</span> Managing Data</a>
   <ul class="collapse">
-  <li><a href="#data-on-the-vm-persistent" id="toc-data-on-the-vm-persistent" class="nav-link" data-scroll-target="#data-on-the-vm-persistent"><span class="header-section-number">6.4.1</span> Data on the VM (Persistent)</a></li>
-  <li><a href="#data-inside-containers-ephemeral" id="toc-data-inside-containers-ephemeral" class="nav-link" data-scroll-target="#data-inside-containers-ephemeral"><span class="header-section-number">6.4.2</span> Data Inside Containers (Ephemeral)</a></li>
-  <li><a href="#safe-deletion-and-cleanup" id="toc-safe-deletion-and-cleanup" class="nav-link" data-scroll-target="#safe-deletion-and-cleanup"><span class="header-section-number">6.4.3</span> Safe Deletion and Cleanup</a></li>
+  <li><a href="#data-on-the-vm-persistent" id="toc-data-on-the-vm-persistent" class="nav-link" data-scroll-target="#data-on-the-vm-persistent"><span class="header-section-number">9.4.1</span> Data on the VM (Persistent)</a></li>
+  <li><a href="#data-inside-containers-ephemeral" id="toc-data-inside-containers-ephemeral" class="nav-link" data-scroll-target="#data-inside-containers-ephemeral"><span class="header-section-number">9.4.2</span> Data Inside Containers (Ephemeral)</a></li>
+  <li><a href="#safe-deletion-and-cleanup" id="toc-safe-deletion-and-cleanup" class="nav-link" data-scroll-target="#safe-deletion-and-cleanup"><span class="header-section-number">9.4.3</span> Safe Deletion and Cleanup</a></li>
   </ul></li>
-  <li><a href="#diagnosing-api-or-container-issues" id="toc-diagnosing-api-or-container-issues" class="nav-link" data-scroll-target="#diagnosing-api-or-container-issues"><span class="header-section-number">6.5</span> Diagnosing API or Container Issues</a>
+  <li><a href="#diagnosing-api-or-container-issues" id="toc-diagnosing-api-or-container-issues" class="nav-link" data-scroll-target="#diagnosing-api-or-container-issues"><span class="header-section-number">9.5</span> Diagnosing API or Container Issues</a>
   <ul class="collapse">
-  <li><a href="#check-container-state" id="toc-check-container-state" class="nav-link" data-scroll-target="#check-container-state"><span class="header-section-number">6.5.1</span> Check Container State</a></li>
-  <li><a href="#view-logs" id="toc-view-logs" class="nav-link" data-scroll-target="#view-logs"><span class="header-section-number">6.5.2</span> View Logs</a></li>
-  <li><a href="#reproduce-interactively" id="toc-reproduce-interactively" class="nav-link" data-scroll-target="#reproduce-interactively"><span class="header-section-number">6.5.3</span> Reproduce Interactively</a></li>
-  <li><a href="#restart-or-rebuild-containers" id="toc-restart-or-rebuild-containers" class="nav-link" data-scroll-target="#restart-or-rebuild-containers"><span class="header-section-number">6.5.4</span> Restart or Rebuild Containers</a></li>
+  <li><a href="#check-container-state" id="toc-check-container-state" class="nav-link" data-scroll-target="#check-container-state"><span class="header-section-number">9.5.1</span> Check Container State</a></li>
+  <li><a href="#view-logs" id="toc-view-logs" class="nav-link" data-scroll-target="#view-logs"><span class="header-section-number">9.5.2</span> View Logs</a></li>
+  <li><a href="#reproduce-interactively" id="toc-reproduce-interactively" class="nav-link" data-scroll-target="#reproduce-interactively"><span class="header-section-number">9.5.3</span> Reproduce Interactively</a></li>
+  <li><a href="#restart-or-rebuild-containers" id="toc-restart-or-rebuild-containers" class="nav-link" data-scroll-target="#restart-or-rebuild-containers"><span class="header-section-number">9.5.4</span> Restart or Rebuild Containers</a></li>
   </ul></li>
-  <li><a href="#testing-api-endpoints" id="toc-testing-api-endpoints" class="nav-link" data-scroll-target="#testing-api-endpoints"><span class="header-section-number">6.6</span> Testing API Endpoints</a>
+  <li><a href="#testing-api-endpoints" id="toc-testing-api-endpoints" class="nav-link" data-scroll-target="#testing-api-endpoints"><span class="header-section-number">9.6</span> Testing API Endpoints</a>
   <ul class="collapse">
-  <li><a href="#from-inside-the-container" id="toc-from-inside-the-container" class="nav-link" data-scroll-target="#from-inside-the-container"><span class="header-section-number">6.6.1</span> From Inside the Container</a></li>
-  <li><a href="#loop-through-common-endpoints" id="toc-loop-through-common-endpoints" class="nav-link" data-scroll-target="#loop-through-common-endpoints"><span class="header-section-number">6.6.2</span> Loop through common endpoints</a></li>
-  <li><a href="#from-outside-vm-host-or-browser" id="toc-from-outside-vm-host-or-browser" class="nav-link" data-scroll-target="#from-outside-vm-host-or-browser"><span class="header-section-number">6.6.3</span> From Outside (VM host or browser)</a></li>
+  <li><a href="#from-inside-the-container" id="toc-from-inside-the-container" class="nav-link" data-scroll-target="#from-inside-the-container"><span class="header-section-number">9.6.1</span> From Inside the Container</a></li>
+  <li><a href="#loop-through-common-endpoints" id="toc-loop-through-common-endpoints" class="nav-link" data-scroll-target="#loop-through-common-endpoints"><span class="header-section-number">9.6.2</span> Loop through common endpoints</a></li>
+  <li><a href="#from-outside-vm-host-or-browser" id="toc-from-outside-vm-host-or-browser" class="nav-link" data-scroll-target="#from-outside-vm-host-or-browser"><span class="header-section-number">9.6.3</span> From Outside (VM host or browser)</a></li>
   </ul></li>
-  <li><a href="#troubleshooting-common-errors" id="toc-troubleshooting-common-errors" class="nav-link" data-scroll-target="#troubleshooting-common-errors"><span class="header-section-number">6.7</span> Troubleshooting Common Errors</a></li>
-  <li><a href="#understanding-ports-80-vs-8080" id="toc-understanding-ports-80-vs-8080" class="nav-link" data-scroll-target="#understanding-ports-80-vs-8080"><span class="header-section-number">6.8</span> Understanding Ports (80 vs 8080)</a></li>
-  <li><a href="#monitoring-resource-usage" id="toc-monitoring-resource-usage" class="nav-link" data-scroll-target="#monitoring-resource-usage"><span class="header-section-number">6.9</span> Monitoring Resource Usage</a></li>
-  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix"><span class="header-section-number">6.10</span> Appendix</a>
+  <li><a href="#troubleshooting-common-errors" id="toc-troubleshooting-common-errors" class="nav-link" data-scroll-target="#troubleshooting-common-errors"><span class="header-section-number">9.7</span> Troubleshooting Common Errors</a></li>
+  <li><a href="#understanding-ports-80-vs-8080" id="toc-understanding-ports-80-vs-8080" class="nav-link" data-scroll-target="#understanding-ports-80-vs-8080"><span class="header-section-number">9.8</span> Understanding Ports (80 vs 8080)</a></li>
+  <li><a href="#monitoring-resource-usage" id="toc-monitoring-resource-usage" class="nav-link" data-scroll-target="#monitoring-resource-usage"><span class="header-section-number">9.9</span> Monitoring Resource Usage</a></li>
+  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix"><span class="header-section-number">9.10</span> Appendix</a>
   <ul class="collapse">
-  <li><a href="#check-disk-usage-quickly" id="toc-check-disk-usage-quickly" class="nav-link" data-scroll-target="#check-disk-usage-quickly"><span class="header-section-number">6.10.1</span> Check Disk Usage Quickly</a></li>
-  <li><a href="#check-docker-service-logs" id="toc-check-docker-service-logs" class="nav-link" data-scroll-target="#check-docker-service-logs"><span class="header-section-number">6.10.2</span> Check Docker Service Logs</a></li>
-  <li><a href="#check-r-version-inside-container" id="toc-check-r-version-inside-container" class="nav-link" data-scroll-target="#check-r-version-inside-container"><span class="header-section-number">6.10.3</span> Check R version inside container</a></li>
+  <li><a href="#check-disk-usage-quickly" id="toc-check-disk-usage-quickly" class="nav-link" data-scroll-target="#check-disk-usage-quickly"><span class="header-section-number">9.10.1</span> Check Disk Usage Quickly</a></li>
+  <li><a href="#check-docker-service-logs" id="toc-check-docker-service-logs" class="nav-link" data-scroll-target="#check-docker-service-logs"><span class="header-section-number">9.10.2</span> Check Docker Service Logs</a></li>
+  <li><a href="#check-r-version-inside-container" id="toc-check-r-version-inside-container" class="nav-link" data-scroll-target="#check-r-version-inside-container"><span class="header-section-number">9.10.3</span> Check R version inside container</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -266,9 +320,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./code_coverage.html">MISC Tools and Tips</a></li><li class="breadcrumb-item"><a href="./interact_vm.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">How to interact with the Virtual Machine (VM) that hosts PIP</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">How to interact with the Virtual Machine (VM) that hosts PIP</span></h1>
+<h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">How to interact with the Virtual Machine (VM) that hosts PIP</span></h1>
 </div>
 
 
@@ -291,10 +345,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="access-and-session-management" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="access-and-session-management"><span class="header-section-number">6.1</span> Access and Session Management</h2>
-<section id="login-to-the-vm" class="level3" data-number="6.1.1">
-<h3 data-number="6.1.1" class="anchored" data-anchor-id="login-to-the-vm"><span class="header-section-number">6.1.1</span> Login to the VM</h3>
+<section id="access-and-session-management" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="access-and-session-management"><span class="header-section-number">9.1</span> Access and Session Management</h2>
+<section id="login-to-the-vm" class="level3" data-number="9.1.1">
+<h3 data-number="9.1.1" class="anchored" data-anchor-id="login-to-the-vm"><span class="header-section-number">9.1.1</span> Login to the VM</h3>
 <ol type="1">
 <li><p>Go to <a href="https://privx.worldbank.org/">PrivX</a>.</p></li>
 <li><p>Use <strong>SSO login</strong> (World Bank Authenticator App).</p></li>
@@ -308,8 +362,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> su <span class="at">-</span> srvpip</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 </ol>
 </section>
-<section id="copy-paste-and-keyboard-shortcuts" class="level3" data-number="6.1.2">
-<h3 data-number="6.1.2" class="anchored" data-anchor-id="copy-paste-and-keyboard-shortcuts"><span class="header-section-number">6.1.2</span> Copy, Paste, and Keyboard Shortcuts</h3>
+<section id="copy-paste-and-keyboard-shortcuts" class="level3" data-number="9.1.2">
+<h3 data-number="9.1.2" class="anchored" data-anchor-id="copy-paste-and-keyboard-shortcuts"><span class="header-section-number">9.1.2</span> Copy, Paste, and Keyboard Shortcuts</h3>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 25%">
@@ -350,10 +404,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="understanding-the-environment" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="understanding-the-environment"><span class="header-section-number">6.2</span> Understanding the Environment</h2>
-<section id="users-and-permissions" class="level3" data-number="6.2.1">
-<h3 data-number="6.2.1" class="anchored" data-anchor-id="users-and-permissions"><span class="header-section-number">6.2.1</span> Users and Permissions</h3>
+<section id="understanding-the-environment" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="understanding-the-environment"><span class="header-section-number">9.2</span> Understanding the Environment</h2>
+<section id="users-and-permissions" class="level3" data-number="9.2.1">
+<h3 data-number="9.2.1" class="anchored" data-anchor-id="users-and-permissions"><span class="header-section-number">9.2.1</span> Users and Permissions</h3>
 <ul>
 <li><strong>Your account:</strong> initial login via PrivX (not root)</li>
 <li><strong><code>srvpip</code> user:</strong> used to manage Docker containers</li>
@@ -366,8 +420,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>sudo su - srvpip</code> → switch to service account context</li>
 </ul>
 </section>
-<section id="architecture-overview" class="level3" data-number="6.2.2">
-<h3 data-number="6.2.2" class="anchored" data-anchor-id="architecture-overview"><span class="header-section-number">6.2.2</span> Architecture Overview</h3>
+<section id="architecture-overview" class="level3" data-number="9.2.2">
+<h3 data-number="9.2.2" class="anchored" data-anchor-id="architecture-overview"><span class="header-section-number">9.2.2</span> Architecture Overview</h3>
 <pre><code>+-------------------------------------------------------------+
 |                      Linux VM (Host)                        |
 |                                                             |
@@ -390,8 +444,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="essential-docker-commands-cheat-sheet" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="essential-docker-commands-cheat-sheet"><span class="header-section-number">6.3</span> Essential Docker Commands (Cheat Sheet)</h2>
+<section id="essential-docker-commands-cheat-sheet" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="essential-docker-commands-cheat-sheet"><span class="header-section-number">9.3</span> Essential Docker Commands (Cheat Sheet)</h2>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 24%">
@@ -454,10 +508,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <hr>
 </section>
-<section id="managing-data" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="managing-data"><span class="header-section-number">6.4</span> Managing Data</h2>
-<section id="data-on-the-vm-persistent" class="level3" data-number="6.4.1">
-<h3 data-number="6.4.1" class="anchored" data-anchor-id="data-on-the-vm-persistent"><span class="header-section-number">6.4.1</span> Data on the VM (Persistent)</h3>
+<section id="managing-data" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="managing-data"><span class="header-section-number">9.4</span> Managing Data</h2>
+<section id="data-on-the-vm-persistent" class="level3" data-number="9.4.1">
+<h3 data-number="9.4.1" class="anchored" data-anchor-id="data-on-the-vm-persistent"><span class="header-section-number">9.4.1</span> Data on the VM (Persistent)</h3>
 <ul>
 <li><p>Main data location:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /Data/pip/files/data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
@@ -469,14 +523,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>View folder sizes:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">du</span> <span class="at">-sh</span> <span class="pp">*</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 </ul>
-<section id="find-large-or-old-files" class="level4" data-number="6.4.1.1">
-<h4 data-number="6.4.1.1" class="anchored" data-anchor-id="find-large-or-old-files"><span class="header-section-number">6.4.1.1</span> 🔍 Find large or old files</h4>
+<section id="find-large-or-old-files" class="level4" data-number="9.4.1.1">
+<h4 data-number="9.4.1.1" class="anchored" data-anchor-id="find-large-or-old-files"><span class="header-section-number">9.4.1.1</span> 🔍 Find large or old files</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">find</span> /Data/pip/files/data <span class="at">-type</span> f <span class="at">-mtime</span> +365 <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 20</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <hr>
 </section>
 </section>
-<section id="data-inside-containers-ephemeral" class="level3" data-number="6.4.2">
-<h3 data-number="6.4.2" class="anchored" data-anchor-id="data-inside-containers-ephemeral"><span class="header-section-number">6.4.2</span> Data Inside Containers (Ephemeral)</h3>
+<section id="data-inside-containers-ephemeral" class="level3" data-number="9.4.2">
+<h3 data-number="9.4.2" class="anchored" data-anchor-id="data-inside-containers-ephemeral"><span class="header-section-number">9.4.2</span> Data Inside Containers (Ephemeral)</h3>
 <p>Check where containers mount volumes:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> docker inspect povertyscoreapi <span class="kw">|</span> <span class="fu">grep</span> Mounts <span class="at">-A</span> 5</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You’ll see:</p>
@@ -492,14 +546,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Inside container → <code>/Data</code></li>
 <li>On host → <code>/Data/pip/files/data</code></li>
 </ul>
-<section id="access-via-container-shell" class="level4" data-number="6.4.2.1">
-<h4 data-number="6.4.2.1" class="anchored" data-anchor-id="access-via-container-shell"><span class="header-section-number">6.4.2.1</span> Access via container shell:</h4>
+<section id="access-via-container-shell" class="level4" data-number="9.4.2.1">
+<h4 data-number="9.4.2.1" class="anchored" data-anchor-id="access-via-container-shell"><span class="header-section-number">9.4.2.1</span> Access via container shell:</h4>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> docker exec <span class="at">-it</span> povertyscoreapi ls <span class="at">-lh</span> /Data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <hr>
 </section>
 </section>
-<section id="safe-deletion-and-cleanup" class="level3" data-number="6.4.3">
-<h3 data-number="6.4.3" class="anchored" data-anchor-id="safe-deletion-and-cleanup"><span class="header-section-number">6.4.3</span> Safe Deletion and Cleanup</h3>
+<section id="safe-deletion-and-cleanup" class="level3" data-number="9.4.3">
+<h3 data-number="9.4.3" class="anchored" data-anchor-id="safe-deletion-and-cleanup"><span class="header-section-number">9.4.3</span> Safe Deletion and Cleanup</h3>
 <p><strong>Preview first:</strong></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-d</span> /Data/pip/files/data/project_<span class="pp">*</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Delete specific folders:</strong></p>
@@ -513,10 +567,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="diagnosing-api-or-container-issues" class="level2" data-number="6.5">
-<h2 data-number="6.5" class="anchored" data-anchor-id="diagnosing-api-or-container-issues"><span class="header-section-number">6.5</span> Diagnosing API or Container Issues</h2>
-<section id="check-container-state" class="level3" data-number="6.5.1">
-<h3 data-number="6.5.1" class="anchored" data-anchor-id="check-container-state"><span class="header-section-number">6.5.1</span> Check Container State</h3>
+<section id="diagnosing-api-or-container-issues" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="diagnosing-api-or-container-issues"><span class="header-section-number">9.5</span> Diagnosing API or Container Issues</h2>
+<section id="check-container-state" class="level3" data-number="9.5.1">
+<h3 data-number="9.5.1" class="anchored" data-anchor-id="check-container-state"><span class="header-section-number">9.5.1</span> Check Container State</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> docker ps <span class="at">-a</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Get detailed exit info:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> docker inspect povertyscoreapi <span class="at">--format</span><span class="op">=</span><span class="st">'ExitCode={{.State.ExitCode}} OOMKilled={{.State.OOMKilled}}'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -526,14 +580,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="view-logs" class="level3" data-number="6.5.2">
-<h3 data-number="6.5.2" class="anchored" data-anchor-id="view-logs"><span class="header-section-number">6.5.2</span> View Logs</h3>
+<section id="view-logs" class="level3" data-number="9.5.2">
+<h3 data-number="9.5.2" class="anchored" data-anchor-id="view-logs"><span class="header-section-number">9.5.2</span> View Logs</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> docker logs povertyscoreapi <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 20   <span class="co"># startup logs</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> docker logs <span class="at">--tail</span> 200 povertyscoreapi     <span class="co"># recent logs</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <hr>
 </section>
-<section id="reproduce-interactively" class="level3" data-number="6.5.3">
-<h3 data-number="6.5.3" class="anchored" data-anchor-id="reproduce-interactively"><span class="header-section-number">6.5.3</span> Reproduce Interactively</h3>
+<section id="reproduce-interactively" class="level3" data-number="9.5.3">
+<h3 data-number="9.5.3" class="anchored" data-anchor-id="reproduce-interactively"><span class="header-section-number">9.5.3</span> Reproduce Interactively</h3>
 <p>Start an interactive debug session:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> docker run <span class="at">--rm</span> <span class="at">-it</span> <span class="dt">\</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> povertyscoreapi-debug <span class="dt">\</span></span>
@@ -546,8 +600,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Press <code>Ctrl + C</code> to stop and <code>exit</code> to leave.</p>
 <hr>
 </section>
-<section id="restart-or-rebuild-containers" class="level3" data-number="6.5.4">
-<h3 data-number="6.5.4" class="anchored" data-anchor-id="restart-or-rebuild-containers"><span class="header-section-number">6.5.4</span> Restart or Rebuild Containers</h3>
+<section id="restart-or-rebuild-containers" class="level3" data-number="9.5.4">
+<h3 data-number="9.5.4" class="anchored" data-anchor-id="restart-or-rebuild-containers"><span class="header-section-number">9.5.4</span> Restart or Rebuild Containers</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> docker restart povertyscoreapi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Or rebuild completely:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> docker stop povertyscoreapi</span>
@@ -560,28 +614,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <hr>
 </section>
 </section>
-<section id="testing-api-endpoints" class="level2" data-number="6.6">
-<h2 data-number="6.6" class="anchored" data-anchor-id="testing-api-endpoints"><span class="header-section-number">6.6</span> Testing API Endpoints</h2>
-<section id="from-inside-the-container" class="level3" data-number="6.6.1">
-<h3 data-number="6.6.1" class="anchored" data-anchor-id="from-inside-the-container"><span class="header-section-number">6.6.1</span> From Inside the Container</h3>
+<section id="testing-api-endpoints" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="testing-api-endpoints"><span class="header-section-number">9.6</span> Testing API Endpoints</h2>
+<section id="from-inside-the-container" class="level3" data-number="9.6.1">
+<h3 data-number="9.6.1" class="anchored" data-anchor-id="from-inside-the-container"><span class="header-section-number">9.6.1</span> From Inside the Container</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> http://localhost:80/api/v1/health-check</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="loop-through-common-endpoints" class="level3" data-number="6.6.2">
-<h3 data-number="6.6.2" class="anchored" data-anchor-id="loop-through-common-endpoints"><span class="header-section-number">6.6.2</span> Loop through common endpoints</h3>
+<section id="loop-through-common-endpoints" class="level3" data-number="9.6.2">
+<h3 data-number="9.6.2" class="anchored" data-anchor-id="loop-through-common-endpoints"><span class="header-section-number">9.6.2</span> Loop through common endpoints</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ep <span class="kw">in</span> health-check pkgs-version data-signature gh-hash<span class="kw">;</span> <span class="cf">do</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"---- Testing </span><span class="va">$ep</span><span class="st"> ----"</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">curl</span> <span class="at">-s</span> http://localhost:80/api/v1/<span class="va">$ep</span></span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span></span>
 <span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="from-outside-vm-host-or-browser" class="level3" data-number="6.6.3">
-<h3 data-number="6.6.3" class="anchored" data-anchor-id="from-outside-vm-host-or-browser"><span class="header-section-number">6.6.3</span> From Outside (VM host or browser)</h3>
+<section id="from-outside-vm-host-or-browser" class="level3" data-number="9.6.3">
+<h3 data-number="9.6.3" class="anchored" data-anchor-id="from-outside-vm-host-or-browser"><span class="header-section-number">9.6.3</span> From Outside (VM host or browser)</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> http://wzlxdpip01.worldbank.org/api/v1/health-check</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <hr>
 </section>
 </section>
-<section id="troubleshooting-common-errors" class="level2" data-number="6.7">
-<h2 data-number="6.7" class="anchored" data-anchor-id="troubleshooting-common-errors"><span class="header-section-number">6.7</span> Troubleshooting Common Errors</h2>
+<section id="troubleshooting-common-errors" class="level2" data-number="9.7">
+<h2 data-number="9.7" class="anchored" data-anchor-id="troubleshooting-common-errors"><span class="header-section-number">9.7</span> Troubleshooting Common Errors</h2>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 25%">
@@ -630,8 +684,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <hr>
 </section>
-<section id="understanding-ports-80-vs-8080" class="level2" data-number="6.8">
-<h2 data-number="6.8" class="anchored" data-anchor-id="understanding-ports-80-vs-8080"><span class="header-section-number">6.8</span> Understanding Ports (80 vs 8080)</h2>
+<section id="understanding-ports-80-vs-8080" class="level2" data-number="9.8">
+<h2 data-number="9.8" class="anchored" data-anchor-id="understanding-ports-80-vs-8080"><span class="header-section-number">9.8</span> Understanding Ports (80 vs 8080)</h2>
 <ul>
 <li><p>Inside Docker, the API runs on <strong>8080</strong>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>pipapi<span class="sc">::</span><span class="fu">start_api</span>(<span class="at">port =</span> <span class="dv">8080</span>, <span class="at">host =</span> <span class="st">"0.0.0.0"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
@@ -645,26 +699,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="monitoring-resource-usage" class="level2" data-number="6.9">
-<h2 data-number="6.9" class="anchored" data-anchor-id="monitoring-resource-usage"><span class="header-section-number">6.9</span> Monitoring Resource Usage</h2>
+<section id="monitoring-resource-usage" class="level2" data-number="9.9">
+<h2 data-number="9.9" class="anchored" data-anchor-id="monitoring-resource-usage"><span class="header-section-number">9.9</span> Monitoring Resource Usage</h2>
 <p>Watch real-time CPU and memory:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> docker stats povertyscoreapi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Or globally:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="ex">top</span> <span class="at">-u</span> srvpip</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <hr>
 </section>
-<section id="appendix" class="level2" data-number="6.10">
-<h2 data-number="6.10" class="anchored" data-anchor-id="appendix"><span class="header-section-number">6.10</span> Appendix</h2>
-<section id="check-disk-usage-quickly" class="level3" data-number="6.10.1">
-<h3 data-number="6.10.1" class="anchored" data-anchor-id="check-disk-usage-quickly"><span class="header-section-number">6.10.1</span> Check Disk Usage Quickly</h3>
+<section id="appendix" class="level2" data-number="9.10">
+<h2 data-number="9.10" class="anchored" data-anchor-id="appendix"><span class="header-section-number">9.10</span> Appendix</h2>
+<section id="check-disk-usage-quickly" class="level3" data-number="9.10.1">
+<h3 data-number="9.10.1" class="anchored" data-anchor-id="check-disk-usage-quickly"><span class="header-section-number">9.10.1</span> Check Disk Usage Quickly</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">df</span> <span class="at">-h</span> <span class="kw">|</span> <span class="fu">grep</span> Data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="check-docker-service-logs" class="level3" data-number="6.10.2">
-<h3 data-number="6.10.2" class="anchored" data-anchor-id="check-docker-service-logs"><span class="header-section-number">6.10.2</span> Check Docker Service Logs</h3>
+<section id="check-docker-service-logs" class="level3" data-number="9.10.2">
+<h3 data-number="9.10.2" class="anchored" data-anchor-id="check-docker-service-logs"><span class="header-section-number">9.10.2</span> Check Docker Service Logs</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> journalctl <span class="at">-u</span> docker <span class="at">--since</span> <span class="st">"2025-09-23 17:00"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="check-r-version-inside-container" class="level3" data-number="6.10.3">
-<h3 data-number="6.10.3" class="anchored" data-anchor-id="check-r-version-inside-container"><span class="header-section-number">6.10.3</span> Check R version inside container</h3>
+<section id="check-r-version-inside-container" class="level3" data-number="9.10.3">
+<h3 data-number="9.10.3" class="anchored" data-anchor-id="check-r-version-inside-container"><span class="header-section-number">9.10.3</span> Check R version inside container</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> docker exec <span class="at">-it</span> povertyscoreapi Rscript <span class="at">-e</span> <span class="st">"R.version.string"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
@@ -1074,13 +1128,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./setupR.html" class="pagination-link" aria-label="Setting Up R, RStudio, and Positron to Use the Same Configuration Files">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></span>
+      <a href="./Increase_performance_WB_laptop.html" class="pagination-link" aria-label="Improve Efficiency of a WB Laptop">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Improve Efficiency of a WB Laptop</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./VScode_Setup_for_stata.html" class="pagination-link" aria-label="SetUp Vscode to work with Stata">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SetUp Vscode to work with Stata</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

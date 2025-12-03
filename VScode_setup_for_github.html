@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.8.26">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>8&nbsp; SetUp Git &amp; GitHub in VS Code – Pip Technical Guidelines</title>
+<title>3&nbsp; SetUp Git &amp; GitHub in VS Code – Pip Technical Guidelines</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./summary.html" rel="next">
+<link href="./copilot_protocols.html" rel="next">
 <link href="./VScode_Setup_for_stata.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -74,7 +74,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-0dd2bd5de344125cf763a379ddc3eb04.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -107,6 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
+<link rel="stylesheet" href="css/tachyons.css">
 </head>
 
 <body class="nav-sidebar floating quarto-light">
@@ -118,7 +119,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./VScode_setup_for_github.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./VScode_Setup_for_stata.html">VSCode Setup</a></li><li class="breadcrumb-item"><a href="./VScode_setup_for_github.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -131,9 +132,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="./index.html" class="sidebar-logo-link">
-      </a>
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Pip Technical Guidelines</a> 
     </div>
@@ -151,66 +150,121 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./code_coverage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Add code coverage badge to your GitHub Repository.</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./github_actions.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Setting up Github Actions for Auto Deployment of Quarto book</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Increase_performance_WB_laptop.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Improve Efficiency of a WB Laptop</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">R Setup and efficiency</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./setupR.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./interact_vm.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">How to interact with the Virtual Machine (VM) that hosts PIP</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">VSCode Setup</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./VScode_Setup_for_stata.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SetUp Vscode to work with Stata</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">SetUp Vscode to work with Stata</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./VScode_setup_for_github.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Copilot and AI Tools</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  <a href="./copilot_protocols.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Mandatory Protocols for Using GitHub Copilot in Technical Work</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./copilot_guidelines.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Suggested Guidelines for Using GitHub Copilot in Technical Work</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">MISC Tools and Tips</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code_coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Add code coverage badge to your GitHub Repository.</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./github_actions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Setting up Github Actions for Auto Deployment of Quarto book</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Increase_performance_WB_laptop.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Improve Efficiency of a WB Laptop</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./interact_vm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">How to interact with the Virtual Machine (VM) that hosts PIP</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
 </li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -221,33 +275,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link active" data-scroll-target="#prerequisites"><span class="header-section-number">8.1</span> Prerequisites</a></li>
-  <li><a href="#install-vscode-and-stata-extensions" id="toc-install-vscode-and-stata-extensions" class="nav-link" data-scroll-target="#install-vscode-and-stata-extensions"><span class="header-section-number">8.2</span> Install VScode and Stata Extensions</a></li>
-  <li><a href="#first-time-git-configuration-one-time" id="toc-first-time-git-configuration-one-time" class="nav-link" data-scroll-target="#first-time-git-configuration-one-time"><span class="header-section-number">8.3</span> First-time Git configuration (one-time)</a></li>
-  <li><a href="#authenticate-to-github" id="toc-authenticate-to-github" class="nav-link" data-scroll-target="#authenticate-to-github"><span class="header-section-number">8.4</span> Authenticate to GitHub</a></li>
-  <li><a href="#clone-or-publish-a-repository-in-vs-code" id="toc-clone-or-publish-a-repository-in-vs-code" class="nav-link" data-scroll-target="#clone-or-publish-a-repository-in-vs-code"><span class="header-section-number">8.5</span> Clone or publish a repository in VS Code</a>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link active" data-scroll-target="#prerequisites"><span class="header-section-number">3.1</span> Prerequisites</a></li>
+  <li><a href="#install-vscode-and-stata-extensions" id="toc-install-vscode-and-stata-extensions" class="nav-link" data-scroll-target="#install-vscode-and-stata-extensions"><span class="header-section-number">3.2</span> Install VScode and Stata Extensions</a></li>
+  <li><a href="#first-time-git-configuration-one-time" id="toc-first-time-git-configuration-one-time" class="nav-link" data-scroll-target="#first-time-git-configuration-one-time"><span class="header-section-number">3.3</span> First-time Git configuration (one-time)</a></li>
+  <li><a href="#authenticate-to-github" id="toc-authenticate-to-github" class="nav-link" data-scroll-target="#authenticate-to-github"><span class="header-section-number">3.4</span> Authenticate to GitHub</a></li>
+  <li><a href="#clone-or-publish-a-repository-in-vs-code" id="toc-clone-or-publish-a-repository-in-vs-code" class="nav-link" data-scroll-target="#clone-or-publish-a-repository-in-vs-code"><span class="header-section-number">3.5</span> Clone or publish a repository in VS Code</a>
   <ul class="collapse">
-  <li><a href="#clone-an-existing-repository" id="toc-clone-an-existing-repository" class="nav-link" data-scroll-target="#clone-an-existing-repository"><span class="header-section-number">8.5.1</span> Clone an existing repository</a></li>
-  <li><a href="#publish-create-a-new-github-repo-from-a-local-folder" id="toc-publish-create-a-new-github-repo-from-a-local-folder" class="nav-link" data-scroll-target="#publish-create-a-new-github-repo-from-a-local-folder"><span class="header-section-number">8.5.2</span> Publish (create a new GitHub repo from a local folder)</a></li>
+  <li><a href="#clone-an-existing-repository" id="toc-clone-an-existing-repository" class="nav-link" data-scroll-target="#clone-an-existing-repository"><span class="header-section-number">3.5.1</span> Clone an existing repository</a></li>
+  <li><a href="#publish-create-a-new-github-repo-from-a-local-folder" id="toc-publish-create-a-new-github-repo-from-a-local-folder" class="nav-link" data-scroll-target="#publish-create-a-new-github-repo-from-a-local-folder"><span class="header-section-number">3.5.2</span> Publish (create a new GitHub repo from a local folder)</a></li>
   </ul></li>
-  <li><a href="#power-ups" id="toc-power-ups" class="nav-link" data-scroll-target="#power-ups"><span class="header-section-number">8.6</span> Power-ups</a>
+  <li><a href="#power-ups" id="toc-power-ups" class="nav-link" data-scroll-target="#power-ups"><span class="header-section-number">3.6</span> Power-ups</a>
   <ul class="collapse">
-  <li><a href="#gitlens-highlights" id="toc-gitlens-highlights" class="nav-link" data-scroll-target="#gitlens-highlights"><span class="header-section-number">8.6.1</span> GitLens highlights</a></li>
-  <li><a href="#git-graph-highlights" id="toc-git-graph-highlights" class="nav-link" data-scroll-target="#git-graph-highlights"><span class="header-section-number">8.6.2</span> Git Graph highlights</a></li>
-  <li><a href="#copilot-copilot-chat" id="toc-copilot-copilot-chat" class="nav-link" data-scroll-target="#copilot-copilot-chat"><span class="header-section-number">8.6.3</span> Copilot &amp; Copilot Chat</a></li>
+  <li><a href="#gitlens-highlights" id="toc-gitlens-highlights" class="nav-link" data-scroll-target="#gitlens-highlights"><span class="header-section-number">3.6.1</span> GitLens highlights</a></li>
+  <li><a href="#git-graph-highlights" id="toc-git-graph-highlights" class="nav-link" data-scroll-target="#git-graph-highlights"><span class="header-section-number">3.6.2</span> Git Graph highlights</a></li>
+  <li><a href="#copilot-copilot-chat" id="toc-copilot-copilot-chat" class="nav-link" data-scroll-target="#copilot-copilot-chat"><span class="header-section-number">3.6.3</span> Copilot &amp; Copilot Chat</a></li>
   </ul></li>
-  <li><a href="#team-conventions-recommended" id="toc-team-conventions-recommended" class="nav-link" data-scroll-target="#team-conventions-recommended"><span class="header-section-number">8.7</span> Team conventions (recommended)</a></li>
-  <li><a href="#quick-reference-commands" id="toc-quick-reference-commands" class="nav-link" data-scroll-target="#quick-reference-commands"><span class="header-section-number">8.8</span> Quick reference (commands)</a></li>
-  <li><a href="#suggested-vs-code-settings-optional" id="toc-suggested-vs-code-settings-optional" class="nav-link" data-scroll-target="#suggested-vs-code-settings-optional"><span class="header-section-number">8.9</span> Suggested VS Code settings (optional)</a></li>
+  <li><a href="#team-conventions-recommended" id="toc-team-conventions-recommended" class="nav-link" data-scroll-target="#team-conventions-recommended"><span class="header-section-number">3.7</span> Team conventions (recommended)</a></li>
+  <li><a href="#quick-reference-commands" id="toc-quick-reference-commands" class="nav-link" data-scroll-target="#quick-reference-commands"><span class="header-section-number">3.8</span> Quick reference (commands)</a></li>
+  <li><a href="#suggested-vs-code-settings-optional" id="toc-suggested-vs-code-settings-optional" class="nav-link" data-scroll-target="#suggested-vs-code-settings-optional"><span class="header-section-number">3.9</span> Suggested VS Code settings (optional)</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./VScode_Setup_for_stata.html">VSCode Setup</a></li><li class="breadcrumb-item"><a href="./VScode_setup_for_github.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></h1>
 </div>
 
 
@@ -270,8 +324,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="prerequisites" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="prerequisites"><span class="header-section-number">8.1</span> Prerequisites</h2>
+<section id="prerequisites" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="prerequisites"><span class="header-section-number">3.1</span> Prerequisites</h2>
 <ul>
 <li><strong>Git for Windows</strong> installed (includes Git Credential Manager).</li>
 <li><strong>VS Code</strong> installed.</li>
@@ -279,8 +333,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <hr>
 </section>
-<section id="install-vscode-and-stata-extensions" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="install-vscode-and-stata-extensions"><span class="header-section-number">8.2</span> Install VScode and Stata Extensions</h2>
+<section id="install-vscode-and-stata-extensions" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="install-vscode-and-stata-extensions"><span class="header-section-number">3.2</span> Install VScode and Stata Extensions</h2>
 <ol type="1">
 <li><p>Open “Company Portal” app on your computer.</p></li>
 <li><p>Search for <a href="companyportal:ApplicationId=d5aba730-00d4-4a78-a224-7b8170ac0eb0">VS Code</a> and install it.</p></li>
@@ -297,8 +351,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 <hr>
 </section>
-<section id="first-time-git-configuration-one-time" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="first-time-git-configuration-one-time"><span class="header-section-number">8.3</span> First-time Git configuration (one-time)</h2>
+<section id="first-time-git-configuration-one-time" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="first-time-git-configuration-one-time"><span class="header-section-number">3.3</span> First-time Git configuration (one-time)</h2>
 <p>Open <strong>Terminal</strong> in VS Code (Ctrl+`) and run:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify yourself in commits</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.name  <span class="st">"Your Name"</span></span>
@@ -315,8 +369,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> fetch.prune true</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <hr>
 </section>
-<section id="authenticate-to-github" class="level2" data-number="8.4">
-<h2 data-number="8.4" class="anchored" data-anchor-id="authenticate-to-github"><span class="header-section-number">8.4</span> Authenticate to GitHub</h2>
+<section id="authenticate-to-github" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="authenticate-to-github"><span class="header-section-number">3.4</span> Authenticate to GitHub</h2>
 <p>Go to your profile on VScode and login to GitHub.</p>
 <p>Trying to <strong>clone/push</strong> over HTTPS will trigger a secure web flow:</p>
 <ol type="1">
@@ -324,17 +378,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Git Credential Manager securely stores/refreshes credentials.</li>
 </ol>
 </section>
-<section id="clone-or-publish-a-repository-in-vs-code" class="level2" data-number="8.5">
-<h2 data-number="8.5" class="anchored" data-anchor-id="clone-or-publish-a-repository-in-vs-code"><span class="header-section-number">8.5</span> Clone or publish a repository in VS Code</h2>
-<section id="clone-an-existing-repository" class="level3" data-number="8.5.1">
-<h3 data-number="8.5.1" class="anchored" data-anchor-id="clone-an-existing-repository"><span class="header-section-number">8.5.1</span> Clone an existing repository</h3>
+<section id="clone-or-publish-a-repository-in-vs-code" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="clone-or-publish-a-repository-in-vs-code"><span class="header-section-number">3.5</span> Clone or publish a repository in VS Code</h2>
+<section id="clone-an-existing-repository" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="clone-an-existing-repository"><span class="header-section-number">3.5.1</span> Clone an existing repository</h3>
 <ul>
 <li>Command Palette → <strong>Git: Clone</strong> → paste repo URL (HTTPS or SSH).</li>
 <li>Choose a local folder → VS Code offers to open the folder.</li>
 </ul>
 </section>
-<section id="publish-create-a-new-github-repo-from-a-local-folder" class="level3" data-number="8.5.2">
-<h3 data-number="8.5.2" class="anchored" data-anchor-id="publish-create-a-new-github-repo-from-a-local-folder"><span class="header-section-number">8.5.2</span> Publish (create a new GitHub repo from a local folder)</h3>
+<section id="publish-create-a-new-github-repo-from-a-local-folder" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="publish-create-a-new-github-repo-from-a-local-folder"><span class="header-section-number">3.5.2</span> Publish (create a new GitHub repo from a local folder)</h3>
 <ol type="1">
 <li><p>Open your project folder in VS Code.</p></li>
 <li><p>Source Control view → <strong>Initialize Repository</strong>.</p></li>
@@ -346,10 +400,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 </section>
 </section>
-<section id="power-ups" class="level2" data-number="8.6">
-<h2 data-number="8.6" class="anchored" data-anchor-id="power-ups"><span class="header-section-number">8.6</span> Power-ups</h2>
-<section id="gitlens-highlights" class="level3" data-number="8.6.1">
-<h3 data-number="8.6.1" class="anchored" data-anchor-id="gitlens-highlights"><span class="header-section-number">8.6.1</span> GitLens highlights</h3>
+<section id="power-ups" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="power-ups"><span class="header-section-number">3.6</span> Power-ups</h2>
+<section id="gitlens-highlights" class="level3" data-number="3.6.1">
+<h3 data-number="3.6.1" class="anchored" data-anchor-id="gitlens-highlights"><span class="header-section-number">3.6.1</span> GitLens highlights</h3>
 <ul>
 <li><strong>Inline blame</strong> (who/when changed this line)</li>
 <li><strong>File &amp; line history</strong> with rich diffs</li>
@@ -358,16 +412,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Code authorship heatmaps</strong> and <strong>commit search</strong> by message, author, time</li>
 </ul>
 </section>
-<section id="git-graph-highlights" class="level3" data-number="8.6.2">
-<h3 data-number="8.6.2" class="anchored" data-anchor-id="git-graph-highlights"><span class="header-section-number">8.6.2</span> Git Graph highlights</h3>
+<section id="git-graph-highlights" class="level3" data-number="3.6.2">
+<h3 data-number="3.6.2" class="anchored" data-anchor-id="git-graph-highlights"><span class="header-section-number">3.6.2</span> Git Graph highlights</h3>
 <ul>
 <li><strong>Graph view</strong> of all branches/tags</li>
 <li><strong>Drag &amp; drop merges/rebases</strong> (careful: follow team policy)</li>
 <li>Quick <strong>reset</strong>, <strong>cherry-pick</strong>, <strong>revert</strong> from context menu</li>
 </ul>
 </section>
-<section id="copilot-copilot-chat" class="level3" data-number="8.6.3">
-<h3 data-number="8.6.3" class="anchored" data-anchor-id="copilot-copilot-chat"><span class="header-section-number">8.6.3</span> Copilot &amp; Copilot Chat</h3>
+<section id="copilot-copilot-chat" class="level3" data-number="3.6.3">
+<h3 data-number="3.6.3" class="anchored" data-anchor-id="copilot-copilot-chat"><span class="header-section-number">3.6.3</span> Copilot &amp; Copilot Chat</h3>
 <p>In order to access Copilot and Copilot Chat, You need to be added to the <a href="https://worldbankgroup.service-now.com/wbg?id=wbg_sc_catalog&amp;sys_id=910e1739db1a54903c5960ab13961912">World Bank GitHub organization</a> using eservices/ request.</p>
 <p>Make sure you read the <a href="https://github.com/worldbank/ospo/blob/main/guidelines/Copilot%20Getting%20started.md">Getting Started Guide</a> with GIthub Copilot.</p>
 <p>Also, make sure you understand and follow the instructions in the General <a href="https://github.com/worldbank/ospo/blob/main/guidelines/copilot.md">Github Copilot Usage Policy and guide</a>.</p>
@@ -382,8 +436,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 </section>
 </section>
-<section id="team-conventions-recommended" class="level2" data-number="8.7">
-<h2 data-number="8.7" class="anchored" data-anchor-id="team-conventions-recommended"><span class="header-section-number">8.7</span> Team conventions (recommended)</h2>
+<section id="team-conventions-recommended" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="team-conventions-recommended"><span class="header-section-number">3.7</span> Team conventions (recommended)</h2>
 <ul>
 <li><strong>Branching</strong>: feature branches from <code>main</code>; short, descriptive names.</li>
 <li><strong>Commits</strong>: small, frequent, imperative subject line; reference issues (<code>#123</code>).</li>
@@ -392,8 +446,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>CI</strong>: make PR green before merge; don’t push directly to <code>main</code>.</li>
 </ul>
 </section>
-<section id="quick-reference-commands" class="level2" data-number="8.8">
-<h2 data-number="8.8" class="anchored" data-anchor-id="quick-reference-commands"><span class="header-section-number">8.8</span> Quick reference (commands)</h2>
+<section id="quick-reference-commands" class="level2" data-number="3.8">
+<h2 data-number="3.8" class="anchored" data-anchor-id="quick-reference-commands"><span class="header-section-number">3.8</span> Quick reference (commands)</h2>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start a repo</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> init</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .</span>
@@ -414,8 +468,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout main</span>
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull <span class="at">--ff-only</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="suggested-vs-code-settings-optional" class="level2" data-number="8.9">
-<h2 data-number="8.9" class="anchored" data-anchor-id="suggested-vs-code-settings-optional"><span class="header-section-number">8.9</span> Suggested VS Code settings (optional)</h2>
+<section id="suggested-vs-code-settings-optional" class="level2" data-number="3.9">
+<h2 data-number="3.9" class="anchored" data-anchor-id="suggested-vs-code-settings-optional"><span class="header-section-number">3.9</span> Suggested VS Code settings (optional)</h2>
 <p>Create <code>.vscode/settings.json</code> in your repo to nudge consistent behavior:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"git.enableSmartCommit"</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
@@ -835,12 +889,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./VScode_Setup_for_stata.html" class="pagination-link" aria-label="SetUp Vscode to work with Stata">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">SetUp Vscode to work with Stata</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">SetUp Vscode to work with Stata</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./summary.html" class="pagination-link" aria-label="Summary">
-        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./copilot_protocols.html" class="pagination-link" aria-label="Mandatory Protocols for Using GitHub Copilot in Technical Work">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Mandatory Protocols for Using GitHub Copilot in Technical Work</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

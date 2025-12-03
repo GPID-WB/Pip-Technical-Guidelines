@@ -4,479 +4,632 @@
     "href": "index.html",
     "title": "Pip Technical Guidelines",
     "section": "",
-    "text": "Preface\nThis is a Quarto book. In this book we intend to write technical information about PIP projects.",
+    "text": "Preface\nWelcome to the PIP Technical Guidelines, a living technical resource for the Poverty and Inequality Platform (PIP) team at the World Bank.\nThis book serves as a centralized knowledge base for the technical infrastructure, development workflows, and best practices that support our data science and statistical work. As the PIP ecosystem continues to evolve—spanning R packages, Stata analysis, version control, automation, and AI-assisted coding—this guide provides practical, field-tested solutions to common technical challenges our team encounters.",
     "crumbs": [
       "Preface"
     ]
   },
   {
-    "objectID": "intro.html",
-    "href": "intro.html",
-    "title": "1  Introduction",
-    "section": "",
-    "text": "The purpose of this book is to gather all the technical knowledge specific to PIP in one place.",
+    "objectID": "index.html#purpose",
+    "href": "index.html#purpose",
+    "title": "Pip Technical Guidelines",
+    "section": "Purpose",
+    "text": "Purpose\nThe primary objectives of this book are to:\n\nDocument technical workflows specific to PIP projects, including environment setup, development tools, and deployment processes\nStandardize best practices across R, Stata, GitHub, VS Code, and other tools used in our daily work\nAccelerate onboarding by providing new team members with clear, step-by-step instructions for configuring their development environment\nPromote consistency in how we write, test, document, and maintain code across different projects and programming languages\nPreserve institutional knowledge that would otherwise exist only in individual team members’ setups or undocumented workflows",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+      "Preface"
     ]
   },
   {
-    "objectID": "code_coverage.html",
-    "href": "code_coverage.html",
-    "title": "2  Add code coverage badge to your GitHub Repository.",
-    "section": "",
-    "text": "2.1 Codecov.io\nIn this article we will learn how to add code coverage badge to your GitHub repository.",
+    "objectID": "index.html#scope",
+    "href": "index.html#scope",
+    "title": "Pip Technical Guidelines",
+    "section": "Scope",
+    "text": "Scope\nThis book focuses on technical infrastructure and development practices, not statistical methodologies or economic theory. You’ll find guidance on:\n\nSetting up R, RStudio, and Positron with unified configurations\nConfiguring VS Code for Stata development with automated workflows\nIntegrating Git and GitHub into daily work with proper authentication and branching strategies\nImplementing GitHub Actions for continuous integration and automated deployment\nUsing GitHub Copilot responsibly and effectively, with mandatory protocols for code quality\nOptimizing performance on World Bank laptops and virtual machines\nManaging code coverage, testing frameworks, and documentation standards",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Add code coverage badge to your GitHub Repository.</span>"
+      "Preface"
     ]
   },
   {
-    "objectID": "code_coverage.html#codecov.io",
-    "href": "code_coverage.html#codecov.io",
-    "title": "2  Add code coverage badge to your GitHub Repository.",
-    "section": "",
-    "text": "Create an account at https://about.codecov.io/ , sign up with your GitHub account if you don’t have an account already. Codecov is a popular tool for measuring and visualizing code coverage in software projects. It integrates with GitHub, GitLab, Bitbucket, and other CI/CD systems to provide insights into how much of your code is tested by your test suite.\nYou can sync your private Github repositories on codecov platform to get started. If you want to add code coverage badge to a repository which is part of an organization (like PIP-Technical-Team, GPID-WB etc) then you need to be an admin of that organization. Admin role is needed because to sync the communication between Codecov.io with GitHub we need to generate a token which can only be done by admins.\nOnce your repo is synced with codecov and you can see it there click on Configure to start the process. As an example it should give you this screen\n\n\n\nIf you scroll below it will ask you to generate a repository secret, click on that to get a unique token for your repository and copy it.\nYou can ignore rest of the steps mentioned on that page since those are very generic language agnostic steps and since we want to setup this for R packages, we have a better option which I will share below.",
+    "objectID": "index.html#audience",
+    "href": "index.html#audience",
+    "title": "Pip Technical Guidelines",
+    "section": "Audience",
+    "text": "Audience\nThis guide is written for PIP team members; data scientists, economists, and developers working with R, Stata, and related tools. While many sections assume familiarity with programming concepts, we provide step-by-step instructions designed to work in the World Bank’s computing environment.",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Add code coverage badge to your GitHub Repository.</span>"
+      "Preface"
     ]
   },
   {
-    "objectID": "code_coverage.html#github",
-    "href": "code_coverage.html#github",
-    "title": "2  Add code coverage badge to your GitHub Repository.",
-    "section": "2.2 GitHub",
-    "text": "2.2 GitHub\n\nNow, moving to GitHub go to your repository. Click on Settings -&gt; Secrets and Variables -&gt; Actions -&gt; Repository Secrets add the new token with name CODECOV_TOKEN and copy the token value which was generated in the previous step.\n\nNext, we are going to setup GitHub Action to run and calculate code coverage after every push. The calculated coverage report would be uploaded on codecov.io and would be visible on their dashboard.\nAdditionally, I also added a possibility to run R CMD CHECK after every push. R CMD check is a tool that runs a series of automated checks on an R package to ensure it’s correctly structured, documented, and error-free. It helps catch issues in code, tests, and documentation before sharing or submitting to CRAN. So it is like an additional validation that we have on our code.\nThe new workflow file looks like below\nname: R-CMD-check and Codecov\n\non:\n  push:\n    branches: [master]\n  pull_request:\n    branches: [master]\n\njobs:\n  R-CMD-check:\n    runs-on: ubuntu-latest\n\n    steps:\n      - name: Checkout repository\n        uses: actions/checkout@v4\n\n      - name: Set up R\n        uses: r-lib/actions/setup-r@v2\n\n      - name: Set up pandoc\n        uses: r-lib/actions/setup-pandoc@v2\n\n      - name: Install dependencies\n        run: |\n          install.packages(c(\"remotes\", \"rcmdcheck\", \"covr\"))\n          remotes::install_deps(dependencies = TRUE)\n        shell: Rscript {0}\n\n      - name: Run R CMD check\n        run: |\n          rcmdcheck::rcmdcheck(args = \"--no-manual\", error_on = \"warning\")\n        shell: Rscript {0}\n\n      - name: Run test coverage\n        run: |\n          covr::codecov()\n        shell: Rscript {0}\n        env:\n          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }} \nThis file is self explanatory but briefly, it checks out the repository that we want to run our action on, sets up R to run R CMD CHECK and finally generate code coverage report and upload it to codecov.io .\nOne tip that I can share is to check if this workflow file works on your local branch before running on master branch. To do that you should temporarily enable the workflow file to run on your local branch. This can be done as below -\non:\n  push:\n    branches: [master, your-branch]\nwhere your-branch is the name of the local branch that you want to run the workflow for. Once you have verified that everything works as expected in the local branch, you can remove your-branch from the list again.\nOnce the workflow runs successfully the dashboard on codecov.io should be updated and you should see something like this\n\nEvery time a push or PR is made to master the dashboard will be updated with latest data.",
+    "objectID": "index.html#a-living-document",
+    "href": "index.html#a-living-document",
+    "title": "Pip Technical Guidelines",
+    "section": "A Living Document",
+    "text": "A Living Document\nThis book is continuously evolving. As we adopt new tools, refine existing workflows, or solve novel technical challenges, we add new chapters and update existing content. Each chapter represents accumulated team knowledge, battle-tested in real projects, and refined through practical experience.\nWe welcome contributions, corrections, and suggestions from all team members as we build this resource together.",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Add code coverage badge to your GitHub Repository.</span>"
-    ]
-  },
-  {
-    "objectID": "github_actions.html",
-    "href": "github_actions.html",
-    "title": "3  Setting up Github Actions for Auto Deployment of Quarto book",
-    "section": "",
-    "text": "3.1 Introduction\nOne of the best parts of using Quarto for websites, blogs, or reports is how easily it integrates with GitHub Pages. With a simple GitHub Actions workflow, you can automatically render and publish your site every time you update your repository. In this post we are going to learn how we have enabled auto deployment for this quarto book.",
-    "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Setting up Github Actions for Auto Deployment of Quarto book</span>"
-    ]
-  },
-  {
-    "objectID": "github_actions.html#workflow",
-    "href": "github_actions.html#workflow",
-    "title": "3  Setting up Github Actions for Auto Deployment of Quarto book",
-    "section": "3.2 Workflow",
-    "text": "3.2 Workflow\nThis is the workflow that we are using in Github Actions . Let’s look at it one by one.\non:\n  workflow_dispatch:\n  push:\n    branches: main\n\nname: Quarto Publish\n\njobs:\n  build-deploy:\n    runs-on: ubuntu-latest\n    permissions:\n      contents: write\n    steps:\n      - name: Check out repository\n        uses: actions/checkout@v4\n\n      - name: Set up Quarto\n        uses: quarto-dev/quarto-actions/setup@v2\n        env:\n          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n        with:\n          tinytex: true\n      - name: Render and Publish\n        uses: quarto-dev/quarto-actions/publish@v2\n        with:\n          target: gh-pages\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n\n3.2.1 Triggering the Workflow\non:\n  workflow_dispatch:\n  push:\n    branches: main\nThis tells GitHub Actions when to run the workflow. There are two triggers here:\n\npush to main – Any time you commit or merge changes into the main branch, the workflow runs\nworkflow_dispatch – Allows you to manually trigger the workflow from the GitHub Actions tab in your repository. This is useful when you want to force a rebuild and republish without committing new changes.\n\n\n\n3.2.2 Naming the workflow\nname: Quarto Publish\nThis gives the workflow a friendly name that will appear in the Actions tab.\n\n\n3.2.3 Defining the job\njobs:\n  build-deploy:\n    runs-on: ubuntu-latest\n    permissions:\n      contents: write\nHere we’re defining a single job called build-deploy.\n\nruns-on: ubuntu-latest – The job will run inside an Ubuntu-based virtual machine provided by GitHub.\npermissions: contents: write – The workflow needs permission to write to the repository (required for publishing to the gh-pages branch).\n\n\n\n3.2.4 The Steps\n\n3.2.4.1 1. Check out the repository\n- name: Check out repository\n  uses: actions/checkout@v4\nThis makes your repository’s files available in the workflow environment so Quarto can render your project.\n\n\n3.2.4.2 2. Set up Quarto\n- name: Set up Quarto\n  uses: quarto-dev/quarto-actions/setup@v2\n  env:\n    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n  with:\n    tinytex: true\nThis installs Quarto in the workflow environment. The tinytex: true option ensures LaTeX support is available for rendering PDFs. The GH_TOKEN is github token repository secret that is added in Repo settings -&gt; Secrets and Variables -&gt; Actions . It is used for authentication when publishing.\n\n\n3.2.4.3 3. Render and Publish\n- name: Render and Publish\n  uses: quarto-dev/quarto-actions/publish@v2\n  with:\n    target: gh-pages\n  env:\n    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\nThis step does two things:\n\nRenders your Quarto project (turns .qmd files into HTML, PDF, or other output formats).\nPublishes the output to the gh-pages branch, which GitHub Pages uses to serve your site. The target: gh-pages option ensures everything is pushed to the right branch.",
-    "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Setting up Github Actions for Auto Deployment of Quarto book</span>"
-    ]
-  },
-  {
-    "objectID": "github_actions.html#dont-ignore-the-.gitignore-file",
-    "href": "github_actions.html#dont-ignore-the-.gitignore-file",
-    "title": "3  Setting up Github Actions for Auto Deployment of Quarto book",
-    "section": "3.3 Don’t ignore the .gitignore file",
-    "text": "3.3 Don’t ignore the .gitignore file\nMake sure that your .gitignore file excludes _book, _site folders. These are the folders where Quarto renders HTML/PDF files when testing them locally. These files should not be tracked since Github Actions will build them with our auto deployment process.",
-    "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Setting up Github Actions for Auto Deployment of Quarto book</span>"
-    ]
-  },
-  {
-    "objectID": "github_actions.html#conclusion",
-    "href": "github_actions.html#conclusion",
-    "title": "3  Setting up Github Actions for Auto Deployment of Quarto book",
-    "section": "3.4 Conclusion :",
-    "text": "3.4 Conclusion :\nWith this workflow in place, the Quarto book will automatically rebuild and deploy whenever a push is made to the main branch or whenever we manually trigger the workflow. No more running commands locally or remembering to push generated files.\nThis is a clean, reproducible, and automated way to publish your Quarto projects using GitHub Pages. As a side not usethis package has a lot of good utility functions that helps you to set up similar workflow. You may explore using them. A good starting point is usethis::use_github_action(\"render-quarto\").\nFor reference the Quarto book is published here.",
-    "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Setting up Github Actions for Auto Deployment of Quarto book</span>"
-    ]
-  },
-  {
-    "objectID": "Increase_performance_WB_laptop.html",
-    "href": "Increase_performance_WB_laptop.html",
-    "title": "4  Improve Efficiency of a WB Laptop",
-    "section": "",
-    "text": "4.1 Modify System Properties for Performance\nThere are a few things you can do to improve the efficiency of a WB laptop. These tips won’t make your laptop fast, but they will help optimize performance and make it feel more responsive.",
-    "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Improve Efficiency of a WB Laptop</span>"
-    ]
-  },
-  {
-    "objectID": "Increase_performance_WB_laptop.html#modify-system-properties-for-performance",
-    "href": "Increase_performance_WB_laptop.html#modify-system-properties-for-performance",
-    "title": "4  Improve Efficiency of a WB Laptop",
-    "section": "",
-    "text": "Open the Windows menu, type Run, and click on the Run app.\n\nIn the Run app, type the following command and hit Enter:\n\n   systempropertiesperformance.exe\n\n\nIn the Performance Options window, select the Visual Effects tab.\n\nClick on Adjust for best performance.\nMake sure all the checkboxes are unchecked.\nClick Apply and then OK.\n\n\n\n\n\n\n\n\n\nWarning\n\n\n\nNote: This may affect the appearance of your system, since many visual effects will be disabled.",
-    "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Improve Efficiency of a WB Laptop</span>"
-    ]
-  },
-  {
-    "objectID": "Increase_performance_WB_laptop.html#battery-settings",
-    "href": "Increase_performance_WB_laptop.html#battery-settings",
-    "title": "4  Improve Efficiency of a WB Laptop",
-    "section": "4.2 Battery Settings",
-    "text": "4.2 Battery Settings\n\nOpen Battery Settings. \nSet the battery mode to Best performance.",
-    "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Improve Efficiency of a WB Laptop</span>"
-    ]
-  },
-  {
-    "objectID": "Increase_performance_WB_laptop.html#google-chrome-settings",
-    "href": "Increase_performance_WB_laptop.html#google-chrome-settings",
-    "title": "4  Improve Efficiency of a WB Laptop",
-    "section": "4.3 Google Chrome Settings",
-    "text": "4.3 Google Chrome Settings\n\nIn Google Chrome, type the following in the address bar:\nchrome://settings/performance\nUnder the Memory section, select Maximum.",
-    "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Improve Efficiency of a WB Laptop</span>"
+      "Preface"
     ]
   },
   {
     "objectID": "setupR.html",
     "href": "setupR.html",
-    "title": "5  Setting Up R, RStudio, and Positron to Use the Same Configuration Files",
+    "title": "1  Setting Up R, RStudio, and Positron to Use the Same Configuration Files",
     "section": "",
-    "text": "5.1 Intro\nWhen working with R, your environment files (.Renviron and .Rprofile) control how R behaves on startup—what packages it loads, what paths it uses, and how it connects to external resources (like CRAN mirrors or proxies).\nHowever, depending on which IDE you use (RStudio, Positron, VS Code, or command-line R), these files might not always point to the same location.\nA clean, unified setup ensures: - Reproducible environments across IDEs.\n- Consistent library paths (.libPaths() output).\n- Fewer surprises when running automated scripts, R Markdown documents, or package builds.\n- Fewer “it works on my RStudio but not on Positron” headaches.\nThis guide describes the recommended setup for aligning your R environment across IDEs, including RStudio and Positron.",
+    "text": "1.1 Intro\nWhen working with R, your environment files (.Renviron and .Rprofile) control how R behaves on startup—what packages it loads, what paths it uses, and how it connects to external resources (like CRAN mirrors or proxies).\nHowever, depending on which IDE you use (RStudio, Positron, VS Code, or command-line R), these files might not always point to the same location.\nA clean, unified setup ensures: - Reproducible environments across IDEs.\n- Consistent library paths (.libPaths() output).\n- Fewer surprises when running automated scripts, R Markdown documents, or package builds.\n- Fewer “it works on my RStudio but not on Positron” headaches.\nThis guide describes the recommended setup for aligning your R environment across IDEs, including RStudio and Positron.",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span>"
+      "R Setup and efficiency",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span>"
     ]
   },
   {
     "objectID": "setupR.html#step-1.-choose-a-canonical-r-configuration-directory",
     "href": "setupR.html#step-1.-choose-a-canonical-r-configuration-directory",
-    "title": "5  Setting Up R, RStudio, and Positron to Use the Same Configuration Files",
-    "section": "5.2 Step 1. Choose a canonical R configuration directory",
-    "text": "5.2 Step 1. Choose a canonical R configuration directory\nDecide on a single folder that will store your personal R configuration files.\nWe recommend creating a dedicated folder at the root of your working directory, for example:\nC:\\WBG\\R\n\nInside that folder, you’ll have:\nC:\\WBG\\R.Renviron\nC:\\WBG\\R.Rprofile",
+    "title": "1  Setting Up R, RStudio, and Positron to Use the Same Configuration Files",
+    "section": "1.2 Step 1. Choose a canonical R configuration directory",
+    "text": "1.2 Step 1. Choose a canonical R configuration directory\nDecide on a single folder that will store your personal R configuration files.\nWe recommend creating a dedicated folder at the root of your working directory, for example:\nC:\\WBG\\R\n\nInside that folder, you’ll have:\nC:\\WBG\\R.Renviron\nC:\\WBG\\R.Rprofile",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span>"
+      "R Setup and efficiency",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span>"
     ]
   },
   {
     "objectID": "setupR.html#step-2.-create-or-update-your-configuration-files",
     "href": "setupR.html#step-2.-create-or-update-your-configuration-files",
-    "title": "5  Setting Up R, RStudio, and Positron to Use the Same Configuration Files",
-    "section": "5.3 Step 2. Create (or update) your configuration files",
-    "text": "5.3 Step 2. Create (or update) your configuration files\n\n5.3.1 .Renviron\nCreate a text file named .Renviron at C:\\WBG\\R\\.Renviron and add your preferred settings:\n# C:/WBG/R/.Renviron\nR_LIBS=C:/WBG/R/r-packages/%v\nR_USER=C:/WBG/R\nR_LIBS_USER=C:/WBG/R/r-packages/%v\nRENV_PATHS_LIBRARY_ROOT=C:/WBG/R/r-packages/.renv/library\nLANG=en_US.UTF-8\nTZ=UTC\nRENVIRON_LOADED_FROM=C:/WBG/R/.Renviron\nThis file defines environment variables that R reads at startup — for example, custom library locations, locale settings, or proxy credentials.\n\n\n5.3.2 .Rprofile\nCreate a text file named .Rprofile at C:\\WBG\\R\\.Rprofile and add the R code that should run automatically at startup:\n# C:/WBG/R/.Rprofile\nlocal({\n  r &lt;- getOption(\"repos\")\n  r[\"CRAN\"] &lt;- \"https://cran.rstudio.com/\"\n  options(repos = r)\n})\n\n# Optional: print which file was loaded (for debugging)\ncat(sprintf(\"[.Rprofile loaded from: %s]\\n\", normalizePath(sys.frame(1)$ofile, mustWork = FALSE)))",
+    "title": "1  Setting Up R, RStudio, and Positron to Use the Same Configuration Files",
+    "section": "1.3 Step 2. Create (or update) your configuration files",
+    "text": "1.3 Step 2. Create (or update) your configuration files\n\n1.3.1 .Renviron\nCreate a text file named .Renviron at C:\\WBG\\R\\.Renviron and add your preferred settings:\n# C:/WBG/R/.Renviron\nR_LIBS=C:/WBG/R/r-packages/%v\nR_USER=C:/WBG/R\nR_LIBS_USER=C:/WBG/R/r-packages/%v\nRENV_PATHS_LIBRARY_ROOT=C:/WBG/R/r-packages/.renv/library\nLANG=en_US.UTF-8\nTZ=UTC\nRENVIRON_LOADED_FROM=C:/WBG/R/.Renviron\nThis file defines environment variables that R reads at startup — for example, custom library locations, locale settings, or proxy credentials.\n\n\n1.3.2 .Rprofile\nCreate a text file named .Rprofile at C:\\WBG\\R\\.Rprofile and add the R code that should run automatically at startup:\n# C:/WBG/R/.Rprofile\nlocal({\n  r &lt;- getOption(\"repos\")\n  r[\"CRAN\"] &lt;- \"https://cran.rstudio.com/\"\n  options(repos = r)\n})\n\n# Optional: print which file was loaded (for debugging)\ncat(sprintf(\"[.Rprofile loaded from: %s]\\n\", normalizePath(sys.frame(1)$ofile, mustWork = FALSE)))",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span>"
+      "R Setup and efficiency",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span>"
     ]
   },
   {
     "objectID": "setupR.html#step-3.-tell-windows-and-r-where-to-find-these-files",
     "href": "setupR.html#step-3.-tell-windows-and-r-where-to-find-these-files",
-    "title": "5  Setting Up R, RStudio, and Positron to Use the Same Configuration Files",
-    "section": "5.4 Step 3. Tell Windows and R where to find these files",
-    "text": "5.4 Step 3. Tell Windows and R where to find these files\nThe most reliable method is to set persistent user environment variables using setx, which works even in secure or constrained PowerShell environments (like corporate devices).\nOpen PowerShell or Command Prompt or Terminal in Vscode (no admin rights needed) and run:\nsetx R_ENVIRON_USER \"C:\\WBG\\R\\.Renviron\"\nsetx R_PROFILE_USER \"C:\\WBG\\R\\.Rprofile\"\nsetx HOME \"C:\\WBG\\R\"\nsetx R_USER \"C:\\WBG\\R\"\nThese commands instruct R to always look for .Renviron and .Rprofile in that directory, no matter which IDE you open.\nThen close and reopen RStudio, Positron, or any terminal using R.",
+    "title": "1  Setting Up R, RStudio, and Positron to Use the Same Configuration Files",
+    "section": "1.4 Step 3. Tell Windows and R where to find these files",
+    "text": "1.4 Step 3. Tell Windows and R where to find these files\nThe most reliable method is to set persistent user environment variables using setx, which works even in secure or constrained PowerShell environments (like corporate devices).\nOpen PowerShell or Command Prompt or Terminal in Vscode (no admin rights needed) and run:\nsetx R_ENVIRON_USER \"C:\\WBG\\R\\.Renviron\"\nsetx R_PROFILE_USER \"C:\\WBG\\R\\.Rprofile\"\nsetx HOME \"C:\\WBG\\R\"\nsetx R_USER \"C:\\WBG\\R\"\nThese commands instruct R to always look for .Renviron and .Rprofile in that directory, no matter which IDE you open.\nThen close and reopen RStudio, Positron, or any terminal using R.",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span>"
+      "R Setup and efficiency",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span>"
     ]
   },
   {
     "objectID": "setupR.html#step-4.-verify-the-configuration",
     "href": "setupR.html#step-4.-verify-the-configuration",
-    "title": "5  Setting Up R, RStudio, and Positron to Use the Same Configuration Files",
-    "section": "5.5 Step 4. Verify the configuration",
-    "text": "5.5 Step 4. Verify the configuration\nAfter restarting R (in any IDE), run the following to confirm the setup:\npath.expand(\"~\")\nnormalizePath(\"~/.Renviron\", mustWork = FALSE)\nnormalizePath(\"~/.Rprofile\", mustWork = FALSE)\nSys.getenv(c(\"R_ENVIRON_USER\", \"R_PROFILE_USER\", \"R_LIBS_USER\", \"LANG\", \"TZ\"))\nExpected results:\n\n~ resolves to C:/WBG/R\n.Renviron and .Rprofile point to the same files in that folder\nYour environment variables (R_LIBS_USER, etc.) are correctly loaded",
+    "title": "1  Setting Up R, RStudio, and Positron to Use the Same Configuration Files",
+    "section": "1.5 Step 4. Verify the configuration",
+    "text": "1.5 Step 4. Verify the configuration\nAfter restarting R (in any IDE), run the following to confirm the setup:\npath.expand(\"~\")\nnormalizePath(\"~/.Renviron\", mustWork = FALSE)\nnormalizePath(\"~/.Rprofile\", mustWork = FALSE)\nSys.getenv(c(\"R_ENVIRON_USER\", \"R_PROFILE_USER\", \"R_LIBS_USER\", \"LANG\", \"TZ\"))\nExpected results:\n\n~ resolves to C:/WBG/R\n.Renviron and .Rprofile point to the same files in that folder\nYour environment variables (R_LIBS_USER, etc.) are correctly loaded",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span>"
+      "R Setup and efficiency",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span>"
     ]
   },
   {
     "objectID": "setupR.html#step-5.-optional-cleanup",
     "href": "setupR.html#step-5.-optional-cleanup",
-    "title": "5  Setting Up R, RStudio, and Positron to Use the Same Configuration Files",
-    "section": "5.6 Step 5. Optional cleanup",
-    "text": "5.6 Step 5. Optional cleanup\nIf you previously had .Rprofile files in other locations (like your Documents or OneDrive folder), remove or rename them by adding a .bak at the end (e.g., .Rprofile.bak). R automatically runs the first .Rprofile it finds, so duplicate files can cause confusion or run twice.\nBy following this setup, your R environment becomes predictable, portable, and IDE-agnostic — a professional-grade configuration for serious R development.",
+    "title": "1  Setting Up R, RStudio, and Positron to Use the Same Configuration Files",
+    "section": "1.6 Step 5. Optional cleanup",
+    "text": "1.6 Step 5. Optional cleanup\nIf you previously had .Rprofile files in other locations (like your Documents or OneDrive folder), remove or rename them by adding a .bak at the end (e.g., .Rprofile.bak). R automatically runs the first .Rprofile it finds, so duplicate files can cause confusion or run twice.\nBy following this setup, your R environment becomes predictable, portable, and IDE-agnostic — a professional-grade configuration for serious R development.",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span>"
-    ]
-  },
-  {
-    "objectID": "interact_vm.html",
-    "href": "interact_vm.html",
-    "title": "6  How to interact with the Virtual Machine (VM) that hosts PIP",
-    "section": "",
-    "text": "6.1 Access and Session Management",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
-    ]
-  },
-  {
-    "objectID": "interact_vm.html#access-and-session-management",
-    "href": "interact_vm.html#access-and-session-management",
-    "title": "6  How to interact with the Virtual Machine (VM) that hosts PIP",
-    "section": "",
-    "text": "6.1.1 Login to the VM\n\nGo to PrivX.\nUse SSO login (World Bank Authenticator App).\nIn the Connections tab, select the VM you want:\n\nDevelopment: Linux-wzlxdpip01.worldbank.org\nQA: Linux-wzlxqpip01.worldbank.org\nProduction: Linux-wzlxppip01.worldbank.org\n\nOnce connected, switch to the srvpip user:\nsudo su - srvpip\n\n\n\n6.1.2 Copy, Paste, and Keyboard Shortcuts\n\n\n\n\n\n\n\n\nShortcut\nAction\nNotes\n\n\n\n\nCtrl + C\nStop the current running process\ne.g. stop an infinite loop or hanging R process\n\n\nCtrl + D\nLog out of the current shell\nEnds your session as srvpip\n\n\nShift + Ctrl + V\nPaste from clipboard\nWorks in most PrivX terminals\n\n\nShift + Insert\nPaste (alternative)\nOften easier in remote shells\n\n\n\nNotice that Ctrl + C does not copy text in terminal. You only need to highlight with your mouse the section you want to copy. Once you stopped highlighting, the text is copied to your clipboard automatically.",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
-    ]
-  },
-  {
-    "objectID": "interact_vm.html#understanding-the-environment",
-    "href": "interact_vm.html#understanding-the-environment",
-    "title": "6  How to interact with the Virtual Machine (VM) that hosts PIP",
-    "section": "6.2 Understanding the Environment",
-    "text": "6.2 Understanding the Environment\n\n6.2.1 Users and Permissions\n\nYour account: initial login via PrivX (not root)\nsrvpip user: used to manage Docker containers\nroot user: required for system-level commands; use only with sudo\n\nCommon prefixes:\n\ndocker → run Docker as normal user (often fails without permissions)\nsudo docker → correct way when managing containers\nsudo su - srvpip → switch to service account context\n\n\n\n6.2.2 Architecture Overview\n+-------------------------------------------------------------+\n|                      Linux VM (Host)                        |\n|                                                             |\n|  Persistent Data:                                           |\n|    /Data/pip/files/data   &lt;---+                             |\n|                               | (bind mount)                |\n|                               v                             |\n|  ---------------------------------------------------------  |\n|  |               Docker Container: povertyscoreapi       |  |\n|  |                                                     |  |\n|  |   - Mounts /Data/pip/files/data → /Data             |  |\n|  |   - Runs: Rscript /app/main.R                       |  |\n|  |   - Listens on port 8080 (internal)                 |  |\n|  ---------------------------------------------------------  |\n|                               ^                             |\n|                               |                             |\n|  Host Port 80  &lt;--------------+  (mapped to container 8080) |\n+-------------------------------------------------------------+\nLegend: - Data written to /Data inside the container is actually stored on the host at /Data/pip/files/data. - The API runs inside the container on port 8080, but is accessible from outside the VM on port 80.",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
-    ]
-  },
-  {
-    "objectID": "interact_vm.html#essential-docker-commands-cheat-sheet",
-    "href": "interact_vm.html#essential-docker-commands-cheat-sheet",
-    "title": "6  How to interact with the Virtual Machine (VM) that hosts PIP",
-    "section": "6.3 Essential Docker Commands (Cheat Sheet)",
-    "text": "6.3 Essential Docker Commands (Cheat Sheet)\n\n\n\n\n\n\n\n\n\nTask\nCommand\nNotes\n\n\n\n\n\nList all containers\nsudo docker ps -a\nShows running & stopped\n\n\n\nView logs\nsudo docker logs -f povertyscoreapi\nAdd --tail 200 to see last lines\n\n\n\nEnter container shell\nsudo docker exec -it povertyscoreapi /bin/bash\nFor interactive debugging\n\n\n\nCheck mounted volumes\nsudo docker inspect povertyscoreapi             | grep Mounts -A 5\nSee /Data source\n\n\n\nDelete stopped containers\nsudo docker container prune\nCleans unused ones\n\n\n\nDelete old images\nsudo docker image prune -a\nBe cautious — removes all unused\n\n\n\nCheck Docker service status\nsudo systemctl status docker\nConfirms Docker is active",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
-    ]
-  },
-  {
-    "objectID": "interact_vm.html#managing-data",
-    "href": "interact_vm.html#managing-data",
-    "title": "6  How to interact with the Virtual Machine (VM) that hosts PIP",
-    "section": "6.4 Managing Data",
-    "text": "6.4 Managing Data\n\n6.4.1 Data on the VM (Persistent)\n\nMain data location:\ncd /Data/pip/files/data\nInspect space usage:\ndf -h | grep Data\ndu -h --max-depth=1 | sort -h\nPreview files safely:\nls -lah\nView folder sizes:\ndu -sh *\n\n\n6.4.1.1 🔍 Find large or old files\nfind /Data/pip/files/data -type f -mtime +365 | head -n 20\n\n\n\n\n6.4.2 Data Inside Containers (Ephemeral)\nCheck where containers mount volumes:\nsudo docker inspect povertyscoreapi | grep Mounts -A 5\nYou’ll see:\n\"Mounts\": [\n  {\n    \"Type\": \"bind\",\n    \"Source\": \"/Data/pip/files/data\",\n    \"Destination\": \"/Data\"\n  }\n]\nThat means:\n\nInside container → /Data\nOn host → /Data/pip/files/data\n\n\n6.4.2.1 Access via container shell:\nsudo docker exec -it povertyscoreapi ls -lh /Data\n\n\n\n\n6.4.3 Safe Deletion and Cleanup\nPreview first:\nls -d /Data/pip/files/data/project_*\nDelete specific folders:\nrm -rf /Data/pip/files/data/folder1 /Data/pip/files/data/folder2\nDelete all contents but keep parent folder:\nrm -rf /Data/pip/files/data/*\nMove to trash instead of deleting:\nmkdir -p /Data/pip/files/trash\nmv /Data/pip/files/data/folder1 /Data/pip/files/trash/\n⚠️ Caution: rm -rf is irreversible — always check with ls first.",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
-    ]
-  },
-  {
-    "objectID": "interact_vm.html#diagnosing-api-or-container-issues",
-    "href": "interact_vm.html#diagnosing-api-or-container-issues",
-    "title": "6  How to interact with the Virtual Machine (VM) that hosts PIP",
-    "section": "6.5 Diagnosing API or Container Issues",
-    "text": "6.5 Diagnosing API or Container Issues\n\n6.5.1 Check Container State\nsudo docker ps -a\nGet detailed exit info:\nsudo docker inspect povertyscoreapi --format='ExitCode={{.State.ExitCode}} OOMKilled={{.State.OOMKilled}}'\n\nExitCode=0 → normal exit\nExitCode=137 → killed (likely out of memory)\n\n\n\n\n6.5.2 View Logs\nsudo docker logs povertyscoreapi | head -n 20   # startup logs\nsudo docker logs --tail 200 povertyscoreapi     # recent logs\n\n\n\n6.5.3 Reproduce Interactively\nStart an interactive debug session:\nsudo docker run --rm -it \\\n  --name povertyscoreapi-debug \\\n  -p 8080 \\\n  -v /Data/pip/files/data:/Data \\\n  itsesippscoreregistryprod.azurecr.io/povertyscoreapi:latest \\\n  /bin/bash\nInside:\nRscript /app/main.R\nPress Ctrl + C to stop and exit to leave.\n\n\n\n6.5.4 Restart or Rebuild Containers\nsudo docker restart povertyscoreapi\nOr rebuild completely:\nsudo docker stop povertyscoreapi\nsudo docker rm povertyscoreapi\nsudo docker pull itsesippscoreregistryprod.azurecr.io/povertyscoreapi:latest\nsudo docker run -d --name povertyscoreapi \\\n  -p 80:8080 \\\n  -v /Data/pip/files/data:/Data \\\n  itsesippscoreregistryprod.azurecr.io/povertyscoreapi:latest",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
-    ]
-  },
-  {
-    "objectID": "interact_vm.html#testing-api-endpoints",
-    "href": "interact_vm.html#testing-api-endpoints",
-    "title": "6  How to interact with the Virtual Machine (VM) that hosts PIP",
-    "section": "6.6 Testing API Endpoints",
-    "text": "6.6 Testing API Endpoints\n\n6.6.1 From Inside the Container\ncurl http://localhost:80/api/v1/health-check\n\n\n6.6.2 Loop through common endpoints\nfor ep in health-check pkgs-version data-signature gh-hash; do\n  echo \"---- Testing $ep ----\"\n  curl -s http://localhost:80/api/v1/$ep\n  echo\ndone\n\n\n6.6.3 From Outside (VM host or browser)\ncurl http://wzlxdpip01.worldbank.org/api/v1/health-check",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
-    ]
-  },
-  {
-    "objectID": "interact_vm.html#troubleshooting-common-errors",
-    "href": "interact_vm.html#troubleshooting-common-errors",
-    "title": "6  How to interact with the Virtual Machine (VM) that hosts PIP",
-    "section": "6.7 Troubleshooting Common Errors",
-    "text": "6.7 Troubleshooting Common Errors\n\n\n\n\n\n\n\n\nSymptom\nLikely Cause\nFix\n\n\n\n\ncurl: (7) Failed connect\nContainer not running or wrong port\nsudo docker ps -a\n\n\nExited (137)\nOut of memory (OOMKilled)\nIncrease VM memory or limit API load\n\n\nauthentication required\nNot logged in to Azure Container Registry\nsudo az acr login --name itsesippscoreregistryprod\n\n\npermission denied on /Data\nWrong user ownership\nsudo chown -R srvpip /Data\n\n\nNo logs shown\nContainer failed before startup\nRun sudo docker inspect povertyscoreapi\n\n\nPort 8080 works but 80 doesn’t\nPort not mapped\nRun container with -p 80:8080",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
-    ]
-  },
-  {
-    "objectID": "interact_vm.html#understanding-ports-80-vs-8080",
-    "href": "interact_vm.html#understanding-ports-80-vs-8080",
-    "title": "6  How to interact with the Virtual Machine (VM) that hosts PIP",
-    "section": "6.8 Understanding Ports (80 vs 8080)",
-    "text": "6.8 Understanding Ports (80 vs 8080)\n\nInside Docker, the API runs on 8080:\npipapi::start_api(port = 8080, host = \"0.0.0.0\")\nOutside Docker (host or browser), you can map any port using:\n-p 80:8080\nThis means:\nhost_port:container_port\nSo users access:\nhttp://wzlxdpip01.worldbank.org/api/v1/...\neven though internally it listens on 8080.",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
-    ]
-  },
-  {
-    "objectID": "interact_vm.html#monitoring-resource-usage",
-    "href": "interact_vm.html#monitoring-resource-usage",
-    "title": "6  How to interact with the Virtual Machine (VM) that hosts PIP",
-    "section": "6.9 Monitoring Resource Usage",
-    "text": "6.9 Monitoring Resource Usage\nWatch real-time CPU and memory:\nsudo docker stats povertyscoreapi\nOr globally:\ntop -u srvpip",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
-    ]
-  },
-  {
-    "objectID": "interact_vm.html#appendix",
-    "href": "interact_vm.html#appendix",
-    "title": "6  How to interact with the Virtual Machine (VM) that hosts PIP",
-    "section": "6.10 Appendix",
-    "text": "6.10 Appendix\n\n6.10.1 Check Disk Usage Quickly\ndf -h | grep Data\n\n\n6.10.2 Check Docker Service Logs\nsudo journalctl -u docker --since \"2025-09-23 17:00\"\n\n\n6.10.3 Check R version inside container\nsudo docker exec -it povertyscoreapi Rscript -e \"R.version.string\"",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+      "R Setup and efficiency",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span>"
     ]
   },
   {
     "objectID": "VScode_Setup_for_stata.html",
     "href": "VScode_Setup_for_stata.html",
-    "title": "7  SetUp Vscode to work with Stata",
+    "title": "2  SetUp Vscode to work with Stata",
     "section": "",
-    "text": "7.1 Install VScode and Stata Extensions",
+    "text": "2.1 Install VScode and Stata Extensions",
     "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>SetUp Vscode to work with Stata</span>"
+      "VSCode Setup",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>SetUp Vscode to work with Stata</span>"
     ]
   },
   {
     "objectID": "VScode_Setup_for_stata.html#install-vscode-and-stata-extensions",
     "href": "VScode_Setup_for_stata.html#install-vscode-and-stata-extensions",
-    "title": "7  SetUp Vscode to work with Stata",
+    "title": "2  SetUp Vscode to work with Stata",
     "section": "",
     "text": "Open “Company Portal” app on your computer.\nSearch for VS Code and install it.(Make sure Git Credential Manager is selected)\nSearch for GitForWindows and install it.\nOpen VS Code → Extensions (left sidebar), and install:\n\nStata Enhanced (syntax highlighting).\nGit Graph (visualize branches).\nGitLens (blame/insight).\nGitHub Pull Requests and Issues.\nGitHub Copilot (optional).\nGitHub Copilot Chat (optional).",
     "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>SetUp Vscode to work with Stata</span>"
+      "VSCode Setup",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>SetUp Vscode to work with Stata</span>"
     ]
   },
   {
     "objectID": "VScode_Setup_for_stata.html#configure-rundo-and-rundolines",
     "href": "VScode_Setup_for_stata.html#configure-rundo-and-rundolines",
-    "title": "7  SetUp Vscode to work with Stata",
-    "section": "7.2 Configure rundo and rundolines",
-    "text": "7.2 Configure rundo and rundolines\nAll the information in this section is based on Friedrich Huebler’s article. If you need more detail, see his blog.\n\nFor convenience, we also mirror the files here: https://github.com/GPID-WB/Pip-Technical-Guidelines/raw/refs/heads/main/_data/rundofiles.zip\nExtract the ZIP into C:\\ado\\personal. You’ll see six files; you only need to modify two of them:\n\nrundo.ini\nrundolines.ini\n\nOpen rundo.ini and rundolines.ini and set:\n\nstatapath → full path to your Stata EXE, e.g.: statapath = \"C:\\Program Files\\Stata19\\StataMP-64.exe\"\nstatawin → exact Stata window title, e.g.: statawin  = \"StataNow/MP 19.5\" \nstatacmd → shortcut that focuses Stata’s Command window (default is ^1 = Ctrl+1).\n\nThe two INIs should be identical except for the filename. Keep both updated.\n\n\n7.2.1 Recommended .ini tuning (for snappier runs)\nThese delays are safe and faster than the defaults:\n[Delays]\nclippause = 60   ; ms after copying selection to clipboard (40–80 is a good range)\nwinpause  = 120  ; ms between window ops (80–140 is a good range)\nkeypause  = 0    ; ms between keystrokes to Stata\nIf you ever get a “nothing happened” run, bump winpause up by ~20–40 ms.\nChecklist\n\nMake sure the window title matches exactly (minor version changes matter).\nKeep Stata open before your first send (cold attaches are slower).",
+    "title": "2  SetUp Vscode to work with Stata",
+    "section": "2.2 Configure rundo and rundolines",
+    "text": "2.2 Configure rundo and rundolines\nAll the information in this section is based on Friedrich Huebler’s article. If you need more detail, see his blog.\n\nFor convenience, we also mirror the files here: https://github.com/GPID-WB/Pip-Technical-Guidelines/raw/refs/heads/main/_data/rundofiles.zip\nExtract the ZIP into C:\\ado\\personal. You’ll see six files; you only need to modify two of them:\n\nrundo.ini\nrundolines.ini\n\nOpen rundo.ini and rundolines.ini and set:\n\nstatapath → full path to your Stata EXE, e.g.: statapath = \"C:\\Program Files\\Stata19\\StataMP-64.exe\"\nstatawin → exact Stata window title, e.g.: statawin  = \"StataNow/MP 19.5\" \nstatacmd → shortcut that focuses Stata’s Command window (default is ^1 = Ctrl+1).\n\nThe two INIs should be identical except for the filename. Keep both updated.\n\n\n2.2.1 Recommended .ini tuning (for snappier runs)\nThese delays are safe and faster than the defaults:\n[Delays]\nclippause = 60   ; ms after copying selection to clipboard (40–80 is a good range)\nwinpause  = 120  ; ms between window ops (80–140 is a good range)\nkeypause  = 0    ; ms between keystrokes to Stata\nIf you ever get a “nothing happened” run, bump winpause up by ~20–40 ms.\nChecklist\n\nMake sure the window title matches exactly (minor version changes matter).\nKeep Stata open before your first send (cold attaches are slower).",
     "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>SetUp Vscode to work with Stata</span>"
+      "VSCode Setup",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>SetUp Vscode to work with Stata</span>"
     ]
   },
   {
     "objectID": "VScode_Setup_for_stata.html#set-up-user-tasks-global-once-to-call-rundolines-rundo",
     "href": "VScode_Setup_for_stata.html#set-up-user-tasks-global-once-to-call-rundolines-rundo",
-    "title": "7  SetUp Vscode to work with Stata",
-    "section": "7.3 Set up User Tasks (global, once) to call rundolines / rundo",
-    "text": "7.3 Set up User Tasks (global, once) to call rundolines / rundo\n\nWe use User Tasks so you don’t have to repeat this per workspace.\n\n\nOpen Command Palette (Ctrl+Shift+P) → type: Tasks: Open User Tasks.\nPaste this JSON (adjust paths to match your machine). NOTE:\n\n\nUse double backslashes \\\\ in paths.\nIf \"tasks\" already exists, just add the two task objects inside the array.\n\n{\n  \"version\": \"2.0.0\",\n  \"tasks\": [\n    {\n      \"label\": \"Stata: Run selection/line (rundolines)\",\n      \"type\": \"shell\",\n      \"command\": \"\\\"C:\\\\ado\\\\personal\\\\rundolines.exe\\\"\",\n      \"presentation\": {\n        \"focus\": false,\n        \"panel\": \"dedicated\",\n        \"showReuseMessage\": false\n      }\n    },\n    {\n      \"label\": \"Stata: Do current file (rundo)\",\n      \"type\": \"shell\",\n      \"command\": \"\\\"C:\\\\ado\\\\personal\\\\rundo.exe\\\"\",\n      \"args\": [\"\\\"${file}\\\"\"],\n      \"presentation\": {\n        \"focus\": false,\n        \"panel\": \"dedicated\",\n        \"showReuseMessage\": false\n      }\n    }\n  ]\n}\n\nrundolines sends the current selection (or current line if nothing is selected).\nrundo runs the entire file (saves first).",
+    "title": "2  SetUp Vscode to work with Stata",
+    "section": "2.3 Set up User Tasks (global, once) to call rundolines / rundo",
+    "text": "2.3 Set up User Tasks (global, once) to call rundolines / rundo\n\nWe use User Tasks so you don’t have to repeat this per workspace.\n\n\nOpen Command Palette (Ctrl+Shift+P) → type: Tasks: Open User Tasks.\nPaste this JSON (adjust paths to match your machine). NOTE:\n\n\nUse double backslashes \\\\ in paths.\nIf \"tasks\" already exists, just add the two task objects inside the array.\n\n{\n  \"version\": \"2.0.0\",\n  \"tasks\": [\n    {\n      \"label\": \"Stata: Run selection/line (rundolines)\",\n      \"type\": \"shell\",\n      \"command\": \"\\\"C:\\\\ado\\\\personal\\\\rundolines.exe\\\"\",\n      \"presentation\": {\n        \"focus\": false,\n        \"panel\": \"dedicated\",\n        \"showReuseMessage\": false\n      }\n    },\n    {\n      \"label\": \"Stata: Do current file (rundo)\",\n      \"type\": \"shell\",\n      \"command\": \"\\\"C:\\\\ado\\\\personal\\\\rundo.exe\\\"\",\n      \"args\": [\"\\\"${file}\\\"\"],\n      \"presentation\": {\n        \"focus\": false,\n        \"panel\": \"dedicated\",\n        \"showReuseMessage\": false\n      }\n    }\n  ]\n}\n\nrundolines sends the current selection (or current line if nothing is selected).\nrundo runs the entire file (saves first).",
     "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>SetUp Vscode to work with Stata</span>"
+      "VSCode Setup",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>SetUp Vscode to work with Stata</span>"
     ]
   },
   {
     "objectID": "VScode_Setup_for_stata.html#bind-your-keyboard-shortcuts-global-once",
     "href": "VScode_Setup_for_stata.html#bind-your-keyboard-shortcuts-global-once",
-    "title": "7  SetUp Vscode to work with Stata",
-    "section": "7.4 Bind your keyboard shortcuts (global, once)",
-    "text": "7.4 Bind your keyboard shortcuts (global, once)\n\nOpen Command Palette (Ctrl+Shift+P) → type: Keyboard Shortcuts → select: Open Keyboard Shortcuts (JSON).\nAdd (or adapt keys if you already use F9/F10 or if you don’t want to use F9/F10):\nHoubler suggests not use any shortcut with the key Ctrl as it may get “stuck”.\n\n[\n  {\n    \"key\": \"f9\",\n    \"command\": \"workbench.action.tasks.runTask\",\n    \"args\": \"Stata: Run selection/line (rundolines)\",\n    \"when\": \"editorTextFocus && (resourceExtname =~ /\\\\.(do|ado|mata)$/ || (resourceScheme == 'untitled' && editorLangId == 'stata'))\"\n  },\n  {\n    \"key\": \"f10\",\n    \"command\": \"workbench.action.tasks.runTask\",\n    \"args\": \"Stata: Do current file (rundo)\",\n    \"when\": \"editorTextFocus && (resourceExtname =~ /\\\\.(do|ado|mata)$/ || (resourceScheme == 'untitled' && editorLangId == 'stata'))\"\n  }\n]\n\nThe when clauses limit these keys to Stata files.\nIf you already mapped F9/F10 to something else, either change those or pick different keys (e.g., f8 / f9).\n\n\nTip: If you still have Code Runner installed, remove any bindings that clash (search “Run Code” in Keyboard Shortcuts and delete its keybindings). You can also disable/uninstall Code Runner entirely—you don’t need it.",
+    "title": "2  SetUp Vscode to work with Stata",
+    "section": "2.4 Bind your keyboard shortcuts (global, once)",
+    "text": "2.4 Bind your keyboard shortcuts (global, once)\n\nOpen Command Palette (Ctrl+Shift+P) → type: Keyboard Shortcuts → select: Open Keyboard Shortcuts (JSON).\nAdd (or adapt keys if you already use F9/F10 or if you don’t want to use F9/F10):\nHoubler suggests not use any shortcut with the key Ctrl as it may get “stuck”.\n\n[\n  {\n    \"key\": \"f9\",\n    \"command\": \"workbench.action.tasks.runTask\",\n    \"args\": \"Stata: Run selection/line (rundolines)\",\n    \"when\": \"editorTextFocus && (resourceExtname =~ /\\\\.(do|ado|mata)$/ || (resourceScheme == 'untitled' && editorLangId == 'stata'))\"\n  },\n  {\n    \"key\": \"f10\",\n    \"command\": \"workbench.action.tasks.runTask\",\n    \"args\": \"Stata: Do current file (rundo)\",\n    \"when\": \"editorTextFocus && (resourceExtname =~ /\\\\.(do|ado|mata)$/ || (resourceScheme == 'untitled' && editorLangId == 'stata'))\"\n  }\n]\n\nThe when clauses limit these keys to Stata files.\nIf you already mapped F9/F10 to something else, either change those or pick different keys (e.g., f8 / f9).\n\n\nTip: If you still have Code Runner installed, remove any bindings that clash (search “Run Code” in Keyboard Shortcuts and delete its keybindings). You can also disable/uninstall Code Runner entirely—you don’t need it.",
     "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>SetUp Vscode to work with Stata</span>"
+      "VSCode Setup",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>SetUp Vscode to work with Stata</span>"
     ]
   },
   {
     "objectID": "VScode_Setup_for_stata.html#optional-running-mata-files-directly",
     "href": "VScode_Setup_for_stata.html#optional-running-mata-files-directly",
-    "title": "7  SetUp Vscode to work with Stata",
-    "section": "7.5 (Optional) Running Mata files directly",
-    "text": "7.5 (Optional) Running Mata files directly\nTwo clean options; pick one.\n\n7.5.1 A) Wrapper .do (recommended for standalone .mata files)\nCreate .vscode/_run_mata.do in your repo (or anywhere stable):\n// _run_mata.do\nargs mfile\nmata:\nmata clear\nmata do \"`mfile'\"\nend\nAdd a User Task to invoke it with the current file:\n{\n  \"label\": \"Stata: Mata do current file\",\n  \"type\": \"shell\",\n  \"command\": \"\\\"C:\\\\Program Files\\\\Stata19\\\\StataMP-64.exe\\\"\",\n  \"args\": [\"/e\", \"do\", \"\\\"${workspaceFolder}\\\\.vscode\\\\_run_mata.do\\\"\", \"\\\"${file}\\\"\"]\n}\nAnd a keybinding for .mata files:\n{\n  \"key\": \"f8\",\n  \"command\": \"workbench.action.tasks.runTask\",\n  \"args\": \"Stata: Mata do current file\",\n  \"when\": \"editorTextFocus && (resourceExtname =~ /\\\\.(mata)$/)\"\n}\n\n\n7.5.2 B) Mata blocks inside a .do\nPlace your Mata code inside a mata: … end block in a .do, then use F9 (selection) or F10 (whole file).",
+    "title": "2  SetUp Vscode to work with Stata",
+    "section": "2.5 (Optional) Running Mata files directly",
+    "text": "2.5 (Optional) Running Mata files directly\nTwo clean options; pick one.\n\n2.5.1 A) Wrapper .do (recommended for standalone .mata files)\nCreate .vscode/_run_mata.do in your repo (or anywhere stable):\n// _run_mata.do\nargs mfile\nmata:\nmata clear\nmata do \"`mfile'\"\nend\nAdd a User Task to invoke it with the current file:\n{\n  \"label\": \"Stata: Mata do current file\",\n  \"type\": \"shell\",\n  \"command\": \"\\\"C:\\\\Program Files\\\\Stata19\\\\StataMP-64.exe\\\"\",\n  \"args\": [\"/e\", \"do\", \"\\\"${workspaceFolder}\\\\.vscode\\\\_run_mata.do\\\"\", \"\\\"${file}\\\"\"]\n}\nAnd a keybinding for .mata files:\n{\n  \"key\": \"f8\",\n  \"command\": \"workbench.action.tasks.runTask\",\n  \"args\": \"Stata: Mata do current file\",\n  \"when\": \"editorTextFocus && (resourceExtname =~ /\\\\.(mata)$/)\"\n}\n\n\n2.5.2 B) Mata blocks inside a .do\nPlace your Mata code inside a mata: … end block in a .do, then use F9 (selection) or F10 (whole file).",
     "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>SetUp Vscode to work with Stata</span>"
+      "VSCode Setup",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>SetUp Vscode to work with Stata</span>"
     ]
   },
   {
     "objectID": "VScode_Setup_for_stata.html#quick-sanity-test-30-seconds",
     "href": "VScode_Setup_for_stata.html#quick-sanity-test-30-seconds",
-    "title": "7  SetUp Vscode to work with Stata",
-    "section": "7.6 Quick sanity test (30 seconds)",
-    "text": "7.6 Quick sanity test (30 seconds)\n\nOpen a .do. Type and select:\ndisplay \"hello from VS Code\"\nPress F9 → Stata should execute the selection.\nPress F10 → Stata should run the entire file.\n\nIf nothing happens, check:\n\nTasks names match your keybinding args exactly.\nYou edited User Tasks (not workspace .vscode/tasks.json).\nNo conflicting keybinding is intercepting F9/F10.",
+    "title": "2  SetUp Vscode to work with Stata",
+    "section": "2.6 Quick sanity test (30 seconds)",
+    "text": "2.6 Quick sanity test (30 seconds)\n\nOpen a .do. Type and select:\ndisplay \"hello from VS Code\"\nPress F9 → Stata should execute the selection.\nPress F10 → Stata should run the entire file.\n\nIf nothing happens, check:\n\nTasks names match your keybinding args exactly.\nYou edited User Tasks (not workspace .vscode/tasks.json).\nNo conflicting keybinding is intercepting F9/F10.",
     "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>SetUp Vscode to work with Stata</span>"
+      "VSCode Setup",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>SetUp Vscode to work with Stata</span>"
     ]
   },
   {
     "objectID": "VScode_Setup_for_stata.html#troubleshooting-performance",
     "href": "VScode_Setup_for_stata.html#troubleshooting-performance",
-    "title": "7  SetUp Vscode to work with Stata",
-    "section": "7.7 Troubleshooting & Performance",
-    "text": "7.7 Troubleshooting & Performance\n\nFirst run is slower (1–3 s) due to task runner warm-up and first attach. Subsequent runs are often sub-second with tuned INIs.\nIf sends are flaky, raise winpause slightly (e.g., from 120 → 140 ms).\nVerify statawin matches the exact window title (minor versions matter).\nKeep Stata open; cold-launches add seconds.\nAvoid network paths for ado/working dirs when possible.\nConsider AV exclusions for the Stata EXE, rundolines.exe, rundo.exe, and your ado/workspace.",
+    "title": "2  SetUp Vscode to work with Stata",
+    "section": "2.7 Troubleshooting & Performance",
+    "text": "2.7 Troubleshooting & Performance\n\nFirst run is slower (1–3 s) due to task runner warm-up and first attach. Subsequent runs are often sub-second with tuned INIs.\nIf sends are flaky, raise winpause slightly (e.g., from 120 → 140 ms).\nVerify statawin matches the exact window title (minor versions matter).\nKeep Stata open; cold-launches add seconds.\nAvoid network paths for ado/working dirs when possible.\nConsider AV exclusions for the Stata EXE, rundolines.exe, rundo.exe, and your ado/workspace.",
     "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>SetUp Vscode to work with Stata</span>"
+      "VSCode Setup",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>SetUp Vscode to work with Stata</span>"
     ]
   },
   {
     "objectID": "VScode_setup_for_github.html",
     "href": "VScode_setup_for_github.html",
-    "title": "8  SetUp Git & GitHub in VS Code",
+    "title": "3  SetUp Git & GitHub in VS Code",
     "section": "",
-    "text": "8.1 Prerequisites",
+    "text": "3.1 Prerequisites",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+      "VSCode Setup",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
     ]
   },
   {
     "objectID": "VScode_setup_for_github.html#prerequisites",
     "href": "VScode_setup_for_github.html#prerequisites",
-    "title": "8  SetUp Git & GitHub in VS Code",
+    "title": "3  SetUp Git & GitHub in VS Code",
     "section": "",
     "text": "Git for Windows installed (includes Git Credential Manager).\nVS Code installed.\nMake sure you’re added to the World Bank GitHub organization using eservices/ request.",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+      "VSCode Setup",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
     ]
   },
   {
     "objectID": "VScode_setup_for_github.html#install-vscode-and-stata-extensions",
     "href": "VScode_setup_for_github.html#install-vscode-and-stata-extensions",
-    "title": "8  SetUp Git & GitHub in VS Code",
-    "section": "8.2 Install VScode and Stata Extensions",
-    "text": "8.2 Install VScode and Stata Extensions\n\nOpen “Company Portal” app on your computer.\nSearch for VS Code and install it.\nSearch for GitForWindows and install it. (Make sure Git Credential Manager is selected)\nOpen VS Code → Extensions (left sidebar), and install:\n\nStata Enhanced (syntax highlighting).\nGit Graph (visualize branches).\nGitLens (blame/insight).\nGitHub Pull Requests and Issues.\nGitHub Copilot (optional).\nGitHub Copilot Chat (optional).",
+    "title": "3  SetUp Git & GitHub in VS Code",
+    "section": "3.2 Install VScode and Stata Extensions",
+    "text": "3.2 Install VScode and Stata Extensions\n\nOpen “Company Portal” app on your computer.\nSearch for VS Code and install it.\nSearch for GitForWindows and install it. (Make sure Git Credential Manager is selected)\nOpen VS Code → Extensions (left sidebar), and install:\n\nStata Enhanced (syntax highlighting).\nGit Graph (visualize branches).\nGitLens (blame/insight).\nGitHub Pull Requests and Issues.\nGitHub Copilot (optional).\nGitHub Copilot Chat (optional).",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+      "VSCode Setup",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
     ]
   },
   {
     "objectID": "VScode_setup_for_github.html#first-time-git-configuration-one-time",
     "href": "VScode_setup_for_github.html#first-time-git-configuration-one-time",
-    "title": "8  SetUp Git & GitHub in VS Code",
-    "section": "8.3 First-time Git configuration (one-time)",
-    "text": "8.3 First-time Git configuration (one-time)\nOpen Terminal in VS Code (Ctrl+`) and run:\n# Identify yourself in commits\ngit config --global user.name  \"Your Name\"\ngit config --global user.email \"your_email@domain.com\"\n\n# Use main as default branch for new repos\ngit config --global init.defaultBranch main\n\n# Line endings: recommended on Windows\ngit config --global core.autocrlf true  # checkout CRLF, commit LF\n\n# Improve diffs for common texty files\ngit config --global diff.renameLimit 99999\ngit config --global fetch.prune true",
+    "title": "3  SetUp Git & GitHub in VS Code",
+    "section": "3.3 First-time Git configuration (one-time)",
+    "text": "3.3 First-time Git configuration (one-time)\nOpen Terminal in VS Code (Ctrl+`) and run:\n# Identify yourself in commits\ngit config --global user.name  \"Your Name\"\ngit config --global user.email \"your_email@domain.com\"\n\n# Use main as default branch for new repos\ngit config --global init.defaultBranch main\n\n# Line endings: recommended on Windows\ngit config --global core.autocrlf true  # checkout CRLF, commit LF\n\n# Improve diffs for common texty files\ngit config --global diff.renameLimit 99999\ngit config --global fetch.prune true",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+      "VSCode Setup",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
     ]
   },
   {
     "objectID": "VScode_setup_for_github.html#authenticate-to-github",
     "href": "VScode_setup_for_github.html#authenticate-to-github",
-    "title": "8  SetUp Git & GitHub in VS Code",
-    "section": "8.4 Authenticate to GitHub",
-    "text": "8.4 Authenticate to GitHub\nGo to your profile on VScode and login to GitHub.\nTrying to clone/push over HTTPS will trigger a secure web flow:\n\nUse a GitHub personal access token (PAT) or organization SSO as prompted.\nGit Credential Manager securely stores/refreshes credentials.",
+    "title": "3  SetUp Git & GitHub in VS Code",
+    "section": "3.4 Authenticate to GitHub",
+    "text": "3.4 Authenticate to GitHub\nGo to your profile on VScode and login to GitHub.\nTrying to clone/push over HTTPS will trigger a secure web flow:\n\nUse a GitHub personal access token (PAT) or organization SSO as prompted.\nGit Credential Manager securely stores/refreshes credentials.",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+      "VSCode Setup",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
     ]
   },
   {
     "objectID": "VScode_setup_for_github.html#clone-or-publish-a-repository-in-vs-code",
     "href": "VScode_setup_for_github.html#clone-or-publish-a-repository-in-vs-code",
-    "title": "8  SetUp Git & GitHub in VS Code",
-    "section": "8.5 Clone or publish a repository in VS Code",
-    "text": "8.5 Clone or publish a repository in VS Code\n\n8.5.1 Clone an existing repository\n\nCommand Palette → Git: Clone → paste repo URL (HTTPS or SSH).\nChoose a local folder → VS Code offers to open the folder.\n\n\n\n8.5.2 Publish (create a new GitHub repo from a local folder)\n\nOpen your project folder in VS Code.\nSource Control view → Initialize Repository.\nCommit initial files.\nClick Publish to GitHub (or run Command Palette → Publish to GitHub).\n\nChoose a name, visibility (private/public), and org/user.",
+    "title": "3  SetUp Git & GitHub in VS Code",
+    "section": "3.5 Clone or publish a repository in VS Code",
+    "text": "3.5 Clone or publish a repository in VS Code\n\n3.5.1 Clone an existing repository\n\nCommand Palette → Git: Clone → paste repo URL (HTTPS or SSH).\nChoose a local folder → VS Code offers to open the folder.\n\n\n\n3.5.2 Publish (create a new GitHub repo from a local folder)\n\nOpen your project folder in VS Code.\nSource Control view → Initialize Repository.\nCommit initial files.\nClick Publish to GitHub (or run Command Palette → Publish to GitHub).\n\nChoose a name, visibility (private/public), and org/user.",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+      "VSCode Setup",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
     ]
   },
   {
     "objectID": "VScode_setup_for_github.html#power-ups",
     "href": "VScode_setup_for_github.html#power-ups",
-    "title": "8  SetUp Git & GitHub in VS Code",
-    "section": "8.6 Power-ups",
-    "text": "8.6 Power-ups\n\n8.6.1 GitLens highlights\n\nInline blame (who/when changed this line)\nFile & line history with rich diffs\nVisualize & compare branches; open Repositories view\nOpen PR associated with a line/commit\nCode authorship heatmaps and commit search by message, author, time\n\n\n\n8.6.2 Git Graph highlights\n\nGraph view of all branches/tags\nDrag & drop merges/rebases (careful: follow team policy)\nQuick reset, cherry-pick, revert from context menu\n\n\n\n8.6.3 Copilot & Copilot Chat\nIn order to access Copilot and Copilot Chat, You need to be added to the World Bank GitHub organization using eservices/ request.\nMake sure you read the Getting Started Guide with GIthub Copilot.\nAlso, make sure you understand and follow the instructions in the General Github Copilot Usage Policy and guide.\n\nCopilot inline suggestions: code, tests, small refactors\nCopilot Chat for:\n\n“Explain this diff” / “Write a PR description”\n“Generate a .gitignore for Stata + VS Code”\n“Draft a release note from merged PRs since vX.Y”",
+    "title": "3  SetUp Git & GitHub in VS Code",
+    "section": "3.6 Power-ups",
+    "text": "3.6 Power-ups\n\n3.6.1 GitLens highlights\n\nInline blame (who/when changed this line)\nFile & line history with rich diffs\nVisualize & compare branches; open Repositories view\nOpen PR associated with a line/commit\nCode authorship heatmaps and commit search by message, author, time\n\n\n\n3.6.2 Git Graph highlights\n\nGraph view of all branches/tags\nDrag & drop merges/rebases (careful: follow team policy)\nQuick reset, cherry-pick, revert from context menu\n\n\n\n3.6.3 Copilot & Copilot Chat\nIn order to access Copilot and Copilot Chat, You need to be added to the World Bank GitHub organization using eservices/ request.\nMake sure you read the Getting Started Guide with GIthub Copilot.\nAlso, make sure you understand and follow the instructions in the General Github Copilot Usage Policy and guide.\n\nCopilot inline suggestions: code, tests, small refactors\nCopilot Chat for:\n\n“Explain this diff” / “Write a PR description”\n“Generate a .gitignore for Stata + VS Code”\n“Draft a release note from merged PRs since vX.Y”",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+      "VSCode Setup",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
     ]
   },
   {
     "objectID": "VScode_setup_for_github.html#team-conventions-recommended",
     "href": "VScode_setup_for_github.html#team-conventions-recommended",
-    "title": "8  SetUp Git & GitHub in VS Code",
-    "section": "8.7 Team conventions (recommended)",
-    "text": "8.7 Team conventions (recommended)\n\nBranching: feature branches from main; short, descriptive names.\nCommits: small, frequent, imperative subject line; reference issues (#123).\nPRs: clear description (what/why), checklist, reviewers; keep PRs small.\nMerging: prefer squash to keep history clean (unless you need merge commits).\nCI: make PR green before merge; don’t push directly to main.",
+    "title": "3  SetUp Git & GitHub in VS Code",
+    "section": "3.7 Team conventions (recommended)",
+    "text": "3.7 Team conventions (recommended)\n\nBranching: feature branches from main; short, descriptive names.\nCommits: small, frequent, imperative subject line; reference issues (#123).\nPRs: clear description (what/why), checklist, reviewers; keep PRs small.\nMerging: prefer squash to keep history clean (unless you need merge commits).\nCI: make PR green before merge; don’t push directly to main.",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+      "VSCode Setup",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
     ]
   },
   {
     "objectID": "VScode_setup_for_github.html#quick-reference-commands",
     "href": "VScode_setup_for_github.html#quick-reference-commands",
-    "title": "8  SetUp Git & GitHub in VS Code",
-    "section": "8.8 Quick reference (commands)",
-    "text": "8.8 Quick reference (commands)\n# Start a repo\ngit init\ngit add .\ngit commit -m \"Initial commit\"\ngit branch -M main\ngit remote add origin &lt;ssh-or-https-url&gt;\ngit push -u origin main\n\n# Typical feature flow\ngit checkout -b feature/my-change\n# ...edit...\ngit add -A\ngit commit -m \"Implement my change\"\ngit push -u origin feature/my-change\n# open PR in VS Code (GitHub PRs extension)\n\n# Sync main\ngit checkout main\ngit pull --ff-only",
+    "title": "3  SetUp Git & GitHub in VS Code",
+    "section": "3.8 Quick reference (commands)",
+    "text": "3.8 Quick reference (commands)\n# Start a repo\ngit init\ngit add .\ngit commit -m \"Initial commit\"\ngit branch -M main\ngit remote add origin &lt;ssh-or-https-url&gt;\ngit push -u origin main\n\n# Typical feature flow\ngit checkout -b feature/my-change\n# ...edit...\ngit add -A\ngit commit -m \"Implement my change\"\ngit push -u origin feature/my-change\n# open PR in VS Code (GitHub PRs extension)\n\n# Sync main\ngit checkout main\ngit pull --ff-only",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+      "VSCode Setup",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
     ]
   },
   {
     "objectID": "VScode_setup_for_github.html#suggested-vs-code-settings-optional",
     "href": "VScode_setup_for_github.html#suggested-vs-code-settings-optional",
-    "title": "8  SetUp Git & GitHub in VS Code",
-    "section": "8.9 Suggested VS Code settings (optional)",
-    "text": "8.9 Suggested VS Code settings (optional)\nCreate .vscode/settings.json in your repo to nudge consistent behavior:\n{\n  \"git.enableSmartCommit\": true,\n  \"git.confirmSync\": false,\n  \"git.autofetch\": true,\n  \"git.openRepositoryInParentFolders\": \"always\",\n  \"files.eol\": \"\\n\",\n  \"editor.renderWhitespace\": \"boundary\",\n  \"editor.rulers\": [100],\n  \"diffEditor.ignoreTrimWhitespace\": false\n}",
+    "title": "3  SetUp Git & GitHub in VS Code",
+    "section": "3.9 Suggested VS Code settings (optional)",
+    "text": "3.9 Suggested VS Code settings (optional)\nCreate .vscode/settings.json in your repo to nudge consistent behavior:\n{\n  \"git.enableSmartCommit\": true,\n  \"git.confirmSync\": false,\n  \"git.autofetch\": true,\n  \"git.openRepositoryInParentFolders\": \"always\",\n  \"files.eol\": \"\\n\",\n  \"editor.renderWhitespace\": \"boundary\",\n  \"editor.rulers\": [100],\n  \"diffEditor.ignoreTrimWhitespace\": false\n}",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+      "VSCode Setup",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>SetUp Git & GitHub in VS Code</span>"
+    ]
+  },
+  {
+    "objectID": "copilot_protocols.html",
+    "href": "copilot_protocols.html",
+    "title": "4  Mandatory Protocols for Using GitHub Copilot in Technical Work",
+    "section": "",
+    "text": "Purpose and Principles\nGitHub Copilot is a powerful assistant that can increase productivity, generate boilerplate code quickly, and support experimentation. However, Copilot is not a substitute for engineering judgment, critical thinking, or expertise in R/Stata. This document establishes Protocols (mandatory actions) that must be followed and demonstrated during reviews.\nThese protocols have been drafted with the following principles in mind:",
+    "crumbs": [
+      "Copilot and AI Tools",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Mandatory Protocols for Using GitHub Copilot in Technical Work</span>"
+    ]
+  },
+  {
+    "objectID": "copilot_protocols.html#purpose-and-principles",
+    "href": "copilot_protocols.html#purpose-and-principles",
+    "title": "4  Mandatory Protocols for Using GitHub Copilot in Technical Work",
+    "section": "",
+    "text": "Improve productivity.\nEnsure robustness, maintainability, and security of code.\nStrengthen—not replace—team members’ coding skills.\nPrevent dependency creep, hallucinations, inefficiencies, and silent errors.\n\n\n\n\n\n\n\nImportant\n\n\n\nEvery team member must follow these protocols when using Copilot for technical work. Team leads will verify compliance during code reviews.",
+    "crumbs": [
+      "Copilot and AI Tools",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Mandatory Protocols for Using GitHub Copilot in Technical Work</span>"
+    ]
+  },
+  {
+    "objectID": "copilot_protocols.html#protocol-1-documenting-your-work-with-copilot",
+    "href": "copilot_protocols.html#protocol-1-documenting-your-work-with-copilot",
+    "title": "4  Mandatory Protocols for Using GitHub Copilot in Technical Work",
+    "section": "Protocol 1 — Documenting Your Work With Copilot",
+    "text": "Protocol 1 — Documenting Your Work With Copilot\nObjective: We want every piece of Copilot-assisted work to be transparent, easy to review, and easy to understand—not only for you, but for anyone who touches the code later. Think of this as keeping a clear trail of “why we did what we did,” without drowning anyone in hundreds of lines of chat history.\n\nStart Every Copilot-Assisted Task With a Quick Declaration\nWhenever you’re about to use Copilot for a particular task (especially the ones formally assigned to you), like rewriting a function, adding a feature, building tests, or refactoring, let Copilot know you’re starting a task.\nYou can use this short message (literally copy and paste; just change the TASK_NAME):\n\n\n\n\n\n\nNotePrompt\n\n\n\nI’m starting Task: TASK_NAME.\nPlease keep a concise running summary of our interaction, including:\n\nthe major prompts I give\n\nthe important decisions we make\n\nany dependencies added or removed\n\nassumptions or limitations we identify\n\nAt the end I’ll ask you to produce a markdown summary.\n\n\nWhy do this? Because Copilot won’t track your whole conversation. This little habit guarantees that your final summary is clean and complete.\n\n\n\nKeep the Summary Updated as You Go (But Keep It Light)\nAs you work, Copilot may try several ideas, produce alternatives, or suggest changes. When something important happens, simply say things like:\n\n“Add this to the summary: we switched to data.table for speed.”\n\n“Add this: the first approach was rejected because it created too many dependencies.”\n\n“Record that we decided to remove purrr and use collapse instead.”\n\nYou don’t need to log every micro-step—just the meaningful ones.\nThis keeps your future self (and your teammates) very happy.\n\n\n\nWhen You Finish, Ask Copilot for a Clean Markdown Summary\nOnce the task is done, ask Copilot:\n\n\n\n\n\n\nNotePrompt\n\n\n\nNow generate a markdown summary of this task, including:\n\nwhat the task was about\n\nthe key prompts I used\n\nthe major decisions or explanations you gave\n\ndependencies that were added, removed, or questioned\n\nany limitations or follow-up steps\n\nthe final version of the function or script\n\na short checklist showing how I followed the protocol\n\nSave the file under copilot_logs/TASK_NAME.md\n\n\n\nIf you’re working in an R package, make sure to include the copilot_logs folder in your .Rbuildignore file to prevent it from being included in the package build. You can do it by executing usethis::use_build_ignore(\"copilot_logs\") or by manually adding the line ^copilot_logs/$ to the .Rbuildignore file.\n\nNow, make sure to include it in your Pull Request.\nThis takes Copilot a few seconds and keeps our PRs tidy, transparent, and genuinely reviewable.",
+    "crumbs": [
+      "Copilot and AI Tools",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Mandatory Protocols for Using GitHub Copilot in Technical Work</span>"
+    ]
+  },
+  {
+    "objectID": "copilot_protocols.html#protocol-2-making-the-code-understandable",
+    "href": "copilot_protocols.html#protocol-2-making-the-code-understandable",
+    "title": "4  Mandatory Protocols for Using GitHub Copilot in Technical Work",
+    "section": "Protocol 2 — Making the Code Understandable",
+    "text": "Protocol 2 — Making the Code Understandable\nObjective: Once Copilot produces code, we need to ensure that it is understandable; not just to you, but to any teammate who might maintain it later. This protocol focuses on explanations, comments, and documentation, so the logic and intent of the code are always clear.\nOur goal here is simple: If Copilot wrote something, then Copilot should also help us understand it, both inside and outside the code.\n\nAsk Copilot to Explain the Code Step-by-Step\nRight after Copilot generates a function, script, or refactor, ask:\n\n\n\n\n\n\nNotePrompt\n\n\n\nExplain this code step-by-step. Describe the purpose of each major block. List all assumptions you’re making. Identify any cases where this code might break.\n\n\nYou’re not expected to decipher the code alone. This step forces Copilot to surface the hidden logic behind its decisions, and gives you a clear foundation for understanding what’s going on.\nInclude this explanation in your task summary.\n\n\n\nAsk Copilot to Add In-Code Comments Explaining Both the “What” and the “Why”\nOnce the general explanation is clear, you must ask Copilot:\n\n\n\n\n\n\nNotePrompt\n\n\n\nAdd clear comments directly inside the code. Explain:\n\nwhat each major block does\nwhy this approach is being used\nwhy this logic or pattern is appropriate here\n\n\n\nThese comments are essential because:\n\nThey ensure the logic is transparent.\nThey help future maintainers (including you).\nThey reduce the cognitive load when reviewing complex Copilot output.\n\nWe want readable, human-language explanations—not machine translations of the code.\n\n\n\nAsk Copilot to Document All R Functions Using Roxygen2\nIf the output includes R functions, you must also request:\n\n\n\n\n\n\nNotePrompt\n\n\n\nAdd proper Roxygen2 documentation for all R functions. Include:\n\n@title\n@description\n@param\n@return\n@examples (if useful)\n@import / @importFrom (only when truly necessary)\n\n\n\nThis step ensures:\n\nThe function interfaces are clear.\nThe expected inputs/outputs are known.\nReviewers can understand intent without reading the body.\nPackages remain maintainable.\n\nWe want professional-grade documentation from the start, not as an afterthought.\n\n\n\nAsk Copilot to Provide a Plain-Language Overview of the Logic\nThis is different from comments or Roxygen2 documentation.\nYou should ask:\n\n\n\n\n\n\nNotePrompt\n\n\n\nWrite a short, plain-language explanation of how this code works. Pretend you’re explaining it to a teammate seeing it for the first time.\n\n\nThis summary helps:\n\nNew team members ramp up quickly.\nReviewers understand context without digging.\nFuture maintainers get immediate clarity.\n\nThis explanation goes into the task summary (alongside the step-by-step explanation).",
+    "crumbs": [
+      "Copilot and AI Tools",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Mandatory Protocols for Using GitHub Copilot in Technical Work</span>"
+    ]
+  },
+  {
+    "objectID": "copilot_protocols.html#protocol-3-testing-and-edge-cases",
+    "href": "copilot_protocols.html#protocol-3-testing-and-edge-cases",
+    "title": "4  Mandatory Protocols for Using GitHub Copilot in Technical Work",
+    "section": "Protocol 3 — Testing and Edge Cases",
+    "text": "Protocol 3 — Testing and Edge Cases\nObjective: No Copilot-generated code should be accepted without being tested against realistic and edge-case scenarios. This protocol ensures that Copilot helps you design and implement tests that actually exercise the code.\n\n\nAsk Copilot to Build a Validation Checklist\nBefore moving on, request:\n\n\n\n\n\n\nNotePrompt\n\n\n\nCreate a validation checklist for this code. Include:\n\nexpected inputs and outputs\npotential failure points\nrequired dependencies\nedge cases to test\nassumptions this code relies on\n\n\n\nThis checklist goes into your summary and becomes a quick-reference tool for reviewers.\n\n\n\nAsk Copilot to Generate Unit Tests and Edge Cases\nNo Copilot-generated code is considered “validated” until Copilot helps you test it.\nFor R:\n\n\n\n\n\n\nNotePrompt\n\n\n\nGenerate testthat unit tests for this code. Cover:\n\nnormal cases\nedge cases\nwrong input types\nmissing values\nextreme or unusual data scenarios\n\n\n\nFor Stata:\n\n\n\n\n\n\nTipPrompt\n\n\n\nGenerate Stata tests (do-file assertions or checks) for this code. Cover:\n\nrealistic data\ncorner cases\nunexpected inputs\n\n\n\nThese tests must be included in your PR.\n\n\n\n(Optional but Recommended) Ask Copilot to Suggest Performance-Sensitive Tests\nWhen working with large data or performance-critical code, you can also ask:\n\n\n\n\n\n\nNotePrompt\n\n\n\nSuggest performance-sensitive tests for this code. Identify:\n\noperations that may be slow on large data\nplaces where copies of large objects might be made\nscenarios that stress memory usage\n\n\n\nThis helps you spot performance issues early rather than discovering them in production.",
+    "crumbs": [
+      "Copilot and AI Tools",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Mandatory Protocols for Using GitHub Copilot in Technical Work</span>"
+    ]
+  },
+  {
+    "objectID": "copilot_protocols.html#protocol-4-dependencies-risks-and-final-validation-bundle",
+    "href": "copilot_protocols.html#protocol-4-dependencies-risks-and-final-validation-bundle",
+    "title": "4  Mandatory Protocols for Using GitHub Copilot in Technical Work",
+    "section": "Protocol 4 — Dependencies, Risks, and Final Validation Bundle",
+    "text": "Protocol 4 — Dependencies, Risks, and Final Validation Bundle\nObjective: Before Copilot-assisted code reaches the repository, we want to be confident that it uses dependencies responsibly, avoids obvious risks, and has a complete “validation bundle” that reviewers can use to assess it quickly and fairly.\n\n\nAsk Copilot to Run a Dependency and Risk Scan\nIf the code adds or modifies dependencies, request:\n\n\n\n\n\n\nNotePrompt\n\n\n\nExplain why each dependency is needed. Suggest ways to remove or replace unnecessary dependencies. Check for conflicts with data.table, collapse, or rlang. Identify any security or stability concerns (e.g., unsafe I/O, exposed paths, or risky patterns).\n\n\nThis helps prevent dependency creep and ensures the code fits our ecosystem and security expectations. Of course, this is only needed when you just started developing the code or when dependencies were changed.\n\n\n\nAsk Copilot to Critique Its Own Code\nBelieve it or not, this might be one of the most powerful steps.\nPrompt Copilot with:\n\n\n\n\n\n\nNotePrompt\n\n\n\nReview your own code as if you were performing a formal code review. Identify:\n\ninefficiencies\nunnecessary complexity\nrisky assumptions\nunclear logic\nplaces where data.table, collapse, or rlang might be more appropriate\nopportunities to simplify or remove over-engineered patterns\n\n\n\nCopilot is surprisingly good at pointing out its own flaws when prompted this way. Use its critique to improve the final version.\nYou can adapt the mention of data.table, collapse, and rlang to match the standards of your package or project. This are the ones that I (Andrés) use the most.\n\n\n\nPackage Everything Into a “Validation Bundle”\nBefore closing your task, ask Copilot:\n\n\n\n\n\n\nNotePrompt\n\n\n\nAdd all validation materials to the task summary, including:\n\nstep-by-step explanation of the code\nin-code comments added\nRoxygen2 documentation (for R functions)\nvalidation checklist\nplain-language explanation\nunit tests and edge cases\ndependency and risk analysis\na brief summary of your self-critique and improvements made\n\n\n\nThis bundle provides everything reviewers need. It also ensures that anyone who maintains the code later won’t be flying blind.\n\n\n\nWhy These Protocols Matter\nThe goal isn’t to slow you down. It’s to make sure that Copilot helps you, without replacing your thinking or lowering our standards.\nWith these protocols:\n\nYou don’t have to manually inspect every line in isolation.\nYou don’t have to fully understand the code immediately—but you always have the material to understand it.\nYou don’t have to memorize anything; explanations, comments, docs, and tests are all there.\n\nCopilot explains, documents, critiques, and tests. You stay in control, make the decisions, and remain the author of the code.\nThat’s the balance we’re aiming for.\n\n\n\n(EXTRA) Prompt Files Are Optional Tools, Not Documentation\nCopilot has something called Prompt Files, which lets you save reusable instructions like:\n\n“Use data.table, not dplyr.”\n“Follow collapse idioms.”\n“Write tests using testthat.”\n\nThese are great for giving Copilot consistent context, but they don’t replace the documentation required above.\nUse them if they help you, but they’re optional.",
+    "crumbs": [
+      "Copilot and AI Tools",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Mandatory Protocols for Using GitHub Copilot in Technical Work</span>"
+    ]
+  },
+  {
+    "objectID": "copilot_guidelines.html",
+    "href": "copilot_guidelines.html",
+    "title": "5  Suggested Guidelines for Using GitHub Copilot in Technical Work",
+    "section": "",
+    "text": "Purpose and Principles\nblah blah blah",
+    "crumbs": [
+      "Copilot and AI Tools",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Suggested Guidelines for Using GitHub Copilot in Technical Work</span>"
+    ]
+  },
+  {
+    "objectID": "code_coverage.html",
+    "href": "code_coverage.html",
+    "title": "6  Add code coverage badge to your GitHub Repository.",
+    "section": "",
+    "text": "6.1 Codecov.io\nIn this article we will learn how to add code coverage badge to your GitHub repository.",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Add code coverage badge to your GitHub Repository.</span>"
+    ]
+  },
+  {
+    "objectID": "code_coverage.html#codecov.io",
+    "href": "code_coverage.html#codecov.io",
+    "title": "6  Add code coverage badge to your GitHub Repository.",
+    "section": "",
+    "text": "Create an account at https://about.codecov.io/ , sign up with your GitHub account if you don’t have an account already. Codecov is a popular tool for measuring and visualizing code coverage in software projects. It integrates with GitHub, GitLab, Bitbucket, and other CI/CD systems to provide insights into how much of your code is tested by your test suite.\nYou can sync your private Github repositories on codecov platform to get started. If you want to add code coverage badge to a repository which is part of an organization (like PIP-Technical-Team, GPID-WB etc) then you need to be an admin of that organization. Admin role is needed because to sync the communication between Codecov.io with GitHub we need to generate a token which can only be done by admins.\nOnce your repo is synced with codecov and you can see it there click on Configure to start the process. As an example it should give you this screen\n\n\n\nIf you scroll below it will ask you to generate a repository secret, click on that to get a unique token for your repository and copy it.\nYou can ignore rest of the steps mentioned on that page since those are very generic language agnostic steps and since we want to setup this for R packages, we have a better option which I will share below.",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Add code coverage badge to your GitHub Repository.</span>"
+    ]
+  },
+  {
+    "objectID": "code_coverage.html#github",
+    "href": "code_coverage.html#github",
+    "title": "6  Add code coverage badge to your GitHub Repository.",
+    "section": "6.2 GitHub",
+    "text": "6.2 GitHub\n\nNow, moving to GitHub go to your repository. Click on Settings -&gt; Secrets and Variables -&gt; Actions -&gt; Repository Secrets add the new token with name CODECOV_TOKEN and copy the token value which was generated in the previous step.\n\nNext, we are going to setup GitHub Action to run and calculate code coverage after every push. The calculated coverage report would be uploaded on codecov.io and would be visible on their dashboard.\nAdditionally, I also added a possibility to run R CMD CHECK after every push. R CMD check is a tool that runs a series of automated checks on an R package to ensure it’s correctly structured, documented, and error-free. It helps catch issues in code, tests, and documentation before sharing or submitting to CRAN. So it is like an additional validation that we have on our code.\nThe new workflow file looks like below\nname: R-CMD-check and Codecov\n\non:\n  push:\n    branches: [master]\n  pull_request:\n    branches: [master]\n\njobs:\n  R-CMD-check:\n    runs-on: ubuntu-latest\n\n    steps:\n      - name: Checkout repository\n        uses: actions/checkout@v4\n\n      - name: Set up R\n        uses: r-lib/actions/setup-r@v2\n\n      - name: Set up pandoc\n        uses: r-lib/actions/setup-pandoc@v2\n\n      - name: Install dependencies\n        run: |\n          install.packages(c(\"remotes\", \"rcmdcheck\", \"covr\"))\n          remotes::install_deps(dependencies = TRUE)\n        shell: Rscript {0}\n\n      - name: Run R CMD check\n        run: |\n          rcmdcheck::rcmdcheck(args = \"--no-manual\", error_on = \"warning\")\n        shell: Rscript {0}\n\n      - name: Run test coverage\n        run: |\n          covr::codecov()\n        shell: Rscript {0}\n        env:\n          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }} \nThis file is self explanatory but briefly, it checks out the repository that we want to run our action on, sets up R to run R CMD CHECK and finally generate code coverage report and upload it to codecov.io .\nOne tip that I can share is to check if this workflow file works on your local branch before running on master branch. To do that you should temporarily enable the workflow file to run on your local branch. This can be done as below -\non:\n  push:\n    branches: [master, your-branch]\nwhere your-branch is the name of the local branch that you want to run the workflow for. Once you have verified that everything works as expected in the local branch, you can remove your-branch from the list again.\nOnce the workflow runs successfully the dashboard on codecov.io should be updated and you should see something like this\n\nEvery time a push or PR is made to master the dashboard will be updated with latest data.",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Add code coverage badge to your GitHub Repository.</span>"
+    ]
+  },
+  {
+    "objectID": "github_actions.html",
+    "href": "github_actions.html",
+    "title": "7  Setting up Github Actions for Auto Deployment of Quarto book",
+    "section": "",
+    "text": "7.1 Introduction\nOne of the best parts of using Quarto for websites, blogs, or reports is how easily it integrates with GitHub Pages. With a simple GitHub Actions workflow, you can automatically render and publish your site every time you update your repository. In this post we are going to learn how we have enabled auto deployment for this quarto book.",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Setting up Github Actions for Auto Deployment of Quarto book</span>"
+    ]
+  },
+  {
+    "objectID": "github_actions.html#workflow",
+    "href": "github_actions.html#workflow",
+    "title": "7  Setting up Github Actions for Auto Deployment of Quarto book",
+    "section": "7.2 Workflow",
+    "text": "7.2 Workflow\nThis is the workflow that we are using in Github Actions . Let’s look at it one by one.\non:\n  workflow_dispatch:\n  push:\n    branches: main\n\nname: Quarto Publish\n\njobs:\n  build-deploy:\n    runs-on: ubuntu-latest\n    permissions:\n      contents: write\n    steps:\n      - name: Check out repository\n        uses: actions/checkout@v4\n\n      - name: Set up Quarto\n        uses: quarto-dev/quarto-actions/setup@v2\n        env:\n          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n        with:\n          tinytex: true\n      - name: Render and Publish\n        uses: quarto-dev/quarto-actions/publish@v2\n        with:\n          target: gh-pages\n        env:\n          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n\n7.2.1 Triggering the Workflow\non:\n  workflow_dispatch:\n  push:\n    branches: main\nThis tells GitHub Actions when to run the workflow. There are two triggers here:\n\npush to main – Any time you commit or merge changes into the main branch, the workflow runs\nworkflow_dispatch – Allows you to manually trigger the workflow from the GitHub Actions tab in your repository. This is useful when you want to force a rebuild and republish without committing new changes.\n\n\n\n7.2.2 Naming the workflow\nname: Quarto Publish\nThis gives the workflow a friendly name that will appear in the Actions tab.\n\n\n7.2.3 Defining the job\njobs:\n  build-deploy:\n    runs-on: ubuntu-latest\n    permissions:\n      contents: write\nHere we’re defining a single job called build-deploy.\n\nruns-on: ubuntu-latest – The job will run inside an Ubuntu-based virtual machine provided by GitHub.\npermissions: contents: write – The workflow needs permission to write to the repository (required for publishing to the gh-pages branch).\n\n\n\n7.2.4 The Steps\n\n7.2.4.1 1. Check out the repository\n- name: Check out repository\n  uses: actions/checkout@v4\nThis makes your repository’s files available in the workflow environment so Quarto can render your project.\n\n\n7.2.4.2 2. Set up Quarto\n- name: Set up Quarto\n  uses: quarto-dev/quarto-actions/setup@v2\n  env:\n    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n  with:\n    tinytex: true\nThis installs Quarto in the workflow environment. The tinytex: true option ensures LaTeX support is available for rendering PDFs. The GH_TOKEN is github token repository secret that is added in Repo settings -&gt; Secrets and Variables -&gt; Actions . It is used for authentication when publishing.\n\n\n7.2.4.3 3. Render and Publish\n- name: Render and Publish\n  uses: quarto-dev/quarto-actions/publish@v2\n  with:\n    target: gh-pages\n  env:\n    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\nThis step does two things:\n\nRenders your Quarto project (turns .qmd files into HTML, PDF, or other output formats).\nPublishes the output to the gh-pages branch, which GitHub Pages uses to serve your site. The target: gh-pages option ensures everything is pushed to the right branch.",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Setting up Github Actions for Auto Deployment of Quarto book</span>"
+    ]
+  },
+  {
+    "objectID": "github_actions.html#dont-ignore-the-.gitignore-file",
+    "href": "github_actions.html#dont-ignore-the-.gitignore-file",
+    "title": "7  Setting up Github Actions for Auto Deployment of Quarto book",
+    "section": "7.3 Don’t ignore the .gitignore file",
+    "text": "7.3 Don’t ignore the .gitignore file\nMake sure that your .gitignore file excludes _book, _site folders. These are the folders where Quarto renders HTML/PDF files when testing them locally. These files should not be tracked since Github Actions will build them with our auto deployment process.",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Setting up Github Actions for Auto Deployment of Quarto book</span>"
+    ]
+  },
+  {
+    "objectID": "github_actions.html#conclusion",
+    "href": "github_actions.html#conclusion",
+    "title": "7  Setting up Github Actions for Auto Deployment of Quarto book",
+    "section": "7.4 Conclusion :",
+    "text": "7.4 Conclusion :\nWith this workflow in place, the Quarto book will automatically rebuild and deploy whenever a push is made to the main branch or whenever we manually trigger the workflow. No more running commands locally or remembering to push generated files.\nThis is a clean, reproducible, and automated way to publish your Quarto projects using GitHub Pages. As a side not usethis package has a lot of good utility functions that helps you to set up similar workflow. You may explore using them. A good starting point is usethis::use_github_action(\"render-quarto\").\nFor reference the Quarto book is published here.",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Setting up Github Actions for Auto Deployment of Quarto book</span>"
+    ]
+  },
+  {
+    "objectID": "Increase_performance_WB_laptop.html",
+    "href": "Increase_performance_WB_laptop.html",
+    "title": "8  Improve Efficiency of a WB Laptop",
+    "section": "",
+    "text": "8.1 Modify System Properties for Performance\nThere are a few things you can do to improve the efficiency of a WB laptop. These tips won’t make your laptop fast, but they will help optimize performance and make it feel more responsive.",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Improve Efficiency of a WB Laptop</span>"
+    ]
+  },
+  {
+    "objectID": "Increase_performance_WB_laptop.html#modify-system-properties-for-performance",
+    "href": "Increase_performance_WB_laptop.html#modify-system-properties-for-performance",
+    "title": "8  Improve Efficiency of a WB Laptop",
+    "section": "",
+    "text": "Open the Windows menu, type Run, and click on the Run app.\n\nIn the Run app, type the following command and hit Enter:\n\n   systempropertiesperformance.exe\n\n\nIn the Performance Options window, select the Visual Effects tab.\n\nClick on Adjust for best performance.\nMake sure all the checkboxes are unchecked.\nClick Apply and then OK.\n\n\n\n\n\n\n\n\n\nWarning\n\n\n\nNote: This may affect the appearance of your system, since many visual effects will be disabled.",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Improve Efficiency of a WB Laptop</span>"
+    ]
+  },
+  {
+    "objectID": "Increase_performance_WB_laptop.html#battery-settings",
+    "href": "Increase_performance_WB_laptop.html#battery-settings",
+    "title": "8  Improve Efficiency of a WB Laptop",
+    "section": "8.2 Battery Settings",
+    "text": "8.2 Battery Settings\n\nOpen Battery Settings. \nSet the battery mode to Best performance.",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Improve Efficiency of a WB Laptop</span>"
+    ]
+  },
+  {
+    "objectID": "Increase_performance_WB_laptop.html#google-chrome-settings",
+    "href": "Increase_performance_WB_laptop.html#google-chrome-settings",
+    "title": "8  Improve Efficiency of a WB Laptop",
+    "section": "8.3 Google Chrome Settings",
+    "text": "8.3 Google Chrome Settings\n\nIn Google Chrome, type the following in the address bar:\nchrome://settings/performance\nUnder the Memory section, select Maximum.",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Improve Efficiency of a WB Laptop</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html",
+    "href": "interact_vm.html",
+    "title": "9  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "",
+    "text": "9.1 Access and Session Management",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html#access-and-session-management",
+    "href": "interact_vm.html#access-and-session-management",
+    "title": "9  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "",
+    "text": "9.1.1 Login to the VM\n\nGo to PrivX.\nUse SSO login (World Bank Authenticator App).\nIn the Connections tab, select the VM you want:\n\nDevelopment: Linux-wzlxdpip01.worldbank.org\nQA: Linux-wzlxqpip01.worldbank.org\nProduction: Linux-wzlxppip01.worldbank.org\n\nOnce connected, switch to the srvpip user:\nsudo su - srvpip\n\n\n\n9.1.2 Copy, Paste, and Keyboard Shortcuts\n\n\n\n\n\n\n\n\nShortcut\nAction\nNotes\n\n\n\n\nCtrl + C\nStop the current running process\ne.g. stop an infinite loop or hanging R process\n\n\nCtrl + D\nLog out of the current shell\nEnds your session as srvpip\n\n\nShift + Ctrl + V\nPaste from clipboard\nWorks in most PrivX terminals\n\n\nShift + Insert\nPaste (alternative)\nOften easier in remote shells\n\n\n\nNotice that Ctrl + C does not copy text in terminal. You only need to highlight with your mouse the section you want to copy. Once you stopped highlighting, the text is copied to your clipboard automatically.",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html#understanding-the-environment",
+    "href": "interact_vm.html#understanding-the-environment",
+    "title": "9  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "9.2 Understanding the Environment",
+    "text": "9.2 Understanding the Environment\n\n9.2.1 Users and Permissions\n\nYour account: initial login via PrivX (not root)\nsrvpip user: used to manage Docker containers\nroot user: required for system-level commands; use only with sudo\n\nCommon prefixes:\n\ndocker → run Docker as normal user (often fails without permissions)\nsudo docker → correct way when managing containers\nsudo su - srvpip → switch to service account context\n\n\n\n9.2.2 Architecture Overview\n+-------------------------------------------------------------+\n|                      Linux VM (Host)                        |\n|                                                             |\n|  Persistent Data:                                           |\n|    /Data/pip/files/data   &lt;---+                             |\n|                               | (bind mount)                |\n|                               v                             |\n|  ---------------------------------------------------------  |\n|  |               Docker Container: povertyscoreapi       |  |\n|  |                                                     |  |\n|  |   - Mounts /Data/pip/files/data → /Data             |  |\n|  |   - Runs: Rscript /app/main.R                       |  |\n|  |   - Listens on port 8080 (internal)                 |  |\n|  ---------------------------------------------------------  |\n|                               ^                             |\n|                               |                             |\n|  Host Port 80  &lt;--------------+  (mapped to container 8080) |\n+-------------------------------------------------------------+\nLegend: - Data written to /Data inside the container is actually stored on the host at /Data/pip/files/data. - The API runs inside the container on port 8080, but is accessible from outside the VM on port 80.",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html#essential-docker-commands-cheat-sheet",
+    "href": "interact_vm.html#essential-docker-commands-cheat-sheet",
+    "title": "9  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "9.3 Essential Docker Commands (Cheat Sheet)",
+    "text": "9.3 Essential Docker Commands (Cheat Sheet)\n\n\n\n\n\n\n\n\n\nTask\nCommand\nNotes\n\n\n\n\n\nList all containers\nsudo docker ps -a\nShows running & stopped\n\n\n\nView logs\nsudo docker logs -f povertyscoreapi\nAdd --tail 200 to see last lines\n\n\n\nEnter container shell\nsudo docker exec -it povertyscoreapi /bin/bash\nFor interactive debugging\n\n\n\nCheck mounted volumes\nsudo docker inspect povertyscoreapi             | grep Mounts -A 5\nSee /Data source\n\n\n\nDelete stopped containers\nsudo docker container prune\nCleans unused ones\n\n\n\nDelete old images\nsudo docker image prune -a\nBe cautious — removes all unused\n\n\n\nCheck Docker service status\nsudo systemctl status docker\nConfirms Docker is active",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html#managing-data",
+    "href": "interact_vm.html#managing-data",
+    "title": "9  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "9.4 Managing Data",
+    "text": "9.4 Managing Data\n\n9.4.1 Data on the VM (Persistent)\n\nMain data location:\ncd /Data/pip/files/data\nInspect space usage:\ndf -h | grep Data\ndu -h --max-depth=1 | sort -h\nPreview files safely:\nls -lah\nView folder sizes:\ndu -sh *\n\n\n9.4.1.1 🔍 Find large or old files\nfind /Data/pip/files/data -type f -mtime +365 | head -n 20\n\n\n\n\n9.4.2 Data Inside Containers (Ephemeral)\nCheck where containers mount volumes:\nsudo docker inspect povertyscoreapi | grep Mounts -A 5\nYou’ll see:\n\"Mounts\": [\n  {\n    \"Type\": \"bind\",\n    \"Source\": \"/Data/pip/files/data\",\n    \"Destination\": \"/Data\"\n  }\n]\nThat means:\n\nInside container → /Data\nOn host → /Data/pip/files/data\n\n\n9.4.2.1 Access via container shell:\nsudo docker exec -it povertyscoreapi ls -lh /Data\n\n\n\n\n9.4.3 Safe Deletion and Cleanup\nPreview first:\nls -d /Data/pip/files/data/project_*\nDelete specific folders:\nrm -rf /Data/pip/files/data/folder1 /Data/pip/files/data/folder2\nDelete all contents but keep parent folder:\nrm -rf /Data/pip/files/data/*\nMove to trash instead of deleting:\nmkdir -p /Data/pip/files/trash\nmv /Data/pip/files/data/folder1 /Data/pip/files/trash/\n⚠️ Caution: rm -rf is irreversible — always check with ls first.",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html#diagnosing-api-or-container-issues",
+    "href": "interact_vm.html#diagnosing-api-or-container-issues",
+    "title": "9  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "9.5 Diagnosing API or Container Issues",
+    "text": "9.5 Diagnosing API or Container Issues\n\n9.5.1 Check Container State\nsudo docker ps -a\nGet detailed exit info:\nsudo docker inspect povertyscoreapi --format='ExitCode={{.State.ExitCode}} OOMKilled={{.State.OOMKilled}}'\n\nExitCode=0 → normal exit\nExitCode=137 → killed (likely out of memory)\n\n\n\n\n9.5.2 View Logs\nsudo docker logs povertyscoreapi | head -n 20   # startup logs\nsudo docker logs --tail 200 povertyscoreapi     # recent logs\n\n\n\n9.5.3 Reproduce Interactively\nStart an interactive debug session:\nsudo docker run --rm -it \\\n  --name povertyscoreapi-debug \\\n  -p 8080 \\\n  -v /Data/pip/files/data:/Data \\\n  itsesippscoreregistryprod.azurecr.io/povertyscoreapi:latest \\\n  /bin/bash\nInside:\nRscript /app/main.R\nPress Ctrl + C to stop and exit to leave.\n\n\n\n9.5.4 Restart or Rebuild Containers\nsudo docker restart povertyscoreapi\nOr rebuild completely:\nsudo docker stop povertyscoreapi\nsudo docker rm povertyscoreapi\nsudo docker pull itsesippscoreregistryprod.azurecr.io/povertyscoreapi:latest\nsudo docker run -d --name povertyscoreapi \\\n  -p 80:8080 \\\n  -v /Data/pip/files/data:/Data \\\n  itsesippscoreregistryprod.azurecr.io/povertyscoreapi:latest",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html#testing-api-endpoints",
+    "href": "interact_vm.html#testing-api-endpoints",
+    "title": "9  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "9.6 Testing API Endpoints",
+    "text": "9.6 Testing API Endpoints\n\n9.6.1 From Inside the Container\ncurl http://localhost:80/api/v1/health-check\n\n\n9.6.2 Loop through common endpoints\nfor ep in health-check pkgs-version data-signature gh-hash; do\n  echo \"---- Testing $ep ----\"\n  curl -s http://localhost:80/api/v1/$ep\n  echo\ndone\n\n\n9.6.3 From Outside (VM host or browser)\ncurl http://wzlxdpip01.worldbank.org/api/v1/health-check",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html#troubleshooting-common-errors",
+    "href": "interact_vm.html#troubleshooting-common-errors",
+    "title": "9  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "9.7 Troubleshooting Common Errors",
+    "text": "9.7 Troubleshooting Common Errors\n\n\n\n\n\n\n\n\nSymptom\nLikely Cause\nFix\n\n\n\n\ncurl: (7) Failed connect\nContainer not running or wrong port\nsudo docker ps -a\n\n\nExited (137)\nOut of memory (OOMKilled)\nIncrease VM memory or limit API load\n\n\nauthentication required\nNot logged in to Azure Container Registry\nsudo az acr login --name itsesippscoreregistryprod\n\n\npermission denied on /Data\nWrong user ownership\nsudo chown -R srvpip /Data\n\n\nNo logs shown\nContainer failed before startup\nRun sudo docker inspect povertyscoreapi\n\n\nPort 8080 works but 80 doesn’t\nPort not mapped\nRun container with -p 80:8080",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html#understanding-ports-80-vs-8080",
+    "href": "interact_vm.html#understanding-ports-80-vs-8080",
+    "title": "9  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "9.8 Understanding Ports (80 vs 8080)",
+    "text": "9.8 Understanding Ports (80 vs 8080)\n\nInside Docker, the API runs on 8080:\npipapi::start_api(port = 8080, host = \"0.0.0.0\")\nOutside Docker (host or browser), you can map any port using:\n-p 80:8080\nThis means:\nhost_port:container_port\nSo users access:\nhttp://wzlxdpip01.worldbank.org/api/v1/...\neven though internally it listens on 8080.",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html#monitoring-resource-usage",
+    "href": "interact_vm.html#monitoring-resource-usage",
+    "title": "9  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "9.9 Monitoring Resource Usage",
+    "text": "9.9 Monitoring Resource Usage\nWatch real-time CPU and memory:\nsudo docker stats povertyscoreapi\nOr globally:\ntop -u srvpip",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "interact_vm.html#appendix",
+    "href": "interact_vm.html#appendix",
+    "title": "9  How to interact with the Virtual Machine (VM) that hosts PIP",
+    "section": "9.10 Appendix",
+    "text": "9.10 Appendix\n\n9.10.1 Check Disk Usage Quickly\ndf -h | grep Data\n\n\n9.10.2 Check Docker Service Logs\nsudo journalctl -u docker --since \"2025-09-23 17:00\"\n\n\n9.10.3 Check R version inside container\nsudo docker exec -it povertyscoreapi Rscript -e \"R.version.string\"",
+    "crumbs": [
+      "MISC Tools and Tips",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
     ]
   }
 ]
