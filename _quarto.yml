@@ -18,15 +18,23 @@ book:
   date: "8/3/2025"
   chapters:
     - index.qmd
-    - code_coverage.qmd
-    - github_actions.qmd
-    - Increase_performance_WB_laptop.qmd
-    - setupR.qmd
-    - interact_vm.qmd
-    - VScode_Setup_for_stata.qmd
-    - VScode_setup_for_github.qmd
-    - copilot_protocols.qmd
-    - copilot_guidelines.qmd
+    - part: "R Setup and efficiency"
+      chapters:
+        - setupR.qmd
+    - part: "VSCode Setup"
+      chapters:
+        - VScode_Setup_for_stata.qmd
+        - VScode_setup_for_github.qmd
+    - part: "Copilot and AI Tools"
+      chapters:
+        - copilot_protocols.qmd
+        - copilot_guidelines.qmd
+    - part: "MISC Tools and Tips"
+      chapters:
+        - code_coverage.qmd
+        - github_actions.qmd
+        - Increase_performance_WB_laptop.qmd
+        - interact_vm.qmd
   appendices:
     - references.qmd
 
