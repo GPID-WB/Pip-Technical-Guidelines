@@ -18,7 +18,6 @@ book:
   date: "8/3/2025"
   chapters:
     - index.qmd
-    - intro.qmd
     - code_coverage.qmd
     - github_actions.qmd
     - Increase_performance_WB_laptop.qmd
