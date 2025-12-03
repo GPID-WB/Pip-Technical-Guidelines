@@ -26,7 +26,8 @@ book:
     - interact_vm.qmd
     - VScode_Setup_for_stata.qmd
     - VScode_setup_for_github.qmd
-    - copilot_protocols_guidelines.qmd
+    - copilot_protocols.qmd
+    - copilot_guidelines.qmd
     - summary.qmd
     - references.qmd
 
