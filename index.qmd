@@ -1,3 +1,37 @@
 # Preface {.unnumbered}
 
-This is a Quarto book. In this book we intend to write technical information about PIP projects.
+Welcome to the **PIP Technical Guidelines**, a living technical resource for the Poverty and Inequality Platform (PIP) team at the World Bank.
+
+This book serves as a centralized knowledge base for the technical infrastructure, development workflows, and best practices that support our data science and statistical work. As the PIP ecosystem continues to evolve—spanning R packages, Stata analysis, version control, automation, and AI-assisted coding—this guide provides practical, field-tested solutions to common technical challenges our team encounters.
+
+## Purpose
+
+The primary objectives of this book are to:
+
+1. **Document technical workflows** specific to PIP projects, including environment setup, development tools, and deployment processes
+2. **Standardize best practices** across R, Stata, GitHub, VS Code, and other tools used in our daily work
+3. **Accelerate onboarding** by providing new team members with clear, step-by-step instructions for configuring their development environment
+4. **Promote consistency** in how we write, test, document, and maintain code across different projects and programming languages
+5. **Preserve institutional knowledge** that would otherwise exist only in individual team members' setups or undocumented workflows
+
+## Scope
+
+This book focuses on **technical infrastructure and development practices**, not statistical methodologies or economic theory. You'll find guidance on:
+
+- Setting up R, RStudio, and Positron with unified configurations
+- Configuring VS Code for Stata development with automated workflows
+- Integrating Git and GitHub into daily work with proper authentication and branching strategies
+- Implementing GitHub Actions for continuous integration and automated deployment
+- Using GitHub Copilot responsibly and effectively, with mandatory protocols for code quality
+- Optimizing performance on World Bank laptops and virtual machines
+- Managing code coverage, testing frameworks, and documentation standards
+
+## Audience
+
+This guide is written for PIP team members; data scientists, economists, and developers working with R, Stata, and related tools. While many sections assume familiarity with programming concepts, we provide step-by-step instructions designed to work in the World Bank's computing environment.
+
+## A Living Document
+
+This book is continuously evolving. As we adopt new tools, refine existing workflows, or solve novel technical challenges, we add new chapters and update existing content. Each chapter represents accumulated team knowledge, battle-tested in real projects, and refined through practical experience.
+
+We welcome contributions, corrections, and suggestions from all team members as we build this resource together.

@@ -28,7 +28,7 @@ book:
     - VScode_setup_for_github.qmd
     - copilot_protocols.qmd
     - copilot_guidelines.qmd
-    - summary.qmd
+  appendices:
     - references.qmd
 
 bibliography: references.bib
