@@ -1,33 +1,30 @@
 ---
-title: "Protocols and Guidelines for Using GitHub Copilot in Technical Work"
-abstract: Technical coding tasks (R, Stata), including data processing, automation, package development, and tool building.
+title: "Mandatory Protocols for Using GitHub Copilot in Technical Work"
+abstract: this document outlines mandatory protocols and recommended guidelines for using GitHub Copilot in technical work, ensuring productivity while maintaining code quality and team skills.
 execute:
   eval: false
 ---
 
 ## Purpose and Principles {.unnumbered}
 
-GitHub Copilot is a powerful assistant that can increase productivity, generate boilerplate code quickly, and support experimentation. However, Copilot is not a substitute for engineering judgment, critical thinking, or expertise in R/Stata. This document establishes:
+GitHub Copilot is a powerful assistant that can increase productivity, generate boilerplate code quickly, and support experimentation. However, Copilot is not a substitute for engineering judgment, critical thinking, or expertise in R/Stata. This document establishes **Protocols** (mandatory actions) that must be followed and demonstrated during reviews.
 
--   **Protocols** (mandatory actions) → must be followed and demonstrated during reviews.
--   **Guidelines** (recommended practices) → encourage effective, responsible use of AI.
-
-Our goals:
+These protocols have been drafted with the following principles in mind:
 
 1.  Improve productivity.
 2.  Ensure robustness, maintainability, and security of code.
 3.  Strengthen—not replace—team members’ coding skills.
 4.  Prevent dependency creep, hallucinations, inefficiencies, and silent errors.
 
-## PROTOCOLS (Mandatory Requirements)
-
+::: {.callout-important}
 Every team member **must** follow these protocols when using Copilot for technical work. Team leads will verify compliance during code reviews.
+:::
 
-### **Protocol 1 — Documenting Your Work With Copilot**
+## **Protocol 1 — Documenting Your Work With Copilot**
 
 **Objective:** We want every piece of Copilot-assisted work to be transparent, easy to review, and easy to understand—not only for you, but for anyone who touches the code later. Think of this as keeping a clear trail of “why we did what we did,” without drowning anyone in hundreds of lines of chat history.
 
-#### **Start Every Copilot-Assisted Task With a Quick Declaration** {.unnumbered}
+### **Start Every Copilot-Assisted Task With a Quick Declaration** {.unnumbered}
 
 Whenever you’re about to use Copilot for something a particular task (specially the ones assigned to you), like rewriting a function, adding a feature, building tests, refactoring, among others, just let Copilot know you’re starting a task.
 
@@ -48,7 +45,7 @@ Why do this? Because Copilot won’t track your whole conversation unless you te
 
 ------------------------------------------------------------------------
 
-#### **Keep the Summary Updated as You Go (But Keep It Light)** {.unnumbered}
+### **Keep the Summary Updated as You Go (But Keep It Light)** {.unnumbered}
 
 As you work, Copilot may try several ideas, produce alternatives, or suggest changes. When something important happens, simply say:
 
@@ -62,7 +59,7 @@ This keeps your future self (and your reviewers) very happy.
 
 ------------------------------------------------------------------------
 
-#### **When You Finish, Ask Copilot for a Clean Markdown Summary** {.unnumbered}
+### **When You Finish, Ask Copilot for a Clean Markdown Summary** {.unnumbered}
 
 Once the task is done, ask Copilot:
 
@@ -80,7 +77,7 @@ This takes Copilot a few seconds and keeps our PRs tidy, transparent, and genuin
 
 ------------------------------------------------------------------------
 
-#### **Prompt Files Are Optional Tools, Not Documentation** {.unnumbered}
+### **Prompt Files Are Optional Tools, Not Documentation** {.unnumbered}
 
 Copilot has something called **Prompt Files**, which lets you save reusable instructions like:
 
@@ -94,7 +91,7 @@ Use them if they help you, but they’re optional.
 
 ------------------------------------------------------------------------
 
-#### **Final Thought** {.unnumbered}
+### **Final Thought** {.unnumbered}
 
 This protocol isn’t about bureaucracy. It’s about making sure that Copilot becomes a *collaborator*, not a shadow author.
 
@@ -113,13 +110,13 @@ You can copy/paste this directly into your main document.
 
 ------------------------------------------------------------------------
 
-### **Protocol 2 — Validating What Copilot Generates**
+## **Protocol 2 — Validating What Copilot Generates**
 
 **Objective:** Once Copilot produces code, we need to make sure that it’s correct, understandable, and safe, *before* it ever reaches the repository. This protocol is not about forcing you to manually check every line of code. Instead, it’s about using Copilot intelligently as a validation partner.
 
 Our goal here is simple: **If Copilot wrote something, then Copilot should also help us understand it, document it, critique it, and test it.** ---
 
-#### **Ask Copilot to Explain the Code Step-by-Step** {.unnumbered}
+### **Ask Copilot to Explain the Code Step-by-Step** {.unnumbered}
 
 Right after Copilot generates a function, script, or refactor, ask:
 
@@ -135,7 +132,7 @@ Include this explanation in your task summary.
 
 ------------------------------------------------------------------------
 
-#### **Ask Copilot to Add In-Code Comments Explaining Both the “What” and the “Why”** {.unnumbered}
+### **Ask Copilot to Add In-Code Comments Explaining Both the “What” and the “Why”** {.unnumbered}
 
 Once the general explanation is clear, you must ask Copilot:
 
@@ -159,7 +156,7 @@ We want readable, human-language explanations—not machine translations of the 
 
 ------------------------------------------------------------------------
 
-#### **Ask Copilot to Document All R Functions Using Roxygen2** {.unnumbered}
+### **Ask Copilot to Document All R Functions Using Roxygen2** {.unnumbered}
 
 If the output includes R functions, you must also request:
 
@@ -187,7 +184,7 @@ We want **professional-grade documentation** from the start, not as an afterthou
 
 ------------------------------------------------------------------------
 
-#### **Ask Copilot to Build a Validation Checklist** {.unnumbered}
+### **Ask Copilot to Build a Validation Checklist** {.unnumbered}
 
 Before moving on, request:
 
@@ -201,7 +198,7 @@ This checklist goes into your summary and becomes a quick-reference tool for rev
 
 ------------------------------------------------------------------------
 
-#### **Ask Copilot to Critique Its Own Code** {.unnumbered}
+### **Ask Copilot to Critique Its Own Code** {.unnumbered}
 
 Though it may sound weird, this might be the most powerful step.
 
@@ -225,7 +222,7 @@ Notice that the last line specifically asks Copilot to check for compatibility w
 
 ------------------------------------------------------------------------
 
-#### **Ask Copilot to Provide a Plain-Language Overview of the Logic** {.unnumbered}
+### **Ask Copilot to Provide a Plain-Language Overview of the Logic** {.unnumbered}
 
 This is different from comments or Roxygen2 documentation.
 
@@ -247,7 +244,7 @@ This explanation goes into the task summary.
 
 ------------------------------------------------------------------------
 
-#### **Ask Copilot to Generate Unit Tests and Edge Cases** {.unnumbered}
+### **Ask Copilot to Generate Unit Tests and Edge Cases** {.unnumbered}
 
 No Copilot-generated code is considered “validated” until Copilot helps you test it.
 
@@ -277,7 +274,7 @@ These tests must be included in your PR.
 
 ------------------------------------------------------------------------
 
-#### **Ask Copilot to Run a Dependency and Risk Scan** {.unnumbered}
+### **Ask Copilot to Run a Dependency and Risk Scan** {.unnumbered}
 
 If the code adds or modifies dependencies, request:
 
@@ -296,7 +293,7 @@ This helps prevent dependency creep and ensures the code fits our ecosystem.
 
 ------------------------------------------------------------------------
 
-#### **Package Everything Into a “Validation Bundle”** {.unnumbered}
+### **Package Everything Into a “Validation Bundle”** {.unnumbered}
 
 Before closing your task, ask Copilot:
 
@@ -321,7 +318,7 @@ This bundle provides everything reviewers need. It also ensures that anyone who 
 
 ------------------------------------------------------------------------
 
-#### **Why This Protocol Matters** {.unnumbered}
+### **Why This Protocol Matters** {.unnumbered}
 
 The goal isn’t to slow you down. It’s to make sure that Copilot helps you; not replaces your thinking.
 
