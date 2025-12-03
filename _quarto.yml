@@ -1,6 +1,12 @@
 project:
   type: book
-  
+
+preview:
+ host: 127.0.0.1
+ port: 8081   
+ browser: true
+ navigate: true
+
 execute:
   freeze: auto
 
@@ -9,18 +15,27 @@ book:
   author:
     - R.Andres Castenada
     - Ronak Shah
-  date: "8/3/2025"
+  date: today
   chapters:
     - index.qmd
-    - intro.qmd
-    - code_coverage.qmd
-    - github_actions.qmd
-    - Increase_performance_WB_laptop.qmd
-    - setupR.qmd
-    - interact_vm.qmd
-    - VScode_Setup_for_stata.qmd
-    - VScode_setup_for_github.qmd
-    - summary.qmd
+    - part: "R Setup and efficiency"
+      chapters:
+        - setupR.qmd
+    - part: "VSCode Setup"
+      chapters:
+        - VScode_Setup_for_stata.qmd
+        - VScode_setup_for_github.qmd
+    - part: "Copilot and AI Tools"
+      chapters:
+        - copilot_protocols.qmd
+        - copilot_guidelines.qmd
+    - part: "MISC Tools and Tips"
+      chapters:
+        - code_coverage.qmd
+        - github_actions.qmd
+        - Increase_performance_WB_laptop.qmd
+        - interact_vm.qmd
+  appendices:
     - references.qmd
 
 bibliography: references.bib
@@ -30,7 +45,8 @@ format:
     theme:
       - cosmo
       - brand
+    css: css/tachyons.css
   pdf:
     documentclass: scrreprt
 
-editor: visual
+editor: source

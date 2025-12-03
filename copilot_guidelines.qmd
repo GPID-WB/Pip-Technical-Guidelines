@@ -1,0 +1,10 @@
+---
+title: "Suggested Guidelines for Using GitHub Copilot in Technical Work"
+abstract: Blah
+execute:
+  eval: false
+---
+
+## Purpose and Principles {.unnumbered}
+
+blah blah blah
