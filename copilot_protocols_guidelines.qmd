@@ -1,0 +1,380 @@
+---
+title: "Protocols and Guidelines for Using GitHub Copilot in Technical Work"
+abstract: Technical coding tasks (R, Stata), including data processing, automation, package development, and tool building.
+execute:
+  eval: false
+---
+
+## Purpose and Principles
+
+GitHub Copilot is a powerful assistant that can increase productivity, generate boilerplate code quickly, and support experimentation. However, Copilot is not a substitute for engineering judgment, critical thinking, or expertise in R/Stata.
+This document establishes:
+
+* **Protocols** (mandatory actions) → must be followed and demonstrated during reviews.
+* **Guidelines** (recommended practices) → encourage effective, responsible use of AI.
+
+Our goals:
+
+1. Improve productivity.
+2. Ensure robustness, maintainability, and security of code.
+3. Strengthen—not replace—team members’ coding skills.
+4. Prevent dependency creep, hallucinations, inefficiencies, and silent errors.
+
+
+# PROTOCOLS (Mandatory Requirements)
+
+Every team member **must** follow these protocols when using Copilot for technical work.
+Team leads will verify compliance during code reviews.
+
+---
+
+## **Protocol 1 — Document Your Copilot Interaction**
+
+**Requirement:** For any substantial Copilot-generated code (functions, modules, refactors), include a comment block:
+
+```md
+# Copilot Interaction Log:
+- Prompt used:
+- Summary of generated code:
+- Manual adjustments made:
+- Known limitations or assumptions:
+```
+
+**Purpose:**
+Ensures transparency, accountability, and helps reviewers understand context.
+
+---
+
+## **Protocol 2 — Validate Every Line of Copilot-Generated Code**
+
+**Requirement:**
+
+Before committing:
+
+1. **Read every line.**
+2. **Explain every line.** (either internally or verbally during review)
+3. Confirm you understand:
+
+   * What each function does.
+   * Which dependencies are introduced.
+   * How input/output flows.
+
+If you cannot explain it, **you cannot commit it**.
+
+---
+
+## **Protocol 3 — Dependency Review**
+
+**Requirement:**
+
+Every time Copilot suggests `library(x)` or a new function from an unfamiliar package, you must:
+
+1. Ask:
+
+   * *Is this dependency necessary?*
+   * *Does it conflict with our preferred ecosystem (data.table, collapse, rlang)?*
+2. Replace unnecessary dependencies.
+3. Document rationale in your Copilot log.
+
+---
+
+## **Protocol 4 — Edge-Case Testing**
+
+**Requirement:**
+
+For any Copilot-generated function intended for production:
+
+1. Test a minimum of **three edge cases**, including:
+
+   * Empty input
+   * Missing values
+   * Unexpected input types
+2. Include tests in the PR or in `tests/testthat`.
+
+---
+
+## **Protocol 5 — Efficiency Review (R-Specific)**
+
+**Requirement:**
+
+If Copilot generates R code that does not use our core tools:
+
+* Replace base R loops with `data.table`, `collapse`, or vectorised alternatives.
+* Replace tidyverse dependencies unless strictly necessary.
+* Confirm code efficiency (preferably with a small benchmark).
+
+You must provide a short note explaining optimizations.
+
+---
+
+## **Protocol 6 — Security and Privacy Screening**
+
+**Requirement:**
+
+Before submitting:
+
+1. Verify no sensitive data is hard-coded.
+2. Remove tokens, passwords, internal URLs.
+3. Confirm that no Copilot-generated code:
+
+   * Writes data to unauthorized locations.
+   * Exposes internal structures.
+   * Sends information externally.
+
+---
+
+## **Protocol 7 — Incremental Commit Strategy**
+
+**Requirement:**
+
+Commit Copilot-generated code in **small, reviewable chunks**, not giant monoliths.
+Each commit must:
+
+* Implement one idea.
+* Include a short explanation.
+* Show manual editing and reasoning.
+
+---
+
+## **Protocol 8 — Manual Refactor Verification**
+
+**Requirement:**
+
+If Copilot refactors code, you must:
+
+1. Compare old vs new logic explicitly.
+2. Run unit tests (existing or new).
+3. Confirm behavior is identical unless change is intentional.
+
+---
+
+## **Protocol 9 — Ownership Rule**
+
+**Requirement:**
+
+You—not Copilot—are the author.
+You are responsible for:
+
+* Understanding the implementation
+* Maintaining the code
+* Troubleshooting failures
+
+Copilot is a collaborator, not a replacement.
+
+---
+
+# **3. GUIDELINES (Recommended Best Practices)**
+
+These are not enforced, but strongly encouraged to ensure effective, intelligent use of Copilot.
+
+---
+
+## **Guideline 1 — Always Start with a Clear Problem Description**
+
+Before asking for code, describe:
+
+* The context
+* Inputs
+* Desired outputs
+* Constraints (speed, memory, packages allowed)
+* Preferred style (`data.table`, `collapse`, Stata best practices, etc.)
+
+---
+
+## **Guideline 2 — Break Prompts into Small Tasks**
+
+Copilot works best when you ask for:
+
+**Bad:**
+“Rewrite this entire script using data.table and add documentation and tests.”
+
+**Good:**
+“Rewrite this specific function using data.table, keeping behavior identical.”
+“Generate roxygen2 documentation for the rewritten function.”
+“Write tests for expected behavior and edge cases.”
+
+---
+
+## **Guideline 3 — Avoid Vague or Overly Broad Prompts (Examples)**
+
+### ❌ **Bad Prompts**
+
+* “Fix this.”
+* “Optimize the code.”
+* “Build a package.”
+* “Add tests.”
+* “Make it better.”
+* “Rewrite everything using best practices.”
+
+These produce bloated, hallucinated, or over-engineered outputs.
+
+### ✅ **Good Prompts**
+
+* “Refactor this function so it avoids copying large objects. Use data.table syntax only.”
+* “Check whether this function handles missing values properly; suggest edge cases I should test.”
+* “Rewrite this Stata loop using frames and preserve/restore logic.”
+* “Add unit tests for the error conditions listed below.”
+
+---
+
+## **Guideline 4 — Use Copilot for Alternatives, Not Final Answers**
+
+Ask Copilot to generate:
+
+* 2–3 versions of a function
+* One minimalistic
+* One optimized
+* One “data.table idiomatic” or “collapse idiomatic”
+
+Then choose or merge the best parts.
+
+---
+
+## **Guideline 5 — Force Copilot to Explain Its Reasoning**
+
+Add to your prompt:
+
+* “Explain your design choices.”
+* “Explain assumptions.”
+* “Explain time/space complexity.”
+* “Explain how this integrates with data.table semantics.”
+
+This reduces hallucinations.
+
+---
+
+## **Guideline 6 — Use Copilot Chat to *Review* Code, Not Just Create It**
+
+Ask:
+
+* “Identify inefficiencies in this function.”
+* “Is this code safe?”
+* “Does this violate functional programming principles?”
+* “Which edge cases could break this function?”
+* “Is there dependency creep in this script?”
+
+This improves code robustness.
+
+---
+
+## **Guideline 7 — Keep Humans in the Loop**
+
+Copilot should **never** replace:
+
+* Architectural decisions
+* Performance-critical planning
+* Naming conventions
+* Data modeling
+* QA and debugging
+* Internal coding standards
+
+---
+
+## **Guideline 8 — Prefer Human-First Code Style**
+
+Readability > Cleverness
+Simplicity > Abstraction
+Stability > Novelty
+
+Ask Copilot:
+
+* “Make this simpler.”
+* “Use fewer helper functions.”
+* “Avoid functional plumbing unless necessary.”
+
+---
+
+## **Guideline 9 — Educate Copilot About Our Ecosystem**
+
+Examples:
+
+* “In this project we use data.table, not dplyr.”
+* “Avoid purrr, prefer base R or collapse.”
+* “Use rlang for non-standard evaluation.”
+
+---
+
+## **Guideline 10 — Ask Copilot to Critique Its Own Output**
+
+You can ask:
+
+* “Review the code you just wrote and check for logical errors.”
+* “Validate that this works with NULL, empty input, and wrong types.”
+* “Rewrite avoiding unnecessary dependencies.”
+
+This produces significantly better results.
+
+---
+
+# **4. Examples of Good vs Bad Prompts**
+
+### ❌ Bad: Overly broad and vague
+
+> “Create a function to clean this dataset using best practices.”
+
+**Why bad:** Leads to hallucination, excess dependencies, over-engineering.
+
+---
+
+### ✅ Good: Detailed, constrained, task-specific
+
+> “Create a data cleaning function using **data.table only**, operating on the following columns: x, y, z.
+> The function must:
+>
+> * remove rows with missing x
+> * convert y to factor
+> * compute z_rescaled = (z - mean) / sd
+>   Do not introduce any external package dependencies.”
+
+---
+
+### ❌ Bad: Asking Copilot to think instead of you
+
+> “What else should I do in this script?”
+
+### ✅ Good: Asking Copilot to critique within boundaries
+
+> “Review this script and identify places where:
+>
+> * memory usage could be reduced
+> * copies of large objects are made
+> * data.table syntax can be tightened
+>   Provide specific recommendations with code examples.”
+
+---
+
+## **5. When NOT to Use Copilot**
+
+Avoid Copilot for:
+
+* Sensitive data handling
+* Complex algorithm design
+* Statistical/econometric logic
+* Code you do not intend to personally maintain
+* R/data.table non-standard evaluation (if you don’t understand it)
+* Anything requiring deep domain knowledge
+
+Use Copilot only as a supplement to expertise, never as a shortcut through understanding.
+
+---
+
+# **6. Team Expectations and Review Process**
+
+During code review, you must be ready to:
+
+* Explain how Copilot was used
+* Show your **Copilot Interaction Log**
+* Justify dependency decisions
+* Demonstrate edge-case testing
+* Explain the full implementation in your own words
+* Defend the chosen approach vs alternatives
+
+Failure to meet mandatory protocols may result in requests for rewrites or revisions.
+
+---
+
+# **7. Final Note**
+
+Copilot is a powerful assistant—but it becomes dangerous when it silently replaces your thinking.
+Our goal is to use AI responsibly:
+**to accelerate expertise, not bypass it.**
