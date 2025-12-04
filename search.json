@@ -391,6 +391,17 @@
     ]
   },
   {
+    "objectID": "copilot_guidelines.html#purpose-and-principles",
+    "href": "copilot_guidelines.html#purpose-and-principles",
+    "title": "5  Suggested Guidelines for Using GitHub Copilot in Technical Work",
+    "section": "",
+    "text": "This is my “note box” with Tachyons.",
+    "crumbs": [
+      "Copilot and AI Tools",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Suggested Guidelines for Using GitHub Copilot in Technical Work</span>"
+    ]
+  },
+  {
     "objectID": "code_coverage.html",
     "href": "code_coverage.html",
     "title": "6  Add code coverage badge to your GitHub Repository.",
