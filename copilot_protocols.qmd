@@ -3,6 +3,8 @@ title: "Mandatory Protocols for Using GitHub Copilot in Technical Work"
 abstract: this document outlines mandatory protocols and recommended guidelines for using GitHub Copilot in technical work, ensuring productivity while maintaining code quality and team skills.
 execute:
   eval: false
+comments:
+  hypothesis: true
 ---
 
 ## Purpose and Principles {.unnumbered}

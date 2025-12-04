@@ -3,8 +3,16 @@ title: "Suggested Guidelines for Using GitHub Copilot in Technical Work"
 abstract: Blah
 execute:
   eval: false
+comments:
+  hypothesis: true
 ---
 
 ## Purpose and Principles {.unnumbered}
 
 blah blah blah
+
+::: {.pa3 .bg-washed-yellow .dark-gray .br2 .lh-copy .mt3}
+This is my “note box” with Tachyons.
+:::
+
+
