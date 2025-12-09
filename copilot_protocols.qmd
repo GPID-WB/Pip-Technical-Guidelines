@@ -42,7 +42,7 @@ There are multiple ways to provide context to Copilot:
 3. **Agent \@workspace**: You can use the Agent \@workspace feature to give Copilot access to your entire project directory. This allows Copilot to see all files and folders in your project, making it easier to understand the context of your work.
 4. **Prompt Files**: These are special files that you can create in your project to give Copilot specific instructions or guidelines. For example, you can create a prompt file that tells Copilot to use certain libraries or coding styles, as well as to use any particular context. Please refer to the `CHAPTER X` to learn more about prompt files.
 
-#### preferred context for our team
+#### Preferred context for our team
 In general, the work of the GPID teams requires a full-project context. Thus, unless you need to limit Copilot context to a specific file or folder, you should use either the Agent \@workspace or add all the files and folders to your chat to provide Copilot with the necessary context for your tasks. This will help ensure that Copilot can generate code that is consistent with the rest of your project and adheres to your team's coding standards.
 
 ### Start Every Copilot-Assisted Task With a Quick Declaration 
@@ -54,15 +54,18 @@ You can use this short message (literally copy and paste; just change the `TASK_
 ::: {.callout-note icon="false" appearance="simple"}
 ## Prompt
 
-I’m starting Task: `TASK_NAME`.  
+I'm starting Task: `TASK_NAME`.
+
+`TASK_NAME` is about `TASK_DESCRIPTION`.
+
 Please keep a concise running summary of our interaction, including:
 
-- the major prompts I give  
-- the important decisions we make  
-- any dependencies added or removed  
-- assumptions or limitations we identify  
+* the major prompts I give
+* the important decisions we make
+* any dependencies added or removed
+* assumptions or limitations we identify
 
-At the end I’ll ask you to produce a markdown summary.
+Create a markdown file `copilot_logs/TASK_NAME.md`, which you will need to update as we go along with the completion of this task. At the end, I'll ask you to produce a markdown summary.
 :::
 
 Why do this? Because Copilot won’t track your whole conversation. This little habit guarantees that your final summary is clean and complete.
