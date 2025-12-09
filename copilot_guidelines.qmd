@@ -1,18 +1,49 @@
 ---
-title: "Suggested Guidelines for Using GitHub Copilot in Technical Work"
-abstract: Blah
+abstract: This document outlines **suggested** guidelines for using GitHub Copilot, ensuring best-practice tips meant to improve efficiency and quality of your technical work.
 execute:
   eval: false
 comments:
   hypothesis: true
+bibliography: AI2.bib
+number-sections: false
 ---
 
-## Purpose and Principles {.unnumbered}
+# Suggested Guidelines for Using GitHub Copilot in Technical Work {#sec-copilot-guidelines}
 
-blah blah blah
+## Purpose and Principles 
 
-::: {.pa3 .bg-washed-yellow .dark-gray .br2 .lh-copy .mt3}
-This is my “note box” with Tachyons.
-:::
+
+## Ask then Agent: map and agree the solution first
+
+Before asking Copilot to modify code (Agent mode), first use the Ask option to explore and agree a solution for the general task. Have Copilot propose a design and refine it until you and the agent share the same approach — this helps avoid unnecessary edits and keeps reviews small.
+
+Examples of Ask prompts:
+
+- "What functions would be needed to implement this feature?"
+- "How would these functions interact? Describe the workflow or provide a brief diagram." 
+- "For each new function, give a short summary: objective, inputs, outputs, and dependencies." 
+- "What modifications to existing functions are required? List changes and rationale."
+
+Once the design is mapped and agreed, switch to Agent mode and request the specific code changes. You can iterate on alternatives and trade-offs in Ask mode before implementing. This workflow reduces code churn and the amount of code you must inspect.
+
+## Documenting Prompts and Context (Maybe)
+
+When using Copilot (or any code-generation agent), record the key characteristics of prompts you send. At minimum, capture:
+
+- The context provided: files, code snippets, or system state included with the prompt (what the agent "saw").
+- The Agent instruction: the explicit task or role you asked the agent to perform (for example, "write a unit test", "refactor this function for readability", or "explain this algorithm").
+
+Other useful prompt characteristics to document:
+
+- Input data examples (small sample inputs and expected outputs).
+- Prompt template or exact phrasing (so it can be re-run or tweaked later).
+- Any constraints or hard requirements (performance limits, libraries to use, coding style).
+- Time or version metadata (date, version of Copilot/IDE/plugins if known).
+
+Why this helps: keeping a short record of prompts and their context makes it easier to reproduce results, re-run or refine prompts, and debug situations where generated code fails or causes errors. These notes become especially valuable during future development when tracking regressions or when onboarding colleagues who must understand the original intent.
+
+
+## Resources
+- [GitHub Copilot in your IDE](https://github.blog/developer-skills/github/how-to-use-github-copilot-in-your-ide-tips-tricks-and-best-practices/?ref_product=copilot&ref_type=engagement&ref_style=text)
 
 
