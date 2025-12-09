@@ -1,5 +1,4 @@
 ---
-title: "Mandatory Protocols for Using GitHub Copilot in Technical Work"
 abstract: This document outlines **mandatory** protocols for using GitHub Copilot in technical work, ensuring productivity while maintaining code quality and team skills.
 execute:
   eval: false
@@ -8,6 +7,8 @@ comments:
 bibliography: AI.bib
 number-sections: false
 ---
+
+# Mandatory Protocols for Using GitHub Copilot in Technical Work {#sec-copilot-protocols}
 
 ## Purpose and Principles 
 
@@ -310,7 +311,7 @@ Cover:
 * extreme or unusual data scenarios
 :::
 
-::: {.callout-tip icon="false" appearance="simple" title="Prompt for Stata}"}
+::: {.callout-tip icon="false" appearance="simple" title="Prompt for Stata"}
 
 Generate Stata tests (do-file assertions or checks) for this `NAME_OF_FUNCTION or TEST or FILE, etc`.
 Cover:
