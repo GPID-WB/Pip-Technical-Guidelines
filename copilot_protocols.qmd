@@ -51,8 +51,7 @@ Whenever you’re about to use Copilot for a particular task (especially the one
 
 You can use this short message (literally copy and paste; just change the `TASK_NAME`):
 
-::: {.callout-note icon="false" appearance="simple"}
-## Prompt
+::: {.callout-note icon="false" appearance="simple" title="Prompt"}
 
 I'm starting Task: `TASK_NAME`.
 
@@ -90,8 +89,7 @@ This keeps your future self (and your teammates) very happy.
 
 Once the task is done, ask Copilot:
 
-::: {.callout-note icon="false" appearance="simple"}
-## Prompt
+::: {.callout-note icon="false" appearance="simple" title="Prompt"}
 
 Now generate a markdown summary of this task, including:
 
@@ -107,7 +105,7 @@ Save the file under `copilot_logs/TASK_NAME.md`
 
 :::
 
-::: {.callout-danger}
+::: {.callout-important}
 If you're working in an R package, make sure to include the `copilot_logs` folder in your `.Rbuildignore` file to prevent it from being included in the package build. You can do it by executing `usethis::use_build_ignore("copilot_logs")` or by manually adding the line `^copilot_logs/$` to the `.Rbuildignore` file.
 :::
 
@@ -127,9 +125,7 @@ Our goal here is simple: **If Copilot wrote something, then Copilot should also 
 
 Right after Copilot generates a function, script, or refactor, ask:
 
-::: {.callout-note icon="false" appearance="simple"}
-
-## Prompt
+::: {.callout-note icon="false" appearance="simple" title="Prompt"}
 
 Explain this code step-by-step.
 Describe the purpose of each major block.
@@ -147,9 +143,7 @@ Include this explanation in your task summary.
 
 Once the general explanation is clear, you must ask Copilot:
 
-::: {.callout-note icon="false" appearance="simple"}
-
-## Prompt
+::: {.callout-note icon="false" appearance="simple" title="Prompt"}
 
 Add clear comments directly inside the code.
 Explain:
@@ -173,9 +167,7 @@ We want readable, human-language explanations—not machine translations of the 
 
 If the output includes R functions, you must also request:
 
-::: {.callout-note icon="false" appearance="simple"}
-
-## Prompt
+::: {.callout-note icon="false" appearance="simple" title="Prompt"}
 
 Add proper Roxygen2 documentation for all R functions.
 Include:
@@ -205,9 +197,7 @@ This is different from comments or Roxygen2 documentation.
 
 You should ask:
 
-::: {.callout-note icon="false" appearance="simple"}
-
-## Prompt
+::: {.callout-note icon="false" appearance="simple" title="Prompt"}
 
 Write a short, plain-language explanation of how this code works.
 Pretend you're explaining it to a teammate seeing it for the first time.
@@ -258,9 +248,7 @@ No Copilot-generated code is considered “validated” until Copilot helps you 
 
 For R:
 
-::: {.callout-note icon="false" appearance="simple"}
-
-## Prompt
+::: {.callout-note icon="false" appearance="simple" title="Prompt"}
 
 Generate `testthat` unit tests for this code.
 Cover:
@@ -274,9 +262,7 @@ Cover:
 
 For Stata:
 
-::: {.callout-tip icon="false" appearance="simple"}
-
-## Prompt
+::: {.callout-tip icon="false" appearance="simple" title="Prompt"}
 
 Generate Stata tests (do-file assertions or checks) for this code.
 Cover:
@@ -294,9 +280,7 @@ These tests must be included in your PR.
 
 When working with large data or performance-critical code, you can also ask:
 
-::: {.callout-note icon="false" appearance="simple"}
-
-## Prompt
+::: {.callout-note icon="false" appearance="simple" title="Prompt"}
 
 Suggest performance-sensitive tests for this code.
 Identify:
@@ -320,14 +304,13 @@ This helps you spot performance issues early rather than discovering them in pro
 
 If the code adds or modifies dependencies, request:
 
-::: {.callout-note icon="false" appearance="simple"}
-
-## Prompt
+::: {.callout-note icon="false" appearance="simple" title="Prompt"}
 
 Explain why each dependency is needed.
 Suggest ways to remove or replace unnecessary dependencies.
 Check for conflicts with `data.table`, `collapse`, or `rlang`.
 Identify any security or stability concerns (e.g., unsafe I/O, exposed paths, or risky patterns).
+
 :::
 
 This helps prevent dependency creep and ensures the code fits our ecosystem and security expectations. Of course, this is only needed when you just started developing the code or when dependencies were changed.
@@ -340,9 +323,7 @@ Believe it or not, this might be one of the most powerful steps.
 
 Prompt Copilot with:
 
-::: {.callout-note icon="false" appearance="simple"}
-
-## Prompt
+::: {.callout-note icon="false" appearance="simple" title="Prompt"}
 
 Review your own code as if you were performing a formal code review.
 Identify:
@@ -365,9 +346,7 @@ You can adapt the mention of `data.table`, `collapse`, and `rlang` to match the 
 
 Before closing your task, ask Copilot:
 
-::: {.callout-note icon="false" appearance="simple"}
-
-## Prompt
+::: {.callout-note icon="false" appearance="simple" title="Prompt"}
 
 Add all validation materials to the task summary, including:
 
