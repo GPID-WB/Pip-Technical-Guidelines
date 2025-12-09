@@ -1,13 +1,15 @@
 ---
 title: "Mandatory Protocols for Using GitHub Copilot in Technical Work"
-abstract: this document outlines mandatory protocols and recommended guidelines for using GitHub Copilot in technical work, ensuring productivity while maintaining code quality and team skills.
+abstract: This document outlines **mandatory** protocols for using GitHub Copilot in technical work, ensuring productivity while maintaining code quality and team skills.
 execute:
   eval: false
 comments:
   hypothesis: true
+bibliography: AI.bib
+number-sections: false
 ---
 
-## Purpose and Principles {.unnumbered}
+## Purpose and Principles 
 
 GitHub Copilot is a powerful assistant that can increase productivity, generate boilerplate code quickly, and support experimentation. However, Copilot is not a substitute for engineering judgment, critical thinking, or expertise in R/Stata. This document establishes **Protocols** (mandatory actions) that must be followed and demonstrated during reviews.
 
@@ -24,11 +26,26 @@ Every team member **must** follow these protocols when using Copilot for technic
 
 ---
 
-## Protocol 1 — Documenting Your Work With Copilot {.unnumbered}
+## Protocol {{< protocol >}} — Documenting Your Work With Copilot 
 
 **Objective:** We want every piece of Copilot-assisted work to be transparent, easy to review, and easy to understand—not only for you, but for anyone who touches the code later. Think of this as keeping a clear trail of “why we did what we did,” without drowning anyone in hundreds of lines of chat history.
 
-### Start Every Copilot-Assisted Task With a Quick Declaration {.unnumbered}
+### Use the right context 
+
+#### what is a context
+Before starting any Copilot-assisted task, you need to make sure Copilot has the necessary information to do the task as you expect. In "copilot terms" this information is known as the context, and it literally refers to the files and folders of your project that copilot can "see" while you are working on your task.
+
+There are multiple ways to provide context to Copilot:
+
+1. **Open Files**: Be default, Copilot can only see the files that you have open in your editor. Therefore, make sure to open any relevant files that contain information Copilot might need to complete your task. For example, if you are working on a function that interacts with a specific dataset, make sure to open the file that contains the dataset schema or structure.
+2. **Manually providing context**: Sometimes having too many files open is annoying. To avoid that, got to the Explorer view in the Activity Bar and just right-click on the file or folder you want to add to the Copilot context. Click on the "Add file/folder to chat".
+3. **Agent \@workspace**: You can use the Agent \@workspace feature to give Copilot access to your entire project directory. This allows Copilot to see all files and folders in your project, making it easier to understand the context of your work.
+4. **Prompt Files**: These are special files that you can create in your project to give Copilot specific instructions or guidelines. For example, you can create a prompt file that tells Copilot to use certain libraries or coding styles, as well as to use any particular context. Please refer to the `CHAPTER X` to learn more about prompt files.
+
+#### preferred context for our team
+In general, the work of the GPID teams requires a full-project context. Thus, unless you need to limit Copilot context to a specific file or folder, you should use either the Agent \@workspace or add all the files and folders to your chat to provide Copilot with the necessary context for your tasks. This will help ensure that Copilot can generate code that is consistent with the rest of your project and adheres to your team's coding standards.
+
+### Start Every Copilot-Assisted Task With a Quick Declaration 
 
 Whenever you’re about to use Copilot for a particular task (especially the ones formally assigned to you), like rewriting a function, adding a feature, building tests, or refactoring, let Copilot know you’re starting a task.
 
@@ -52,7 +69,7 @@ Why do this? Because Copilot won’t track your whole conversation. This little 
 
 ---
 
-### Keep the Summary Updated as You Go (But Keep It Light) {.unnumbered}
+### Keep the Summary Updated as You Go (But Keep It Light) 
 
 As you work, Copilot may try several ideas, produce alternatives, or suggest changes. When something important happens, simply say things like:
 
@@ -66,7 +83,7 @@ This keeps your future self (and your teammates) very happy.
 
 ---
 
-### When You Finish, Ask Copilot for a Clean Markdown Summary {.unnumbered}
+### When You Finish, Ask Copilot for a Clean Markdown Summary 
 
 Once the task is done, ask Copilot:
 
@@ -96,14 +113,14 @@ Now, make sure to include it in your Pull Request.
 This takes Copilot a few seconds and keeps our PRs tidy, transparent, and genuinely *reviewable*.
 
 
-## Protocol 2 — Making the Code Understandable {.unnumbered}
+## Protocol {{< protocol >}} — Making the Code Understandable 
 
 **Objective:** Once Copilot produces code, we need to ensure that it is understandable; not just to you, but to any teammate who might maintain it later. This protocol focuses on explanations, comments, and documentation, so the logic and intent of the code are always clear.
 
 Our goal here is simple: **If Copilot wrote something, then Copilot should also help us understand it, both inside and outside the code.**
 
 
-### Ask Copilot to Explain the Code Step-by-Step {.unnumbered}
+### Ask Copilot to Explain the Code Step-by-Step 
 
 Right after Copilot generates a function, script, or refactor, ask:
 
@@ -123,7 +140,7 @@ Include this explanation in your task summary.
 
 ---
 
-### Ask Copilot to Add In-Code Comments Explaining Both the “What” and the “Why” {.unnumbered}
+### Ask Copilot to Add In-Code Comments Explaining Both the “What” and the “Why” 
 
 Once the general explanation is clear, you must ask Copilot:
 
@@ -149,7 +166,7 @@ We want readable, human-language explanations—not machine translations of the 
 
 ---
 
-### Ask Copilot to Document All R Functions Using Roxygen2 {.unnumbered}
+### Ask Copilot to Document All R Functions Using Roxygen2 
 
 If the output includes R functions, you must also request:
 
@@ -179,7 +196,7 @@ We want **professional-grade documentation** from the start, not as an afterthou
 
 ---
 
-### Ask Copilot to Provide a Plain-Language Overview of the Logic {.unnumbered}
+### Ask Copilot to Provide a Plain-Language Overview of the Logic 
 
 This is different from comments or Roxygen2 documentation.
 
@@ -203,13 +220,13 @@ This explanation goes into the task summary (alongside the step-by-step explanat
 
 ---
 
-## Protocol 3 — Testing and Edge Cases {.unnumbered}
+## Protocol {{< protocol >}} — Testing and Edge Cases 
 
 **Objective:** No Copilot-generated code should be accepted without being tested against realistic and edge-case scenarios. This protocol ensures that Copilot helps you design and implement tests that actually exercise the code.
 
 ---
 
-### Ask Copilot to Build a Validation Checklist {.unnumbered}
+### Ask Copilot to Build a Validation Checklist 
 
 Before moving on, request:
 
@@ -232,7 +249,7 @@ This checklist goes into your summary and becomes a quick-reference tool for rev
 
 ---
 
-### Ask Copilot to Generate Unit Tests and Edge Cases {.unnumbered}
+### Ask Copilot to Generate Unit Tests and Edge Cases 
 
 No Copilot-generated code is considered “validated” until Copilot helps you test it.
 
@@ -270,7 +287,7 @@ These tests must be included in your PR.
 
 ---
 
-### (Optional but Recommended) Ask Copilot to Suggest Performance-Sensitive Tests {.unnumbered}
+### (Optional but Recommended) Ask Copilot to Suggest Performance-Sensitive Tests 
 
 When working with large data or performance-critical code, you can also ask:
 
@@ -290,13 +307,13 @@ This helps you spot performance issues early rather than discovering them in pro
 
 ---
 
-## Protocol 4 — Dependencies, Risks, and Final Validation Bundle {.unnumbered}
+## Protocol {{< protocol >}} — Dependencies, Risks, and Final Validation Bundle 
 
 **Objective:** Before Copilot-assisted code reaches the repository, we want to be confident that it uses dependencies responsibly, avoids obvious risks, and has a complete “validation bundle” that reviewers can use to assess it quickly and fairly.
 
 ---
 
-### Ask Copilot to Run a Dependency and Risk Scan {.unnumbered}
+### Ask Copilot to Run a Dependency and Risk Scan 
 
 If the code adds or modifies dependencies, request:
 
@@ -314,7 +331,7 @@ This helps prevent dependency creep and ensures the code fits our ecosystem and 
 
 ---
 
-### Ask Copilot to Critique Its Own Code {.unnumbered}
+### Ask Copilot to Critique Its Own Code 
 
 Believe it or not, this might be one of the most powerful steps.
 
@@ -341,7 +358,7 @@ You can adapt the mention of `data.table`, `collapse`, and `rlang` to match the 
 
 ---
 
-### Package Everything Into a “Validation Bundle” {.unnumbered}
+### Package Everything Into a “Validation Bundle” 
 
 Before closing your task, ask Copilot:
 
@@ -365,7 +382,7 @@ This bundle provides everything reviewers need. It also ensures that anyone who 
 
 ---
 
-### Why These Protocols Matter {.unnumbered}
+### Why These Protocols Matter 
 
 The goal isn’t to slow you down. It’s to make sure that Copilot helps you, without replacing your thinking or lowering our standards.
 
@@ -382,7 +399,7 @@ That’s the balance we’re aiming for.
 
 ---
 
-### (EXTRA) Prompt Files Are Optional Tools, Not Documentation {.unnumbered}
+### (EXTRA) Prompt Files Are Optional Tools, Not Documentation 
 
 Copilot has something called **Prompt Files**, which lets you save reusable instructions like:
 
