@@ -39,7 +39,7 @@ There are multiple ways to provide context to Copilot:
 
 1. **Open Files**: Be default, Copilot can only see the files that you have open in your editor. Therefore, make sure to open any relevant files that contain information Copilot might need to complete your task. For example, if you are working on a function that interacts with a specific dataset, make sure to open the file that contains the dataset schema or structure.
 2. **Manually providing context**: Sometimes having too many files open is annoying. To avoid that, got to the Explorer view in the Activity Bar and just right-click on the file or folder you want to add to the Copilot context. Click on the "Add file/folder to chat".
-3. **Agent \@workspace**: You can use the Agent \@workspace feature to give Copilot access to your entire project directory. This allows Copilot to see all files and folders in your project, making it easier to understand the context of your work.
+3. **Agent \@workspace**: You can use the Agent \@workspace feature to give Copilot access to your entire project directory. This allows Copilot to see all files and folders in your project, making it easier to understand the context of your work. [Note]{.blue}: If you're using Positron, the default context is your current session's workspace, which includes all files in your project directory.
 4. **Prompt Files**: These are special files that you can create in your project to give Copilot specific instructions or guidelines. For example, you can create a prompt file that tells Copilot to use certain libraries or coding styles, as well as to use any particular context. Please refer to the `CHAPTER X` to learn more about prompt files.
 
 #### Preferred context for our team
@@ -127,10 +127,10 @@ Right after Copilot generates a function, script, or refactor, ask:
 
 ::: {.callout-note icon="false" appearance="simple" title="Prompt"}
 
-Explain this code step-by-step.
+Explain this `NAME_OF_FUNCTION or TEST or FILE, etc` step-by-step.
 Describe the purpose of each major block.
 List all assumptions you’re making.
-Identify any cases where this code might break.
+Identify any cases where this `NAME_OF_FUNCTION or TEST or FILE, etc` might break.
 :::
 
 You’re not expected to decipher the code alone. This step forces Copilot to surface the hidden logic behind its decisions, and gives you a clear foundation for understanding what’s going on.
@@ -199,8 +199,7 @@ You should ask:
 
 ::: {.callout-note icon="false" appearance="simple" title="Prompt"}
 
-Write a short, plain-language explanation of how this code works.
-Pretend you're explaining it to a teammate seeing it for the first time.
+Write a short, plain-language explanation of how `NAME_OF_FUNCTION or TEST or FILE, etc` works. Pretend you’re explaining it to a teammate seeing it for the first time
 :::
 
 This summary helps:
@@ -210,6 +209,60 @@ This summary helps:
 * Future maintainers get immediate clarity.
 
 This explanation goes into the task summary (alongside the step-by-step explanation). 
+
+---
+
+## Protocol {{< protocol >}} — Code Review and Efficiency Check
+
+**Objective:** Before testing any Copilot-generated code, you must conduct a thorough review to identify and eliminate inefficiencies, redundancies, and unnecessary complexity. This ensures that only clean, optimized code enters the testing phase, saving time and preventing technical debt.
+
+### Review Code for Inefficiencies
+
+Every time you ask Copilot to make changes to your code, **you must review the generated code for inefficiencies** before proceeding to test it.
+
+:::{.callout-important}
+This is your responsibility as the author of the code
+:::
+
+### What to Look For:
+
+When reviewing Copilot-generated code, check for the following inefficiencies:
+
+• **Unnecessary functions**: Are all functions actually needed? Could some be combined or removed?
+
+• **Redundant code**: Is there duplicated logic that could be consolidated into a single function or block?
+
+• **Over-complicated patterns**: Is the code more complex than it needs to be? Could it be simplified without losing functionality?
+
+• **Unused variables or objects**: Are there variables created but never used?
+
+• **Inefficient data operations**: Are there operations that copy large data objects unnecessarily, or loops that could be vectorized?
+
+• **Excessive dependencies**: Does the code introduce new packages when existing ones could handle the task?
+
+• **Nested logic**: Could deeply nested if-else statements or loops be flattened or refactored for clarity?
+
+• **Dead code**: Are there commented-out blocks or experimental code that should be removed?
+
+### Use This Prompt to Help Copilot Find Inefficiencies:
+
+Before review yourself, you can also ask Copilot:
+
+::: {.callout-note icon="false" appearance="simple" title="Prompt"} 
+Review this `NAME_OF_FUNCTION or TEST or FILE, etc` for inefficiencies and unnecessary complexity. Specifically, identify:
+ 
+- functions that are defined but not used, or could be consolidated
+- redundant or duplicated logic that appears in multiple places
+- operations that create unnecessary copies of data or objects
+- code blocks that could be simplified without changing functionality
+- variables or dependencies that aren't actually needed
+- patterns that are overly complex for the task at hand
+- opportunities to use more efficient approaches (e.g., vectorization, optimized packages)
+ 
+For each issue found, suggest a specific improvement and explain why it matters.
+:::
+
+This prompt forces Copilot to act as a code auditor, helping you spot problems before you review it yourself.
 
 ---
 
@@ -223,18 +276,16 @@ This explanation goes into the task summary (alongside the step-by-step explanat
 
 Before moving on, request:
 
-::: {.callout-note icon="false" appearance="simple"}
+::: {.callout-note icon="false" appearance="simple" title="Prompt"}
 
-## Prompt
-
-Create a validation checklist for this code.
+Create a validation checklist for this `NAME_OF_FUNCTION or TEST or FILE, etc`.
 Include:
 
 * expected inputs and outputs
 * potential failure points
 * required dependencies
 * edge cases to test
-* assumptions this code relies on
+* assumptions this `NAME_OF_FUNCTION or TEST or FILE, etc` relies on
 
 :::
 
@@ -242,15 +293,14 @@ This checklist goes into your summary and becomes a quick-reference tool for rev
 
 ---
 
+
 ### Ask Copilot to Generate Unit Tests and Edge Cases 
 
 No Copilot-generated code is considered “validated” until Copilot helps you test it.
 
-For R:
+::: {.callout-note icon="false" appearance="simple" title="Prompt for R"}
 
-::: {.callout-note icon="false" appearance="simple" title="Prompt"}
-
-Generate `testthat` unit tests for this code.
+Generate `testthat` unit tests for this `NAME_OF_FUNCTION or TEST or FILE, etc`.
 Cover:
 
 * normal cases
@@ -260,11 +310,9 @@ Cover:
 * extreme or unusual data scenarios
 :::
 
-For Stata:
+::: {.callout-tip icon="false" appearance="simple" title="Prompt for Stata}"}
 
-::: {.callout-tip icon="false" appearance="simple" title="Prompt"}
-
-Generate Stata tests (do-file assertions or checks) for this code.
+Generate Stata tests (do-file assertions or checks) for this `NAME_OF_FUNCTION or TEST or FILE, etc`.
 Cover:
 
 * realistic data
@@ -282,7 +330,7 @@ When working with large data or performance-critical code, you can also ask:
 
 ::: {.callout-note icon="false" appearance="simple" title="Prompt"}
 
-Suggest performance-sensitive tests for this code.
+Suggest performance-sensitive tests for this `NAME_OF_FUNCTION or TEST or FILE, etc`.
 Identify:
 
 * operations that may be slow on large data
@@ -357,14 +405,12 @@ Add all validation materials to the task summary, including:
 * plain-language explanation
 * unit tests and edge cases
 * dependency and risk analysis
-* a brief summary of your self-critique and improvements made
+* a brief summary of your self-critique on the recommendations you provided, as well as a summary of the improvements I implemented, or asked you to implement, throughout our collaboration.
 :::
 
 This bundle provides everything reviewers need. It also ensures that anyone who maintains the code later won’t be flying blind.
 
----
-
-### Why These Protocols Matter 
+## Why These Protocols Matter 
 
 The goal isn’t to slow you down. It’s to make sure that Copilot helps you, without replacing your thinking or lowering our standards.
 
@@ -379,16 +425,15 @@ You stay in control, make the decisions, and remain the author of the code.
 
 That’s the balance we’re aiming for.
 
----
 
-### (EXTRA) Prompt Files Are Optional Tools, Not Documentation 
+## Remember: You Are the Author
 
-Copilot has something called **Prompt Files**, which lets you save reusable instructions like:
+**The code produced by Copilot is ultimately your responsibility.**
 
-* “Use `data.table`, not `dplyr`.”
-* “Follow `collapse` idioms.”
-* “Write tests using `testthat`.”
+• **Authorship means accountability**: When you commit Copilot-assisted code, you are claiming authorship of it. This means you're responsible for its correctness, efficiency, and maintainability.
 
-These are great for giving Copilot consistent context, but they *don’t* replace the documentation required above.
+• **Review is mandatory**: Skipping the efficiency review puts the burden on your teammates during code review, slows down development, and can introduce bugs or performance issues that are hard to trace later.
 
-Use them if they help you, but they’re optional.
+• **Use Copilot as a tool, not a replacement**: Copilot accelerates your work, but it cannot replace your engineering judgment. You must understand, evaluate, and refine everything it produces.
+
+**Bottom line:** If you wouldn't put your name on it as-is, don't commit it yet. Clean it up first.
