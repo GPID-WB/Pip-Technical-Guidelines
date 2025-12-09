@@ -33,7 +33,7 @@ Every team member **must** follow these protocols when using Copilot for technic
 
 ### Use the right context 
 
-#### what is a context
+#### What Is a Context
 Before starting any Copilot-assisted task, you need to make sure Copilot has the necessary information to do the task as you expect. In "copilot terms" this information is known as the context, and it literally refers to the files and folders of your project that copilot can "see" while you are working on your task.
 
 There are multiple ways to provide context to Copilot:
@@ -387,7 +387,7 @@ Identify:
 
 Copilot is surprisingly good at pointing out its own flaws when prompted this way. Use its critique to improve the final version.
 
-You can adapt the mention of `data.table`, `collapse`, and `rlang` to match the standards of your package or project. This are the ones that I (Andrés) use the most.
+You can adapt the mention of `data.table`, `collapse`, and `rlang` to match the standards of your package or project. These are the ones that I (Andrés) use the most.
 
 ---
 
@@ -406,7 +406,7 @@ Add all validation materials to the task summary, including:
 * plain-language explanation
 * unit tests and edge cases
 * dependency and risk analysis
-* a brief summary of your self-critique on the recommendations you provided, as well as a summary of the improvements I implemented, or asked you to implement, throughout our collaboration.
+* a brief summary of your self-critique on the recommendations and improvements implemented throughout our collaboration.
 :::
 
 This bundle provides everything reviewers need. It also ensures that anyone who maintains the code later won’t be flying blind.
