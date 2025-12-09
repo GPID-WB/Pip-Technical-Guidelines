@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>4&nbsp; Mandatory Protocols for Using GitHub Copilot in Technical Work – Pip Technical Guidelines</title>
+<title>Mandatory Protocols for Using GitHub Copilot in Technical Work – Pip Technical Guidelines</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -247,33 +247,40 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#purpose-and-principles" id="toc-purpose-and-principles" class="nav-link active" data-scroll-target="#purpose-and-principles">Purpose and Principles</a></li>
-  <li><a href="#protocol-1-documenting-your-work-with-copilot" id="toc-protocol-1-documenting-your-work-with-copilot" class="nav-link" data-scroll-target="#protocol-1-documenting-your-work-with-copilot">Protocol 1 — Documenting Your Work With Copilot</a>
+  <li><a href="#protocol-documenting-your-work-with-copilot" id="toc-protocol-documenting-your-work-with-copilot" class="nav-link" data-scroll-target="#protocol-documenting-your-work-with-copilot">Protocol 1 — Documenting Your Work With Copilot</a>
   <ul class="collapse">
+  <li><a href="#use-the-right-context" id="toc-use-the-right-context" class="nav-link" data-scroll-target="#use-the-right-context">Use the right context</a></li>
   <li><a href="#start-every-copilot-assisted-task-with-a-quick-declaration" id="toc-start-every-copilot-assisted-task-with-a-quick-declaration" class="nav-link" data-scroll-target="#start-every-copilot-assisted-task-with-a-quick-declaration">Start Every Copilot-Assisted Task With a Quick Declaration</a></li>
   <li><a href="#keep-the-summary-updated-as-you-go-but-keep-it-light" id="toc-keep-the-summary-updated-as-you-go-but-keep-it-light" class="nav-link" data-scroll-target="#keep-the-summary-updated-as-you-go-but-keep-it-light">Keep the Summary Updated as You Go (But Keep It Light)</a></li>
   <li><a href="#when-you-finish-ask-copilot-for-a-clean-markdown-summary" id="toc-when-you-finish-ask-copilot-for-a-clean-markdown-summary" class="nav-link" data-scroll-target="#when-you-finish-ask-copilot-for-a-clean-markdown-summary">When You Finish, Ask Copilot for a Clean Markdown Summary</a></li>
   </ul></li>
-  <li><a href="#protocol-2-making-the-code-understandable" id="toc-protocol-2-making-the-code-understandable" class="nav-link" data-scroll-target="#protocol-2-making-the-code-understandable">Protocol 2 — Making the Code Understandable</a>
+  <li><a href="#protocol-making-the-code-understandable" id="toc-protocol-making-the-code-understandable" class="nav-link" data-scroll-target="#protocol-making-the-code-understandable">Protocol 2 — Making the Code Understandable</a>
   <ul class="collapse">
   <li><a href="#ask-copilot-to-explain-the-code-step-by-step" id="toc-ask-copilot-to-explain-the-code-step-by-step" class="nav-link" data-scroll-target="#ask-copilot-to-explain-the-code-step-by-step">Ask Copilot to Explain the Code Step-by-Step</a></li>
   <li><a href="#ask-copilot-to-add-in-code-comments-explaining-both-the-what-and-the-why" id="toc-ask-copilot-to-add-in-code-comments-explaining-both-the-what-and-the-why" class="nav-link" data-scroll-target="#ask-copilot-to-add-in-code-comments-explaining-both-the-what-and-the-why">Ask Copilot to Add In-Code Comments Explaining Both the “What” and the “Why”</a></li>
   <li><a href="#ask-copilot-to-document-all-r-functions-using-roxygen2" id="toc-ask-copilot-to-document-all-r-functions-using-roxygen2" class="nav-link" data-scroll-target="#ask-copilot-to-document-all-r-functions-using-roxygen2">Ask Copilot to Document All R Functions Using Roxygen2</a></li>
   <li><a href="#ask-copilot-to-provide-a-plain-language-overview-of-the-logic" id="toc-ask-copilot-to-provide-a-plain-language-overview-of-the-logic" class="nav-link" data-scroll-target="#ask-copilot-to-provide-a-plain-language-overview-of-the-logic">Ask Copilot to Provide a Plain-Language Overview of the Logic</a></li>
   </ul></li>
-  <li><a href="#protocol-3-testing-and-edge-cases" id="toc-protocol-3-testing-and-edge-cases" class="nav-link" data-scroll-target="#protocol-3-testing-and-edge-cases">Protocol 3 — Testing and Edge Cases</a>
+  <li><a href="#protocol-code-review-and-efficiency-check" id="toc-protocol-code-review-and-efficiency-check" class="nav-link" data-scroll-target="#protocol-code-review-and-efficiency-check">Protocol 3 — Code Review and Efficiency Check</a>
+  <ul class="collapse">
+  <li><a href="#review-code-for-inefficiencies" id="toc-review-code-for-inefficiencies" class="nav-link" data-scroll-target="#review-code-for-inefficiencies">Review Code for Inefficiencies</a></li>
+  <li><a href="#what-to-look-for" id="toc-what-to-look-for" class="nav-link" data-scroll-target="#what-to-look-for">What to Look For:</a></li>
+  <li><a href="#use-this-prompt-to-help-copilot-find-inefficiencies" id="toc-use-this-prompt-to-help-copilot-find-inefficiencies" class="nav-link" data-scroll-target="#use-this-prompt-to-help-copilot-find-inefficiencies">Use This Prompt to Help Copilot Find Inefficiencies:</a></li>
+  </ul></li>
+  <li><a href="#protocol-testing-and-edge-cases" id="toc-protocol-testing-and-edge-cases" class="nav-link" data-scroll-target="#protocol-testing-and-edge-cases">Protocol 4 — Testing and Edge Cases</a>
   <ul class="collapse">
   <li><a href="#ask-copilot-to-build-a-validation-checklist" id="toc-ask-copilot-to-build-a-validation-checklist" class="nav-link" data-scroll-target="#ask-copilot-to-build-a-validation-checklist">Ask Copilot to Build a Validation Checklist</a></li>
   <li><a href="#ask-copilot-to-generate-unit-tests-and-edge-cases" id="toc-ask-copilot-to-generate-unit-tests-and-edge-cases" class="nav-link" data-scroll-target="#ask-copilot-to-generate-unit-tests-and-edge-cases">Ask Copilot to Generate Unit Tests and Edge Cases</a></li>
   <li><a href="#optional-but-recommended-ask-copilot-to-suggest-performance-sensitive-tests" id="toc-optional-but-recommended-ask-copilot-to-suggest-performance-sensitive-tests" class="nav-link" data-scroll-target="#optional-but-recommended-ask-copilot-to-suggest-performance-sensitive-tests">(Optional but Recommended) Ask Copilot to Suggest Performance-Sensitive Tests</a></li>
   </ul></li>
-  <li><a href="#protocol-4-dependencies-risks-and-final-validation-bundle" id="toc-protocol-4-dependencies-risks-and-final-validation-bundle" class="nav-link" data-scroll-target="#protocol-4-dependencies-risks-and-final-validation-bundle">Protocol 4 — Dependencies, Risks, and Final Validation Bundle</a>
+  <li><a href="#protocol-dependencies-risks-and-final-validation-bundle" id="toc-protocol-dependencies-risks-and-final-validation-bundle" class="nav-link" data-scroll-target="#protocol-dependencies-risks-and-final-validation-bundle">Protocol 5 — Dependencies, Risks, and Final Validation Bundle</a>
   <ul class="collapse">
   <li><a href="#ask-copilot-to-run-a-dependency-and-risk-scan" id="toc-ask-copilot-to-run-a-dependency-and-risk-scan" class="nav-link" data-scroll-target="#ask-copilot-to-run-a-dependency-and-risk-scan">Ask Copilot to Run a Dependency and Risk Scan</a></li>
   <li><a href="#ask-copilot-to-critique-its-own-code" id="toc-ask-copilot-to-critique-its-own-code" class="nav-link" data-scroll-target="#ask-copilot-to-critique-its-own-code">Ask Copilot to Critique Its Own Code</a></li>
   <li><a href="#package-everything-into-a-validation-bundle" id="toc-package-everything-into-a-validation-bundle" class="nav-link" data-scroll-target="#package-everything-into-a-validation-bundle">Package Everything Into a “Validation Bundle”</a></li>
-  <li><a href="#why-these-protocols-matter" id="toc-why-these-protocols-matter" class="nav-link" data-scroll-target="#why-these-protocols-matter">Why These Protocols Matter</a></li>
-  <li><a href="#extra-prompt-files-are-optional-tools-not-documentation" id="toc-extra-prompt-files-are-optional-tools-not-documentation" class="nav-link" data-scroll-target="#extra-prompt-files-are-optional-tools-not-documentation">(EXTRA) Prompt Files Are Optional Tools, Not Documentation</a></li>
   </ul></li>
+  <li><a href="#why-these-protocols-matter" id="toc-why-these-protocols-matter" class="nav-link" data-scroll-target="#why-these-protocols-matter">Why These Protocols Matter</a></li>
+  <li><a href="#remember-you-are-the-author" id="toc-remember-you-are-the-author" class="nav-link" data-scroll-target="#remember-you-are-the-author">Remember: You Are the Author</a></li>
   </ul>
 </nav>
     </div>
@@ -282,7 +289,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./copilot_protocols.html">Copilot and AI Tools</a></li><li class="breadcrumb-item"><a href="./copilot_protocols.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Mandatory Protocols for Using GitHub Copilot in Technical Work</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Mandatory Protocols for Using GitHub Copilot in Technical Work</span></h1>
+<h1 class="title"><span id="sec-copilot-protocols" class="quarto-section-identifier"><span class="chapter-title">Mandatory Protocols for Using GitHub Copilot in Technical Work</span></span></h1>
 </div>
 
 
@@ -297,7 +304,7 @@ ul.task-list li input[type="checkbox"] {
 <div>
   <div class="abstract">
     <div class="block-title">Abstract</div>
-    this document outlines mandatory protocols and recommended guidelines for using GitHub Copilot in technical work, ensuring productivity while maintaining code quality and team skills.
+    This document outlines <strong>mandatory</strong> protocols for using GitHub Copilot in technical work, ensuring productivity while maintaining code quality and team skills.
   </div>
 </div>
 
@@ -305,8 +312,8 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="purpose-and-principles" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="purpose-and-principles">Purpose and Principles</h2>
+<section id="purpose-and-principles" class="level2">
+<h2 class="anchored" data-anchor-id="purpose-and-principles">Purpose and Principles</h2>
 <p>GitHub Copilot is a powerful assistant that can increase productivity, generate boilerplate code quickly, and support experimentation. However, Copilot is not a substitute for engineering judgment, critical thinking, or expertise in R/Stata. This document establishes <strong>Protocols</strong> (mandatory actions) that must be followed and demonstrated during reviews.</p>
 <p>These protocols have been drafted with the following principles in mind:</p>
 <ol type="1">
@@ -330,14 +337,32 @@ Important
 </div>
 <hr>
 </section>
-<section id="protocol-1-documenting-your-work-with-copilot" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="protocol-1-documenting-your-work-with-copilot">Protocol 1 — Documenting Your Work With Copilot</h2>
+<section id="protocol-documenting-your-work-with-copilot" class="level2">
+<h2 class="anchored" data-anchor-id="protocol-documenting-your-work-with-copilot">Protocol 1 — Documenting Your Work With Copilot</h2>
 <p><strong>Objective:</strong> We want every piece of Copilot-assisted work to be transparent, easy to review, and easy to understand—not only for you, but for anyone who touches the code later. Think of this as keeping a clear trail of “why we did what we did,” without drowning anyone in hundreds of lines of chat history.</p>
-<section id="start-every-copilot-assisted-task-with-a-quick-declaration" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="start-every-copilot-assisted-task-with-a-quick-declaration">Start Every Copilot-Assisted Task With a Quick Declaration</h3>
+<section id="use-the-right-context" class="level3">
+<h3 class="anchored" data-anchor-id="use-the-right-context">Use the right context</h3>
+<section id="what-is-a-context" class="level4">
+<h4 class="anchored" data-anchor-id="what-is-a-context">What Is a Context</h4>
+<p>Before starting any Copilot-assisted task, you need to make sure Copilot has the necessary information to do the task as you expect. In “copilot terms” this information is known as the context, and it literally refers to the files and folders of your project that copilot can “see” while you are working on your task.</p>
+<p>There are multiple ways to provide context to Copilot:</p>
+<ol type="1">
+<li><strong>Open Files</strong>: Be default, Copilot can only see the files that you have open in your editor. Therefore, make sure to open any relevant files that contain information Copilot might need to complete your task. For example, if you are working on a function that interacts with a specific dataset, make sure to open the file that contains the dataset schema or structure.</li>
+<li><strong>Manually providing context</strong>: Sometimes having too many files open is annoying. To avoid that, got to the Explorer view in the Activity Bar and just right-click on the file or folder you want to add to the Copilot context. Click on the “Add file/folder to chat”.</li>
+<li><strong>Agent @workspace</strong>: You can use the Agent @workspace feature to give Copilot access to your entire project directory. This allows Copilot to see all files and folders in your project, making it easier to understand the context of your work. <span class="blue">Note</span>: If you’re using Positron, the default context is your current session’s workspace, which includes all files in your project directory.</li>
+<li><strong>Prompt Files</strong>: These are special files that you can create in your project to give Copilot specific instructions or guidelines. For example, you can create a prompt file that tells Copilot to use certain libraries or coding styles, as well as to use any particular context. Please refer to the <code>CHAPTER X</code> to learn more about prompt files.</li>
+</ol>
+</section>
+<section id="preferred-context-for-our-team" class="level4">
+<h4 class="anchored" data-anchor-id="preferred-context-for-our-team">Preferred context for our team</h4>
+<p>In general, the work of the GPID teams requires a full-project context. Thus, unless you need to limit Copilot context to a specific file or folder, you should use either the Agent @workspace or add all the files and folders to your chat to provide Copilot with the necessary context for your tasks. This will help ensure that Copilot can generate code that is consistent with the rest of your project and adheres to your team’s coding standards.</p>
+</section>
+</section>
+<section id="start-every-copilot-assisted-task-with-a-quick-declaration" class="level3">
+<h3 class="anchored" data-anchor-id="start-every-copilot-assisted-task-with-a-quick-declaration">Start Every Copilot-Assisted Task With a Quick Declaration</h3>
 <p>Whenever you’re about to use Copilot for a particular task (especially the ones formally assigned to you), like rewriting a function, adding a feature, building tests, or refactoring, let Copilot know you’re starting a task.</p>
 <p>You can use this short message (literally copy and paste; just change the <code>TASK_NAME</code>):</p>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout callout-style-simple callout-note no-icon callout-titled" title="Prompt">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -347,25 +372,23 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>I’m starting Task: <code>TASK_NAME</code>.<br>
-Please keep a concise running summary of our interaction, including:</p>
+<p>I’m starting Task: <code>TASK_NAME</code>.</p>
+<p><code>TASK_NAME</code> is about <code>TASK_DESCRIPTION</code>.</p>
+<p>Please keep a concise running summary of our interaction, including:</p>
 <ul>
-<li>the major prompts I give<br>
-</li>
-<li>the important decisions we make<br>
-</li>
-<li>any dependencies added or removed<br>
-</li>
+<li>the major prompts I give</li>
+<li>the important decisions we make</li>
+<li>any dependencies added or removed</li>
 <li>assumptions or limitations we identify</li>
 </ul>
-<p>At the end I’ll ask you to produce a markdown summary.</p>
+<p>Create a markdown file <code>copilot_logs/TASK_NAME.md</code>, which you will need to update as we go along with the completion of this task. At the end, I’ll ask you to produce a markdown summary.</p>
 </div>
 </div>
 <p>Why do this? Because Copilot won’t track your whole conversation. This little habit guarantees that your final summary is clean and complete.</p>
 <hr>
 </section>
-<section id="keep-the-summary-updated-as-you-go-but-keep-it-light" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="keep-the-summary-updated-as-you-go-but-keep-it-light">Keep the Summary Updated as You Go (But Keep It Light)</h3>
+<section id="keep-the-summary-updated-as-you-go-but-keep-it-light" class="level3">
+<h3 class="anchored" data-anchor-id="keep-the-summary-updated-as-you-go-but-keep-it-light">Keep the Summary Updated as You Go (But Keep It Light)</h3>
 <p>As you work, Copilot may try several ideas, produce alternatives, or suggest changes. When something important happens, simply say things like:</p>
 <ul>
 <li>“Add this to the summary: we switched to <code>data.table</code> for speed.”<br>
@@ -378,10 +401,10 @@ Please keep a concise running summary of our interaction, including:</p>
 <p>This keeps your future self (and your teammates) very happy.</p>
 <hr>
 </section>
-<section id="when-you-finish-ask-copilot-for-a-clean-markdown-summary" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="when-you-finish-ask-copilot-for-a-clean-markdown-summary">When You Finish, Ask Copilot for a Clean Markdown Summary</h3>
+<section id="when-you-finish-ask-copilot-for-a-clean-markdown-summary" class="level3">
+<h3 class="anchored" data-anchor-id="when-you-finish-ask-copilot-for-a-clean-markdown-summary">When You Finish, Ask Copilot for a Clean Markdown Summary</h3>
 <p>Once the task is done, ask Copilot:</p>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout callout-style-simple callout-note no-icon callout-titled" title="Prompt">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -410,21 +433,31 @@ Please keep a concise running summary of our interaction, including:</p>
 <p>Save the file under <code>copilot_logs/TASK_NAME.md</code></p>
 </div>
 </div>
-<div class="callout-danger">
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>If you’re working in an R package, make sure to include the <code>copilot_logs</code> folder in your <code>.Rbuildignore</code> file to prevent it from being included in the package build. You can do it by executing <code>usethis::use_build_ignore("copilot_logs")</code> or by manually adding the line <code>^copilot_logs/$</code> to the <code>.Rbuildignore</code> file.</p>
+</div>
 </div>
 <p>Now, make sure to include it in your Pull Request.</p>
 <p>This takes Copilot a few seconds and keeps our PRs tidy, transparent, and genuinely <em>reviewable</em>.</p>
 </section>
 </section>
-<section id="protocol-2-making-the-code-understandable" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="protocol-2-making-the-code-understandable">Protocol 2 — Making the Code Understandable</h2>
+<section id="protocol-making-the-code-understandable" class="level2">
+<h2 class="anchored" data-anchor-id="protocol-making-the-code-understandable">Protocol 2 — Making the Code Understandable</h2>
 <p><strong>Objective:</strong> Once Copilot produces code, we need to ensure that it is understandable; not just to you, but to any teammate who might maintain it later. This protocol focuses on explanations, comments, and documentation, so the logic and intent of the code are always clear.</p>
 <p>Our goal here is simple: <strong>If Copilot wrote something, then Copilot should also help us understand it, both inside and outside the code.</strong></p>
-<section id="ask-copilot-to-explain-the-code-step-by-step" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="ask-copilot-to-explain-the-code-step-by-step">Ask Copilot to Explain the Code Step-by-Step</h3>
+<section id="ask-copilot-to-explain-the-code-step-by-step" class="level3">
+<h3 class="anchored" data-anchor-id="ask-copilot-to-explain-the-code-step-by-step">Ask Copilot to Explain the Code Step-by-Step</h3>
 <p>Right after Copilot generates a function, script, or refactor, ask:</p>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout callout-style-simple callout-note no-icon callout-titled" title="Prompt">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -434,17 +467,17 @@ Please keep a concise running summary of our interaction, including:</p>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Explain this code step-by-step. Describe the purpose of each major block. List all assumptions you’re making. Identify any cases where this code might break.</p>
+<p>Explain this <code>NAME_OF_FUNCTION or TEST or FILE, etc</code> step-by-step. Describe the purpose of each major block. List all assumptions you’re making. Identify any cases where this <code>NAME_OF_FUNCTION or TEST or FILE, etc</code> might break.</p>
 </div>
 </div>
 <p>You’re not expected to decipher the code alone. This step forces Copilot to surface the hidden logic behind its decisions, and gives you a clear foundation for understanding what’s going on.</p>
 <p>Include this explanation in your task summary.</p>
 <hr>
 </section>
-<section id="ask-copilot-to-add-in-code-comments-explaining-both-the-what-and-the-why" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="ask-copilot-to-add-in-code-comments-explaining-both-the-what-and-the-why">Ask Copilot to Add In-Code Comments Explaining Both the “What” and the “Why”</h3>
+<section id="ask-copilot-to-add-in-code-comments-explaining-both-the-what-and-the-why" class="level3">
+<h3 class="anchored" data-anchor-id="ask-copilot-to-add-in-code-comments-explaining-both-the-what-and-the-why">Ask Copilot to Add In-Code Comments Explaining Both the “What” and the “Why”</h3>
 <p>Once the general explanation is clear, you must ask Copilot:</p>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout callout-style-simple callout-note no-icon callout-titled" title="Prompt">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -471,10 +504,10 @@ Please keep a concise running summary of our interaction, including:</p>
 <p>We want readable, human-language explanations—not machine translations of the code.</p>
 <hr>
 </section>
-<section id="ask-copilot-to-document-all-r-functions-using-roxygen2" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="ask-copilot-to-document-all-r-functions-using-roxygen2">Ask Copilot to Document All R Functions Using Roxygen2</h3>
+<section id="ask-copilot-to-document-all-r-functions-using-roxygen2" class="level3">
+<h3 class="anchored" data-anchor-id="ask-copilot-to-document-all-r-functions-using-roxygen2">Ask Copilot to Document All R Functions Using Roxygen2</h3>
 <p>If the output includes R functions, you must also request:</p>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout callout-style-simple callout-note no-icon callout-titled" title="Prompt">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -505,11 +538,11 @@ Please keep a concise running summary of our interaction, including:</p>
 <p>We want <strong>professional-grade documentation</strong> from the start, not as an afterthought.</p>
 <hr>
 </section>
-<section id="ask-copilot-to-provide-a-plain-language-overview-of-the-logic" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="ask-copilot-to-provide-a-plain-language-overview-of-the-logic">Ask Copilot to Provide a Plain-Language Overview of the Logic</h3>
+<section id="ask-copilot-to-provide-a-plain-language-overview-of-the-logic" class="level3">
+<h3 class="anchored" data-anchor-id="ask-copilot-to-provide-a-plain-language-overview-of-the-logic">Ask Copilot to Provide a Plain-Language Overview of the Logic</h3>
 <p>This is different from comments or Roxygen2 documentation.</p>
 <p>You should ask:</p>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout callout-style-simple callout-note no-icon callout-titled" title="Prompt">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -519,7 +552,7 @@ Please keep a concise running summary of our interaction, including:</p>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Write a short, plain-language explanation of how this code works. Pretend you’re explaining it to a teammate seeing it for the first time.</p>
+<p>Write a short, plain-language explanation of how <code>NAME_OF_FUNCTION or TEST or FILE, etc</code> works. Pretend you’re explaining it to a teammate seeing it for the first time</p>
 </div>
 </div>
 <p>This summary helps:</p>
@@ -532,14 +565,42 @@ Please keep a concise running summary of our interaction, including:</p>
 <hr>
 </section>
 </section>
-<section id="protocol-3-testing-and-edge-cases" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="protocol-3-testing-and-edge-cases">Protocol 3 — Testing and Edge Cases</h2>
-<p><strong>Objective:</strong> No Copilot-generated code should be accepted without being tested against realistic and edge-case scenarios. This protocol ensures that Copilot helps you design and implement tests that actually exercise the code.</p>
-<hr>
-<section id="ask-copilot-to-build-a-validation-checklist" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="ask-copilot-to-build-a-validation-checklist">Ask Copilot to Build a Validation Checklist</h3>
-<p>Before moving on, request:</p>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<section id="protocol-code-review-and-efficiency-check" class="level2">
+<h2 class="anchored" data-anchor-id="protocol-code-review-and-efficiency-check">Protocol 3 — Code Review and Efficiency Check</h2>
+<p><strong>Objective:</strong> Before testing any Copilot-generated code, you must conduct a thorough review to identify and eliminate inefficiencies, redundancies, and unnecessary complexity. This ensures that only clean, optimized code enters the testing phase, saving time and preventing technical debt.</p>
+<section id="review-code-for-inefficiencies" class="level3">
+<h3 class="anchored" data-anchor-id="review-code-for-inefficiencies">Review Code for Inefficiencies</h3>
+<p>Every time you ask Copilot to make changes to your code, <strong>you must review the generated code for inefficiencies</strong> before proceeding to test it.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This is your responsibility as the author of the code</p>
+</div>
+</div>
+</section>
+<section id="what-to-look-for" class="level3">
+<h3 class="anchored" data-anchor-id="what-to-look-for">What to Look For:</h3>
+<p>When reviewing Copilot-generated code, check for the following inefficiencies:</p>
+<p>• <strong>Unnecessary functions</strong>: Are all functions actually needed? Could some be combined or removed?</p>
+<p>• <strong>Redundant code</strong>: Is there duplicated logic that could be consolidated into a single function or block?</p>
+<p>• <strong>Over-complicated patterns</strong>: Is the code more complex than it needs to be? Could it be simplified without losing functionality?</p>
+<p>• <strong>Unused variables or objects</strong>: Are there variables created but never used?</p>
+<p>• <strong>Inefficient data operations</strong>: Are there operations that copy large data objects unnecessarily, or loops that could be vectorized?</p>
+<p>• <strong>Excessive dependencies</strong>: Does the code introduce new packages when existing ones could handle the task?</p>
+<p>• <strong>Nested logic</strong>: Could deeply nested if-else statements or loops be flattened or refactored for clarity?</p>
+<p>• <strong>Dead code</strong>: Are there commented-out blocks or experimental code that should be removed?</p>
+</section>
+<section id="use-this-prompt-to-help-copilot-find-inefficiencies" class="level3">
+<h3 class="anchored" data-anchor-id="use-this-prompt-to-help-copilot-find-inefficiencies">Use This Prompt to Help Copilot Find Inefficiencies:</h3>
+<p>Before review yourself, you can also ask Copilot:</p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled" title="Prompt">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -549,34 +610,67 @@ Please keep a concise running summary of our interaction, including:</p>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Create a validation checklist for this code. Include:</p>
+<p>Review this <code>NAME_OF_FUNCTION or TEST or FILE, etc</code> for inefficiencies and unnecessary complexity. Specifically, identify:</p>
+<ul>
+<li>functions that are defined but not used, or could be consolidated</li>
+<li>redundant or duplicated logic that appears in multiple places</li>
+<li>operations that create unnecessary copies of data or objects</li>
+<li>code blocks that could be simplified without changing functionality</li>
+<li>variables or dependencies that aren’t actually needed</li>
+<li>patterns that are overly complex for the task at hand</li>
+<li>opportunities to use more efficient approaches (e.g., vectorization, optimized packages)</li>
+</ul>
+<p>For each issue found, suggest a specific improvement and explain why it matters.</p>
+</div>
+</div>
+<p>This prompt forces Copilot to act as a code auditor, helping you spot problems before you review it yourself.</p>
+<hr>
+</section>
+</section>
+<section id="protocol-testing-and-edge-cases" class="level2">
+<h2 class="anchored" data-anchor-id="protocol-testing-and-edge-cases">Protocol 4 — Testing and Edge Cases</h2>
+<p><strong>Objective:</strong> No Copilot-generated code should be accepted without being tested against realistic and edge-case scenarios. This protocol ensures that Copilot helps you design and implement tests that actually exercise the code.</p>
+<hr>
+<section id="ask-copilot-to-build-a-validation-checklist" class="level3">
+<h3 class="anchored" data-anchor-id="ask-copilot-to-build-a-validation-checklist">Ask Copilot to Build a Validation Checklist</h3>
+<p>Before moving on, request:</p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled" title="Prompt">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Prompt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Create a validation checklist for this <code>NAME_OF_FUNCTION or TEST or FILE, etc</code>. Include:</p>
 <ul>
 <li>expected inputs and outputs</li>
 <li>potential failure points</li>
 <li>required dependencies</li>
 <li>edge cases to test</li>
-<li>assumptions this code relies on</li>
+<li>assumptions this <code>NAME_OF_FUNCTION or TEST or FILE, etc</code> relies on</li>
 </ul>
 </div>
 </div>
 <p>This checklist goes into your summary and becomes a quick-reference tool for reviewers.</p>
 <hr>
 </section>
-<section id="ask-copilot-to-generate-unit-tests-and-edge-cases" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="ask-copilot-to-generate-unit-tests-and-edge-cases">Ask Copilot to Generate Unit Tests and Edge Cases</h3>
+<section id="ask-copilot-to-generate-unit-tests-and-edge-cases" class="level3">
+<h3 class="anchored" data-anchor-id="ask-copilot-to-generate-unit-tests-and-edge-cases">Ask Copilot to Generate Unit Tests and Edge Cases</h3>
 <p>No Copilot-generated code is considered “validated” until Copilot helps you test it.</p>
-<p>For R:</p>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout callout-style-simple callout-note no-icon callout-titled" title="Prompt for R">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Prompt
+<span class="screen-reader-only">Note</span>Prompt for R
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Generate <code>testthat</code> unit tests for this code. Cover:</p>
+<p>Generate <code>testthat</code> unit tests for this <code>NAME_OF_FUNCTION or TEST or FILE, etc</code>. Cover:</p>
 <ul>
 <li>normal cases</li>
 <li>edge cases</li>
@@ -586,18 +680,17 @@ Please keep a concise running summary of our interaction, including:</p>
 </ul>
 </div>
 </div>
-<p>For Stata:</p>
-<div class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout callout-style-simple callout-tip no-icon callout-titled" title="Prompt for Stata">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Prompt
+<span class="screen-reader-only">Tip</span>Prompt for Stata
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Generate Stata tests (do-file assertions or checks) for this code. Cover:</p>
+<p>Generate Stata tests (do-file assertions or checks) for this <code>NAME_OF_FUNCTION or TEST or FILE, etc</code>. Cover:</p>
 <ul>
 <li>realistic data</li>
 <li>corner cases</li>
@@ -608,10 +701,10 @@ Please keep a concise running summary of our interaction, including:</p>
 <p>These tests must be included in your PR.</p>
 <hr>
 </section>
-<section id="optional-but-recommended-ask-copilot-to-suggest-performance-sensitive-tests" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="optional-but-recommended-ask-copilot-to-suggest-performance-sensitive-tests">(Optional but Recommended) Ask Copilot to Suggest Performance-Sensitive Tests</h3>
+<section id="optional-but-recommended-ask-copilot-to-suggest-performance-sensitive-tests" class="level3">
+<h3 class="anchored" data-anchor-id="optional-but-recommended-ask-copilot-to-suggest-performance-sensitive-tests">(Optional but Recommended) Ask Copilot to Suggest Performance-Sensitive Tests</h3>
 <p>When working with large data or performance-critical code, you can also ask:</p>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout callout-style-simple callout-note no-icon callout-titled" title="Prompt">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -621,7 +714,7 @@ Please keep a concise running summary of our interaction, including:</p>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Suggest performance-sensitive tests for this code. Identify:</p>
+<p>Suggest performance-sensitive tests for this <code>NAME_OF_FUNCTION or TEST or FILE, etc</code>. Identify:</p>
 <ul>
 <li>operations that may be slow on large data</li>
 <li>places where copies of large objects might be made</li>
@@ -633,14 +726,14 @@ Please keep a concise running summary of our interaction, including:</p>
 <hr>
 </section>
 </section>
-<section id="protocol-4-dependencies-risks-and-final-validation-bundle" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="protocol-4-dependencies-risks-and-final-validation-bundle">Protocol 4 — Dependencies, Risks, and Final Validation Bundle</h2>
+<section id="protocol-dependencies-risks-and-final-validation-bundle" class="level2">
+<h2 class="anchored" data-anchor-id="protocol-dependencies-risks-and-final-validation-bundle">Protocol 5 — Dependencies, Risks, and Final Validation Bundle</h2>
 <p><strong>Objective:</strong> Before Copilot-assisted code reaches the repository, we want to be confident that it uses dependencies responsibly, avoids obvious risks, and has a complete “validation bundle” that reviewers can use to assess it quickly and fairly.</p>
 <hr>
-<section id="ask-copilot-to-run-a-dependency-and-risk-scan" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="ask-copilot-to-run-a-dependency-and-risk-scan">Ask Copilot to Run a Dependency and Risk Scan</h3>
+<section id="ask-copilot-to-run-a-dependency-and-risk-scan" class="level3">
+<h3 class="anchored" data-anchor-id="ask-copilot-to-run-a-dependency-and-risk-scan">Ask Copilot to Run a Dependency and Risk Scan</h3>
 <p>If the code adds or modifies dependencies, request:</p>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout callout-style-simple callout-note no-icon callout-titled" title="Prompt">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -656,11 +749,11 @@ Please keep a concise running summary of our interaction, including:</p>
 <p>This helps prevent dependency creep and ensures the code fits our ecosystem and security expectations. Of course, this is only needed when you just started developing the code or when dependencies were changed.</p>
 <hr>
 </section>
-<section id="ask-copilot-to-critique-its-own-code" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="ask-copilot-to-critique-its-own-code">Ask Copilot to Critique Its Own Code</h3>
+<section id="ask-copilot-to-critique-its-own-code" class="level3">
+<h3 class="anchored" data-anchor-id="ask-copilot-to-critique-its-own-code">Ask Copilot to Critique Its Own Code</h3>
 <p>Believe it or not, this might be one of the most powerful steps.</p>
 <p>Prompt Copilot with:</p>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout callout-style-simple callout-note no-icon callout-titled" title="Prompt">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -682,13 +775,13 @@ Please keep a concise running summary of our interaction, including:</p>
 </div>
 </div>
 <p>Copilot is surprisingly good at pointing out its own flaws when prompted this way. Use its critique to improve the final version.</p>
-<p>You can adapt the mention of <code>data.table</code>, <code>collapse</code>, and <code>rlang</code> to match the standards of your package or project. This are the ones that I (Andrés) use the most.</p>
+<p>You can adapt the mention of <code>data.table</code>, <code>collapse</code>, and <code>rlang</code> to match the standards of your package or project. These are the ones that I (Andrés) use the most.</p>
 <hr>
 </section>
-<section id="package-everything-into-a-validation-bundle" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="package-everything-into-a-validation-bundle">Package Everything Into a “Validation Bundle”</h3>
+<section id="package-everything-into-a-validation-bundle" class="level3">
+<h3 class="anchored" data-anchor-id="package-everything-into-a-validation-bundle">Package Everything Into a “Validation Bundle”</h3>
 <p>Before closing your task, ask Copilot:</p>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout callout-style-simple callout-note no-icon callout-titled" title="Prompt">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -707,15 +800,15 @@ Please keep a concise running summary of our interaction, including:</p>
 <li>plain-language explanation</li>
 <li>unit tests and edge cases</li>
 <li>dependency and risk analysis</li>
-<li>a brief summary of your self-critique and improvements made</li>
+<li>a brief summary of your self-critique on the recommendations and improvements implemented throughout our collaboration.</li>
 </ul>
 </div>
 </div>
 <p>This bundle provides everything reviewers need. It also ensures that anyone who maintains the code later won’t be flying blind.</p>
-<hr>
 </section>
-<section id="why-these-protocols-matter" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="why-these-protocols-matter">Why These Protocols Matter</h3>
+</section>
+<section id="why-these-protocols-matter" class="level2">
+<h2 class="anchored" data-anchor-id="why-these-protocols-matter">Why These Protocols Matter</h2>
 <p>The goal isn’t to slow you down. It’s to make sure that Copilot helps you, without replacing your thinking or lowering our standards.</p>
 <p>With these protocols:</p>
 <ul>
@@ -725,21 +818,16 @@ Please keep a concise running summary of our interaction, including:</p>
 </ul>
 <p>Copilot explains, documents, critiques, and tests. You stay in control, make the decisions, and remain the author of the code.</p>
 <p>That’s the balance we’re aiming for.</p>
-<hr>
 </section>
-<section id="extra-prompt-files-are-optional-tools-not-documentation" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="extra-prompt-files-are-optional-tools-not-documentation">(EXTRA) Prompt Files Are Optional Tools, Not Documentation</h3>
-<p>Copilot has something called <strong>Prompt Files</strong>, which lets you save reusable instructions like:</p>
-<ul>
-<li>“Use <code>data.table</code>, not <code>dplyr</code>.”</li>
-<li>“Follow <code>collapse</code> idioms.”</li>
-<li>“Write tests using <code>testthat</code>.”</li>
-</ul>
-<p>These are great for giving Copilot consistent context, but they <em>don’t</em> replace the documentation required above.</p>
-<p>Use them if they help you, but they’re optional.</p>
+<section id="remember-you-are-the-author" class="level2">
+<h2 class="anchored" data-anchor-id="remember-you-are-the-author">Remember: You Are the Author</h2>
+<p><strong>The code produced by Copilot is ultimately your responsibility.</strong></p>
+<p>• <strong>Authorship means accountability</strong>: When you commit Copilot-assisted code, you are claiming authorship of it. This means you’re responsible for its correctness, efficiency, and maintainability.</p>
+<p>• <strong>Review is mandatory</strong>: Skipping the efficiency review puts the burden on your teammates during code review, slows down development, and can introduce bugs or performance issues that are hard to trace later.</p>
+<p>• <strong>Use Copilot as a tool, not a replacement</strong>: Copilot accelerates your work, but it cannot replace your engineering judgment. You must understand, evaluate, and refine everything it produces.</p>
+<p><strong>Bottom line:</strong> If you wouldn’t put your name on it as-is, don’t commit it yet. Clean it up first.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
