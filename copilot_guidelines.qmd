@@ -4,15 +4,31 @@ execute:
   eval: false
 comments:
   hypothesis: true
-bibliography: AI2.bib
+# bibliography: AI2.bib
 number-sections: false
 ---
 
 # Suggested Guidelines for Using GitHub Copilot in Technical Work {#sec-copilot-guidelines}
 
-## Purpose and Principles 
+## Purpose and Principles
 
-...
+GitHub Copilot is a powerful tool that can accelerate development, help you explore solutions, and reduce repetitive coding tasks. However, it works best when you know how to communicate effectively with it and when you maintain critical judgment about its suggestions.
+
+This document provides **suggested guidelines** (not mandatory protocols) for using Copilot more effectively. These tips are designed to help you:
+
+1. **Get better results faster** — learn how to prompt Copilot effectively so you spend less time iterating.
+2. **Maintain code quality** — understand how to verify, refine, and improve Copilot's suggestions.
+3. **Work securely** — avoid accidentally sharing sensitive data or introducing security risks.
+4. **Build reusable workflows** — create prompt patterns you can share with teammates and reuse across projects.
+5. **Stay in control** — use Copilot as an assistant, not a replacement for your engineering judgment.
+
+These guidelines complement the mandatory protocols outlined in the Copilot Protocols document. While protocols define what you *must* do for code reviews and formal tasks, these guidelines help you work more efficiently day-to-day.
+
+::: {.callout-tip}
+Think of these guidelines as best practices that will save you time and help you get the most value from Copilot without compromising quality or security.
+:::
+
+---
 
 ## Prompt engineering
 
@@ -28,46 +44,127 @@ One of the most important skills to develop when using Githup Copilot, or any ot
 
 ## The Do's and Don'ts when prompting
 
-- what verbs are more useful to be clearer to the agent (Give examples of senteces). And what is the best structure of a prompt
-- what to avoid about prompts
+Useful action verbs / short commands (with example sentences):
 
-## First Ask, then activate Agent: map and agree the solution first
+- Analyze — "Analyze this function and list potential edge cases."
+- Explain — "Explain what this block of code does in plain language."
+- Refactor — "Refactor this function for readability and add comments."
+- Test — "Write unit tests for this function covering typical and edge cases."
+- Summarize — "Summarize the responsibilities of each module in one paragraph."
+- Optimize — "Optimize this loop for performance and explain changes."
+- Validate — "Validate input handling and add defensive checks."
+- Suggest — "Suggest alternative implementations that reduce memory usage."
+- Document — "Add Roxygen2-style documentation for these functions."
+- Critique — "Critique this code and point out risks or unclear logic."
+
+Best prompt structure (brief):
+
+1. Context: state which files, functions, or data the agent should consider.
+2. Task: give a clear action using a verb (from the list above).
+3. Constraints: list any requirements or restrictions (style, libraries, performance).
+4. Examples/output: show a small input/output example or the desired format for the answer.
+
+::: {.callout-note icon="false" appearance="simple"}
+## Example
+
+Context: file utils.R (functions read_data, clean_data). Task: Write unit tests for clean_data. Constraints: use testthat, cover edge cases for NA and invalid types. Output: provide test code only.
+:::
+
+What to avoid when creating prompts:
+
+- Vague or ambiguous instructions (avoid "fix this" without context).
+- Overloading a single prompt with many unrelated tasks.
+- Including sensitive data (secrets, passwords, personal data).
+- Assuming the agent knows private or internal project details not provided in the prompt.
+- Requests that rely on unstated external state (unspecified files, databases, or services).
+
+Note on links and security: be cautious when including or following external links in prompts or Copilot responses—links may expose or lead to insecure resources and can present a security risk.
+
+## Security Considerations for Prompts
+
+When creating prompts, follow these guidelines to protect organizational data and avoid security risks:
+
+**Never include sensitive data:**
+- Avoid pasting credentials, API keys, passwords, tokens, or authentication secrets.
+- Do not include personally identifiable information (PII) or confidential business data.
+- Exclude proprietary algorithms or internal business logic.
+
+**Sanitize code before sharing:**
+- Remove or redact hardcoded secrets, connection strings, or environment variables.
+- Replace real identifiers with placeholders (e.g., `<DB_NAME>`, `<API_ENDPOINT>`).
+- Avoid exposing internal directory structures, server names, or infrastructure details.
+
+**Verify external resources:**
+- Do not blindly follow or execute code from links provided by Copilot.
+- Validate suggested packages, libraries, or URLs against trusted sources before installation.
+- Be aware that suggested resources may be outdated, compromised, or malicious.
+
+**Review generated code:**
+- Check for security vulnerabilities (SQL injection, command injection, unsafe file operations).
+- Verify that code follows secure coding practices (input validation, error handling, least privilege).
+
+**Keep context minimal:**
+- Only provide the minimum code/context necessary to answer your question.
+- Follow the organization's data classification and handling policies.
+
+## First Ask, then Agent: map and agree the solution before making changes
 
 Before asking Copilot to modify code (Agent mode), first use the Ask option to explore and agree a solution for the general task. Have Copilot propose a design and refine it until you and the agent share the same approach — this helps avoid unnecessary edits and keeps reviews small.
 
-Examples of Ask prompts:
+::: {.callout-note icon="false" appearance="simple"}
+## Examples of Ask prompts
 
 - "What functions would be needed to implement this feature?"
 - "How would these functions interact? Describe the workflow or provide a brief diagram." 
 - "For each new function, give a short summary: objective, inputs, outputs, and dependencies." 
 - "What modifications to existing functions are required? List changes and rationale."
+:::
 
 Once the design is mapped and agreed, switch to Agent mode and request the specific code changes. You can iterate on alternatives and trade-offs in Ask mode before implementing. This workflow reduces code churn and the amount of code you must inspect.
 
-## Provide feedback to improve future suggestions. 
+## Provide Feedback to Improve Future Suggestions
 
-This can improve the answer from copilot
+GitHub Copilot learns from your feedback to improve the quality and relevance of future suggestions. Providing feedback helps the AI agent understand what works well and what doesn't.
 
-## Documenting Prompts and Context (Maybe)
+**How to give feedback:**
 
-When using Copilot (or any code-generation agent), record the key characteristics of prompts you send. At minimum, capture:
+- Use thumbs up/down buttons on suggestions or responses when available in the Copilot interface.
+- Explicitly tell Copilot when a response is helpful or unhelpful (e.g., "This solution works well" or "This approach doesn't fit our requirements").
+- If a suggestion is incorrect or incomplete, explain why and ask for a revised version with specific corrections.
+- Accept or reject inline code suggestions to signal which patterns align with your codebase.
 
-- The context provided: files, code snippets, or system state included with the prompt (what the agent "saw").
+**Why feedback is important:**
+
+- Helps Copilot adapt to your coding style, preferred libraries, and project conventions over time.
+- Improves the accuracy of future suggestions for similar tasks.
+- Signals to the model which responses are most useful, contributing to better performance.
+- Saves time by reducing iterations needed to get the right answer.
+
+Providing clear, specific feedback (rather than just rejecting suggestions) yields the best results for improving Copilot's future responses.
+
+## Reusable prompts
+
+Create useful reusable prompts that can help you save time and can also be shared with team members. For example, you can make the prompts from the Protocol section as a reusable prompts. VSCode gives a good explanation of how these can created in its [Copilot Tips and Tricks](https://code.visualstudio.com/docs/copilot/copilot-tips-and-tricks#_reusable-prompts). 
+
+## Document prompts used for key tasks
+
+When using Github Copilot to work on tasks that will need revision by team members, a good idea will be to record the key characteristics of prompts you used. At minimum, capture:
+
+- The context provided (if any): files, code snippets, or system state included with the prompt (what the agent "saw").
 - The Agent instruction: the explicit task or role you asked the agent to perform (for example, "write a unit test", "refactor this function for readability", or "explain this algorithm").
 
 Other useful prompt characteristics to document:
 
 - Input data examples (small sample inputs and expected outputs).
-- Prompt template or exact phrasing (so it can be re-run or tweaked later).
 - Any constraints or hard requirements (performance limits, libraries to use, coding style).
 - Time or version metadata (date, version of Copilot/IDE/plugins if known).
 
-Why this helps: keeping a short record of prompts and their context makes it easier to reproduce results, re-run or refine prompts, and debug situations where generated code fails or causes errors. These notes become especially valuable during future development when tracking regressions or when onboarding colleagues who must understand the original intent.
+Why this helps: keeping a short record of the prompts and their context makes it easier to reproduce results, re-run or refine prompts, and debug situations where generated code fails or causes errors. These notes become especially valuable during future development when tracking regressions or when onboarding colleagues who must understand the original intent.
 
-
-## Resources
+## Other resources
 - [GitHub Copilot in your IDE](https://github.blog/developer-skills/github/how-to-use-github-copilot-in-your-ide-tips-tricks-and-best-practices/?ref_product=copilot&ref_type=engagement&ref_style=text)
 - [Github Copilot best practices](https://docs.github.com/en/copilot/get-started/best-practices)
+- [Github Copilot tips and tricks in Vscode](https://code.visualstudio.com/docs/copilot/copilot-tips-and-tricks)
 - [Mastering Github Copilot Chat](https://www.copilotcraft.dev/blog/mastering-github-copilot-chat)
 
 
