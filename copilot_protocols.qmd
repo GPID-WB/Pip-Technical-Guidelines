@@ -385,9 +385,26 @@ Identify:
 * opportunities to simplify or remove over-engineered patterns
 :::
 
+You can adapt the mention of `data.table`, `collapse`, and `rlang` to match the standards of your package or project. This are the ones that I (Andrés) use the most.
+
 Copilot is surprisingly good at pointing out its own flaws when prompted this way. Use its critique to improve the final version.
 
-You can adapt the mention of `data.table`, `collapse`, and `rlang` to match the standards of your package or project. These are the ones that I (Andrés) use the most.
+**Additional check:** When changes affect many functions, ask Copilot to evaluate the code incrementally and run components at runtime for a more thorough review. This means assessing how the code actually executes—verifying assumptions about inputs/outputs, testing individual components in isolation, and identifying places where a single error could cascade into bigger failures.
+
+::: {.callout-note icon="false" appearance="simple"}
+
+## Prompt  
+
+Evaluate this code incrementally, function by function, as if executing it. For each function or module:
+
+* Verify that all inputs match expected types, ranges, and formats, including null, empty, or extreme values.
+* Verify that outputs meet the intended behavior and constraints for all test cases.
+* Test each component in isolation to ensure correct independent behavior.
+* Identify any assumptions about data, external resources, or dependencies that could fail.
+* Highlight potential run time errors or cascading failures if an individual component fails.
+* Suggest concrete changes or safeguards to prevent these failures and improve reliability.
+
+:::
 
 ---
 
@@ -399,14 +416,16 @@ Before closing your task, ask Copilot:
 
 Add all validation materials to the task summary, including:
 
-* step-by-step explanation of the code
-* in-code comments added
+* Step-by-step technical explanation of the code: a walk through of what the code does and how it executes, incorporating insights from the run time evaluation
+* Plain-language explanation / high-level rationale: why the code exists, its purpose, and how it should be used, understandable without technical expertise
+* In-code comments added
 * Roxygen2 documentation (for R functions)
-* validation checklist
-* plain-language explanation
-* unit tests and edge cases
-* dependency and risk analysis
-* a brief summary of your self-critique on the recommendations and improvements implemented throughout our collaboration.
+* Validation checklist confirming correctness, completeness, and adherence to protocol
+* Unit tests and edge cases
+* Error-handling description: how the code responds to invalid, missing, or unexpected inputs, including safeguards and messages
+* Dependency and risk analysis
+* Brief summary of your self-critique on the recommendations and improvements implemented throughout our collaboration.
+
 :::
 
 This bundle provides everything reviewers need. It also ensures that anyone who maintains the code later won’t be flying blind.
