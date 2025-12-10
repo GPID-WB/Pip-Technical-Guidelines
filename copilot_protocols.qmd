@@ -312,6 +312,14 @@ This file must be included in your PR.
 
 ## Final Reminder: You Are the Author
 
-Copilot accelerates development but **you remain responsible** for correctness, clarity, performance, and maintainability.
 
-If you would not proudly put your name on the code, do not commit it yet.
+**The code produced by Copilot is ultimately your responsibility.**
+
+• **Authorship means accountability**: When you commit Copilot-assisted code, you are claiming authorship of it. This means you're responsible for its correctness, efficiency, and maintainability.
+
+• **Review is mandatory**: Skipping the efficiency review puts the burden on your teammates during code review, slows down development, and can introduce bugs or performance issues that are hard to trace later.
+
+• **Use Copilot as a tool, not a replacement**: Copilot accelerates your work, but it cannot replace your engineering judgment. You must understand, evaluate, and refine everything it produces.
+
+**Bottom line:** If you wouldn't put your name on it as-is, don't commit it yet. Clean it up first.
+
