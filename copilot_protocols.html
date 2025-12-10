@@ -774,8 +774,30 @@ Important
 </ul>
 </div>
 </div>
+<p>You can adapt the mention of <code>data.table</code>, <code>collapse</code>, and <code>rlang</code> to match the standards of your package or project. This are the ones that I (Andrés) use the most.</p>
 <p>Copilot is surprisingly good at pointing out its own flaws when prompted this way. Use its critique to improve the final version.</p>
-<p>You can adapt the mention of <code>data.table</code>, <code>collapse</code>, and <code>rlang</code> to match the standards of your package or project. These are the ones that I (Andrés) use the most.</p>
+<p><strong>Additional check:</strong> When changes affect many functions, ask Copilot to evaluate the code incrementally and run components at runtime for a more thorough review. This means assessing how the code actually executes—verifying assumptions about inputs/outputs, testing individual components in isolation, and identifying places where a single error could cascade into bigger failures.</p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Prompt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Evaluate this code incrementally, function by function, as if executing it. For each function or module:</p>
+<ul>
+<li>Verify that all inputs match expected types, ranges, and formats, including null, empty, or extreme values.</li>
+<li>Verify that outputs meet the intended behavior and constraints for all test cases.</li>
+<li>Test each component in isolation to ensure correct independent behavior.</li>
+<li>Identify any assumptions about data, external resources, or dependencies that could fail.</li>
+<li>Highlight potential run time errors or cascading failures if an individual component fails.</li>
+<li>Suggest concrete changes or safeguards to prevent these failures and improve reliability.</li>
+</ul>
+</div>
+</div>
 <hr>
 </section>
 <section id="package-everything-into-a-validation-bundle" class="level3">
@@ -793,14 +815,15 @@ Important
 <div class="callout-body-container callout-body">
 <p>Add all validation materials to the task summary, including:</p>
 <ul>
-<li>step-by-step explanation of the code</li>
-<li>in-code comments added</li>
+<li>Step-by-step technical explanation of the code: a walk through of what the code does and how it executes, incorporating insights from the run time evaluation</li>
+<li>Plain-language explanation / high-level rationale: why the code exists, its purpose, and how it should be used, understandable without technical expertise</li>
+<li>In-code comments added</li>
 <li>Roxygen2 documentation (for R functions)</li>
-<li>validation checklist</li>
-<li>plain-language explanation</li>
-<li>unit tests and edge cases</li>
-<li>dependency and risk analysis</li>
-<li>a brief summary of your self-critique on the recommendations and improvements implemented throughout our collaboration.</li>
+<li>Validation checklist confirming correctness, completeness, and adherence to protocol</li>
+<li>Unit tests and edge cases</li>
+<li>Error-handling description: how the code responds to invalid, missing, or unexpected inputs, including safeguards and messages</li>
+<li>Dependency and risk analysis</li>
+<li>Brief summary of your self-critique on the recommendations and improvements implemented throughout our collaboration.</li>
 </ul>
 </div>
 </div>
