@@ -12,8 +12,26 @@ number-sections: false
 
 ## Purpose and Principles 
 
+...
 
-## Ask then Agent: map and agree the solution first
+## Prompt engineering
+
+One of the most important skills to develop when using Githup Copilot, or any other AI agent, is to know how to prompt. Github provides some guidelines on [Prompt engineering for Github Copilot Chat](https://docs.github.com/en/copilot/concepts/prompting/prompt-engineering), but here are the main points to take into consideration:
+
+- Start general and then specific
+- Provide examples
+- Break complex tasks into simpler tasks
+- Reread your prompt and avoid ambiguity 
+- Indicate relevant code (sekect a file or highlight the specific piece of code)  
+- Experiment and iterate until you find a useful answer
+- Keep history relevant and delete requests that are not longer relevant
+
+## The Do's and Don'ts when prompting
+
+- what verbs are more useful to be clearer to the agent (Give examples of senteces). And what is the best structure of a prompt
+- what to avoid about prompts
+
+## First Ask, then activate Agent: map and agree the solution first
 
 Before asking Copilot to modify code (Agent mode), first use the Ask option to explore and agree a solution for the general task. Have Copilot propose a design and refine it until you and the agent share the same approach — this helps avoid unnecessary edits and keeps reviews small.
 
@@ -25,6 +43,10 @@ Examples of Ask prompts:
 - "What modifications to existing functions are required? List changes and rationale."
 
 Once the design is mapped and agreed, switch to Agent mode and request the specific code changes. You can iterate on alternatives and trade-offs in Ask mode before implementing. This workflow reduces code churn and the amount of code you must inspect.
+
+## Provide feedback to improve future suggestions. 
+
+This can improve the answer from copilot
 
 ## Documenting Prompts and Context (Maybe)
 
@@ -45,5 +67,7 @@ Why this helps: keeping a short record of prompts and their context makes it eas
 
 ## Resources
 - [GitHub Copilot in your IDE](https://github.blog/developer-skills/github/how-to-use-github-copilot-in-your-ide-tips-tricks-and-best-practices/?ref_product=copilot&ref_type=engagement&ref_style=text)
+- [Github Copilot best practices](https://docs.github.com/en/copilot/get-started/best-practices)
+- [Mastering Github Copilot Chat](https://www.copilotcraft.dev/blog/mastering-github-copilot-chat)
 
 
