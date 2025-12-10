@@ -96,7 +96,7 @@ cd "C:\Users\USERNAME\OneDrive - WBG\GPID-team\copilot-prompts"
 git pull
 ```
 
-## Using the GPID Protocol Prompts
+## The GPID Protocol Prompts
 
 The following sections describe each mandatory protocol and the corresponding `gpid-proto-*` prompt that should be used.
 
@@ -111,7 +111,7 @@ Using the prompts is simple. You just need to type the prompt command in Copilot
 Copilot will ask for the necessary information and then guide you through the protocol.
 
 
-## Protocol — Documenting Your Work With Copilot
+### Protocol  {{< protocol >}} — Documenting Your Work With Copilot {.unnumbered}
 
 **Prompt:**
 
@@ -119,7 +119,7 @@ Copilot will ask for the necessary information and then guide you through the pr
 /gpid-proto-start-task
 ```
 
-### Objective
+#### Purpose {.unnumbered}
 
 Every Copilot-assisted task must produce a clear, transparent trail of:
 
@@ -128,7 +128,7 @@ Every Copilot-assisted task must produce a clear, transparent trail of:
 * What dependencies were added or removed
 * How the final code works
 
-### How the Prompt Works
+#### What It Does {.unnumbered}
 
 When you run `/gpid-proto-start-task`, Copilot:
 
@@ -150,7 +150,7 @@ You do **not** need to structure this manually — the prompt enforces consisten
 
 ---
 
-## Protocol — Making the Code Understandable
+### Protocol  {{< protocol >}} — Making the Code Understandable {.unnumbered}
 
 **Prompts:**
 
@@ -159,21 +159,21 @@ You do **not** need to structure this manually — the prompt enforces consisten
 /gpid-proto-document-code
 ```
 
-### Purpose
+#### Purpose {.unnumbered}
 
 Copilot may generate correct code, but not always readable code.
 These prompts ensure that the logic, intention, and structure are thoroughly documented.
 
-### What They Do
+#### What They Do  {.unnumbered}
 
-#### `/gpid-proto-explain-code`
+##### `/gpid-proto-explain-code`
 
 * Asks what function/file you want explained
 * Produces a **step-by-step technical explanation**
 * Lists assumptions
 * Identifies failure points
 
-#### `/gpid-proto-document-code`
+##### `/gpid-proto-document-code`
 
 * Adds in-code comments (the “what” and the “why”)
 * Adds full Roxygen2 documentation (for R code)
@@ -181,7 +181,7 @@ These prompts ensure that the logic, intention, and structure are thoroughly doc
 
 ---
 
-## Protocol — Code Review and Efficiency Check
+### Protocol  {{< protocol >}} — Code Review and Efficiency Check {.unnumbered}
 
 **Prompt:**
 
@@ -189,11 +189,11 @@ These prompts ensure that the logic, intention, and structure are thoroughly doc
 /gpid-proto-review-efficiency
 ```
 
-### Purpose
+#### Purpose {.unnumbered}
 
 Before testing, every piece of Copilot-generated code must undergo an efficiency audit.
 
-### What It Does
+#### What It Does {.unnumbered}
 
 The prompt reviews code for:
 
@@ -208,7 +208,7 @@ And provides clear, actionable improvements.
 
 ---
 
-## Protocol — Testing and Edge Cases
+### Protocol  {{< protocol >}} — Testing and Edge Cases {.unnumbered}
 
 **Prompt:**
 
@@ -216,11 +216,11 @@ And provides clear, actionable improvements.
 /gpid-proto-tests-checklist
 ```
 
-### Purpose
+#### Purpose {.unnumbered}
 
 No Copilot-generated code is accepted without thorough testing.
 
-### What It Produces
+#### What It does {.unnumbered}
 
 1. A **validation checklist**
 2. `testthat` unit tests (for R)
@@ -231,7 +231,7 @@ All structured for direct inclusion in your PR.
 
 ---
 
-## Protocol — Dependencies, Risks, and Safety
+### Protocol  {{< protocol >}} — Dependencies, Risks, and Safety {.unnumbered}
 
 **Prompt:**
 
@@ -239,11 +239,11 @@ All structured for direct inclusion in your PR.
 /gpid-proto-deps-risk
 ```
 
-### Purpose
+#### Purpose {.unnumbered}
 
 Ensure that dependencies are justified, safe, and aligned with team standards.
 
-### What It Does
+#### What It Does {.unnumbered}
 
 * Lists all dependencies
 * Explains why each is needed
@@ -253,7 +253,7 @@ Ensure that dependencies are justified, safe, and aligned with team standards.
 
 ---
 
-## Protocol — Self-Critique and Robustness Review
+### Protocol  {{< protocol >}} — Self-Critique and Robustness Review {.unnumbered}
 
 **Prompt:**
 
@@ -261,13 +261,13 @@ Ensure that dependencies are justified, safe, and aligned with team standards.
 /gpid-proto-self-critique
 ```
 
-### Purpose
+#### Purpose {.unnumbered}
 
 Copilot is surprisingly good at critiquing its own work when prompted correctly.
 
 This step often finds issues humans miss.
 
-### What It Does
+#### What It Does {.unnumbered}
 
 * Reviews code as if performing a formal code review
 * Identifies inefficiencies
@@ -277,7 +277,7 @@ This step often finds issues humans miss.
 
 ---
 
-## Protocol — Producing the Final Validation Bundle
+### Protocol  {{< protocol >}} — Producing the Final Validation Bundle {.unnumbered}
 
 **Prompt:**
 
@@ -285,7 +285,7 @@ This step often finds issues humans miss.
 /gpid-proto-wrap-task TASK_NAME
 ```
 
-### Purpose
+#### Purpose {.unnumbered}
 
 Every Copilot-assisted task ends with a **final Markdown summary** stored under:
 
@@ -293,7 +293,7 @@ Every Copilot-assisted task ends with a **final Markdown summary** stored under:
 copilot_logs/TASK_NAME.md
 ```
 
-### What the Prompt Generates
+#### What It Does {.unnumbered}
 
 * Task overview
 * Step-by-step technical explanation
@@ -309,65 +309,6 @@ copilot_logs/TASK_NAME.md
 
 This file must be included in your PR.
 
----
-
-## Summary: The GPID Copilot Workflow
-
-Your standard workflow for any Copilot-assisted task is:
-
-1. **Start the task**
-
-   ```
-   /gpid-proto-start-task
-   ```
-
-2. **Generate or refine code**
-
-3. **Explain the code**
-
-   ```
-   /gpid-proto-explain-code
-   ```
-
-4. **Document the code**
-
-   ```
-   /gpid-proto-document-code
-   ```
-
-5. **Review for efficiency**
-
-   ```
-   /gpid-proto-review-efficiency
-   ```
-
-6. **Design tests and edge cases**
-
-   ```
-   /gpid-proto-tests-checklist
-   ```
-
-7. **Check dependencies and risks**
-
-   ```
-   /gpid-proto-deps-risk
-   ```
-
-8. **Ask Copilot to critique its own work**
-
-   ```
-   /gpid-proto-self-critique
-   ```
-
-9. **Wrap up the task**
-
-   ```
-   /gpid-proto-wrap-task TASK_NAME
-   ```
-
-This pipeline ensures rigorous, transparent, maintainable, and reviewable work.
-
----
 
 ## Final Reminder: You Are the Author
 
