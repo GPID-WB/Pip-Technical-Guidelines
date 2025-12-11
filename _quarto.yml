@@ -45,7 +45,7 @@ format:
       - cosmo
       - brand
     css: css/tachyons.css
-  pdf:
-    documentclass: scrreprt
+  # pdf:
+  #   documentclass: scrreprt
 
 editor: source

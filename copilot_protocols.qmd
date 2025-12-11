@@ -1,13 +1,21 @@
 ---
 abstract: This document outlines **mandatory** protocols for using GitHub Copilot in technical work, explains how to use the GPID prompt files that implement these protocols, and provides guidance on installation, usage, and maintenance.
 execute:
-  eval: false
+  eval: true
 bibliography: AI.bib
 ---
 
 # Mandatory Protocols for Using GitHub Copilot in Technical Work {#sec-copilot-protocols}
 
 ## Purpose and Principles 
+
+```{r}
+#| echo: false
+#| results: false
+source("R/helpers.R")
+
+```
+
 
 GitHub Copilot is a powerful assistant that can increase productivity, generate boilerplate code quickly, and support experimentation. However, Copilot is not a substitute for engineering judgment, critical thinking, or expertise in R/Stata. without discipline, Copilot can also introduce inefficiency, unnecessary complexity, hallucinated dependencies, and silent errors.
 This document establishes:
