@@ -180,6 +180,22 @@ You do **not** need to structure this manually — the prompt enforces consisten
 /gpid-proto-document-code
 ```
 
+
+
+#### Purpose {.unnumbered}
+
+Copilot may generate correct code, but not always readable code.
+These prompts ensure that the logic, intention, and structure are thoroughly documented.
+
+#### What They Do  {.unnumbered}
+
+##### `/gpid-proto-explain-code` {.unnumbered}
+
+* Asks what function/file you want explained
+* Produces a **step-by-step technical explanation**
+* Lists assumptions
+* Identifies failure points
+
 ::: {.callout-note collapse="true" title="gpid-proto-explain-code"}
 
 ```{r}
@@ -193,26 +209,26 @@ embed_gpid_prompt("gpid-proto-explain-code.prompt.md")
 :::
 
 
-
-#### Purpose {.unnumbered}
-
-Copilot may generate correct code, but not always readable code.
-These prompts ensure that the logic, intention, and structure are thoroughly documented.
-
-#### What They Do  {.unnumbered}
-
-##### `/gpid-proto-explain-code`
-
-* Asks what function/file you want explained
-* Produces a **step-by-step technical explanation**
-* Lists assumptions
-* Identifies failure points
-
-##### `/gpid-proto-document-code`
+##### `/gpid-proto-document-code` {.unnumbered}
 
 * Adds in-code comments (the “what” and the “why”)
 * Adds full Roxygen2 documentation (for R code)
 * Produces a plain-language explanation for the task summary
+
+::: {.callout-note collapse="true" title="gpid-proto-document-code"}
+
+```{r}
+#| echo: false
+#| results: asis
+#| code-fold: true
+embed_gpid_prompt("gpid-proto-document-code.prompt.md")
+
+```
+
+:::
+
+
+
 
 ---
 
@@ -223,6 +239,20 @@ These prompts ensure that the logic, intention, and structure are thoroughly doc
 ```
 /gpid-proto-review-efficiency
 ```
+
+::: {.callout-note collapse="true" title="gpid-proto-review-efficiency"}
+
+```{r}
+#| echo: false
+#| results: asis
+#| code-fold: true
+embed_gpid_prompt("gpid-proto-review-efficiency.prompt.md")
+
+```
+
+:::
+
+
 
 #### Purpose {.unnumbered}
 
@@ -251,6 +281,19 @@ And provides clear, actionable improvements.
 /gpid-proto-tests-checklist
 ```
 
+::: {.callout-note collapse="true" title="gpid-proto-tests-checklist"}
+
+```{r}
+#| echo: false
+#| results: asis
+#| code-fold: true
+embed_gpid_prompt("gpid-proto-tests-checklist.prompt.md")
+
+```
+
+:::
+
+
 #### Purpose {.unnumbered}
 
 No Copilot-generated code is accepted without thorough testing.
@@ -274,6 +317,20 @@ All structured for direct inclusion in your PR.
 /gpid-proto-deps-risk
 ```
 
+::: {.callout-note collapse="true" title="gpid-proto-deps-risk"}
+
+```{r}
+#| echo: false
+#| results: asis
+#| code-fold: true
+embed_gpid_prompt("gpid-proto-deps-risk.prompt.md")
+
+```
+
+:::
+
+
+
 #### Purpose {.unnumbered}
 
 Ensure that dependencies are justified, safe, and aligned with team standards.
@@ -295,6 +352,19 @@ Ensure that dependencies are justified, safe, and aligned with team standards.
 ```
 /gpid-proto-self-critique
 ```
+
+::: {.callout-note collapse="true" title="gpid-proto-self-critique"}
+
+```{r}
+#| echo: false
+#| results: asis
+#| code-fold: true
+embed_gpid_prompt("gpid-proto-self-critique.prompt.md")
+
+```
+
+:::
+
 
 #### Purpose {.unnumbered}
 
@@ -319,6 +389,20 @@ This step often finds issues humans miss.
 ```
 /gpid-proto-wrap-task TASK_NAME
 ```
+
+::: {.callout-note collapse="true" title="gpid-proto-wrap-task"}
+
+```{r}
+#| echo: false
+#| results: asis
+#| code-fold: true
+embed_gpid_prompt("gpid-proto-wrap-task.prompt.md")
+
+```
+
+:::
+
+
 
 #### Purpose {.unnumbered}
 
@@ -357,4 +441,3 @@ This file must be included in your PR.
 • **Use Copilot as a tool, not a replacement**: Copilot accelerates your work, but it cannot replace your engineering judgment. You must understand, evaluate, and refine everything it produces.
 
 **Bottom line:** If you wouldn't put your name on it as-is, don't commit it yet. Clean it up first.
-
