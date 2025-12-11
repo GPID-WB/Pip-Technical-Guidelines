@@ -17,7 +17,7 @@ source("R/helpers.R")
 ```
 
 
-GitHub Copilot is a powerful assistant that can increase productivity, generate boilerplate code quickly, and support experimentation. However, Copilot is not a substitute for engineering judgment, critical thinking, or expertise in R/Stata. without discipline, Copilot can also introduce inefficiency, unnecessary complexity, hallucinated dependencies, and silent errors.
+GitHub Copilot is a powerful assistant that can increase productivity, generate boilerplate code quickly, and support experimentation. However, Copilot is not a substitute for engineering judgment, critical thinking, or expertise in R/Stata. Without discipline, Copilot can also introduce inefficiency, unnecessary complexity, hallucinated dependencies, and silent errors.
 This document establishes:
 
 1. **Mandatory protocols** for how Copilot must be used in all GPID technical work.  
@@ -29,13 +29,12 @@ Team leads will verify compliance during code reviews.
 
 ## GPID Copilot Prompt System
 
-To ensure consistency, the GPID team uses **shared Copilot prompt files** stored in a central repository.  
-These prompt files automate the workflows described in this document.
+To ensure consistency, the GPID team uses **shared Github Copilot prompt files** stored in a central repository. These prompt files automate the workflows described in this document.
 
 ### What Are GPID Prompt Files?
 
-Prompt files are `.prompt.md` files that define reusable Copilot commands.  
-They appear in VS Code or Positron when you type `/` in Copilot Chat.
+Prompt files are `.prompt.md` files that define reusable Github Copilot commands.  
+They appear in VS Code or Positron when you type `/` in Github Copilot Chat.
 
 Each GPID protocol prompt begins with the prefix `gpid-proto-`
 
@@ -83,16 +82,16 @@ C:\Users\<USERNAME>\OneDrive - WBG\GPID-team\copilot-prompts
 
 ### Registering Prompt Files in VS Code / Positron
 
-After cloning, you must tell Copilot where to find the shared prompts by modifying the **user settings**. This can by done in multiple ways, but we recommend the following:
+After cloning, you must tell Github Copilot where to find the shared prompts by modifying the **user settings**. This can by done in multiple ways, but we recommend the following:
 
-1. In positron, open settings via the gear icon in the lower left corner or by hitting `Ctrl + ,`.
+1. In VS Code/Positron, open settings via the gear icon in the lower left corner or by hitting `Ctrl + ,`.
 2. Search for "prompt files location" (without quotes).
 3. Hit "add item" and add the full path to the `prompts` folder in your local clone of the repository adding the `protocols/` subfolder.
 ![](images/prompt_files_location.png) 
-4. Restart Positron.
+4. Restart VS Code/Positron.
 
 
-NOW Typing `/` in Copilot Chat will now show all GPID protocol prompts.
+NOW: Typing `/` in Github Copilot Chat will show all GPID protocol prompts.
 
 
 ### Updating Prompt Files
@@ -108,7 +107,7 @@ git pull
 
 The following sections describe each mandatory protocol and the corresponding `gpid-proto-*` prompt that should be used.
 
-Using the prompts is simple. You just need to type the prompt command in Copilot Chat.
+Using the prompts is simple. You just need to type the prompt command in Github Copilot Chat.
 
 **Example:**
 
@@ -116,29 +115,16 @@ Using the prompts is simple. You just need to type the prompt command in Copilot
 /gpid-proto-start-task
 ```
 
-Copilot will ask for the necessary information and then guide you through the protocol.
+Github Copilot will ask for the necessary information and then guide you through the protocol.
 
 
-### Protocol  {{< protocol >}} — Documenting Your Work With Copilot {.unnumbered}
+### Protocol  {{< protocol >}} — Documenting Your Work With Github Copilot {.unnumbered}
 
 **Prompt:**
 
 ```
 /gpid-proto-start-task
 ```
-
-::: {.callout-note collapse="true" title="gpid-proto-deps-risk"}
-
-```{r}
-#| echo: false
-#| results: asis
-#| code-fold: true
-embed_gpid_prompt("gpid-proto-deps-risk.prompt.md")
-
-```
-
-:::
-
 
 #### Purpose {.unnumbered}
 
@@ -151,7 +137,7 @@ Every Copilot-assisted task must produce a clear, transparent trail of:
 
 #### What It Does {.unnumbered}
 
-When you run `/gpid-proto-start-task`, Copilot:
+When you run `/gpid-proto-start-task`, Github Copilot:
 
 1. Asks you for:
 
@@ -169,6 +155,20 @@ When you run `/gpid-proto-start-task`, Copilot:
 
 You do **not** need to structure this manually — the prompt enforces consistency.
 
+#### Latest GPID prompt file {.unnumbered}
+
+::: {.callout-note collapse="true" title="gpid-proto-deps-risk"}
+
+```{r}
+#| echo: false
+#| results: asis
+#| code-fold: true
+embed_gpid_prompt("gpid-proto-deps-risk.prompt.md")
+
+```
+
+:::
+
 ---
 
 ### Protocol  {{< protocol >}} — Making the Code Understandable {.unnumbered}
@@ -180,11 +180,9 @@ You do **not** need to structure this manually — the prompt enforces consisten
 /gpid-proto-document-code
 ```
 
-
-
 #### Purpose {.unnumbered}
 
-Copilot may generate correct code, but not always readable code.
+Github Copilot may generate correct code, but not always readable code.
 These prompts ensure that the logic, intention, and structure are thoroughly documented.
 
 #### What They Do  {.unnumbered}
@@ -195,6 +193,8 @@ These prompts ensure that the logic, intention, and structure are thoroughly doc
 * Produces a **step-by-step technical explanation**
 * Lists assumptions
 * Identifies failure points
+
+##### Latest GPID prompt file {.unnumbered}
 
 ::: {.callout-note collapse="true" title="gpid-proto-explain-code"}
 
@@ -215,6 +215,8 @@ embed_gpid_prompt("gpid-proto-explain-code.prompt.md")
 * Adds full Roxygen2 documentation (for R code)
 * Produces a plain-language explanation for the task summary
 
+##### Latest GPID prompt file {.unnumbered}
+
 ::: {.callout-note collapse="true" title="gpid-proto-document-code"}
 
 ```{r}
@@ -227,9 +229,6 @@ embed_gpid_prompt("gpid-proto-document-code.prompt.md")
 
 :::
 
-
-
-
 ---
 
 ### Protocol  {{< protocol >}} — Code Review and Efficiency Check {.unnumbered}
@@ -239,20 +238,6 @@ embed_gpid_prompt("gpid-proto-document-code.prompt.md")
 ```
 /gpid-proto-review-efficiency
 ```
-
-::: {.callout-note collapse="true" title="gpid-proto-review-efficiency"}
-
-```{r}
-#| echo: false
-#| results: asis
-#| code-fold: true
-embed_gpid_prompt("gpid-proto-review-efficiency.prompt.md")
-
-```
-
-:::
-
-
 
 #### Purpose {.unnumbered}
 
@@ -271,6 +256,20 @@ The prompt reviews code for:
 
 And provides clear, actionable improvements.
 
+#### Latest GPID prompt file {.unnumbered}
+
+::: {.callout-note collapse="true" title="gpid-proto-review-efficiency"}
+
+```{r}
+#| echo: false
+#| results: asis
+#| code-fold: true
+embed_gpid_prompt("gpid-proto-review-efficiency.prompt.md")
+
+```
+
+:::
+
 ---
 
 ### Protocol  {{< protocol >}} — Testing and Edge Cases {.unnumbered}
@@ -280,19 +279,6 @@ And provides clear, actionable improvements.
 ```
 /gpid-proto-tests-checklist
 ```
-
-::: {.callout-note collapse="true" title="gpid-proto-tests-checklist"}
-
-```{r}
-#| echo: false
-#| results: asis
-#| code-fold: true
-embed_gpid_prompt("gpid-proto-tests-checklist.prompt.md")
-
-```
-
-:::
-
 
 #### Purpose {.unnumbered}
 
@@ -307,6 +293,20 @@ No Copilot-generated code is accepted without thorough testing.
 
 All structured for direct inclusion in your PR.
 
+#### Latest GPID prompt file {.unnumbered}
+
+::: {.callout-note collapse="true" title="gpid-proto-tests-checklist"}
+
+```{r}
+#| echo: false
+#| results: asis
+#| code-fold: true
+embed_gpid_prompt("gpid-proto-tests-checklist.prompt.md")
+
+```
+
+:::
+
 ---
 
 ### Protocol  {{< protocol >}} — Dependencies, Risks, and Safety {.unnumbered}
@@ -316,20 +316,6 @@ All structured for direct inclusion in your PR.
 ```
 /gpid-proto-deps-risk
 ```
-
-::: {.callout-note collapse="true" title="gpid-proto-deps-risk"}
-
-```{r}
-#| echo: false
-#| results: asis
-#| code-fold: true
-embed_gpid_prompt("gpid-proto-deps-risk.prompt.md")
-
-```
-
-:::
-
-
 
 #### Purpose {.unnumbered}
 
@@ -343,6 +329,20 @@ Ensure that dependencies are justified, safe, and aligned with team standards.
 * Checks compatibility with `data.table`, `collapse`, and `rlang`
 * Identifies unsafe patterns (I/O, file paths, etc.)
 
+#### Latest GPID prompt file {.unnumbered}
+
+::: {.callout-note collapse="true" title="gpid-proto-deps-risk"}
+
+```{r}
+#| echo: false
+#| results: asis
+#| code-fold: true
+embed_gpid_prompt("gpid-proto-deps-risk.prompt.md")
+
+```
+
+:::
+
 ---
 
 ### Protocol  {{< protocol >}} — Self-Critique and Robustness Review {.unnumbered}
@@ -352,6 +352,22 @@ Ensure that dependencies are justified, safe, and aligned with team standards.
 ```
 /gpid-proto-self-critique
 ```
+
+#### Purpose {.unnumbered}
+
+Github Copilot is surprisingly good at critiquing its own work when prompted correctly.
+
+This step often finds issues humans miss.
+
+#### What It Does {.unnumbered}
+
+* Reviews code as if performing a formal code review
+* Identifies inefficiencies
+* Points out risky assumptions
+* Suggests simplifications
+* Produces a concise summary of strengths, risks, and recommended improvements
+
+#### Latest GPID prompt file {.unnumbered}
 
 ::: {.callout-note collapse="true" title="gpid-proto-self-critique"}
 
@@ -365,21 +381,6 @@ embed_gpid_prompt("gpid-proto-self-critique.prompt.md")
 
 :::
 
-
-#### Purpose {.unnumbered}
-
-Copilot is surprisingly good at critiquing its own work when prompted correctly.
-
-This step often finds issues humans miss.
-
-#### What It Does {.unnumbered}
-
-* Reviews code as if performing a formal code review
-* Identifies inefficiencies
-* Points out risky assumptions
-* Suggests simplifications
-* Produces a concise summary of strengths, risks, and recommended improvements
-
 ---
 
 ### Protocol  {{< protocol >}} — Producing the Final Validation Bundle {.unnumbered}
@@ -389,20 +390,6 @@ This step often finds issues humans miss.
 ```
 /gpid-proto-wrap-task TASK_NAME
 ```
-
-::: {.callout-note collapse="true" title="gpid-proto-wrap-task"}
-
-```{r}
-#| echo: false
-#| results: asis
-#| code-fold: true
-embed_gpid_prompt("gpid-proto-wrap-task.prompt.md")
-
-```
-
-:::
-
-
 
 #### Purpose {.unnumbered}
 
@@ -426,18 +413,32 @@ copilot_logs/TASK_NAME.md
 * Self-critique findings
 * Remaining TODOs
 
-This file must be included in your PR.
+This file must **always** be included in your PR.
+
+#### Latest GPID prompt file {.unnumbered}
+
+::: {.callout-note collapse="true" title="gpid-proto-wrap-task"}
+
+```{r}
+#| echo: false
+#| results: asis
+#| code-fold: true
+embed_gpid_prompt("gpid-proto-wrap-task.prompt.md")
+
+```
+
+:::
 
 
 ## Final Reminder: You Are the Author
 
 
-**The code produced by Copilot is ultimately your responsibility.**
+**The code produced by Github Copilot is ultimately your responsibility.**
 
 • **Authorship means accountability**: When you commit Copilot-assisted code, you are claiming authorship of it. This means you're responsible for its correctness, efficiency, and maintainability.
 
 • **Review is mandatory**: Skipping the efficiency review puts the burden on your teammates during code review, slows down development, and can introduce bugs or performance issues that are hard to trace later.
 
-• **Use Copilot as a tool, not a replacement**: Copilot accelerates your work, but it cannot replace your engineering judgment. You must understand, evaluate, and refine everything it produces.
+• **Use Github Copilot as a tool, not a replacement**: Github Copilot accelerates your work, but it cannot replace your engineering judgment. You must understand, evaluate, and refine everything it produces.
 
 **Bottom line:** If you wouldn't put your name on it as-is, don't commit it yet. Clean it up first.
