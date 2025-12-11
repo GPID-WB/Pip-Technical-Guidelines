@@ -116,6 +116,17 @@ Using the prompts is simple. You just need to type the prompt command in Copilot
 /gpid-proto-start-task
 ```
 
+Copilot will ask for the necessary information and then guide you through the protocol.
+
+
+### Protocol  {{< protocol >}} — Documenting Your Work With Copilot {.unnumbered}
+
+**Prompt:**
+
+```
+/gpid-proto-start-task
+```
+
 ::: {.callout-note collapse="true" title="gpid-proto-deps-risk"}
 
 ```{r}
@@ -128,17 +139,6 @@ embed_gpid_prompt("gpid-proto-deps-risk.prompt.md")
 
 :::
 
-
-Copilot will ask for the necessary information and then guide you through the protocol.
-
-
-### Protocol  {{< protocol >}} — Documenting Your Work With Copilot {.unnumbered}
-
-**Prompt:**
-
-```
-/gpid-proto-start-task
-```
 
 #### Purpose {.unnumbered}
 
@@ -179,6 +179,20 @@ You do **not** need to structure this manually — the prompt enforces consisten
 /gpid-proto-explain-code
 /gpid-proto-document-code
 ```
+
+::: {.callout-note collapse="true" title="gpid-proto-explain-code"}
+
+```{r}
+#| echo: false
+#| results: asis
+#| code-fold: true
+embed_gpid_prompt("gpid-proto-explain-code.prompt.md")
+
+```
+
+:::
+
+
 
 #### Purpose {.unnumbered}
 
