@@ -1062,7 +1062,11 @@ Important
 </div>
 <div class="callout-body-container callout-body">
 <p>If you’re working in an R package, make sure to include the <code>copilot_logs</code> folder in your <code>.Rbuildignore</code> file to prevent it from being included in the package build.</p>
-<p>You can do it by 1. executing <code>usethis::use_build_ignore("copilot_logs")</code> or, 2. by manually adding the line <code>^copilot_logs/$</code> to the <code>.Rbuildignore</code> file.</p>
+<p>You can do it by</p>
+<ol type="1">
+<li>executing <code>usethis::use_build_ignore("copilot_logs")</code> or,</li>
+<li>by manually adding the line <code>^copilot_logs/$</code> to the <code>.Rbuildignore</code> file.</li>
+</ol>
 </div>
 </div>
 </section>
