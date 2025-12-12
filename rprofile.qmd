@@ -1,0 +1,962 @@
+---
+abstract: This document provides guidance on setting up the .Rprofile file to be used in WB computers.
+execute:
+  eval: false
+---
+
+# How to set up .Rprofile properly {#sec-rprofile}
+
+## Introduction
+
+If you've been using R for a while, you've probably found yourself repeatedly typing the same commands at the start of each session: loading your favorite packages, setting options, or defining utility functions. The `.Rprofile` file is your solution to this repetition—it's a script that R automatically runs every time you start a new session.
+
+Think of `.Rprofile` as your R environment's "autoexec" file. It lets you customize your R experience, set up your workspace exactly how you like it, and save countless keystrokes over time. For World Bank analysts working with large datasets, multiple projects, and collaboration tools, a well-configured `.Rprofile` can significantly boost your productivity.
+
+In this guide, we'll walk through building a robust `.Rprofile` tailored for World Bank workflows, explaining each component and why it matters.
+
+::: {.callout-warning title="A word of caution"}
+While `.Rprofile` is powerful, it can also cause issues if misconfigured. A broken `.Rprofile` can prevent R from starting. We'll show you how to avoid this and how to bypass `.Rprofile` if needed.
+:::
+
+## Understanding the Basics
+
+### .Rprofile vs .Renviron: What's the difference?
+
+Before we dive in, let's clarify two files that often cause confusion:
+
+- **`.Renviron`**: Sets **environment variables** before R starts. Think of it as configuration data (API keys, paths, tokens). It uses simple `KEY=value` syntax and cannot execute R code.
+
+- **`.Rprofile`**: Runs **R code** during startup. This is where you load packages, define functions, set options, and customize your session behavior.
+
+**Rule of thumb**: Environment variables go in `.Renviron`, everything else goes in `.Rprofile`.
+
+Example `.Renviron`:
+```bash
+R_LIBS_USER="~/R/library"
+GITHUB_PAT="ghp_your_token_here"
+```
+
+Example `.Rprofile`:
+```r
+options(repos = c(CRAN = "https://cran.rstudio.com/"))
+library(devtools)
+```
+
+### User-level vs Project-level
+
+R can load `.Rprofile` from two locations:
+
+1. **User-level**: `~/.Rprofile` (your home directory) - applies to all R sessions
+2. **Project-level**: `ProjectFolder/.Rprofile` - applies only when working in that project
+
+**In this guide, we focus on user-level `.Rprofile`** because we want consistent behavior across all projects. Project-specific configurations are better handled through `renv` (which we'll mention briefly) or project-specific scripts.
+
+::: {.callout-note}
+## Where is my home directory?
+In R, run `path.expand("~")` to see your home directory path.
+:::
+
+## The Anatomy of a Robust .Rprofile
+
+Let's build a `.Rprofile` step by step, explaining the purpose and order of each section. The order matters because later sections often depend on earlier ones.
+
+### 1. Error-Safe Wrapper (The Safety Net)
+
+The first and most critical piece: wrap your entire `.Rprofile` in error handling to prevent startup failures.
+
+```r
+local({
+  # Everything goes inside this local() call
+  # If something breaks, R still starts
+  
+  # Your .Rprofile code here...
+  
+})
+```
+
+Why `local()`? It creates an isolated environment so your startup code doesn't pollute the global workspace with temporary variables.
+
+### 2. Essential Utilities (Build Your Tools First)
+
+Before doing anything else, define helper functions you'll use throughout the file:
+
+```r
+# Safe package loading - won't crash if package is missing
+.safe_require <- function(pkg) {
+  requireNamespace(pkg, quietly = TRUE) |> isTRUE()
+}
+
+# Clean messaging - uses cli if available, falls back to base
+.msg <- function(...) {
+  if (.safe_require("cli")) {
+    try(cli::cli_inform(...), silent = TRUE)
+  } else {
+    message(paste0(...))
+  }
+}
+```
+
+These utilities are defensive: they handle missing packages gracefully and provide consistent messaging.
+
+### 3. Library Path Management (Critical for WB Environment)
+
+World Bank computers often have complex network setups. Properly configuring your library paths prevents many headaches:
+
+```r
+# Respect R_LIBS_USER from .Renviron
+rlu <- Sys.getenv("R_LIBS_USER", unset = "")
+if (nzchar(rlu)) {
+  rlu <- path.expand(rlu)
+  # Create directory if it doesn't exist
+  if (!dir.exists(rlu)) {
+    try(dir.create(rlu, recursive = TRUE), silent = TRUE)
+  }
+  # Add to library paths (avoid duplicates)
+  if (dir.exists(rlu)) {
+    .libPaths(unique(c(rlu, .libPaths())))
+  }
+}
+```
+
+**Why this matters**: Without proper library paths, R might try to install packages in system directories where you lack write permissions, or scatter packages across multiple locations.
+
+::: {.callout-tip}
+## Setting R_LIBS_USER
+In your `.Renviron`, add:
+```
+R_LIBS_USER=~/R/library
+```
+Then restart R. This tells R where to install and look for packages.
+:::
+
+### 4. Session Mode Toggle (Vanilla vs Regular)
+
+Sometimes you need a clean R session without customizations (for debugging or reproducible testing). This toggle system lets you switch between modes:
+
+```r
+toggle_file <- "~/.Rsession_toggle"
+
+# Function to set next session mode
+next_R_session <- function(mode = c("regular", "vanilla"),
+                          toggle_file = "~/.Rsession_toggle") {
+  mode <- match.arg(mode)
+  try(dir.create(dirname(path.expand(toggle_file)),
+                 recursive = TRUE,
+                 showWarnings = FALSE),
+      silent = TRUE)
+  writeLines(mode, path.expand(toggle_file))
+  msg <- paste("Next session will be", mode)
+  message(msg)
+  invisible(msg)
+}
+
+# Convenience function
+vanilla_next <- function() {
+  next_R_session("vanilla")
+  if (requireNamespace("rstudioapi", quietly = TRUE)) {
+    rstudioapi::restartSession()
+  }
+  invisible(TRUE)
+}
+
+# Read current mode
+mode <- if (file.exists(path.expand(toggle_file))) {
+  readLines(toggle_file, warn = FALSE)[1]
+} else {
+  "regular"
+}
+
+# Branch based on mode
+if (identical(mode, "vanilla")) {
+  message("[startup] Vanilla-like session (light init)")
+  # Flip back for next time
+  try(writeLines("regular", path.expand(toggle_file)), silent = TRUE)
+  
+  # Disable renv auto-loading
+  Sys.setenv(RENV_CONFIG_AUTOLOADER_ENABLED = "FALSE")
+  options(renv.consent = FALSE)
+  
+  # Suppress history for this session
+  if (.Platform$OS.type == "windows") {
+    Sys.setenv(R_HISTFILE = "NUL")
+  } else {
+    Sys.setenv(R_HISTFILE = "/dev/null")
+  }
+  
+  message("Next session will be regular. Type rstudioapi::restartSession()")
+  # Exit early - skip all customizations
+  return(invisible())
+}
+```
+
+**Usage**: Call `vanilla_next()` in R console, then restart. Next session runs without customizations.
+
+### 5. CRAN Repository (Always Set This)
+
+Always specify your CRAN mirror to avoid being prompted:
+
+```r
+local({
+  r <- getOption("repos")
+  r["CRAN"] <- "https://cran.rstudio.com/"
+  options(repos = r)
+})
+```
+
+Using `local()` here prevents the temporary variable `r` from cluttering your global environment.
+
+### 6. Performance Optimization (Threading)
+
+For data-intensive work, configure parallel processing:
+
+```r
+# Detect available cores
+ncores <- if (.safe_require("parallel")) {
+  parallel::detectCores(logical = TRUE)
+} else {
+  5L
+}
+
+# Use ~90% of cores, capped at 12 for responsiveness
+nthreads <- max(1L, floor(ncores * 0.9))
+nthreads <- min(nthreads, 12L)
+
+# Configure data.table
+if (.safe_require("data.table")) {
+  data.table::setDTthreads(nthreads)
+}
+
+# Configure collapse
+if (.safe_require("collapse")) {
+  collapse::set_collapse(nthreads = nthreads)
+}
+
+.msg("Threading set to: {.field {nthreads}} cores")
+```
+
+**Why cap at 90%?** Leaving some cores free keeps your system responsive for other tasks.
+
+### 7. Essential Package Loading (Interactive Sessions Only)
+
+Load packages you use constantly, but only in interactive sessions:
+
+```r
+if (interactive()) {
+  # Helper to load packages safely
+  lib_sup <- function(x) {
+    if (.safe_require(x)) {
+      library(x, character.only = TRUE) |>
+        suppressPackageStartupMessages() |>
+        suppressWarnings() |>
+        suppressMessages()
+      invisible(TRUE)
+    } else {
+      invisible(FALSE)
+    }
+  }
+  
+  # Load your essential packages
+  lapply(c("devtools", "gert", "usethis"), lib_sup) |> invisible()
+}
+```
+
+::: {.callout-warning}
+## Don't overload packages
+Only load packages you use in *every* session. Loading too many slows startup and can cause conflicts.
+:::
+
+### 8. Daily Package Update Check (Smart Caching)
+
+Stay informed about package updates without slowing down startup:
+
+```r
+if (interactive() && .safe_require("fs") && .safe_require("qs")) {
+  todays <- format(Sys.Date(), "%Y%m%d")
+  
+  # Helper function to go up directories
+  up <- function(path, n = 1) {
+    for (i in seq_len(n)) path <- fs::path_dir(path)
+    path
+  }
+  
+  opdir <- tryCatch(up(rlu, 2), error = function(e) NA_character_)
+  
+  if (is.character(opdir) && !is.na(opdir)) {
+    fs::path(opdir, "_old") |> fs::dir_create()
+    file_date <- fs::path(opdir, "date.txt")
+    
+    if (!fs::file_exists(file_date)) {
+      try(writeLines("", file_date), silent = TRUE)
+    }
+    
+    date_checked <- tryCatch(readLines(file_date, warn = FALSE), 
+                             error = function(e) "")
+    
+    old <- NULL
+    if (!identical(todays, date_checked)) {
+      # Check for updates (network call)
+      old <- tryCatch(utils::old.packages(), error = function(e) NULL)
+      
+      # Cache results
+      try(qs::qsave(old, fs::path(opdir, "old_packages.qs")), silent = TRUE)
+      try(writeLines(todays, file_date), silent = TRUE)
+      .msg("Saved daily packages snapshot")
+    } else {
+      # Use cached results
+      old <- tryCatch(qs::qread(fs::path(opdir, "old_packages.qs")), 
+                      error = function(e) NULL)
+      .msg("Reading cached packages snapshot")
+    }
+    
+    if (!is.null(old) && nrow(old) > 0) {
+      .msg("Updatable packages: {.field {old[,1]}}")
+    } else {
+      message("All packages up to date")
+    }
+  }
+}
+```
+
+**Smart design**: Only checks for updates once per day, caching results to avoid network delays on subsequent sessions.
+
+### 9. R Options (Customize Your Experience)
+
+Set your preferred R options:
+
+```r
+options(
+  # Default output format
+  digits = 4,
+  scipen = 999,  # Avoid scientific notation
+  
+  # Stringsafety (redundant in R >= 4.0, but explicit)
+  stringsAsFactors = FALSE,
+  
+  # Custom prompt
+  prompt = "R> ",
+  continue = "... ",
+  
+  # Error handling
+  warn = 1,  # Show warnings as they occur
+  error = NULL,  # NULL = use default error handler
+  
+  # Browser/editor
+  browser = "firefox",  # Or your preferred browser
+  editor = "notepad",   # Fallback editor
+  
+  # Network timeouts (important for WB network)
+  timeout = 300,  # 5 minutes for downloads
+  
+  # usethis preferences
+  usethis.protocol = "https",
+  usethis.full_name = "Your Name",
+  usethis.description = list(
+    `Authors@R` = 'person("Your", "Name", 
+                          email = "your.email@worldbank.org", 
+                          role = c("aut", "cre"))'
+  ),
+  
+  # Blogdown (if you use it)
+  blogdown.ext = ".Rmd",
+  blogdown.author = "Your Name"
+)
+
+# Set timezone for reproducibility
+Sys.setenv(TZ = "UTC")
+```
+
+### 10. Network/Proxy Settings (WB Specific)
+
+World Bank network sometimes requires proxy settings:
+
+```r
+# Check if behind WB proxy
+if (.Platform$OS.type == "windows") {
+  # WB proxy settings (adjust as needed)
+  # Uncomment and modify if you need proxy
+  # Sys.setenv(
+  #   http_proxy = "http://proxy.worldbank.org:8080",
+  #   https_proxy = "http://proxy.worldbank.org:8080",
+  #   no_proxy = "localhost,127.0.0.1,.worldbank.org"
+  # )
+  
+  # Alternative: Use system proxy settings
+  # Sys.setenv(http_proxy_user = "ask")
+}
+```
+
+::: {.callout-note}
+## Proxy configuration varies
+Check with your IT team for correct proxy settings. Many WB computers handle this automatically.
+:::
+
+### 11. Helper Functions (Productivity Boosters)
+
+Now we can define utility functions that improve daily workflows:
+
+```r
+# Git shortcuts (requires gert package)
+if (.safe_require("gert")) {
+  gca <- function(x, ...) gert::git_commit_all(x, ...)
+  gp  <- function(x = NULL, ...) gert::git_push(x, ...)
+  ga  <- function(...) {
+    st <- gert::git_status(...)
+    if (nrow(st)) {
+      gert::git_add(st$file)
+    } else {
+      cli::cli_alert_info("No files changed. Nothing to stage.")
+    }
+  }
+  gi  <- function() gert::git_info()$upstream
+  gs  <- function() gert::git_status()
+  
+  # Export to global environment
+  for (nm in c("gca", "gp", "ga", "gi", "gs")) {
+    assign(nm, get(nm, inherits = FALSE), envir = .GlobalEnv)
+  }
+}
+
+# Devtools shortcut
+if (.safe_require("devtools")) {
+  la <- function() devtools::load_all()
+  assign("la", la, envir = .GlobalEnv)
+}
+
+# Format numbers with thousands separators
+pn <- function(x, digits = 3) {
+  formatC(x, format = "f", digits = digits, 
+          big.mark = ",", decimal.mark = ".")
+}
+
+# Assign variables to global environment
+assign_to_global <- function(vars = NULL, from_env = parent.frame()) {
+  x <- if (is.null(vars)) ls(envir = from_env) else vars
+  for (nm in x) {
+    assign(nm, get(nm, envir = from_env), envir = .GlobalEnv)
+  }
+  invisible(NULL)
+}
+
+# Navigate up directories
+up <- function(path, n = 1) {
+  for (i in seq_len(n)) path <- fs::path_dir(path)
+  path
+}
+
+# Export utility functions to global environment
+for (fn in c("pn", "assign_to_global", "up")) {
+  if (exists(fn, inherits = FALSE)) {
+    assign(fn, get(fn, inherits = FALSE), envir = .GlobalEnv)
+  }
+}
+```
+
+**Philosophy**: These are shortcuts for common tasks. Include only what you'll actually use.
+
+### 12. Startup and Exit Hooks (The Bookends)
+
+Finally, define what happens when R starts and exits:
+
+```r
+# .First runs after everything is loaded
+.First <- function() {
+  if (!interactive()) return(invisible())
+  
+  # Optional: Measure startup time
+  # startup_time <- proc.time()
+  
+  # Welcome message
+  .msg("Welcome to R! Session ready.")
+  
+  # Show current project (if using RStudio)
+  if (.safe_require("rstudioapi")) {
+    pth <- tryCatch(rstudioapi::getActiveProject(), 
+                    error = function(e) NULL)
+    if (!is.null(pth)) {
+      .msg("Working in project: {.file {basename(pth)}}")
+    }
+  }
+  
+  # Optional: Check for conflicts
+  if (.safe_require("conflicted")) {
+    conflicts <- conflict_scout()
+    if (length(conflicts) > 0) {
+      cli::cli_alert_warning("Package conflicts detected")
+    }
+  }
+}
+
+# .Last runs when R session ends
+.Last <- function() {
+  if (!interactive()) return(invisible())
+  
+  # Optional: Log session info
+  # if (.safe_require("rstudioapi")) {
+  #   pth <- tryCatch(rstudioapi::getActiveProject(), 
+  #                   error = function(e) NULL)
+  #   if (!is.null(pth)) {
+  #     info <- capture.output(sessionInfo())
+  #     cat(paste0("\n---- ", Sys.time(), " ----\n", 
+  #                paste(info, collapse = "\n")),
+  #         file = file.path(pth, "session_log.txt"), 
+  #         append = TRUE)
+  #   }
+  # }
+  
+  message("Goodbye!")
+}
+```
+
+## Additional Recommendations
+
+Here are important additions to consider:
+
+### Memory Management
+
+```r
+# Set memory limit (Windows only)
+if (.Platform$OS.type == "windows") {
+  invisible(utils::memory.limit(size = 16000))  # 16GB
+}
+
+# Garbage collection settings
+gcinfo(FALSE)  # Don't report GC activity
+```
+
+### Conflict Management
+
+```r
+# Use conflicted package to make conflicts explicit
+if (.safe_require("conflicted")) {
+  conflicted::conflict_prefer("filter", "dplyr")
+  conflicted::conflict_prefer("lag", "dplyr")
+}
+```
+
+### Custom Prompt with Project Info
+
+```r
+# Dynamic prompt showing project name
+if (.safe_require("rstudioapi")) {
+  options(prompt = function() {
+    pth <- tryCatch(rstudioapi::getActiveProject(), 
+                    error = function(e) NULL)
+    proj_name <- if (!is.null(pth)) basename(pth) else "R"
+    paste0("[", proj_name, "]> ")
+  })
+}
+```
+
+### Startup Time Measurement
+
+```r
+# Measure .Rprofile execution time
+.rprofile_start <- Sys.time()
+# ... rest of .Rprofile ...
+if (interactive()) {
+  .rprofile_end <- Sys.time()
+  .rprofile_time <- difftime(.rprofile_end, .rprofile_start, units = "secs")
+  message(sprintf(".Rprofile loaded in %.2f seconds", .rprofile_time))
+}
+```
+
+### Safe Sourcing of Additional Config
+
+```r
+# Source additional config files if they exist
+additional_config <- "~/.Rprofile_local"
+if (file.exists(path.expand(additional_config))) {
+  tryCatch(
+    source(path.expand(additional_config)),
+    error = function(e) {
+      warning("Failed to source ", additional_config, ": ", e$message)
+    }
+  )
+}
+```
+
+## Best Practices and Pitfalls
+
+### Do's ✅
+
+1. **Wrap everything in `local()`** to avoid polluting global environment
+2. **Use `.safe_require()`** for all package checks
+3. **Test your `.Rprofile`** after changes by restarting R
+4. **Keep a backup** of your working `.Rprofile`
+5. **Document complex sections** with comments
+6. **Profile startup time** if it feels slow (aim for < 2 seconds)
+7. **Use `.Renviron`** for secrets and environment variables
+
+### Don'ts ❌
+
+1. **Don't load too many packages** - only essentials
+2. **Don't assume packages are installed** - always check
+3. **Don't include project-specific code** - keep it general
+4. **Don't ignore errors** - handle them gracefully
+5. **Don't set `setwd()`** - this breaks projects
+6. **Don't load massive datasets** - slows startup dramatically
+7. **Don't override base functions** without careful thought
+
+### Emergency: Bypassing .Rprofile
+
+If your `.Rprofile` breaks R startup:
+
+**Option 1**: Start R with `--vanilla` flag
+```bash
+R --vanilla
+```
+
+**Option 2**: In RStudio, hold `Ctrl` while clicking "Restart R"
+
+**Option 3**: Rename your `.Rprofile` temporarily
+```bash
+mv ~/.Rprofile ~/.Rprofile.backup
+```
+
+## A Note on renv
+
+We haven't covered `renv` in detail, but it's worth mentioning. `renv` provides project-specific package management, creating isolated, reproducible environments for each project. It works alongside your `.Rprofile` but serves a different purpose:
+
+- **`.Rprofile`**: Personal customizations for *all* your R sessions
+- **`renv`**: Project-specific package versions for *reproducibility*
+
+The two complement each other. Your `.Rprofile` might load development tools (like `devtools`), while `renv` ensures each project uses specific package versions.
+
+## Complete .Rprofile Template
+
+Here's a complete, production-ready `.Rprofile` that incorporates everything we've discussed:
+
+```r
+# ==============================================================================
+# .Rprofile for World Bank R Users
+# ==============================================================================
+# This file customizes R startup behavior
+# Location: ~/.Rprofile (user home directory)
+# To find your home directory: path.expand("~")
+# To bypass this file: Start R with --vanilla flag
+# ==============================================================================
+
+local({
+  # Wrap everything in local() to avoid polluting global environment
+  # If something breaks, R will still start
+  
+  # --------------------------------------------------------------------------
+  # 1. ESSENTIAL UTILITIES (Build tools first)
+  # --------------------------------------------------------------------------
+  
+  .safe_require <- function(pkg) {
+    requireNamespace(pkg, quietly = TRUE) |> isTRUE()
+  }
+  
+  .msg <- function(...) {
+    if (.safe_require("cli")) {
+      try(cli::cli_inform(...), silent = TRUE)
+    } else {
+      message(paste0(...))
+    }
+  }
+  
+  # --------------------------------------------------------------------------
+  # 2. LIBRARY PATH MANAGEMENT (Critical for WB environment)
+  # --------------------------------------------------------------------------
+  
+  rlu <- Sys.getenv("R_LIBS_USER", unset = "")
+  if (nzchar(rlu)) {
+    rlu <- path.expand(rlu)
+    if (!dir.exists(rlu)) {
+      try(dir.create(rlu, recursive = TRUE), silent = TRUE)
+    }
+    if (dir.exists(rlu)) {
+      .libPaths(unique(c(rlu, .libPaths())))
+    }
+  }
+  
+  # --------------------------------------------------------------------------
+  # 3. SESSION MODE TOGGLE (Vanilla vs Regular)
+  # --------------------------------------------------------------------------
+  
+  toggle_file <- "~/.Rsession_toggle"
+  
+  next_R_session <- function(mode = c("regular", "vanilla"),
+                             toggle_file = "~/.Rsession_toggle") {
+    mode <- match.arg(mode)
+    try(dir.create(dirname(path.expand(toggle_file)),
+                   recursive = TRUE,
+                   showWarnings = FALSE),
+        silent = TRUE)
+    writeLines(mode, path.expand(toggle_file))
+    msg <- paste("Next session will be", mode)
+    message(msg)
+    invisible(msg)
+  }
+  
+  vanilla_next <- function() {
+    next_R_session("vanilla")
+    if (requireNamespace("rstudioapi", quietly = TRUE)) {
+      rstudioapi::restartSession()
+    }
+    invisible(TRUE)
+  }
+  
+  # Export toggle functions
+  assign("next_R_session", next_R_session, envir = .GlobalEnv)
+  assign("vanilla_next", vanilla_next, envir = .GlobalEnv)
+  
+  # Read current mode
+  mode <- if (file.exists(path.expand(toggle_file))) {
+    readLines(toggle_file, warn = FALSE)[1]
+  } else {
+    "regular"
+  }
+  
+  # Branch: Vanilla mode
+  if (identical(mode, "vanilla")) {
+    message("[startup] Vanilla-like session (light init)")
+    try(writeLines("regular", path.expand(toggle_file)), silent = TRUE)
+    
+    Sys.setenv(RENV_CONFIG_AUTOLOADER_ENABLED = "FALSE")
+    options(renv.consent = FALSE)
+    
+    if (.Platform$OS.type == "windows") {
+      Sys.setenv(R_HISTFILE = "NUL")
+    } else {
+      Sys.setenv(R_HISTFILE = "/dev/null")
+    }
+    
+    message("Next session will be regular. Type rstudioapi::restartSession()")
+    return(invisible())
+  }
+  
+  # --------------------------------------------------------------------------
+  # REGULAR SESSION STARTS HERE
+  # --------------------------------------------------------------------------
+  
+  .msg("Starting regular R session...")
+  
+  # --------------------------------------------------------------------------
+  # 4. CRAN REPOSITORY
+  # --------------------------------------------------------------------------
+  
+  local({
+    r <- getOption("repos")
+    r["CRAN"] <- "https://cran.rstudio.com/"
+    options(repos = r)
+  })
+  
+  # --------------------------------------------------------------------------
+  # 5. PERFORMANCE OPTIMIZATION (Threading)
+  # --------------------------------------------------------------------------
+  
+  ncores <- if (.safe_require("parallel")) {
+    parallel::detectCores(logical = TRUE)
+  } else {
+    5L
+  }
+  
+  nthreads <- max(1L, floor(ncores * 0.9))
+  nthreads <- min(nthreads, 12L)
+  
+  if (.safe_require("data.table")) {
+    data.table::setDTthreads(nthreads)
+  }
+  
+  if (.safe_require("collapse")) {
+    collapse::set_collapse(nthreads = nthreads)
+  }
+  
+  .msg("Threading set to: {.field {nthreads}} cores")
+  
+  # --------------------------------------------------------------------------
+  # 6. ESSENTIAL PACKAGE LOADING (Interactive only)
+  # --------------------------------------------------------------------------
+  
+  if (interactive()) {
+    lib_sup <- function(x) {
+      if (.safe_require(x)) {
+        library(x, character.only = TRUE) |>
+          suppressPackageStartupMessages() |>
+          suppressWarnings() |>
+          suppressMessages()
+        invisible(TRUE)
+      } else {
+        invisible(FALSE)
+      }
+    }
+    
+    # Load your essential packages here
+    lapply(c("devtools", "gert", "usethis"), lib_sup) |> invisible()
+  }
+  
+  # --------------------------------------------------------------------------
+  # 7. DAILY PACKAGE UPDATE CHECK (Smart caching)
+  # --------------------------------------------------------------------------
+  
+  if (interactive() && .safe_require("fs") && .safe_require("qs")) {
+    todays <- format(Sys.Date(), "%Y%m%d")
+    
+    up <- function(path, n = 1) {
+      for (i in seq_len(n)) path <- fs::path_dir(path)
+      path
+    }
+    
+    opdir <- tryCatch(up(rlu, 2), error = function(e) NA_character_)
+    
+    if (is.character(opdir) && !is.na(opdir)) {
+      fs::path(opdir, "_old") |> fs::dir_create()
+      file_date <- fs::path(opdir, "date.txt")
+      
+      if (!fs::file_exists(file_date)) {
+        try(writeLines("", file_date), silent = TRUE)
+      }
+      
+      date_checked <- tryCatch(readLines(file_date, warn = FALSE),
+                               error = function(e) "")
+      
+      old <- NULL
+      if (!identical(todays, date_checked)) {
+        old <- tryCatch(utils::old.packages(), error = function(e) NULL)
+        try(qs::qsave(old, fs::path(opdir, "old_packages.qs")), silent = TRUE)
+        try(writeLines(todays, file_date), silent = TRUE)
+        .msg("Saved daily packages snapshot")
+      } else {
+        old <- tryCatch(qs::qread(fs::path(opdir, "old_packages.qs")),
+                        error = function(e) NULL)
+        .msg("Reading cached packages snapshot")
+      }
+      
+      if (!is.null(old) && nrow(old) > 0) {
+        .msg("Updatable packages: {.field {old[,1]}}")
+      } else {
+        message("All packages up to date")
+      }
+    }
+  }
+  
+  # --------------------------------------------------------------------------
+  # 8. R OPTIONS (Customize experience)
+  # --------------------------------------------------------------------------
+  
+  options(
+    digits = 4,
+    scipen = 999,
+    stringsAsFactors = FALSE,
+    prompt = "R> ",
+    continue = "... ",
+    warn = 1,
+    timeout = 300,
+    usethis.protocol = "https",
+    blogdown.ext = ".Rmd"
+  )
+  
+  Sys.setenv(TZ = "UTC")
+  
+  # --------------------------------------------------------------------------
+  # 9. NETWORK/PROXY SETTINGS (WB specific - uncomment if needed)
+  # --------------------------------------------------------------------------
+  
+  # if (.Platform$OS.type == "windows") {
+  #   Sys.setenv(
+  #     http_proxy = "http://proxy.worldbank.org:8080",
+  #     https_proxy = "http://proxy.worldbank.org:8080",
+  #     no_proxy = "localhost,127.0.0.1,.worldbank.org"
+  #   )
+  # }
+  
+  # --------------------------------------------------------------------------
+  # 10. HELPER FUNCTIONS (Productivity boosters)
+  # --------------------------------------------------------------------------
+  
+  # Git shortcuts
+  if (.safe_require("gert")) {
+    gca <- function(x, ...) gert::git_commit_all(x, ...)
+    gp  <- function(x = NULL, ...) gert::git_push(x, ...)
+    ga  <- function(...) {
+      st <- gert::git_status(...)
+      if (nrow(st)) {
+        gert::git_add(st$file)
+      } else {
+        cli::cli_alert_info("No files changed. Nothing to stage.")
+      }
+    }
+    gi  <- function() gert::git_info()$upstream
+    gs  <- function() gert::git_status()
+    
+    for (nm in c("gca", "gp", "ga", "gi", "gs")) {
+      assign(nm, get(nm, inherits = FALSE), envir = .GlobalEnv)
+    }
+  }
+  
+  # Devtools shortcut
+  if (.safe_require("devtools")) {
+    la <- function() devtools::load_all()
+    assign("la", la, envir = .GlobalEnv)
+  }
+  
+  # Number formatting
+  pn <- function(x, digits = 3) {
+    formatC(x, format = "f", digits = digits,
+            big.mark = ",", decimal.mark = ".")
+  }
+  
+  # Variable assignment helper
+  assign_to_global <- function(vars = NULL, from_env = parent.frame()) {
+    x <- if (is.null(vars)) ls(envir = from_env) else vars
+    for (nm in x) {
+      assign(nm, get(nm, envir = from_env), envir = .GlobalEnv)
+    }
+    invisible(NULL)
+  }
+  
+  # Directory navigation
+  up <- function(path, n = 1) {
+    for (i in seq_len(n)) path <- fs::path_dir(path)
+    path
+  }
+  
+  # Export utility functions
+  for (fn in c("pn", "assign_to_global", "up")) {
+    if (exists(fn, inherits = FALSE)) {
+      assign(fn, get(fn, inherits = FALSE), envir = .GlobalEnv)
+    }
+  }
+  
+  # --------------------------------------------------------------------------
+  # 11. STARTUP AND EXIT HOOKS
+  # --------------------------------------------------------------------------
+  
+  .First <- function() {
+    if (!interactive()) return(invisible())
+    .msg("Welcome to R! Session ready.")
+    cat(sprintf("[.Rprofile loaded, cwd: %s]\n", getwd()))
+  }
+  
+  .Last <- function() {
+    if (!interactive()) return(invisible())
+    message("Goodbye!")
+  }
+  
+  # Export hooks
+  assign(".First", .First, envir = .GlobalEnv)
+  assign(".Last", .Last, envir = .GlobalEnv)
+  
+})  # End of local() wrapper
+
+# ==============================================================================
+# END OF .RPROFILE
+# ==============================================================================
+```
+
+## Summary
+
+A well-configured `.Rprofile` is like a well-tuned instrument—it makes your work smoother without getting in the way. The key principles:
+
+1. **Safety first**: Wrap everything, handle errors, provide escape hatches
+2. **Order matters**: Build utilities before using them
+3. **Be selective**: Only load what you use daily
+4. **Stay clean**: Use `local()`, avoid global pollution
+5. **Document**: Future you will thank present you
+
+Start with a minimal `.Rprofile` and gradually add features as you identify repetitive tasks. Test each addition and keep your startup time under 2 seconds for a smooth experience.
+
+Happy coding! 🚀
+
