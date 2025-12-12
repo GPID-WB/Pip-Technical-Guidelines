@@ -433,7 +433,8 @@ embed_gpid_prompt("gpid-proto-wrap-task.prompt.md")
 ::: {.callout-important}
 If you're working in an R package, make sure to include the `copilot_logs` folder in your `.Rbuildignore` file to prevent it from being included in the package build. 
 
-You can do it by 
+You can do it by
+
 1. executing `usethis::use_build_ignore("copilot_logs")` or, 
 2. by manually adding the line `^copilot_logs/$` to the `.Rbuildignore` file.
 :::
