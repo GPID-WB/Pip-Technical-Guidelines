@@ -1051,6 +1051,20 @@ gpid-proto-wrap-task.prompt.md
 </div>
 </div>
 </div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you’re working in an R package, make sure to include the <code>copilot_logs</code> folder in your <code>.Rbuildignore</code> file to prevent it from being included in the package build.</p>
+<p>You can do it by 1. executing <code>usethis::use_build_ignore("copilot_logs")</code> or, 2. by manually adding the line <code>^copilot_logs/$</code> to the <code>.Rbuildignore</code> file.</p>
+</div>
+</div>
 </section>
 </section>
 </section>
