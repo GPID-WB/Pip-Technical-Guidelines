@@ -3,9 +3,8 @@ project:
 
 preview:
  host: 127.0.0.1
- port: 8081   
- browser: true
- navigate: true
+ port: 8081
+ browser: false
 
 execute:
   freeze: auto
@@ -46,7 +45,7 @@ format:
       - cosmo
       - brand
     css: css/tachyons.css
-  pdf:
-    documentclass: scrreprt
+  # pdf:
+  #   documentclass: scrreprt
 
 editor: source

@@ -10,3 +10,6 @@
 /_book/
 /_freeze/
 **/*.quarto_ipynb
+temp/
+
+/.luarc.json
