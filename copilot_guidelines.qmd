@@ -22,7 +22,21 @@ This document provides **suggested guidelines** (not mandatory protocols) for us
 4. **Build reusable workflows** — create prompt patterns you can share with teammates and reuse across projects.
 5. **Stay in control** — use Copilot as an assistant, not a replacement for your engineering judgment.
 
-These guidelines complement the mandatory protocols outlined in the Copilot Protocols document. While protocols define what you *must* do for code reviews and formal tasks, these guidelines help you work more efficiently day-to-day.
+These guidelines complement the mandatory protocols outlined in the Copilot Protocols document. While protocols define what you *must* do for code reviews and formal tasks, these guidelines help you work more efficiently day-to-day. 
+
+We will suggest some prompts to apply this guidelines but feel free to modified them as needed to fit your specific context and projects.
+
+### Where the suggested Prompt Files Live
+
+The shared prompts are stored in the repository [GPID-WB/copilot-prompts](https://github.com/GPID-WB/copilot-prompts).  The prompt files for these guidelines are in the folder `guidelines/`.
+
+```
+prompts/
+gpid-guide-complete-prompt.prompt.md
+
+```
+
+To include these prompts in your IDE, you can clone the repository and then import the relevant prompt files into your Copilot setup. See the installation instructions: [One-Time Installation (Per Developer)](copilot_protocols.qmd#one-time-installation). Make sure to add the `guidelines/` subfolder, as well as the `protocols/` subfolder.
 
 ::: {.callout-tip}
 Think of these guidelines as best practices that will save you time and help you get the most value from Copilot without compromising quality or security.
@@ -38,7 +52,7 @@ One of the most important skills to develop when using Githup Copilot, or any ot
 - Provide examples
 - Break complex tasks into simpler tasks
 - Reread your prompt and avoid ambiguity 
-- Indicate relevant code (sekect a file or highlight the specific piece of code)  
+- Indicate relevant code (select a file or highlight the specific piece of code)  
 - Experiment and iterate until you find a useful answer
 - Keep history relevant and delete requests that are not longer relevant
 
@@ -77,6 +91,26 @@ What to avoid when creating prompts:
 - Including sensitive data (secrets, passwords, personal data).
 - Assuming the agent knows private or internal project details not provided in the prompt.
 - Requests that rely on unstated external state (unspecified files, databases, or services).
+
+**Prompt:**
+
+```
+/gpid-guide-complete-prompt
+```
+
+#### Latest GPID prompt file {.unnumbered}
+
+::: {.callout-note collapse="true" title="gpid-guide-complete-prompt"}
+
+```{r}
+#| echo: false
+#| results: asis
+#| code-fold: true
+embed_gpid_prompt("gpid-guide-complete-prompt", folder = "guidelines")
+
+```
+
+:::
 
 Note on links and security: be cautious when including or following external links in prompts or Copilot responses—links may expose or lead to insecure resources and can present a security risk.
 
