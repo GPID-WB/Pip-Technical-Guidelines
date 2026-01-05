@@ -63,7 +63,7 @@ One of the most important skills to develop when using Githup Copilot, or any ot
 - Experiment and iterate until you find a useful answer
 - Keep history relevant and delete requests that are not longer relevant
 
-## The Do's and Don'ts when prompting
+### The Do's and Don'ts when prompting
 
 Useful action verbs / short commands (with example sentences):
 
@@ -99,7 +99,9 @@ What to avoid when creating prompts:
 - Assuming the agent knows private or internal project details not provided in the prompt.
 - Requests that rely on unstated external state (unspecified files, databases, or services).
 
-**Prompt:**
+Note on links and security: be cautious when including or following external links in prompts or Copilot responses—links may expose or lead to insecure resources and can present a security risk.
+
+**Prompt suggested:**
 
 ```
 /gpid-guide-complete-prompt
@@ -119,9 +121,7 @@ embed_gpid_prompt("gpid-guide-complete-prompt.prompt.md", folder = "guidelines",
 
 :::
 
-Note on links and security: be cautious when including or following external links in prompts or Copilot responses—links may expose or lead to insecure resources and can present a security risk.
-
-## Security Considerations for Prompts
+### Security Considerations for Prompts
 
 When creating prompts, follow these guidelines to protect organizational data and avoid security risks:
 
@@ -148,7 +148,34 @@ When creating prompts, follow these guidelines to protect organizational data an
 - Only provide the minimum code/context necessary to answer your question.
 - Follow the organization's data classification and handling policies.
 
-## First Ask, then Agent: map and agree the solution before making changes
+**Prompt suggested:**
+
+```
+/gpid-guide-security
+```
+
+#### Latest GPID prompt file {.unnumbered}
+
+::: {.callout-note collapse="true" title="gpid-guide-security"}
+
+```{r}
+#| echo: false
+#| results: asis
+#| code-fold: true
+embed_gpid_prompt("gpid-guide-security.prompt.md", folder = "guidelines", branch = "update_guidelines")
+
+```
+
+:::
+
+### Reusable prompts
+
+Same as the prompt above, you can create useful reusable prompts that can help you save time and can also be shared with team members. For example, you can make the prompts from the Protocol section as a reusable prompts. VSCode gives a good explanation of how these can created in its [Copilot Tips and Tricks](https://code.visualstudio.com/docs/copilot/copilot-tips-and-tricks#_reusable-prompts). 
+
+
+## Interaction with GitHub Copilot
+
+### First Ask, then Agent: map and agree the solution before making changes
 
 Before asking Copilot to modify code (Agent mode), first use the Ask option to explore and agree a solution for the general task. Have Copilot propose a design and refine it until you and the agent share the same approach — this helps avoid unnecessary edits and keeps reviews small.
 
@@ -163,7 +190,7 @@ Before asking Copilot to modify code (Agent mode), first use the Ask option to e
 
 Once the design is mapped and agreed, switch to Agent mode and request the specific code changes. You can iterate on alternatives and trade-offs in Ask mode before implementing. This workflow reduces code churn and the amount of code you must inspect.
 
-## Provide Feedback to Improve Future Suggestions
+### Provide Feedback to Improve Future Suggestions
 
 GitHub Copilot learns from your feedback to improve the quality and relevance of future suggestions. Providing feedback helps the AI agent understand what works well and what doesn't.
 
@@ -183,13 +210,9 @@ GitHub Copilot learns from your feedback to improve the quality and relevance of
 
 Providing clear, specific feedback (rather than just rejecting suggestions) yields the best results for improving Copilot's future responses.
 
-## Reusable prompts
+### Document prompts used for key tasks
 
-Create useful reusable prompts that can help you save time and can also be shared with team members. For example, you can make the prompts from the Protocol section as a reusable prompts. VSCode gives a good explanation of how these can created in its [Copilot Tips and Tricks](https://code.visualstudio.com/docs/copilot/copilot-tips-and-tricks#_reusable-prompts). 
-
-## Document prompts used for key tasks
-
-When using Github Copilot to work on tasks that will need revision by team members, a good idea will be to record the key characteristics of prompts you used. At minimum, capture:
+When using Github Copilot to work on tasks that will need revision by team members, a good idea will be to record the key characteristics of prompts you used. At minimum, ask Github Copilot to capture:
 
 - The context provided (if any): files, code snippets, or system state included with the prompt (what the agent "saw").
 - The Agent instruction: the explicit task or role you asked the agent to perform (for example, "write a unit test", "refactor this function for readability", or "explain this algorithm").
