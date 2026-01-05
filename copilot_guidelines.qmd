@@ -225,6 +225,26 @@ Other useful prompt characteristics to document:
 
 Why this helps: keeping a short record of the prompts and their context makes it easier to reproduce results, re-run or refine prompts, and debug situations where generated code fails or causes errors. These notes become especially valuable during future development when tracking regressions or when onboarding colleagues who must understand the original intent.
 
+**Prompt suggested:**
+
+```
+/gpid-guide-document-task
+```
+
+#### Latest GPID prompt file {.unnumbered}
+
+::: {.callout-note collapse="true" title="gpid-guide-document-task"}
+
+```{r}
+#| echo: false
+#| results: asis
+#| code-fold: true
+embed_gpid_prompt("gpid-guide-document-task.prompt.md", folder = "guidelines", branch = "update_guidelines")
+
+```
+
+:::
+
 ## Other resources
 - [GitHub Copilot in your IDE](https://github.blog/developer-skills/github/how-to-use-github-copilot-in-your-ide-tips-tricks-and-best-practices/?ref_product=copilot&ref_type=engagement&ref_style=text)
 - [Github Copilot best practices](https://docs.github.com/en/copilot/get-started/best-practices)
