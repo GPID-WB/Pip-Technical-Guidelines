@@ -1,7 +1,7 @@
 ---
 abstract: This document outlines **suggested** guidelines for using GitHub Copilot, ensuring best-practice tips meant to improve efficiency and quality of your technical work.
 execute:
-  eval: false
+  eval: true
 comments:
   hypothesis: true
 # bibliography: AI2.bib
@@ -11,6 +11,13 @@ number-sections: false
 # Suggested Guidelines for Using GitHub Copilot in Technical Work {#sec-copilot-guidelines}
 
 ## Purpose and Principles
+
+```{r}
+#| echo: false
+#| results: false
+source("R/helpers.R")
+
+```
 
 GitHub Copilot is a powerful tool that can accelerate development, help you explore solutions, and reduce repetitive coding tasks. However, it works best when you know how to communicate effectively with it and when you maintain critical judgment about its suggestions.
 
@@ -106,7 +113,7 @@ What to avoid when creating prompts:
 #| echo: false
 #| results: asis
 #| code-fold: true
-embed_gpid_prompt("gpid-guide-complete-prompt", folder = "guidelines")
+embed_gpid_prompt("gpid-guide-complete-prompt.prompt.md", folder = "guidelines", branch = "update_guidelines")
 
 ```
 
