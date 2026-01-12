@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="description" content="Record prompts, context, and an incremental development log for a task; support resuming from prior logs and returning a final file.">
 
-<title>5&nbsp; Suggested Guidelines for Using GitHub Copilot in Technical Work – Pip Technical Guidelines</title>
+<title>Suggested Guidelines for Using GitHub Copilot in Technical Work – Pip Technical Guidelines</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -246,7 +247,23 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#purpose-and-principles" id="toc-purpose-and-principles" class="nav-link active" data-scroll-target="#purpose-and-principles">Purpose and Principles</a></li>
+  <li><a href="#purpose-and-principles" id="toc-purpose-and-principles" class="nav-link active" data-scroll-target="#purpose-and-principles">Purpose and Principles</a>
+  <ul class="collapse">
+  <li><a href="#where-the-suggested-prompt-files-live" id="toc-where-the-suggested-prompt-files-live" class="nav-link" data-scroll-target="#where-the-suggested-prompt-files-live">Where the suggested Prompt Files Live</a></li>
+  </ul></li>
+  <li><a href="#prompt-engineering" id="toc-prompt-engineering" class="nav-link" data-scroll-target="#prompt-engineering">Prompt engineering</a>
+  <ul class="collapse">
+  <li><a href="#the-dos-and-donts-when-prompting" id="toc-the-dos-and-donts-when-prompting" class="nav-link" data-scroll-target="#the-dos-and-donts-when-prompting">The Do’s and Don’ts when prompting</a></li>
+  <li><a href="#security-considerations-for-prompts" id="toc-security-considerations-for-prompts" class="nav-link" data-scroll-target="#security-considerations-for-prompts">Security Considerations for Prompts</a></li>
+  <li><a href="#reusable-prompts" id="toc-reusable-prompts" class="nav-link" data-scroll-target="#reusable-prompts">Reusable prompts</a></li>
+  </ul></li>
+  <li><a href="#interaction-with-github-copilot" id="toc-interaction-with-github-copilot" class="nav-link" data-scroll-target="#interaction-with-github-copilot">Interaction with GitHub Copilot</a>
+  <ul class="collapse">
+  <li><a href="#first-ask-then-agent-map-and-agree-the-solution-before-making-changes" id="toc-first-ask-then-agent-map-and-agree-the-solution-before-making-changes" class="nav-link" data-scroll-target="#first-ask-then-agent-map-and-agree-the-solution-before-making-changes">First Ask, then Agent: map and agree the solution before making changes</a></li>
+  <li><a href="#provide-feedback-to-improve-future-suggestions" id="toc-provide-feedback-to-improve-future-suggestions" class="nav-link" data-scroll-target="#provide-feedback-to-improve-future-suggestions">Provide Feedback to Improve Future Suggestions</a></li>
+  <li><a href="#document-prompts-used-for-key-tasks" id="toc-document-prompts-used-for-key-tasks" class="nav-link" data-scroll-target="#document-prompts-used-for-key-tasks">Document prompts used for key tasks</a></li>
+  </ul></li>
+  <li><a href="#other-resources" id="toc-other-resources" class="nav-link" data-scroll-target="#other-resources">Other resources</a></li>
   </ul>
 </nav>
     </div>
@@ -255,7 +272,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./copilot_protocols.html">Copilot and AI Tools</a></li><li class="breadcrumb-item"><a href="./copilot_guidelines.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Suggested Guidelines for Using GitHub Copilot in Technical Work</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Suggested Guidelines for Using GitHub Copilot in Technical Work</span></h1>
+<h1 class="title"><span id="sec-copilot-guidelines" class="quarto-section-identifier"><span class="chapter-title">Suggested Guidelines for Using GitHub Copilot in Technical Work</span></span></h1>
 </div>
 
 
@@ -270,7 +287,7 @@ ul.task-list li input[type="checkbox"] {
 <div>
   <div class="abstract">
     <div class="block-title">Abstract</div>
-    Blah
+    This document outlines <strong>suggested</strong> guidelines for using GitHub Copilot, ensuring best-practice tips meant to improve efficiency and quality of your technical work.
   </div>
 </div>
 
@@ -278,12 +295,353 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="purpose-and-principles" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="purpose-and-principles">Purpose and Principles</h2>
-<p>blah blah blah</p>
-<div class="pa3 bg-washed-yellow dark-gray br2 lh-copy mt3">
-<p>This is my “note box” with Tachyons.</p>
+<section id="purpose-and-principles" class="level2">
+<h2 class="anchored" data-anchor-id="purpose-and-principles">Purpose and Principles</h2>
+<p>GitHub Copilot is a powerful tool that can accelerate development, help you explore solutions, and reduce repetitive coding tasks. However, it works best when you know how to communicate effectively with it and when you maintain critical judgment about its suggestions.</p>
+<p>This document provides <strong>suggested guidelines</strong> (not mandatory protocols) for using Copilot more effectively. These tips are designed to help you:</p>
+<ol type="1">
+<li><strong>Get better results faster</strong> — learn how to prompt Copilot effectively so you spend less time iterating.</li>
+<li><strong>Maintain code quality</strong> — understand how to verify, refine, and improve Copilot’s suggestions.</li>
+<li><strong>Work securely</strong> — avoid accidentally sharing sensitive data or introducing security risks.</li>
+<li><strong>Build reusable workflows</strong> — create prompt patterns you can share with teammates and reuse across projects.</li>
+<li><strong>Stay in control</strong> — use Copilot as an assistant, not a replacement for your engineering judgment.</li>
+</ol>
+<p>These guidelines complement the mandatory protocols outlined in the Copilot Protocols document. While protocols define what you <em>must</em> do for code reviews and formal tasks, these guidelines help you work more efficiently day-to-day.</p>
+<p>We will suggest some prompts to apply this guidelines but feel free to modified them as needed to fit your specific context and projects.</p>
+<section id="where-the-suggested-prompt-files-live" class="level3">
+<h3 class="anchored" data-anchor-id="where-the-suggested-prompt-files-live">Where the suggested Prompt Files Live</h3>
+<p>The shared prompts are stored in the repository <a href="https://github.com/GPID-WB/copilot-prompts">GPID-WB/copilot-prompts</a>. The prompt files for these guidelines are in the folder <code>guidelines/</code>.</p>
+<pre><code>prompts/
+gpid-guide-complete-prompt.prompt.md
+</code></pre>
+<p>To include these prompts in your IDE, you can clone the repository and then import the relevant prompt files into your Copilot setup. See the installation instructions: <a href="./copilot_protocols.html#one-time-installation">One-Time Installation (Per Developer)</a>. Make sure to add the <code>guidelines/</code> subfolder, as well as the <code>protocols/</code> subfolder.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Think of these guidelines as best practices that will save you time and help you get the most value from Copilot without compromising quality or security.</p>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="prompt-engineering" class="level2">
+<h2 class="anchored" data-anchor-id="prompt-engineering">Prompt engineering</h2>
+<p>One of the most important skills to develop when using Githup Copilot, or any other AI agent, is to know how to prompt. Github provides some guidelines on <a href="https://docs.github.com/en/copilot/concepts/prompting/prompt-engineering">Prompt engineering for Github Copilot Chat</a>, but here are the main points to take into consideration:</p>
+<ul>
+<li>Start general and then specific</li>
+<li>Provide examples</li>
+<li>Break complex tasks into simpler tasks</li>
+<li>Reread your prompt and avoid ambiguity</li>
+<li>Indicate relevant code (select a file or highlight the specific piece of code)<br>
+</li>
+<li>Experiment and iterate until you find a useful answer</li>
+<li>Keep history relevant and delete requests that are not longer relevant</li>
+</ul>
+<section id="the-dos-and-donts-when-prompting" class="level3">
+<h3 class="anchored" data-anchor-id="the-dos-and-donts-when-prompting">The Do’s and Don’ts when prompting</h3>
+<p>Useful action verbs / short commands (with example sentences):</p>
+<ul>
+<li>Analyze — “Analyze this function and list potential edge cases.”</li>
+<li>Explain — “Explain what this block of code does in plain language.”</li>
+<li>Refactor — “Refactor this function for readability and add comments.”</li>
+<li>Test — “Write unit tests for this function covering typical and edge cases.”</li>
+<li>Summarize — “Summarize the responsibilities of each module in one paragraph.”</li>
+<li>Optimize — “Optimize this loop for performance and explain changes.”</li>
+<li>Validate — “Validate input handling and add defensive checks.”</li>
+<li>Suggest — “Suggest alternative implementations that reduce memory usage.”</li>
+<li>Document — “Add Roxygen2-style documentation for these functions.”</li>
+<li>Critique — “Critique this code and point out risks or unclear logic.”</li>
+</ul>
+<p>Best prompt structure (brief):</p>
+<ol type="1">
+<li>Context: state which files, functions, or data the agent should consider.</li>
+<li>Task: give a clear action using a verb (from the list above).</li>
+<li>Constraints: list any requirements or restrictions (style, libraries, performance).</li>
+<li>Examples/output: show a small input/output example or the desired format for the answer.</li>
+</ol>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Example
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Context: file utils.R (functions read_data, clean_data). Task: Write unit tests for clean_data. Constraints: use testthat, cover edge cases for NA and invalid types. Output: provide test code only.</p>
+</div>
+</div>
+<p>What to avoid when creating prompts:</p>
+<ul>
+<li>Vague or ambiguous instructions (avoid “fix this” without context).</li>
+<li>Overloading a single prompt with many unrelated tasks.</li>
+<li>Including sensitive data (secrets, passwords, personal data).</li>
+<li>Assuming the agent knows private or internal project details not provided in the prompt.</li>
+<li>Requests that rely on unstated external state (unspecified files, databases, or services).</li>
+</ul>
+<p>Note on links and security: be cautious when including or following external links in prompts or Copilot responses—links may expose or lead to insecure resources and can present a security risk.</p>
+<p><strong>Prompt suggested:</strong></p>
+<pre><code>/gpid-guide-complete-prompt</code></pre>
+<section id="latest-gpid-prompt-file" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file">Latest GPID prompt file</h4>
+<div class="callout callout-style-default callout-note callout-titled" title="gpid-guide-complete-prompt">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>gpid-guide-complete-prompt
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>You are an expert coding assistant. For all tasks, make sure you have the necessary context and information. If any of the following are not provided, ask for them before proceeding.</p>
+<ul>
+<li>Context: {FILES_OR_SNIPPET}.</li>
+<li>Task: {SHORT_ACTION_VERB + target}.</li>
+<li>Constraints: {LIBRARIES, STYLE, PERFORMANCE, ETC.}.</li>
+<li>Example I/O: {GIVEN_INPUT =&gt; EXPECTED_OUTPUT}.</li>
+</ul>
+<p>And provide the following case example:</p>
+<p>“Context: file <code>utils.R</code> (read_data, clean_data). Task:”Write unit tests for clean_data”. Constraints: use <code>testthat</code>, cover NA and invalid types. Example I/O: “input: a vector with NA =&gt; expect: handled gracefully”.</p>
+<p>If the user says to continue without the missing information, proceed with best-effort assumptions.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="security-considerations-for-prompts" class="level3">
+<h3 class="anchored" data-anchor-id="security-considerations-for-prompts">Security Considerations for Prompts</h3>
+<p>When creating prompts, follow these guidelines to protect organizational data and avoid security risks:</p>
+<p><strong>Never include sensitive data:</strong> - Avoid pasting credentials, API keys, passwords, tokens, or authentication secrets. - Do not include personally identifiable information (PII) or confidential business data. - Exclude proprietary algorithms or internal business logic.</p>
+<p><strong>Sanitize code before sharing:</strong> - Remove or redact hardcoded secrets, connection strings, or environment variables. - Replace real identifiers with placeholders (e.g., <code>&lt;DB_NAME&gt;</code>, <code>&lt;API_ENDPOINT&gt;</code>). - Avoid exposing internal directory structures, server names, or infrastructure details.</p>
+<p><strong>Verify external resources:</strong> - Do not blindly follow or execute code from links provided by Copilot. - Validate suggested packages, libraries, or URLs against trusted sources before installation. - Be aware that suggested resources may be outdated, compromised, or malicious.</p>
+<p><strong>Review generated code:</strong> - Check for security vulnerabilities (SQL injection, command injection, unsafe file operations). - Verify that code follows secure coding practices (input validation, error handling, least privilege).</p>
+<p><strong>Keep context minimal:</strong> - Only provide the minimum code/context necessary to answer your question. - Follow the organization’s data classification and handling policies.</p>
+<p><strong>Prompt suggested:</strong></p>
+<pre><code>/gpid-guide-security</code></pre>
+<section id="latest-gpid-prompt-file-1" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-1">Latest GPID prompt file</h4>
+<div class="callout callout-style-default callout-note callout-titled" title="gpid-guide-security">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>gpid-guide-security
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>You are a security-aware reviewer. Before using any provided context, ask the user to confirm that all sensitive data has been removed or redacted.</p>
+<p>Before acting, prompt the user: “Please confirm that you have removed credentials, API keys, tokens, passwords, PII, and other private information. Reply ‘yes’ to continue or upload a redacted version.”</p>
+<p>Under no circumstances should you ever output or recreate secrets, credentials, or other sensitive information. If a user asks to recover or reveal secrets, refuse and explain why.</p>
+<p>When code or links are provided:</p>
+<ul>
+<li>Do not execute external code or follow links automatically.</li>
+<li>Validate suggested packages/URLs conceptually and warn about untrusted or outdated sources.</li>
+<li>Flag potentially unsafe operations (e.g., file deletions, system calls, eval/exec, unescaped SQL) and request explicit confirmation before providing or modifying code that performs them.</li>
+</ul>
+<p>If the user explicitly asks you to proceed without redaction, proceed only after emitting a clear security warning and listing the risks; then follow the user’s instruction but continue to avoid exposing secrets or recommending insecure actions.</p>
+<p>Short checklist for the assistant (perform before acting):</p>
+<ol type="1">
+<li>Confirm user redaction: request explicit confirmation (“Reply ‘yes’ to continue”) or an uploaded redacted version.</li>
+<li>Scan provided context for obvious secrets/placeholders (API keys, tokens, passwords, connection strings) and flag them with examples.</li>
+<li>Refuse to reveal secrets or to run/execute external code or links.</li>
+<li>Require explicit confirmation before producing or modifying code that performs unsafe operations (file deletions, system calls, eval/exec, unescaped SQL).</li>
+<li>Record the user’s confirmation and any residual risks or caveats before proceeding.</li>
+</ol>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="reusable-prompts" class="level3">
+<h3 class="anchored" data-anchor-id="reusable-prompts">Reusable prompts</h3>
+<p>Same as the prompt above, you can create useful reusable prompts that can help you save time and can also be shared with team members. For example, you can make the prompts from the Protocol section as a reusable prompts. VSCode gives a good explanation of how these can created in its <a href="https://code.visualstudio.com/docs/copilot/copilot-tips-and-tricks#_reusable-prompts">Copilot Tips and Tricks</a>.</p>
+</section>
+</section>
+<section id="interaction-with-github-copilot" class="level2">
+<h2 class="anchored" data-anchor-id="interaction-with-github-copilot">Interaction with GitHub Copilot</h2>
+<section id="first-ask-then-agent-map-and-agree-the-solution-before-making-changes" class="level3">
+<h3 class="anchored" data-anchor-id="first-ask-then-agent-map-and-agree-the-solution-before-making-changes">First Ask, then Agent: map and agree the solution before making changes</h3>
+<p>Before asking Copilot to modify code (Agent mode), first use the Ask option to explore and agree a solution for the general task. Have Copilot propose a design and refine it until you and the agent share the same approach — this helps avoid unnecessary edits and keeps reviews small.</p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Examples of Ask prompts
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>“What functions would be needed to implement this feature?”</li>
+<li>“How would these functions interact? Describe the workflow or provide a brief diagram.”</li>
+<li>“For each new function, give a short summary: objective, inputs, outputs, and dependencies.”</li>
+<li>“What modifications to existing functions are required? List changes and rationale.”</li>
+</ul>
+</div>
+</div>
+<p>Once the design is mapped and agreed, switch to Agent mode and request the specific code changes. You can iterate on alternatives and trade-offs in Ask mode before implementing. This workflow reduces code churn and the amount of code you must inspect.</p>
+</section>
+<section id="provide-feedback-to-improve-future-suggestions" class="level3">
+<h3 class="anchored" data-anchor-id="provide-feedback-to-improve-future-suggestions">Provide Feedback to Improve Future Suggestions</h3>
+<p>GitHub Copilot learns from your feedback to improve the quality and relevance of future suggestions. Providing feedback helps the AI agent understand what works well and what doesn’t.</p>
+<p><strong>How to give feedback:</strong></p>
+<ul>
+<li>Use thumbs up/down buttons on suggestions or responses when available in the Copilot interface.</li>
+<li>Explicitly tell Copilot when a response is helpful or unhelpful (e.g., “This solution works well” or “This approach doesn’t fit our requirements”).</li>
+<li>If a suggestion is incorrect or incomplete, explain why and ask for a revised version with specific corrections.</li>
+<li>Accept or reject inline code suggestions to signal which patterns align with your codebase.</li>
+</ul>
+<p><strong>Why feedback is important:</strong></p>
+<ul>
+<li>Helps Copilot adapt to your coding style, preferred libraries, and project conventions over time.</li>
+<li>Improves the accuracy of future suggestions for similar tasks.</li>
+<li>Signals to the model which responses are most useful, contributing to better performance.</li>
+<li>Saves time by reducing iterations needed to get the right answer.</li>
+</ul>
+<p>Providing clear, specific feedback (rather than just rejecting suggestions) yields the best results for improving Copilot’s future responses.</p>
+</section>
+<section id="document-prompts-used-for-key-tasks" class="level3">
+<h3 class="anchored" data-anchor-id="document-prompts-used-for-key-tasks">Document prompts used for key tasks</h3>
+<p>When using Github Copilot to work on tasks that will need revision by team members, a good idea will be to record the key characteristics of prompts you used. At minimum, ask Github Copilot to capture:</p>
+<ul>
+<li>The context provided (if any): files, code snippets, or system state included with the prompt (what the agent “saw”).</li>
+<li>The Agent instruction: the explicit task or role you asked the agent to perform (for example, “write a unit test”, “refactor this function for readability”, or “explain this algorithm”).</li>
+</ul>
+<p>Other useful prompt characteristics to document:</p>
+<ul>
+<li>Input data examples (small sample inputs and expected outputs).</li>
+<li>Any constraints or hard requirements (performance limits, libraries to use, coding style).</li>
+<li>Time or version metadata (date, version of Copilot/IDE/plugins if known).</li>
+</ul>
+<p>Why this helps: keeping a short record of the prompts and their context makes it easier to reproduce results, re-run or refine prompts, and debug situations where generated code fails or causes errors. These notes become especially valuable during future development when tracking regressions or when onboarding colleagues who must understand the original intent.</p>
+<p><strong>Prompt suggested:</strong></p>
+<pre><code>/gpid-guide-document-task</code></pre>
+<section id="latest-gpid-prompt-file-2" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-2">Latest GPID prompt file</h4>
+<div class="callout callout-style-default callout-note callout-titled" title="gpid-guide-document-task">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>gpid-guide-document-task
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>You are a reporter/recorder assisting with development logging. Required inputs:</p>
+<ul>
+<li><code>TASK_NAME</code> (short string)</li>
+<li><code>TASK_DESCRIPTION</code> or <code>ORIGINAL_PROMPT</code> (text used to request the work)</li>
+<li><code>CONTEXT</code> (files, snippets, sample input — include file paths)</li>
+<li><code>PREVIOUS_LOG</code> (optional — full text of an earlier log to continue)</li>
+<li><code>REDACTION_CONFIRMED</code> (optional flag: <code>"yes"</code> if user has already redacted sensitive data)</li>
+</ul>
+<p>Security &amp; redaction (required first step)</p>
+<ol type="1">
+<li>If <code>REDACTION_CONFIRMED</code> is missing or not <code>"yes"</code>, ask: “Please confirm that you have removed credentials, API keys, tokens, passwords, PII, and other private information. Reply ‘yes’ to continue or upload a redacted version.”</li>
+<li>If the provided context looks like it contains secrets or connection strings, stop and request a redacted version. Do not proceed until user confirms.</li>
+<li>Never output or recreate secrets.</li>
+</ol>
+<p>Logging behaviour (start immediately after redaction is confirmed)</p>
+<ul>
+<li>If <code>PREVIOUS_LOG</code> is provided: integrate it as the authoritative history and append new entries. Do not overwrite past entries; annotate any corrections with a short note and timestamp.</li>
+<li>If <code>PREVIOUS_LOG</code> is not provided: create a new append-only log.</li>
+</ul>
+<p>Log entry format (use for every incremental update)</p>
+<ul>
+<li>Header: <code>LOG | TASK_NAME | entry: N | date: YYYY-MM-DDTHH:MM:SSZ</code></li>
+<li>Context: list file paths used and short excerpt (1-3 lines)</li>
+<li>Agent Instruction: a short summary of the prompt/instruction (1-2 sentences). Include the full prompt in a fenced block only for the first log entry or when the user sets <code>INCLUDE_FULL_PROMPT: yes</code> or explicitly requests it.</li>
+<li>Actions Taken: bullet list of steps performed since last entry</li>
+<li>Outcome summary: 1 paragraph summarizing results and current status</li>
+<li>Artifacts / Files changed: suggested paths and brief diff summary</li>
+<li>Next steps: short list of recommended next actions (requires user agreement before saving)</li>
+<li>Where to store (suggested): <code>copilot_logs/TASK_NAME.md</code> (or alternative path)</li>
+</ul>
+<p>Operational rules</p>
+<ul>
+<li>Always include the current log entry number (N), incrementing from the last entry in <code>PREVIOUS_LOG</code> (start at 1 for new logs).</li>
+<li>Keep each entry concise and timestamped (use ISO 8601).</li>
+<li>When modifying code or files, list only the file paths changed (no code snippets or diffs).</li>
+<li>Ask clarifying questions when the task or context is ambiguous before proceeding.</li>
+</ul>
+<p>Resume &amp; continue commands (how the user controls the assistant)</p>
+<ul>
+<li>To append progress: user provides new <code>CONTEXT</code> or instructions; assistant creates the next <code>LOG</code> entry and returns it.</li>
+<li>To request a draft file for review: user sends <code>GENERATE DRAFT FILE</code> — assistant returns the assembled file content and suggested path (not saved).</li>
+<li>To finalize the task and return the log-ready file: user sends <code>FINALIZE</code> or <code>RETURN FINAL FILE</code> — assistant:
+<ol type="1">
+<li>Proposes next steps and asks: “Do you agree with these next steps? Reply ‘yes’ to continue or provide your preferred steps.”</li>
+<li>After user confirms, asks: “Do you want to add any other items to the todo list for this log entry? Reply ‘yes’ with your items or ‘no’ to skip.”</li>
+<li>Before saving, asks: “Do you want to save the following todo items/next steps in the log? [list items]”. Wait for user confirmation (“yes” or edited list).</li>
+<li>After confirmation, compiles the full log and any final artifact into a single markdown/text file.</li>
+<li>Includes a header with TASK_NAME, TASK_DESCRIPTION, start and end dates, and a changelog.</li>
+<li>Returns content ready for file inclusion and a suggested storage path (e.g., <code>copilot_logs/TASK_NAME.md</code>).</li>
+</ol></li>
+</ul>
+<p>Example minimal log entry (for illustration):</p>
+<pre><code>LOG | Data-Cleanup | entry: 2 | date: 2026-01-05T14:28:00Z
+
+Context:
+- `R/clean_data.R` (excerpt: `clean_data &lt;- function(df) { df |&gt; ... }`)
+
+Agent Instruction (summary):
+Refactor `clean_data` to handle NA and factor levels; include unit tests. (Full prompt included in entry 1 or on request.)
+
+Actions Taken:
+- Added NA-handling to `clean_data`
+- Wrote 4 `testthat` unit tests in `tests/test-clean_data.R`
+
+Outcome summary:
+- `clean_data` now handles NA and unexpected types; tests pass locally (4/4). Minor edge-case for empty inputs remains.
+
+Artifacts / Files changed:
+- `R/clean_data.R`
+- `tests/test-clean_data.R`
+
+Next steps:
+- Review edge-case for empty inputs
+- Run full package checks
+
+Where to store:
+- `copilot_logs/Data-Cleanup.md`</code></pre>
+<p>Return format</p>
+<ul>
+<li>For every assistant response that appends the log, return only the new log entry text (ready to paste into the log file) and a one-line suggested storage path.</li>
+<li>On <code>FINALIZE</code>, return the full assembled file content (complete log + artifacts summary) ready for inclusion in <code>copilot_logs/</code>.</li>
+</ul>
+<p>End of prompt.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="other-resources" class="level2">
+<h2 class="anchored" data-anchor-id="other-resources">Other resources</h2>
+<ul>
+<li><a href="https://github.blog/developer-skills/github/how-to-use-github-copilot-in-your-ide-tips-tricks-and-best-practices/?ref_product=copilot&amp;ref_type=engagement&amp;ref_style=text">GitHub Copilot in your IDE</a></li>
+<li><a href="https://docs.github.com/en/copilot/get-started/best-practices">Github Copilot best practices</a></li>
+<li><a href="https://code.visualstudio.com/docs/copilot/copilot-tips-and-tricks">Github Copilot tips and tricks in Vscode</a></li>
+<li><a href="https://www.copilotcraft.dev/blog/mastering-github-copilot-chat">Mastering Github Copilot Chat</a></li>
+</ul>
 
 
 </section>
