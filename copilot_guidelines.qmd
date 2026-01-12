@@ -115,7 +115,7 @@ Note on links and security: be cautious when including or following external lin
 #| echo: false
 #| results: asis
 #| code-fold: true
-embed_gpid_prompt("gpid-guide-complete-prompt.prompt.md", folder = "guidelines", branch = "update_guidelines")
+embed_gpid_prompt("gpid-guide-complete-prompt.prompt.md", folder = "guidelines")
 
 ```
 
@@ -162,7 +162,7 @@ When creating prompts, follow these guidelines to protect organizational data an
 #| echo: false
 #| results: asis
 #| code-fold: true
-embed_gpid_prompt("gpid-guide-security.prompt.md", folder = "guidelines", branch = "update_guidelines")
+embed_gpid_prompt("gpid-guide-security.prompt.md", folder = "guidelines")
 
 ```
 
@@ -239,7 +239,7 @@ Why this helps: keeping a short record of the prompts and their context makes it
 #| echo: false
 #| results: asis
 #| code-fold: true
-embed_gpid_prompt("gpid-guide-document-task.prompt.md", folder = "guidelines", branch = "update_guidelines")
+embed_gpid_prompt("gpid-guide-document-task.prompt.md", folder = "guidelines")
 
 ```
 
