@@ -1,5 +1,8 @@
-embed_gpid_prompt <- function(filename, folder = "protocols") {
-  base <- "https://raw.githubusercontent.com/GPID-WB/copilot-prompts/main"
+embed_gpid_prompt <- function(filename, folder = "protocols", branch = "main") {
+  base <- paste0(
+    "https://raw.githubusercontent.com/GPID-WB/copilot-prompts/",
+    branch
+  )
   url <- paste0(base, "/", folder, "/", filename)
 
   # Fetch file
@@ -11,5 +14,5 @@ embed_gpid_prompt <- function(filename, folder = "protocols") {
   )
 
   # Emit Markdown code block (printed "as-is") with proper escaping
-  cat("```markdown\n", paste(lines, collapse = "\n"), "\n```\n", sep = "")
+  cat(paste(lines, collapse = "\n"), sep = "")
 }
