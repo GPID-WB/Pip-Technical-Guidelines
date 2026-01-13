@@ -251,7 +251,8 @@ ul.task-list li input[type="checkbox"] {
   <ul class="collapse">
   <li><a href="#where-the-suggested-prompt-files-live" id="toc-where-the-suggested-prompt-files-live" class="nav-link" data-scroll-target="#where-the-suggested-prompt-files-live">Where the suggested Prompt Files Live</a></li>
   </ul></li>
-  <li><a href="#prompt-engineering" id="toc-prompt-engineering" class="nav-link" data-scroll-target="#prompt-engineering">Prompt engineering</a>
+  <li><a href="#prompt-engineering" id="toc-prompt-engineering" class="nav-link" data-scroll-target="#prompt-engineering">Prompt engineering</a></li>
+  <li><a href="#premium-advantages" id="toc-premium-advantages" class="nav-link" data-scroll-target="#premium-advantages">Premium Advantages</a>
   <ul class="collapse">
   <li><a href="#the-dos-and-donts-when-prompting" id="toc-the-dos-and-donts-when-prompting" class="nav-link" data-scroll-target="#the-dos-and-donts-when-prompting">The Do’s and Don’ts when prompting</a></li>
   <li><a href="#security-considerations-for-prompts" id="toc-security-considerations-for-prompts" class="nav-link" data-scroll-target="#security-considerations-for-prompts">Security Considerations for Prompts</a></li>
@@ -333,6 +334,37 @@ Tip
 </section>
 <section id="prompt-engineering" class="level2">
 <h2 class="anchored" data-anchor-id="prompt-engineering">Prompt engineering</h2>
+</section>
+<section id="premium-advantages" class="level2">
+<h2 class="anchored" data-anchor-id="premium-advantages">Premium Advantages</h2>
+<p>This section explains when it is more efficient to use premium large language models (LLMs) such as Anthropic Claude, Google Gemini, or other higher-capability commercial models instead of the default Copilot models. The guidance focuses on practical trade-offs: capability, latency, cost, privacy, and operational fit.</p>
+<ul>
+<li><p><strong>Use premium models when task complexity is high:</strong> prefer premium models for complex reasoning tasks (multi-step data transformations, advanced statistical reasoning, causal inference explanations, or complex code synthesis across multiple files) where higher-context windows and better reasoning substantially reduce iteration time.</p></li>
+<li><p><strong>Use premium models for high-stakes correctness:</strong> when errors have substantial downstream costs (policy notes, model specification, reproducible analysis pipelines, or security-sensitive code), a premium model’s improved accuracy and safer outputs reduce review cycles.</p></li>
+<li><p><strong>Use premium models for long-context workflows:</strong> if your task requires understanding many files, long notebooks, or long prompt histories, premium models with larger context windows avoid manual summarization and preserve continuity across the conversation.</p></li>
+<li><p><strong>Use premium models for nuanced language and domain adaptation:</strong> when you need better adherence to style, domain-specific terminology, or advanced rewriting (technical report polishing, precise policy phrasing, or data interpretation for non-technical audiences), premium models tend to produce higher-quality, more human-like text.</p></li>
+<li><p><strong>Use premium models for multi-modal or advanced tool usage:</strong> where the model must handle code + charts + tables, or integrate with tools (APIs, retrieval systems), premium models often provide more robust, reliable integrations and clearer reasoning steps.</p></li>
+</ul>
+<p>Trade-offs and constraints</p>
+<ul>
+<li><p><strong>Cost:</strong> premium models are more expensive. Reserve them for tasks where the time saved or the reduction in review burden justifies the cost. For exploratory work, drafts, or low-risk scripting, the default Copilot model is usually sufficient.</p></li>
+<li><p><strong>Latency and throughput:</strong> premium models can have higher latency and lower throughput in bulk operations. For batch processing or many small requests, prefer cheaper, faster models unless capability is the bottleneck.</p></li>
+<li><p><strong>Data governance and confidentiality:</strong> verify provider contracts and data handling policies before sending sensitive data to any external model. Some premium offerings include enterprise contracts with stronger data protections—use those when confidentiality matters.</p></li>
+<li><p><strong>Availability and integration:</strong> premium models may have different integration mechanisms, rate limits, or UI/SDK support. Confirm operational constraints (API keys, quotas, and SDK compatibility) before adopting them in an automated pipeline.</p></li>
+</ul>
+<p>Practical examples</p>
+<ul>
+<li><p>Prefer premium models when asking: “Design an analysis pipeline that uses multiple files, explains the causal identification strategy, drafts R code to implement it, and creates unit tests.” This single, complex request benefits from higher reasoning and longer context.</p></li>
+<li><p>Use default Copilot for: short refactors, small function implementations, or routine unit test scaffolding where speed and cost-efficiency are priorities.</p></li>
+<li><p>Use premium models for final-pass editing of policy text, executive summaries, or other documents that require nuance, tone control, and low tolerance for errors.</p></li>
+</ul>
+<p>Suggested workflow</p>
+<ol type="1">
+<li>Start with the default Copilot to prototype and iterate quickly on ideas or code.</li>
+<li>When the design stabilizes and you need higher-quality output, switch to a premium model for synthesis, long-context edits, or final polishing.</li>
+<li>Document which model you used and why in your prompt record (see “Document prompts used for key tasks”) to aid reproducibility and post-hoc review.</li>
+</ol>
+<p>This approach balances cost and capability while ensuring higher-quality outputs when they matter most.</p>
 <p>One of the most important skills to develop when using Githup Copilot, or any other AI agent, is to know how to prompt. Github provides some guidelines on <a href="https://docs.github.com/en/copilot/concepts/prompting/prompt-engineering">Prompt engineering for Github Copilot Chat</a>, but here are the main points to take into consideration:</p>
 <ul>
 <li>Start general and then specific</li>
