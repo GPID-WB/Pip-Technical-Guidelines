@@ -53,6 +53,47 @@ Think of these guidelines as best practices that will save you time and help you
 
 ## Prompt engineering
 
+## Premium Advantages
+
+This section explains when it is more efficient to use premium large language models (LLMs) such as Anthropic Claude, Google Gemini, or other higher-capability commercial models instead of the default Copilot models. The guidance focuses on practical trade-offs: capability, latency, cost, privacy, and operational fit.
+
+- **Use premium models when task complexity is high:** prefer premium models for complex reasoning tasks (multi-step data transformations, advanced statistical reasoning, causal inference explanations, or complex code synthesis across multiple files) where higher-context windows and better reasoning substantially reduce iteration time.
+
+- **Use premium models for high-stakes correctness:** when errors have substantial downstream costs (policy notes, model specification, reproducible analysis pipelines, or security-sensitive code), a premium model's improved accuracy and safer outputs reduce review cycles.
+
+- **Use premium models for long-context workflows:** if your task requires understanding many files, long notebooks, or long prompt histories, premium models with larger context windows avoid manual summarization and preserve continuity across the conversation.
+
+- **Use premium models for nuanced language and domain adaptation:** when you need better adherence to style, domain-specific terminology, or advanced rewriting (technical report polishing, precise policy phrasing, or data interpretation for non-technical audiences), premium models tend to produce higher-quality, more human-like text.
+
+- **Use premium models for multi-modal or advanced tool usage:** where the model must handle code + charts + tables, or integrate with tools (APIs, retrieval systems), premium models often provide more robust, reliable integrations and clearer reasoning steps.
+
+Trade-offs and constraints
+
+- **Cost:** premium models are more expensive. Reserve them for tasks where the time saved or the reduction in review burden justifies the cost. For exploratory work, drafts, or low-risk scripting, the default Copilot model is usually sufficient.
+
+- **Latency and throughput:** premium models can have higher latency and lower throughput in bulk operations. For batch processing or many small requests, prefer cheaper, faster models unless capability is the bottleneck.
+
+- **Data governance and confidentiality:** verify provider contracts and data handling policies before sending sensitive data to any external model. Some premium offerings include enterprise contracts with stronger data protections—use those when confidentiality matters.
+
+- **Availability and integration:** premium models may have different integration mechanisms, rate limits, or UI/SDK support. Confirm operational constraints (API keys, quotas, and SDK compatibility) before adopting them in an automated pipeline.
+
+Practical examples
+
+- Prefer premium models when asking: "Design an analysis pipeline that uses multiple files, explains the causal identification strategy, drafts R code to implement it, and creates unit tests." This single, complex request benefits from higher reasoning and longer context.
+
+- Use default Copilot for: short refactors, small function implementations, or routine unit test scaffolding where speed and cost-efficiency are priorities.
+
+- Use premium models for final-pass editing of policy text, executive summaries, or other documents that require nuance, tone control, and low tolerance for errors.
+
+Suggested workflow
+
+1. Start with the default Copilot to prototype and iterate quickly on ideas or code.
+2. When the design stabilizes and you need higher-quality output, switch to a premium model for synthesis, long-context edits, or final polishing.
+3. Document which model you used and why in your prompt record (see "Document prompts used for key tasks") to aid reproducibility and post-hoc review.
+
+This approach balances cost and capability while ensuring higher-quality outputs when they matter most.
+
+
 One of the most important skills to develop when using Githup Copilot, or any other AI agent, is to know how to prompt. Github provides some guidelines on [Prompt engineering for Github Copilot Chat](https://docs.github.com/en/copilot/concepts/prompting/prompt-engineering), but here are the main points to take into consideration:
 
 - Start general and then specific
