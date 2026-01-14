@@ -172,9 +172,11 @@ embed_gpid_prompt("gpid-guide-security.prompt.md", folder = "guidelines")
 
 Same as the prompt above, you can create useful reusable prompts that can help you save time and can also be shared with team members. For example, you can make the prompts from the Protocol section as a reusable prompts. VSCode gives a good explanation of how these can created in its [Copilot Tips and Tricks](https://code.visualstudio.com/docs/copilot/copilot-tips-and-tricks#_reusable-prompts). 
 
-### Premium Advantages
+## Premium Advantages
 
-GitHub Copilot offers access to both standard models (included in your subscription) and premium models (Anthropic Claude, Google Gemini, OpenAI o1, and others). Choosing the right model for each task balances capability, cost, speed, and operational constraints. This section provides practical guidance on when to use premium models and when the standard model is sufficient.
+GitHub Copilot offers access to both standard models (included in your subscription) and premium models (Anthropic Claude, Google Gemini, OpenAI o1, and others). Choosing the right model for each task balances capability, cost, speed, and operational constraints.
+
+### General guidance on model selection
 
 **When to use premium models**
 
@@ -204,15 +206,6 @@ Standard models are cost-effective and sufficient for most routine development t
 
 - **Low-stakes content:** Internal notes, preliminary analysis drafts, or documentation that will undergo extensive human review and editing regardless of model quality.
 
-**Decision framework: when is capability the bottleneck?**
-
-Switch from standard to premium models when you observe these signs that capability (not cost or speed) is limiting your progress:
-
-- Repeated iterations produce inconsistent, contradictory, or incomplete outputs despite clear prompts.
-- You must constantly break context into many small prompts or manually summarize because the model "forgets" earlier parts of the conversation.
-- Errors persist that look like reasoning failures or hallucinations rather than simple bugs (e.g., incorrect statistical interpretations, flawed causal logic, or fabricated function signatures).
-- The time spent iterating with the standard model exceeds the marginal cost of using a premium model (typically after 3-5 failed attempts on complex tasks).
-
 **Practical workflow**
 
 1. **Start with standard models** for initial prototyping, exploration, and routine tasks. This keeps costs low and iteration fast.
@@ -235,6 +228,46 @@ Switch from standard to premium models when you observe these signs that capabil
 - **Standard:** "Add Roxygen2 documentation to these three short utility functions." (Routine, low-stakes, well-defined.)
 
 This approach ensures you use premium models where they provide measurable value while keeping costs manageable for routine work.
+
+### Empirical findings from model comparisons
+
+This subsection presents model comparison results from GitHub's documentation and Posit's evaluation of LLMs for R code generation, introducing the empirical findings that follow and their implications for model selection.
+
+**GitHub Copilot model comparison findings**
+
+GitHub's [comparison of AI models](https://docs.github.com/en/copilot/tutorials/compare-ai-models) provides task-specific recommendations based on real-world developer workflows:
+
+- **GPT-5 mini:** Optimized for speed and cost-efficiency. Best for simple, repetitive tasks like filtering data, adding docstrings, or generating utility code. Delivers fast, low-latency responses ideal for real-time suggestions and lightweight development. Use when task logic is straightforward and depth is unnecessary.
+
+- **GPT-4.1:** General-purpose model suited for common development tasks requiring broad knowledge and fast iteration. Effective for standard code understanding, quick refactoring, and basic explanations. Good balance of speed and capability for everyday coding.
+
+- **GPT-5.2:** Supports image input, making it ideal for tasks requiring visual context—analyzing UML diagrams, reviewing UI screenshots, interpreting wireframes, or debugging layout issues. Use when visual assets inform the coding task.
+
+- **Claude Haiku 4.5:** Cost-efficient model for everyday coding support including documentation, boilerplate scaffolding, and test generation. Performs well on tasks requiring multi-step reasoning within moderate complexity bounds. Recommended when operating under budget constraints but still needing solid performance on routine tasks.
+
+- **Claude Sonnet 4.5:** Excels at complex, multi-file workflows and architectural planning. Well-suited for modernizing legacy code, cross-language translation (e.g., COBOL to Node.js), and tasks spanning multiple components. Handles long context well and provides deeper, step-by-step reasoning for intricate problems. Use for full software development lifecycle tasks from design to optimization.
+
+**Key takeaway:** Match model capability to task complexity. Use faster, cheaper models (GPT-5 mini, GPT-4.1) for routine work; switch to premium models (Claude Sonnet 4.5, GPT-5.2) when context, reasoning depth, or specialized capabilities (visual input, multi-file synthesis) are required.
+
+**Practical implications for R users:**
+
+Posit's [evaluation of large language models](https://posit.co/blog/r-llm-evaluation-02/) for R code quality provides domain-specific insights for data science workflows. Their benchmarking evaluated multiple models (including Claude, GPT, Gemini, and open-source alternatives) on R-specific tasks. General takeaways include:
+
+- When generating R code, prefer models with demonstrated R proficiency (check latest vendor documentation or community benchmarks).
+- Always specify style preferences (base R vs. tidyverse), required packages, and statistical assumptions explicitly in prompts.
+- Use premium models for complex statistical workflows (causal inference, Bayesian modeling, survey analysis) where reasoning depth and domain knowledge matter. 
+  - Examples: Claude Sonnet 4.5, GPT-4.1, or Gemini Pro demonstrate stronger R proficiency in Posit's evaluations.
+- Use standard models for routine data manipulation, simple visualizations, or well-established patterns (reading CSV files, basic dplyr operations). 
+  - Examples: GPT-5 mini, Claude Haiku 4.5, or lighter open-source models work well for straightforward R tasks.
+- Validate all generated R code through testing, peer review, and reproducibility checks regardless of model choice.
+
+**Combined recommendations**
+
+- For **R and data science workflows:** Start with standard models for exploratory data analysis, simple transformations, and quick prototypes. Switch to premium models (Claude Sonnet, specialized R-tuned models if available) for complex statistical reasoning, multi-step analysis pipelines, or tasks requiring deep understanding of statistical methodology.
+
+- For **general software development:** Use GPT-5 mini or Claude Haiku for routine coding, GPT-4.1 for general-purpose tasks, GPT-5.2 for visual tasks, and Claude Sonnet for complex multi-file refactoring or architectural work.
+
+- **Always document model choice:** Note which model you used and why in your workflow logs to support reproducibility, cost tracking, and post-hoc analysis of output quality.
 
 ## Interaction with GitHub Copilot
 
