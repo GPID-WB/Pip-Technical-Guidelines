@@ -257,10 +257,10 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#security-considerations-for-prompts" id="toc-security-considerations-for-prompts" class="nav-link" data-scroll-target="#security-considerations-for-prompts">Security Considerations for Prompts</a></li>
   <li><a href="#reusable-prompts" id="toc-reusable-prompts" class="nav-link" data-scroll-target="#reusable-prompts">Reusable prompts</a></li>
   </ul></li>
-  <li><a href="#premium-advantages" id="toc-premium-advantages" class="nav-link" data-scroll-target="#premium-advantages">Premium Advantages</a>
+  <li><a href="#premium-vs-standard-ai-models" id="toc-premium-vs-standard-ai-models" class="nav-link" data-scroll-target="#premium-vs-standard-ai-models">Premium vs Standard AI models</a>
   <ul class="collapse">
-  <li><a href="#general-guidance-on-model-selection" id="toc-general-guidance-on-model-selection" class="nav-link" data-scroll-target="#general-guidance-on-model-selection">General guidance on model selection</a></li>
   <li><a href="#empirical-findings-from-model-comparisons" id="toc-empirical-findings-from-model-comparisons" class="nav-link" data-scroll-target="#empirical-findings-from-model-comparisons">Empirical findings from model comparisons</a></li>
+  <li><a href="#general-guidance-on-model-selection" id="toc-general-guidance-on-model-selection" class="nav-link" data-scroll-target="#general-guidance-on-model-selection">General guidance on model selection</a></li>
   </ul></li>
   <li><a href="#interaction-with-github-copilot" id="toc-interaction-with-github-copilot" class="nav-link" data-scroll-target="#interaction-with-github-copilot">Interaction with GitHub Copilot</a>
   <ul class="collapse">
@@ -476,55 +476,13 @@ Tip
 <p>Same as the prompt above, you can create useful reusable prompts that can help you save time and can also be shared with team members. For example, you can make the prompts from the Protocol section as a reusable prompts. VSCode gives a good explanation of how these can created in its <a href="https://code.visualstudio.com/docs/copilot/copilot-tips-and-tricks#_reusable-prompts">Copilot Tips and Tricks</a>.</p>
 </section>
 </section>
-<section id="premium-advantages" class="level2">
-<h2 class="anchored" data-anchor-id="premium-advantages">Premium Advantages</h2>
-<p>GitHub Copilot offers access to both standard models (included in your subscription) and premium models (Anthropic Claude, Google Gemini, OpenAI o1, and others). Choosing the right model for each task balances capability, cost, speed, and operational constraints.</p>
-<section id="general-guidance-on-model-selection" class="level3">
-<h3 class="anchored" data-anchor-id="general-guidance-on-model-selection">General guidance on model selection</h3>
-<p><strong>When to use premium models</strong></p>
-<p>Premium models excel at tasks where their advanced reasoning, longer context windows, or specialized capabilities substantially reduce iteration time or improve output quality:</p>
-<ul>
-<li><p><strong>Complex multi-step reasoning:</strong> Tasks requiring multi-step data transformations, advanced statistical or causal inference explanations, intricate code synthesis across multiple files, or deep logical analysis. Premium models handle these more reliably with fewer hallucinations and contradictions.</p></li>
-<li><p><strong>High-stakes correctness:</strong> When errors have significant downstream costs—policy notes, model specifications, reproducible analysis pipelines, security-sensitive code, or regulatory reporting—premium models’ improved accuracy and safer outputs reduce review cycles and minimize risk.</p></li>
-<li><p><strong>Long-context workflows:</strong> If your task requires understanding many files (10+ modules), long notebooks (500+ lines), or extended prompt histories, premium models with larger context windows (100K+ tokens) avoid manual summarization and preserve continuity across complex conversations.</p></li>
-<li><p><strong>Nuanced language and domain adaptation:</strong> Tasks demanding precise adherence to style, domain-specific terminology (economics, statistics, legal language), or advanced rewriting for technical reports, policy briefs, or executive summaries. Premium models produce higher-quality, more contextually appropriate text.</p></li>
-<li><p><strong>Multi-modal or advanced tool usage:</strong> When the model must handle code + charts + tables simultaneously, or integrate with external tools (APIs, retrieval systems, databases), premium models provide more robust reasoning and clearer explanation of multi-step operations.</p></li>
-</ul>
-<p><strong>When to use standard models</strong></p>
-<p>Standard models are cost-effective and sufficient for most routine development tasks. Use them when speed, cost, and throughput matter more than advanced reasoning:</p>
-<ul>
-<li><p><strong>Routine code generation:</strong> Simple function implementations, standard CRUD operations, boilerplate generation, or straightforward refactoring tasks where the logic is well-established and low-risk.</p></li>
-<li><p><strong>Exploratory work and prototyping:</strong> Early-stage brainstorming, quick drafts, proof-of-concept scripts, or iterative experimentation where you expect to revise heavily and speed matters more than perfection.</p></li>
-<li><p><strong>Small-scale edits:</strong> Single-file changes, adding comments or documentation, formatting fixes, or minor bug corrections where context is limited and the task is well-defined.</p></li>
-<li><p><strong>Batch operations:</strong> Many small, independent requests (batch refactoring, generating test stubs for 50+ functions, or repetitive code transformations) where latency and cost per request are priorities.</p></li>
-<li><p><strong>Low-stakes content:</strong> Internal notes, preliminary analysis drafts, or documentation that will undergo extensive human review and editing regardless of model quality.</p></li>
-</ul>
-<p><strong>Practical workflow</strong></p>
-<ol type="1">
-<li><strong>Start with standard models</strong> for initial prototyping, exploration, and routine tasks. This keeps costs low and iteration fast.</li>
-<li><strong>Switch to premium models</strong> when the task requires high accuracy, long context, complex reasoning, or when standard model iterations are failing or taking too long.</li>
-<li><strong>Use premium models for final synthesis</strong> on high-stakes deliverables: polishing policy documents, validating complex pipelines, or generating production-ready code with rigorous error handling.</li>
-<li><strong>Document your choice:</strong> Note which model you used and why in your prompt record (see “Document prompts used for key tasks”) to support reproducibility and cost tracking.</li>
-</ol>
-<p><strong>Trade-offs and constraints</strong></p>
-<ul>
-<li><strong>Cost:</strong> Premium models are 5-20x more expensive per request. Reserve them for tasks where reduced iteration time or higher quality justifies the cost.</li>
-<li><strong>Latency:</strong> Premium models may have higher response times (2-10 seconds vs.&nbsp;&lt;1 second). For interactive workflows, this can slow down rapid iteration.</li>
-<li><strong>Data governance:</strong> Verify provider contracts and data handling policies before sending sensitive data. Some premium offerings include enterprise contracts with stronger confidentiality protections—use those for proprietary or sensitive work.</li>
-<li><strong>Availability and rate limits:</strong> Premium models may have different quotas, API limits, or integration requirements. Confirm operational constraints before committing to them in automated pipelines.</li>
-</ul>
-<p><strong>Examples</strong></p>
-<ul>
-<li><strong>Premium:</strong> “Design an analysis pipeline that reads microdata from five countries, harmonizes variable definitions, implements a difference-in-differences estimator with sensitivity analysis, generates reproducible R code with unit tests, and drafts a two-page summary of findings for a policy note.” (Complex, multi-step, high-stakes.)</li>
-<li><strong>Standard:</strong> “Write a helper function that converts country codes from ISO2 to ISO3 format using the countrycode package.” (Simple, low-risk, single-file.)</li>
-<li><strong>Premium:</strong> “Review this 800-line poverty estimation script, identify edge cases that could cause incorrect poverty headcount calculations, and suggest defensive checks.” (Long context, high correctness requirement.)</li>
-<li><strong>Standard:</strong> “Add Roxygen2 documentation to these three short utility functions.” (Routine, low-stakes, well-defined.)</li>
-</ul>
-<p>This approach ensures you use premium models where they provide measurable value while keeping costs manageable for routine work.</p>
-</section>
+<section id="premium-vs-standard-ai-models" class="level2">
+<h2 class="anchored" data-anchor-id="premium-vs-standard-ai-models">Premium vs Standard AI models</h2>
+<p>GitHub Copilot offers access to both standard models (included in your subscription) and premium models (Anthropic Claude, Google Gemini, OpenAI o1, and others). Premium models (Claude Sonnet, GPT-4.1, Gemini Pro, o1) typically require additional credits or higher subscription tiers, while standard models (GPT-5 mini, Claude Haiku) are included in base subscriptions. Choosing the right model for each task balances capability, cost, speed, and operational constraints.</p>
+<p><strong>Note:</strong> Model availability depends on your GitHub Copilot subscription tier and may change over time. Check your IDE’s model selector for current options.</p>
 <section id="empirical-findings-from-model-comparisons" class="level3">
 <h3 class="anchored" data-anchor-id="empirical-findings-from-model-comparisons">Empirical findings from model comparisons</h3>
-<p>This subsection presents model comparison results from GitHub’s documentation and Posit’s evaluation of LLMs for R code generation, introducing the empirical findings that follow and their implications for model selection.</p>
+<p>This subsection presents model comparison results from GitHub’s documentation and Posit’s evaluation of LLMs for R code generation, providing evidence-based guidance on model selection.</p>
 <p><strong>GitHub Copilot model comparison findings</strong></p>
 <p>GitHub’s <a href="https://docs.github.com/en/copilot/tutorials/compare-ai-models">comparison of AI models</a> provides task-specific recommendations based on real-world developer workflows:</p>
 <ul>
@@ -536,25 +494,40 @@ Tip
 </ul>
 <p><strong>Key takeaway:</strong> Match model capability to task complexity. Use faster, cheaper models (GPT-5 mini, GPT-4.1) for routine work; switch to premium models (Claude Sonnet 4.5, GPT-5.2) when context, reasoning depth, or specialized capabilities (visual input, multi-file synthesis) are required.</p>
 <p><strong>Practical implications for R users:</strong></p>
-<p>Posit’s <a href="https://posit.co/blog/r-llm-evaluation-02/">evaluation of large language models</a> for R code quality provides domain-specific insights for data science workflows. Their benchmarking evaluated multiple models (including Claude, GPT, Gemini, and open-source alternatives) on R-specific tasks. General takeaways include:</p>
+<p>As of August 2025, Posit’s <a href="https://posit.co/blog/r-llm-evaluation-02/">evaluation of large language models</a> for R code quality provides domain-specific insights for data science workflows. Their benchmarking evaluated multiple models (including Claude, GPT, Gemini, and open-source alternatives) on R-specific tasks. General takeaways include:</p>
 <ul>
-<li>When generating R code, prefer models with demonstrated R proficiency (check latest vendor documentation or community benchmarks).</li>
+<li>When generating R code, prefer models with demonstrated R proficiency. Check the Posit blog post for updated rankings or consult vendor documentation.</li>
 <li>Always specify style preferences (base R vs.&nbsp;tidyverse), required packages, and statistical assumptions explicitly in prompts.</li>
-<li>Use premium models for complex statistical workflows (causal inference, Bayesian modeling, survey analysis) where reasoning depth and domain knowledge matter.
-<ul>
-<li>Examples: Claude Sonnet 4.5, GPT-4.1, or Gemini Pro demonstrate stronger R proficiency in Posit’s evaluations.</li>
-</ul></li>
-<li>Use standard models for routine data manipulation, simple visualizations, or well-established patterns (reading CSV files, basic dplyr operations).
-<ul>
-<li>Examples: GPT-5 mini, Claude Haiku 4.5, or lighter open-source models work well for straightforward R tasks.</li>
-</ul></li>
+<li>Use premium models (Claude Sonnet 4.5, GPT-4.1, Gemini Pro) for complex statistical workflows such as causal inference, Bayesian modeling, or survey analysis where reasoning depth and domain knowledge matter.</li>
+<li>Use standard models (GPT-5 mini, Claude Haiku 4.5, lighter open-source models) for routine data manipulation, simple visualizations, or well-established patterns like reading CSV files or basic dplyr operations.</li>
 <li>Validate all generated R code through testing, peer review, and reproducibility checks regardless of model choice.</li>
 </ul>
-<p><strong>Combined recommendations</strong></p>
+</section>
+<section id="general-guidance-on-model-selection" class="level3">
+<h3 class="anchored" data-anchor-id="general-guidance-on-model-selection">General guidance on model selection</h3>
+<p>Based on the empirical findings above, follow this workflow to choose the right model for your task:</p>
+<p><strong>Practical workflow</strong></p>
+<ol type="1">
+<li><strong>Start with standard models</strong> (GPT-5 mini, Claude Haiku 4.5) for initial prototyping, exploration, and routine tasks. This keeps costs low and iteration fast.</li>
+<li><strong>Switch to premium models</strong> (Claude Sonnet 4.5, GPT-4.1, Gemini Pro) when tasks require high accuracy, long context, complex reasoning, or when standard model iterations fail or take too long.</li>
+<li><strong>For R and data science workflows:</strong> Start with standard models for exploratory data analysis, simple transformations, and quick prototypes. Switch to premium models for complex statistical reasoning, multi-step analysis pipelines, or tasks requiring deep understanding of statistical methodology.</li>
+<li><strong>For general software development:</strong> Use standard models (GPT-5 mini, Claude Haiku) for routine coding, GPT-4.1 for general-purpose tasks, GPT-5.2 for visual tasks, and Claude Sonnet for complex multi-file refactoring or architectural work.</li>
+<li><strong>Use premium models for final synthesis</strong> on high-stakes deliverables: polishing policy documents, validating complex pipelines, or generating production-ready code with rigorous error handling.</li>
+<li><strong>Document your choice:</strong> Note which model you used and why in your prompt record (see “Document prompts used for key tasks”) to support reproducibility, cost tracking, and post-hoc analysis of output quality.</li>
+</ol>
+<p><strong>Trade-offs and constraints</strong></p>
 <ul>
-<li><p>For <strong>R and data science workflows:</strong> Start with standard models for exploratory data analysis, simple transformations, and quick prototypes. Switch to premium models (Claude Sonnet, specialized R-tuned models if available) for complex statistical reasoning, multi-step analysis pipelines, or tasks requiring deep understanding of statistical methodology.</p></li>
-<li><p>For <strong>general software development:</strong> Use GPT-5 mini or Claude Haiku for routine coding, GPT-4.1 for general-purpose tasks, GPT-5.2 for visual tasks, and Claude Sonnet for complex multi-file refactoring or architectural work.</p></li>
-<li><p><strong>Always document model choice:</strong> Note which model you used and why in your workflow logs to support reproducibility, cost tracking, and post-hoc analysis of output quality.</p></li>
+<li><strong>Cost:</strong> Premium models are 5-20x more expensive per request. Reserve them for tasks where reduced iteration time or higher quality justifies the cost.</li>
+<li><strong>Latency:</strong> Premium models may have higher response times (2-10 seconds vs.&nbsp;&lt;1 second). For interactive workflows, this can slow rapid iteration.</li>
+<li><strong>Data governance:</strong> Verify provider contracts and data handling policies before sending sensitive data. Some premium offerings include enterprise contracts with stronger confidentiality protections—use those for proprietary or sensitive work.</li>
+<li><strong>Availability and rate limits:</strong> Premium models may have different quotas, API limits, or integration requirements. Confirm operational constraints before committing to them in automated pipelines.</li>
+</ul>
+<p><strong>Example prompts by model category</strong></p>
+<ul>
+<li><strong>Premium:</strong> “Design an analysis pipeline that reads microdata from five countries, harmonizes variable definitions, implements a difference-in-differences estimator with sensitivity analysis, generates reproducible R code with unit tests, and drafts a two-page summary of findings for a policy note.” (Complex, multi-step, high-stakes.)</li>
+<li><strong>Standard:</strong> “Write a helper function that converts country codes from ISO2 to ISO3 format using the countrycode package.” (Simple, low-risk, single-file.)</li>
+<li><strong>Premium:</strong> “Review this 800-line poverty estimation script, identify edge cases that could cause incorrect poverty headcount calculations, and suggest defensive checks.” (Long context, high correctness requirement.)</li>
+<li><strong>Standard:</strong> “Add Roxygen2 documentation to these three short utility functions.” (Routine, low-stakes, well-defined.)</li>
 </ul>
 </section>
 </section>
