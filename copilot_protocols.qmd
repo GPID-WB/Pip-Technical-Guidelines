@@ -151,7 +151,7 @@ When you run `/gpid-proto-start-task`, Github Copilot:
    * assumptions
    * dependencies added/removed
 
-3. Keeps the summary alive throughout the task.
+3. Keeps the summary alive throughout the task in the file `copilot_logs/LOG_${TASK_NAME}.md`.
 
 You do **not** need to structure this manually — the prompt enforces consistency.
 
@@ -164,6 +164,46 @@ You do **not** need to structure this manually — the prompt enforces consisten
 #| results: asis
 #| code-fold: true
 embed_gpid_prompt("gpid-proto-start-task.prompt.md")
+
+```
+
+:::
+
+---
+
+### Protocol  {{< protocol >}} — Logging progress of the task {.unnumbered}
+
+**Prompt:**
+
+```
+/gpid-proto-log-update
+```
+
+#### Purpose {.unnumbered}
+
+Keep the `copilot_logs/LOG_${TASK_NAME}.md` updated with regular progress updates.
+
+
+#### What It Does {.unnumbered}
+
+When you run `/gpid-proto-log-update`, Github Copilot will append an update to the running summary in `copilot_logs/LOG_${TASK_NAME}.md` with:
+
+- **Timestamp**: Include the current date and time in ISO format (YYYY-MM-DD HH:MM:SS)
+- **Progress summary**: Key accomplishments since the last update
+- **Challenges encountered**: Any blockers, issues, or difficulties faced
+- **Changes to plan**: Deviations from the original approach or scope
+- **Next steps**: What will be tackled next  
+
+
+#### Latest GPID prompt file {.unnumbered}
+
+::: {.callout-note collapse="true" title="gpid-proto-log-update"}
+
+```{r}
+#| echo: false
+#| results: asis
+#| code-fold: true
+embed_gpid_prompt("gpid-proto-log-update.prompt.md")
 
 ```
 
@@ -388,7 +428,7 @@ embed_gpid_prompt("gpid-proto-self-critique.prompt.md")
 **Prompt:**
 
 ```
-/gpid-proto-wrap-task TASK_NAME
+/gpid-proto-wrap-task
 ```
 
 #### Purpose {.unnumbered}
