@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.26">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -75,7 +75,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-0dd2bd5de344125cf763a379ddc3eb04.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -107,35 +107,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="css/tachyons.css">
 </head>
@@ -317,14 +288,15 @@ window.Quarto = {
   <li><a href="#the-gpid-protocol-prompts" id="toc-the-gpid-protocol-prompts" class="nav-link" data-scroll-target="#the-gpid-protocol-prompts"><span class="header-section-number">4.3</span> The GPID Protocol Prompts</a>
   <ul class="collapse">
   <li><a href="#protocol-documenting-your-work-with-github-copilot" id="toc-protocol-documenting-your-work-with-github-copilot" class="nav-link" data-scroll-target="#protocol-documenting-your-work-with-github-copilot">Protocol 1 — Documenting Your Work With Github Copilot</a></li>
-  <li><a href="#protocol-making-the-code-understandable" id="toc-protocol-making-the-code-understandable" class="nav-link" data-scroll-target="#protocol-making-the-code-understandable">Protocol 2 — Making the Code Understandable</a></li>
-  <li><a href="#protocol-code-review-and-efficiency-check" id="toc-protocol-code-review-and-efficiency-check" class="nav-link" data-scroll-target="#protocol-code-review-and-efficiency-check">Protocol 3 — Code Review and Efficiency Check</a></li>
-  <li><a href="#protocol-testing-and-edge-cases" id="toc-protocol-testing-and-edge-cases" class="nav-link" data-scroll-target="#protocol-testing-and-edge-cases">Protocol 4 — Testing and Edge Cases</a></li>
-  <li><a href="#protocol-dependencies-risks-and-safety" id="toc-protocol-dependencies-risks-and-safety" class="nav-link" data-scroll-target="#protocol-dependencies-risks-and-safety">Protocol 5 — Dependencies, Risks, and Safety</a></li>
-  <li><a href="#protocol-self-critique-and-robustness-review" id="toc-protocol-self-critique-and-robustness-review" class="nav-link" data-scroll-target="#protocol-self-critique-and-robustness-review">Protocol 6 — Self-Critique and Robustness Review</a></li>
-  <li><a href="#protocol-producing-the-final-validation-bundle" id="toc-protocol-producing-the-final-validation-bundle" class="nav-link" data-scroll-target="#protocol-producing-the-final-validation-bundle">Protocol 7 — Producing the Final Validation Bundle</a></li>
+  <li><a href="#protocol-logging-progress-of-the-task" id="toc-protocol-logging-progress-of-the-task" class="nav-link" data-scroll-target="#protocol-logging-progress-of-the-task">Protocol 2 — Logging progress of the task</a></li>
+  <li><a href="#protocol-making-the-code-understandable" id="toc-protocol-making-the-code-understandable" class="nav-link" data-scroll-target="#protocol-making-the-code-understandable">Protocol 3 — Making the Code Understandable</a></li>
+  <li><a href="#protocol-code-review-and-efficiency-check" id="toc-protocol-code-review-and-efficiency-check" class="nav-link" data-scroll-target="#protocol-code-review-and-efficiency-check">Protocol 4 — Code Review and Efficiency Check</a></li>
+  <li><a href="#protocol-testing-and-edge-cases" id="toc-protocol-testing-and-edge-cases" class="nav-link" data-scroll-target="#protocol-testing-and-edge-cases">Protocol 5 — Testing and Edge Cases</a></li>
+  <li><a href="#protocol-dependencies-risks-and-safety" id="toc-protocol-dependencies-risks-and-safety" class="nav-link" data-scroll-target="#protocol-dependencies-risks-and-safety">Protocol 6 — Dependencies, Risks, and Safety</a></li>
+  <li><a href="#protocol-self-critique-and-robustness-review" id="toc-protocol-self-critique-and-robustness-review" class="nav-link" data-scroll-target="#protocol-self-critique-and-robustness-review">Protocol 7 — Self-Critique and Robustness Review</a></li>
+  <li><a href="#protocol-producing-the-final-validation-bundle" id="toc-protocol-producing-the-final-validation-bundle" class="nav-link" data-scroll-target="#protocol-producing-the-final-validation-bundle">Protocol 8 — Producing the Final Validation Bundle</a></li>
   </ul></li>
-  <li><a href="#final-reminder-you-are-the-author" id="toc-final-reminder-you-are-the-author" class="nav-link" data-scroll-target="#final-reminder-you-are-the-author"><span class="header-section-number">4.4</span> Final Reminder: You Are the Author</a></li>
+  <li><a href="#final-reminder-you-are-the-author" id="toc-final-reminder-you-are-the-author" class="nav-link" data-scroll-target="#final-reminder-you-are-the-author"><span class="header-section-number">4.10</span> Final Reminder: You Are the Author</a></li>
   </ul>
 </nav>
     </div>
@@ -471,7 +443,7 @@ gpid-proto-wrap-task.prompt.md
 <li>assumptions</li>
 <li>dependencies added/removed</li>
 </ul></li>
-<li><p>Keeps the summary alive throughout the task.</p></li>
+<li><p>Keeps the summary alive throughout the task in the file <code>copilot_logs/LOG_${TASK_NAME}.md</code>.</p></li>
 </ol>
 <p>You do <strong>not</strong> need to structure this manually — the prompt enforces consistency.</p>
 </section>
@@ -503,6 +475,18 @@ gpid-proto-wrap-task.prompt.md
 <li><code>Task name: ...</code></li>
 <li><code>Description: ...</code></li>
 </ul></li>
+<li>Create two files for task tracking:
+<ul>
+<li><strong>Task log file</strong> at <code>copilot_logs/LOG_${TASK_NAME}.md</code> containing:
+<ul>
+<li>Task name and description</li>
+<li>Initial context and relevant information you identify</li>
+<li>A timestamp for task initialization</li>
+<li>This log will be used to track progress throughout the task</li>
+<li><strong>Note:</strong> As we work, you may add a “To Do List” section to track follow-up tasks, improvements, or issues discovered during the current task</li>
+</ul></li>
+<li><strong>Current task marker</strong> at <code>.current_task</code> containing only the task name (for quick reference across the session)</li>
+</ul></li>
 <li>From that point on, keep a <strong>concise running summary</strong> of our interaction, including:
 <ul>
 <li>major prompts I send</li>
@@ -525,13 +509,92 @@ Your role after the initial questions is, only when asked, to:
 <hr>
 </section>
 </section>
+<section id="protocol-logging-progress-of-the-task" class="level3 unnumbered">
+<h3 class="unnumbered anchored">Protocol 2 — Logging progress of the task</h3>
+<p><strong>Prompt:</strong></p>
+<pre><code>/gpid-proto-log-update</code></pre>
+<section id="purpose-1" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="purpose-1">Purpose</h4>
+<p>Keep the <code>copilot_logs/LOG_${TASK_NAME}.md</code> updated with regular progress updates.</p>
+</section>
+<section id="what-it-does-1" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="what-it-does-1">What It Does</h4>
+<p>When you run <code>/gpid-proto-log-update</code>, Github Copilot will append an update to the running summary in <code>copilot_logs/LOG_${TASK_NAME}.md</code> with:</p>
+<ul>
+<li><strong>Timestamp</strong>: Include the current date and time in ISO format (YYYY-MM-DD HH:MM:SS)</li>
+<li><strong>Progress summary</strong>: Key accomplishments since the last update</li>
+<li><strong>Challenges encountered</strong>: Any blockers, issues, or difficulties faced</li>
+<li><strong>Changes to plan</strong>: Deviations from the original approach or scope</li>
+<li><strong>Next steps</strong>: What will be tackled next</li>
+</ul>
+</section>
+<section id="latest-gpid-prompt-file-1" class="level4 unnumbered">
+<h4 class="unnumbered anchored">Latest GPID prompt file</h4>
+<div class="callout callout-style-default callout-note callout-titled" title="gpid-proto-log-update">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>gpid-proto-log-update
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We are updating the <strong>task progress log</strong> for an ongoing Copilot-assisted task.</p>
+<section id="retrieving-the-task-name" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="retrieving-the-task-name"><span class="header-section-number">4.4</span> Retrieving the task name</h2>
+<p>Locate the task name you provided at the start of this conversation session. Confirm it by restating: &gt; Task name: [TASK_NAME]</p>
+<p>Then proceed to update <code>copilot_logs/LOG_${TASK_NAME}.md</code> where <code>${TASK_NAME}</code> is that task name.</p>
+<p><strong>Fallback:</strong> If you cannot locate the task name in the conversation history, read <code>.current_task</code> to retrieve it. If that file doesn’t exist either, ask the user to provide the task name with a single prompt: <code>Please provide the TASK_NAME to update copilot_logs/LOG_TASK_NAME.md.</code></p>
+<p>After confirming the task name, proceed with the update:</p>
+</section>
+<section id="update-the-log-file-copilot_logslog_task_name.md" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="update-the-log-file-copilot_logslog_task_name.md"><span class="header-section-number">4.5</span> Update the log file <code>copilot_logs/LOG_${TASK_NAME}.md</code>:</h2>
+<ol type="1">
+<li><p><strong>Open and review</strong> the existing log file to understand its current state and structure.</p></li>
+<li><p><strong>Append a new update section</strong> with:</p>
+<ul>
+<li><strong>Timestamp</strong>: Include the current date and time in ISO format (YYYY-MM-DD HH:MM:SS)</li>
+<li><strong>Progress summary</strong>: Key accomplishments since the last update</li>
+<li><strong>Challenges encountered</strong>: Any blockers, issues, or difficulties faced</li>
+<li><strong>Changes to plan</strong>: Deviations from the original approach or scope</li>
+<li><strong>Next steps</strong>: What will be tackled next</li>
+</ul></li>
+<li><p><strong>Update or create the To Do List section</strong>:</p>
+<ul>
+<li>Review the conversation since the last log update (or since task initialization)</li>
+<li>Identify potential follow-up tasks, improvements, technical debt, or issues discovered</li>
+<li><strong>Before adding to the log</strong>, present your suggested to-do items to the user in a clear list format</li>
+<li>Ask: “I suggest adding these items to the To Do List. Would you like me to include them, or would you like to modify/add others?”</li>
+<li>Only after user confirmation, add/update the “## To Do List” section in the log</li>
+<li>If a To Do List section already exists, preserve completed items and update with new suggestions</li>
+</ul></li>
+<li><p><strong>Maintain organization</strong> by:</p>
+<ul>
+<li>Using clear section headings for each update</li>
+<li>Keeping entries concise but informative</li>
+<li>Ensuring the log remains chronologically ordered</li>
+<li>Using consistent formatting throughout</li>
+</ul></li>
+<li><p><strong>Preserve all prior content</strong>: Do not remove or modify previous updates; only append new information.</p></li>
+</ol>
+<p>Return the updated <code>copilot_logs/LOG_${TASK_NAME}.md</code> file with the new update appended.</p>
+</section>
+</div>
+</div>
+</div>
+<hr>
+</section>
+</section>
 <section id="protocol-making-the-code-understandable" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="protocol-making-the-code-understandable">Protocol 2 — Making the Code Understandable</h3>
+<h3 class="unnumbered anchored" data-anchor-id="protocol-making-the-code-understandable">Protocol 3 — Making the Code Understandable</h3>
 <p><strong>Prompts:</strong></p>
 <pre><code>/gpid-proto-explain-code
 /gpid-proto-document-code</code></pre>
-<section id="purpose-1" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="purpose-1">Purpose</h4>
+<section id="purpose-2" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="purpose-2">Purpose</h4>
 <p>Github Copilot may generate correct code, but not always readable code. These prompts ensure that the logic, intention, and structure are thoroughly documented.</p>
 </section>
 <section id="what-they-do" class="level4 unnumbered">
@@ -545,10 +608,10 @@ Your role after the initial questions is, only when asked, to:
 <li>Identifies failure points</li>
 </ul>
 </section>
-<section id="latest-gpid-prompt-file-1" class="level5 unnumbered">
-<h5 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-1">Latest GPID prompt file</h5>
+<section id="latest-gpid-prompt-file-2" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-2">Latest GPID prompt file</h5>
 <div class="callout callout-style-default callout-note callout-titled" title="gpid-proto-explain-code">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -557,7 +620,7 @@ Your role after the initial questions is, only when asked, to:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>You will be asked to explain a function, test file, or script (usually R or Stata).</p>
 <p>If the context is ambiguous, first ask me <strong>what code or file you should focus on</strong> (e.g., current selection, specific function, or file).</p>
@@ -615,10 +678,10 @@ Your role after the initial questions is, only when asked, to:
 <li>Produces a plain-language explanation for the task summary</li>
 </ul>
 </section>
-<section id="latest-gpid-prompt-file-2" class="level5 unnumbered">
-<h5 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-2">Latest GPID prompt file</h5>
+<section id="latest-gpid-prompt-file-3" class="level5 unnumbered">
+<h5 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-3">Latest GPID prompt file</h5>
 <div class="callout callout-style-default callout-note callout-titled" title="gpid-proto-document-code">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -627,7 +690,7 @@ Your role after the initial questions is, only when asked, to:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>You will be given one or more functions or scripts, mainly in <strong>R</strong> (often using <code>data.table</code>, <code>collapse</code>, <code>rlang</code>) and sometimes <strong>Stata</strong>.</p>
 <p>If it is unclear what code to document, first ask me <strong>which function/file/selection</strong> to use.</p>
@@ -671,15 +734,15 @@ Your role after the initial questions is, only when asked, to:
 </section>
 </section>
 <section id="protocol-code-review-and-efficiency-check" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="protocol-code-review-and-efficiency-check">Protocol 3 — Code Review and Efficiency Check</h3>
+<h3 class="unnumbered anchored" data-anchor-id="protocol-code-review-and-efficiency-check">Protocol 4 — Code Review and Efficiency Check</h3>
 <p><strong>Prompt:</strong></p>
 <pre><code>/gpid-proto-review-efficiency</code></pre>
-<section id="purpose-2" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="purpose-2">Purpose</h4>
+<section id="purpose-3" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="purpose-3">Purpose</h4>
 <p>Before testing, every piece of Copilot-generated code must undergo an efficiency audit.</p>
 </section>
-<section id="what-it-does-1" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="what-it-does-1">What It Does</h4>
+<section id="what-it-does-2" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="what-it-does-2">What It Does</h4>
 <p>The prompt reviews code for:</p>
 <ul>
 <li>redundant logic</li>
@@ -691,10 +754,10 @@ Your role after the initial questions is, only when asked, to:
 </ul>
 <p>And provides clear, actionable improvements.</p>
 </section>
-<section id="latest-gpid-prompt-file-3" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-3">Latest GPID prompt file</h4>
+<section id="latest-gpid-prompt-file-4" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-4">Latest GPID prompt file</h4>
 <div class="callout callout-style-default callout-note callout-titled" title="gpid-proto-review-efficiency">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -703,7 +766,7 @@ Your role after the initial questions is, only when asked, to:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>You are reviewing Copilot-assisted code for <strong>efficiency, simplicity, and maintainability</strong>.</p>
 <p>If it is unclear what to review, first ask me <strong>which function/file/selection</strong> to analyze.</p>
@@ -747,15 +810,15 @@ Your role after the initial questions is, only when asked, to:
 </section>
 </section>
 <section id="protocol-testing-and-edge-cases" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="protocol-testing-and-edge-cases">Protocol 4 — Testing and Edge Cases</h3>
+<h3 class="unnumbered anchored" data-anchor-id="protocol-testing-and-edge-cases">Protocol 5 — Testing and Edge Cases</h3>
 <p><strong>Prompt:</strong></p>
 <pre><code>/gpid-proto-tests-checklist</code></pre>
-<section id="purpose-3" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="purpose-3">Purpose</h4>
+<section id="purpose-4" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="purpose-4">Purpose</h4>
 <p>No Copilot-generated code is accepted without thorough testing.</p>
 </section>
-<section id="what-it-does-2" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="what-it-does-2">What It does</h4>
+<section id="what-it-does-3" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="what-it-does-3">What It does</h4>
 <ol type="1">
 <li>A <strong>validation checklist</strong></li>
 <li><code>testthat</code> unit tests (for R)</li>
@@ -764,10 +827,10 @@ Your role after the initial questions is, only when asked, to:
 </ol>
 <p>All structured for direct inclusion in your PR.</p>
 </section>
-<section id="latest-gpid-prompt-file-4" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-4">Latest GPID prompt file</h4>
+<section id="latest-gpid-prompt-file-5" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-5">Latest GPID prompt file</h4>
 <div class="callout callout-style-default callout-note callout-titled" title="gpid-proto-tests-checklist">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -776,7 +839,7 @@ Your role after the initial questions is, only when asked, to:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>You will help design validation for a function, module, or script.</p>
 <p>If it is unclear what to validate, first ask me <strong>which function/file/selection</strong> to focus on.</p>
@@ -831,15 +894,15 @@ Your role after the initial questions is, only when asked, to:
 </section>
 </section>
 <section id="protocol-dependencies-risks-and-safety" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="protocol-dependencies-risks-and-safety">Protocol 5 — Dependencies, Risks, and Safety</h3>
+<h3 class="unnumbered anchored" data-anchor-id="protocol-dependencies-risks-and-safety">Protocol 6 — Dependencies, Risks, and Safety</h3>
 <p><strong>Prompt:</strong></p>
 <pre><code>/gpid-proto-deps-risk</code></pre>
-<section id="purpose-4" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="purpose-4">Purpose</h4>
+<section id="purpose-5" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="purpose-5">Purpose</h4>
 <p>Ensure that dependencies are justified, safe, and aligned with team standards.</p>
 </section>
-<section id="what-it-does-3" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="what-it-does-3">What It Does</h4>
+<section id="what-it-does-4" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="what-it-does-4">What It Does</h4>
 <ul>
 <li>Lists all dependencies</li>
 <li>Explains why each is needed</li>
@@ -848,10 +911,10 @@ Your role after the initial questions is, only when asked, to:
 <li>Identifies unsafe patterns (I/O, file paths, etc.)</li>
 </ul>
 </section>
-<section id="latest-gpid-prompt-file-5" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-5">Latest GPID prompt file</h4>
+<section id="latest-gpid-prompt-file-6" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-6">Latest GPID prompt file</h4>
 <div class="callout callout-style-default callout-note callout-titled" title="gpid-proto-deps-risk">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -860,7 +923,7 @@ Your role after the initial questions is, only when asked, to:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>You are reviewing dependencies and risks for Copilot-assisted code in R or Stata.</p>
 <p>If it is unclear what code to inspect, ask me <strong>which file/selection</strong> to analyze.</p>
@@ -911,16 +974,16 @@ Your role after the initial questions is, only when asked, to:
 </section>
 </section>
 <section id="protocol-self-critique-and-robustness-review" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="protocol-self-critique-and-robustness-review">Protocol 6 — Self-Critique and Robustness Review</h3>
+<h3 class="unnumbered anchored" data-anchor-id="protocol-self-critique-and-robustness-review">Protocol 7 — Self-Critique and Robustness Review</h3>
 <p><strong>Prompt:</strong></p>
 <pre><code>/gpid-proto-self-critique</code></pre>
-<section id="purpose-5" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="purpose-5">Purpose</h4>
+<section id="purpose-6" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="purpose-6">Purpose</h4>
 <p>Github Copilot is surprisingly good at critiquing its own work when prompted correctly.</p>
 <p>This step often finds issues humans miss.</p>
 </section>
-<section id="what-it-does-4" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="what-it-does-4">What It Does</h4>
+<section id="what-it-does-5" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="what-it-does-5">What It Does</h4>
 <ul>
 <li>Reviews code as if performing a formal code review</li>
 <li>Identifies inefficiencies</li>
@@ -929,10 +992,10 @@ Your role after the initial questions is, only when asked, to:
 <li>Produces a concise summary of strengths, risks, and recommended improvements</li>
 </ul>
 </section>
-<section id="latest-gpid-prompt-file-6" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-6">Latest GPID prompt file</h4>
+<section id="latest-gpid-prompt-file-7" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-7">Latest GPID prompt file</h4>
 <div class="callout callout-style-default callout-note callout-titled" title="gpid-proto-self-critique">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -941,7 +1004,7 @@ Your role after the initial questions is, only when asked, to:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>You are performing a <strong>self-critique</strong> of Copilot-assisted code, as if you were a human reviewer.</p>
 <p>If it is unclear what code to review, first ask me <strong>which function/file/selection</strong> to critique.</p>
@@ -990,16 +1053,16 @@ Your role after the initial questions is, only when asked, to:
 </section>
 </section>
 <section id="protocol-producing-the-final-validation-bundle" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="protocol-producing-the-final-validation-bundle">Protocol 7 — Producing the Final Validation Bundle</h3>
+<h3 class="unnumbered anchored">Protocol 8 — Producing the Final Validation Bundle</h3>
 <p><strong>Prompt:</strong></p>
-<pre><code>/gpid-proto-wrap-task TASK_NAME</code></pre>
-<section id="purpose-6" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="purpose-6">Purpose</h4>
+<pre><code>/gpid-proto-wrap-task</code></pre>
+<section id="purpose-7" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="purpose-7">Purpose</h4>
 <p>Every Copilot-assisted task ends with a <strong>final Markdown summary</strong> stored under:</p>
 <pre><code>copilot_logs/TASK_NAME.md</code></pre>
 </section>
-<section id="what-it-does-5" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="what-it-does-5">What It Does</h4>
+<section id="what-it-does-6" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="what-it-does-6">What It Does</h4>
 <ul>
 <li>Task overview</li>
 <li>Step-by-step technical explanation</li>
@@ -1015,10 +1078,10 @@ Your role after the initial questions is, only when asked, to:
 </ul>
 <p>This file must <strong>always</strong> be included in your PR.</p>
 </section>
-<section id="latest-gpid-prompt-file-7" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-7">Latest GPID prompt file</h4>
+<section id="latest-gpid-prompt-file-8" class="level4 unnumbered">
+<h4 class="unnumbered anchored">Latest GPID prompt file</h4>
 <div class="callout callout-style-default callout-note callout-titled" title="gpid-proto-wrap-task">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1027,55 +1090,91 @@ Your role after the initial questions is, only when asked, to:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>We have reached the end of a Copilot-assisted task.</p>
-<p>The task name is: **<span class="math inline">\({input}**
-Use this as `TASK_NAME` (for example in `copilot_logs/\)</span>{input}.md`).</p>
-<p>Using our full conversation and your running summary, generate a <strong>Markdown report</strong> suitable for saving as <code>copilot_logs/TASK_NAME.md</code>. Include:</p>
+<section id="retrieving-the-task-name-1" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="retrieving-the-task-name-1"><span class="header-section-number">4.6</span> Retrieving the task name</h2>
+<p>Locate the task name you provided at the start of this conversation session. Confirm it by restating: &gt; Task name: [TASK_NAME]</p>
+<p>Then proceed to work with <code>copilot_logs/TASK_NAME.md</code> and <code>copilot_logs/LOG_${TASK_NAME}.md</code> where <code>${TASK_NAME}</code> is that task name.</p>
+<p><strong>Fallback:</strong> If you cannot locate the task name in the conversation history, read <code>.current_task</code> to retrieve it. If that file doesn’t exist either, ask the user to provide the task name with a single prompt: <code>Please provide a short TASK_NAME to save the final report as copilot_logs/TASK_NAME.md.</code></p>
+<p>After confirming the task name, proceed with the task completion:</p>
+</section>
+<section id="step-1-review-the-task-log" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="step-1-review-the-task-log"><span class="header-section-number">4.7</span> Step 1: Review the task log</h2>
+<p>Before generating the final summary, carefully review the existing task log file at <code>copilot_logs/LOG_${TASK_NAME}.md</code>. This file contains: - The task initialization details - All progress updates recorded throughout the task - Challenges encountered and solutions implemented - Changes made to the original plan</p>
+<p>Use this log to ensure that all relevant information, decisions, and important details are captured in the final summary. Verify that no critical information is overlooked.</p>
+</section>
+<section id="step-2-generate-the-final-markdown-report" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="step-2-generate-the-final-markdown-report"><span class="header-section-number">4.8</span> Step 2: Generate the final Markdown report</h2>
+<p>Using our full conversation, your running summary, and the reviewed task log, generate a <strong>Markdown report</strong> suitable for saving as <code>copilot_logs/TASK_NAME.md</code>. This final report should synthesize all work completed and provide clear documentation for future reference.</p>
+<p>Include:</p>
 <ol type="1">
-<li><strong>Task overview</strong>
+<li><strong>Executive Summary</strong>
+<ul>
+<li>brief overview of what the task accomplished</li>
+<li>primary goals achieved</li>
+<li>overall status (complete, in-progress, blocked, etc.)</li>
+</ul></li>
+<li><strong>Task Overview</strong>
 <ul>
 <li>what the task was about</li>
 <li>main files/functions affected</li>
-<li>major decisions and trade-offs</li>
+<li>major decisions and trade-offs made</li>
 </ul></li>
-<li><strong>Technical explanation</strong>
+<li><strong>Technical Explanation</strong>
 <ul>
 <li>step-by-step description of how the code works</li>
 <li>important algorithmic or design choices</li>
 <li>any performance considerations</li>
+<li>rationale for technical decisions</li>
 </ul></li>
-<li><strong>Plain-language overview</strong>
+<li><strong>Plain-Language Overview</strong>
 <ul>
 <li>why the code exists</li>
 <li>how a teammate should use it</li>
 <li>non-technical explanation of the behavior</li>
 </ul></li>
-<li><strong>Documentation and comments</strong>
+<li><strong>Documentation and Comments</strong>
 <ul>
 <li>confirmation of in-code comments and Roxygen2 docs (for R)</li>
 <li>any important notes for future maintainers</li>
+<li>known limitations or caveats</li>
 </ul></li>
-<li><strong>Validation bundle</strong>
+<li><strong>Validation and Testing</strong>
 <ul>
-<li>validation checklist</li>
-<li>unit tests and edge cases (summarize what is covered)</li>
+<li>validation checklist with status for each item</li>
+<li>unit tests and edge cases covered (summarize what is tested)</li>
 <li>error-handling strategy (how invalid or unexpected inputs are handled)</li>
 <li>performance-sensitive tests, if applicable</li>
 </ul></li>
-<li><strong>Dependencies and risk analysis</strong>
+<li><strong>Dependencies and Risk Analysis</strong>
 <ul>
 <li>summary of dependency decisions</li>
 <li>key security/stability considerations</li>
+<li>any external factors that could affect the work</li>
 </ul></li>
-<li><strong>Self-critique and follow-ups</strong>
+<li><strong>Self-Critique and Follow-Ups</strong>
 <ul>
 <li>main issues uncovered by reviews/self-critique</li>
 <li>remaining TODOs or recommended future improvements</li>
+<li>potential enhancements or optimizations for next iteration</li>
+<li><strong>To Do List</strong>: Extract any to-do items from the task log (<code>copilot_logs/LOG_${TASK_NAME}.md</code>)
+<ul>
+<li>Before finalizing, present the compiled to-do list to the user</li>
+<li>Ask: “Here are the to-do items identified during this task. Would you like to add, remove, or modify any items before I include them in the final report?”</li>
+<li>Wait for user confirmation or modifications before proceeding</li>
+</ul></li>
 </ul></li>
 </ol>
 <p>Return <strong>only</strong> the Markdown document, and save it as <code>copilot_logs/${input}.md</code>.</p>
+<p>This final report, combined with the task log (<code>copilot_logs/LOG_${input}.md</code>), provides a complete record of the task work and can serve as reference material for future similar tasks.</p>
+</section>
+<section id="step-3-clean-up-temporary-files" class="level2" data-number="4.9">
+<h2 data-number="4.9" class="anchored" data-anchor-id="step-3-clean-up-temporary-files"><span class="header-section-number">4.9</span> Step 3: Clean up temporary files</h2>
+<p>After creating <code>copilot_logs/TASK_NAME.md</code>, ask the user: <strong>“May I delete the temporary <code>.current_task</code> marker file to keep the project clean?”</strong></p>
+<p>If the user agrees (or does not object), delete <code>.current_task</code>. If they prefer to keep it or it doesn’t exist, proceed without action.</p>
+</section>
 </div>
 </div>
 </div>
@@ -1100,8 +1199,8 @@ Important
 </section>
 </section>
 </section>
-<section id="final-reminder-you-are-the-author" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="final-reminder-you-are-the-author"><span class="header-section-number">4.4</span> Final Reminder: You Are the Author</h2>
+<section id="final-reminder-you-are-the-author" class="level2" data-number="4.10">
+<h2 data-number="4.10" class="anchored" data-anchor-id="final-reminder-you-are-the-author"><span class="header-section-number">4.10</span> Final Reminder: You Are the Author</h2>
 <p><strong>The code produced by Github Copilot is ultimately your responsibility.</strong></p>
 <p>• <strong>Authorship means accountability</strong>: When you commit Copilot-assisted code, you are claiming authorship of it. This means you’re responsible for its correctness, efficiency, and maintainability.</p>
 <p>• <strong>Review is mandatory</strong>: Skipping the efficiency review puts the burden on your teammates during code review, slows down development, and can introduce bugs or performance issues that are hard to trace later.</p>
