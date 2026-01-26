@@ -20,6 +20,8 @@ book:
     - part: "R Setup and efficiency"
       chapters:
         - setupR.qmd
+        - rprofile.qmd
+        - rupdate.qmd
     - part: "VSCode Setup"
       chapters:
         - VScode_Setup_for_stata.qmd

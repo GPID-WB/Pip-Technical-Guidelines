@@ -1,42 +1,99 @@
 ---
-abstract: How to update R from from one major version to the next (e.g., R 4.4 to R 4.5) by reinstalling packages from the previous version's library.
+abstract: How to update R from one major or minor version to the next (e.g., R 4.4 to R 4.5) by reinstalling packages from the previous version's library, including CRAN packages and packages from GitHub.
 execute:
   eval: false
 ---
 
 # How to update R and reinstall packages
 
-When updating R to a new major version (e.g., from R 4.4 to R 4.5), you will need to reinstall your R packages, as each major version of R uses a separate library location.
+When updating R to a new major or minor version (e.g., from R 4.4 to R 4.5), you will need to reinstall your R packages, as each R version uses a separate library location. This chapter walks you through migrating your packages efficiently.
 
+::: {.callout-important}
+## Start with a vanilla session
+Before beginning this process, start a clean R session without your usual `.Rprofile` customizations. Follow the instructions in @sec-rprofile to use the vanilla session toggle, or start R with the `--vanilla` flag. This ensures you have a consistent, reproducible session without potential conflicts from your personalized configuration.
+:::
+
+## Overview
+
+The process has three main steps:
+
+1. **Identify old packages**: Get a list of packages from your previous R version
+2. **Install CRAN packages**: Reinstall binary packages from CRAN
+3. **Install GitHub packages**: Handle packages that need to be installed from GitHub
+
+## Step 1: Identify packages from your old R installation
+
+First, we need to identify which packages were in your previous R version. The code below is generic—it will work for any two versions.
 
 ```{r}
 #| evaluate: false
-# Get list of packages from R 4.4 library
 
-r45_lib <- .libPaths()[1]
+# Define your old and new R versions
+old_version <- "4.4"  # Change to your old version (e.g., "4.3", "4.4")
+new_version <- "4.5"  # Change to your new version (e.g., "4.5", "4.6")
 
-# Extract the root and version, then construct R 4.4 library path
-r45_version <- "4.5"
-r44_version <- "4.4"
-r44_lib <- sub(r45_version, r44_version, r45_lib)
+# Get the current library path (for the new version)
+new_lib <- .libPaths()[1]
 
-packages_to_install <- list.files(r44_lib)
+# Construct the old library path by replacing version numbers
+old_lib <- sub(new_version, old_version, new_lib)
 
-# Filter out packages already installed in R 4.5
-installed_packages <- list.files(r45_lib)
-packages_to_install <- setdiff(packages_to_install, installed_packages)
+# Verify the old library exists
+if (!dir.exists(old_lib)) {
+  stop("Old library not found: ", old_lib, 
+       "\nCheck that you haven't deleted it and the path is correct.")
+}
 
-cat("Found", length(packages_to_install), "packages to install.\n\n")
+# Get list of packages from old library
+old_packages <- list.files(old_lib)
 
-# Set options to avoid prompts
-options(install.packages.check.source = "no")
+# Filter out packages already installed in new version
+new_packages <- list.files(new_lib)
+packages_to_install <- setdiff(old_packages, new_packages)
+
+cat(sprintf("Old R library: %s\n", old_lib))
+cat(sprintf("New R library: %s\n", new_lib))
+cat(sprintf("Packages to install: %d\n\n", length(packages_to_install)))
+
+# Show the first 10 packages as a preview
+if (length(packages_to_install) > 0) {
+  cat("First 10 packages to install:\n")
+  print(head(packages_to_install, 10))
+  if (length(packages_to_install) > 10) {
+    cat("... and", length(packages_to_install) - 10, "more\n")
+  }
+}
+```
+
+## Step 2: Install CRAN packages
+
+Once you've identified the packages, install them from CRAN. The script below handles failures gracefully, skipping packages that can't be installed and logging the results.
+
+```{r}
+#| evaluate: false
+
+# Continue from Step 1—packages_to_install should be defined
+
+# Set options to avoid interactive prompts
+options(
+  install.packages.check.source = "no",
+  Ncpus = parallel::detectCores(logical = TRUE)
+)
 Sys.setenv(R_INSTALL_PKG_EDIT_MODE = "never")
 
-# Install each package, skipping failures
-for (pkg in packages_to_install) {
-  cat("Installing", pkg, "...\n")
+# Track installation results
+results <- data.frame(
+  package = packages_to_install,
+  status = NA_character_,
+  stringsAsFactors = FALSE
+)
 
-  tryCatch(
+# Install each package, skipping failures
+for (i in seq_along(packages_to_install)) {
+  pkg <- packages_to_install[i]
+  cat(sprintf("[%d/%d] Installing %s... ", i, length(packages_to_install), pkg))
+  
+  result <- tryCatch(
     {
       install.packages(
         pkg,
@@ -46,16 +103,403 @@ for (pkg in packages_to_install) {
         verbose = FALSE,
         quiet = TRUE
       )
+      "✓ Success"
     },
     error = function(e) {
-      cat("  ✗ Failed to install", pkg, "\n")
+      paste("✗ Failed:", e$message)
     },
     warning = function(w) {
-      cat("  ⚠ Warning installing", pkg, "\n")
+      "⚠ Warning"
+    }
+  )
+  
+  results$status[i] <- result
+  cat(result, "\n")
+}
+
+# Summary
+cat("\n")
+cat("=== Installation Summary ===\n")
+table(results$status)
+
+# Show failed packages for manual review
+failed <- results$package[grepl("Failed", results$status)]
+if (length(failed) > 0) {
+  cat("\nFailed packages (may need manual installation or GitHub source):\n")
+  print(failed)
+}
+```
+
+## Step 3: Install packages from GitHub
+
+Some packages may not be available on CRAN or may require the development version from GitHub. We'll install these using base R tools (without `pak`, which may not be available in your institution).
+
+::: {.callout-note}
+## Why not use `pak`?
+The `pak` package provides excellent package management features, but some institutions restrict its use for security reasons. The methods below use base R and `devtools`, which are more widely available.
+:::
+
+### Method 1: Using `devtools::install_github()` (Recommended)
+
+This is the most straightforward method if you have `devtools` installed.
+
+```{r}
+#| evaluate: false
+
+# Install devtools if not already available
+if (!require("devtools", quietly = TRUE)) {
+  install.packages("devtools", repos = "https://cran.rstudio.com/")
+}
+
+# List of packages to install from GitHub
+# Format: "owner/repo" or "owner/repo@branch"
+github_packages <- list(
+  # Example entries—replace with your actual packages
+  "tidyverse/ggplot2",           # Latest development version
+  "r-lib/devtools",              # From r-lib organization
+  # "hadley/ggplot2@main",       # Specific branch
+  # "owner/private-repo",        # Private repos work if you have credentials
+  NULL  # Placeholder to make it easy to add more
+)
+
+# Remove NULL entries and duplicates
+github_packages <- Filter(Negate(is.null), github_packages)
+
+if (length(github_packages) > 0) {
+  # Install each GitHub package
+  for (i in seq_along(github_packages)) {
+    pkg_spec <- github_packages[[i]]
+    cat(sprintf("\n[%d/%d] Installing from GitHub: %s\n", 
+                i, length(github_packages), pkg_spec))
+    
+    tryCatch(
+      {
+        devtools::install_github(
+          pkg_spec,
+          dependencies = FALSE,
+          type = "binary",
+          quiet = TRUE
+        )
+        cat("✓ Successfully installed\n")
+      },
+      error = function(e) {
+        cat("✗ Failed to install:", e$message, "\n")
+      }
+    )
+  }
+} else {
+  cat("No GitHub packages specified.\n")
+}
+```
+
+### Method 2: Direct download and installation
+
+If `devtools` is unavailable or GitHub packages have dependencies, you can download and install directly:
+
+```{r}
+#| evaluate: false
+
+# Create a temporary directory for downloads
+temp_dir <- file.path(tempdir(), "gh_packages")
+dir.create(temp_dir, showWarnings = FALSE)
+
+# Specify GitHub packages as "owner/repo"
+github_packages <- c(
+  # "tidyverse/ggplot2",
+  # "r-lib/devtools"
+)
+
+if (length(github_packages) > 0) {
+  for (pkg_spec in github_packages) {
+    parts <- strsplit(pkg_spec, "@")[[1]]
+    repo_path <- parts[1]  # "owner/repo"
+    branch <- if (length(parts) > 1) parts[2] else "main"
+    
+    # Construct download URL
+    url <- sprintf("https://github.com/%s/archive/refs/heads/%s.zip",
+                   repo_path, branch)
+    
+    pkg_name <- basename(strsplit(repo_path, "/")[[1]][2])
+    zip_file <- file.path(temp_dir, paste0(pkg_name, ".zip"))
+    
+    cat(sprintf("Downloading %s from %s...\n", pkg_name, url))
+    
+    tryCatch(
+      {
+        download.file(url, zip_file, quiet = TRUE, mode = "wb")
+        
+        # Extract and install
+        extract_dir <- file.path(temp_dir, pkg_name)
+        unzip(zip_file, exdir = extract_dir)
+        
+        # Find the package directory (should be owner-repo-branch/)
+        pkg_source <- list.files(extract_dir, full.names = TRUE)[1]
+        
+        cat(sprintf("Installing %s...\n", pkg_name))
+        install.packages(
+          pkg_source,
+          repos = NULL,
+          type = "source",
+          dependencies = FALSE
+        )
+        cat("✓ Successfully installed\n")
+      },
+      error = function(e) {
+        cat("✗ Failed:", e$message, "\n")
+      }
+    )
+  }
+  
+  # Cleanup
+  unlink(temp_dir, recursive = TRUE)
+}
+```
+
+### Method 3: From source using R CMD INSTALL
+
+For maximum compatibility, you can use R's built-in source installation:
+
+```{r}
+#| evaluate: false
+
+# Function to install GitHub package from source
+install_github_source <- function(repo, branch = "main", 
+                                 install_dir = tempdir()) {
+  
+  # Parse repo spec
+  parts <- strsplit(repo, "@")[[1]]
+  repo_path <- parts[1]
+  if (length(parts) > 1) branch <- parts[2]
+  
+  pkg_name <- basename(strsplit(repo_path, "/")[[1]][2])
+  
+  # Download URL
+  url <- sprintf("https://github.com/%s/archive/refs/heads/%s.tar.gz",
+                 repo_path, branch)
+  
+  tar_file <- file.path(install_dir, paste0(pkg_name, ".tar.gz"))
+  pkg_dir <- file.path(install_dir, pkg_name)
+  
+  cat(sprintf("Downloading %s...\n", pkg_name))
+  
+  tryCatch(
+    {
+      download.file(url, tar_file, quiet = TRUE)
+      
+      # Extract
+      untar(tar_file, exdir = install_dir)
+      
+      # Find actual extracted directory (has -branch suffix)
+      extracted <- list.files(install_dir, 
+                             pattern = paste0(pkg_name, "-"),
+                             full.names = TRUE)[1]
+      
+      cat(sprintf("Installing %s from source...\n", pkg_name))
+      
+      # Use shell to run R CMD INSTALL
+      system(sprintf("R CMD INSTALL \"%s\"", extracted))
+      
+      cat("✓ Installation complete\n")
+    },
+    error = function(e) {
+      cat("✗ Failed:", e$message, "\n")
     }
   )
 }
 
-cat("Installation complete.\n")
-
+# Example usage:
+# install_github_source("tidyverse/ggplot2")
+# install_github_source("r-lib/devtools@main")
 ```
+
+## Complete workflow script
+
+Here's a complete, integrated script that combines all steps:
+
+```{r}
+#| evaluate: false
+#| code-fold: true
+
+# ==============================================================================
+# R Package Migration Script
+# ==============================================================================
+# Migrate packages from an old R version to a new one
+# ==============================================================================
+
+# Configuration
+OLD_VERSION <- "4.4"   # Your old R version
+NEW_VERSION <- "4.5"   # Your new R version
+
+# GitHub packages to install (if any)
+GITHUB_PACKAGES <- c(
+  # "tidyverse/ggplot2",
+  # "r-lib/devtools",
+  NULL
+)
+
+# ==============================================================================
+# STEP 1: IDENTIFY PACKAGES
+# ==============================================================================
+
+cat("Step 1: Identifying packages from old R installation\n")
+cat("=".^50, "\n\n")
+
+new_lib <- .libPaths()[1]
+old_lib <- sub(NEW_VERSION, OLD_VERSION, new_lib)
+
+if (!dir.exists(old_lib)) {
+  stop("Old library not found: ", old_lib)
+}
+
+old_packages <- list.files(old_lib)
+new_packages <- list.files(new_lib)
+packages_to_install <- setdiff(old_packages, new_packages)
+
+cat(sprintf("Old R version library: %s\n", old_lib))
+cat(sprintf("New R version library: %s\n", new_lib))
+cat(sprintf("Total packages to install: %d\n\n", length(packages_to_install)))
+
+if (length(packages_to_install) == 0) {
+  cat("No packages to install. All packages already in new version.\n")
+  q("no")
+}
+
+# ==============================================================================
+# STEP 2: INSTALL CRAN PACKAGES
+# ==============================================================================
+
+cat("Step 2: Installing CRAN packages\n")
+cat("=".^50, "\n\n")
+
+options(
+  install.packages.check.source = "no",
+  Ncpus = parallel::detectCores(logical = TRUE)
+)
+Sys.setenv(R_INSTALL_PKG_EDIT_MODE = "never")
+
+results <- data.frame(
+  package = packages_to_install,
+  status = NA_character_,
+  stringsAsFactors = FALSE
+)
+
+for (i in seq_along(packages_to_install)) {
+  pkg <- packages_to_install[i]
+  cat(sprintf("[%d/%d] %s... ", i, length(packages_to_install), pkg))
+  
+  result <- tryCatch(
+    {
+      install.packages(
+        pkg,
+        repos = "https://cran.rstudio.com/",
+        type = "binary",
+        dependencies = FALSE,
+        verbose = FALSE,
+        quiet = TRUE
+      )
+      "✓"
+    },
+    error = function(e) "✗",
+    warning = function(w) "⚠"
+  )
+  
+  results$status[i] <- result
+  cat(result, "\n")
+}
+
+# Summary
+cat("\n=== CRAN Installation Summary ===\n")
+print(table(results$status))
+
+failed <- results$package[results$status == "✗"]
+if (length(failed) > 0) {
+  cat("\nFailed packages:\n")
+  print(failed)
+}
+
+# ==============================================================================
+# STEP 3: INSTALL GITHUB PACKAGES (if specified)
+# ==============================================================================
+
+GITHUB_PACKAGES <- Filter(Negate(is.null), GITHUB_PACKAGES)
+
+if (length(GITHUB_PACKAGES) > 0) {
+  cat("\n\nStep 3: Installing GitHub packages\n")
+  cat("=".^50, "\n\n")
+  
+  if (!require("devtools", quietly = TRUE)) {
+    cat("Installing devtools for GitHub package support...\n")
+    install.packages("devtools", repos = "https://cran.rstudio.com/")
+  }
+  
+  for (i in seq_along(GITHUB_PACKAGES)) {
+    pkg_spec <- GITHUB_PACKAGES[i]
+    cat(sprintf("[%d/%d] %s... ", i, length(GITHUB_PACKAGES), pkg_spec))
+    
+    result <- tryCatch(
+      {
+        devtools::install_github(
+          pkg_spec,
+          dependencies = FALSE,
+          type = "binary",
+          quiet = TRUE
+        )
+        "✓"
+      },
+      error = function(e) "✗"
+    )
+    
+    cat(result, "\n")
+  }
+}
+
+# ==============================================================================
+# COMPLETION
+# ==============================================================================
+
+cat("\n\n")
+cat("=".^50, "\n")
+cat("Package migration complete!\n")
+cat("=".^50, "\n")
+cat(sprintf("Installed %d packages from CRAN\n", 
+            sum(results$status %in% c("✓", "⚠"))))
+cat("Review any failed packages above and install manually if needed.\n")
+```
+
+## Important notes
+
+### Before you start
+
+1. **Back up your old library**: Don't delete your old R library until you've verified everything works
+2. **Start with vanilla session**: Use the vanilla session toggle from @sec-rprofile to avoid conflicts
+3. **Check internet connection**: Package installation requires stable internet
+4. **Have admin rights**: You may need administrator access to write to library directories
+
+### Troubleshooting
+
+**"Old library not found"**
+: Make sure you haven't deleted the old R library, and check that you've set the version numbers correctly.
+
+**Binary packages not available**
+: Some packages may only be available as source. Add `type = "source"` to `install.packages()`, but note that this requires build tools (Rtools on Windows).
+
+**GitHub authentication errors**
+: If you're installing private repositories, make sure you have GitHub credentials set up. See `?devtools::install_github` for details.
+
+**Package conflicts**
+: If packages fail to install, check for missing dependencies. You can install them manually first with `install.packages("dependency_name")`.
+
+### After installation
+
+- Test your packages by loading a few: `library(package_name)`
+- Run any diagnostic scripts that depend on your packages
+- Keep the old library for a few days before deletion, in case you need to reference it
+- Update your package migration script for next time (add any GitHub packages you installed manually)
+
+## Next steps
+
+Once your packages are installed, remember to:
+
+1. Return to regular session mode (vanilla mode automatically toggles back)
+2. Review @sec-rprofile to ensure your startup configuration is optimal
+3. Consider using `renv` for project-specific package management if reproducibility is critical
