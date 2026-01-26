@@ -1,0 +1,61 @@
+---
+abstract: How to update R from from one major version to the next (e.g., R 4.4 to R 4.5) by reinstalling packages from the previous version's library.
+execute:
+  eval: false
+---
+
+# How to update R and reinstall packages
+
+When updating R to a new major version (e.g., from R 4.4 to R 4.5), you will need to reinstall your R packages, as each major version of R uses a separate library location.
+
+
+```{r}
+#| evaluate: false
+# Get list of packages from R 4.4 library
+
+r45_lib <- .libPaths()[1]
+
+# Extract the root and version, then construct R 4.4 library path
+r45_version <- "4.5"
+r44_version <- "4.4"
+r44_lib <- sub(r45_version, r44_version, r45_lib)
+
+packages_to_install <- list.files(r44_lib)
+
+# Filter out packages already installed in R 4.5
+installed_packages <- list.files(r45_lib)
+packages_to_install <- setdiff(packages_to_install, installed_packages)
+
+cat("Found", length(packages_to_install), "packages to install.\n\n")
+
+# Set options to avoid prompts
+options(install.packages.check.source = "no")
+Sys.setenv(R_INSTALL_PKG_EDIT_MODE = "never")
+
+# Install each package, skipping failures
+for (pkg in packages_to_install) {
+  cat("Installing", pkg, "...\n")
+
+  tryCatch(
+    {
+      install.packages(
+        pkg,
+        repos = "https://cran.rstudio.com/",
+        type = "binary",
+        dependencies = FALSE,
+        verbose = FALSE,
+        quiet = TRUE
+      )
+    },
+    error = function(e) {
+      cat("  ✗ Failed to install", pkg, "\n")
+    },
+    warning = function(w) {
+      cat("  ⚠ Warning installing", pkg, "\n")
+    }
+  )
+}
+
+cat("Installation complete.\n")
+
+```
