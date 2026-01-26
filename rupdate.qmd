@@ -753,3 +753,4 @@ Once your packages are installed, remember to:
 1. Return to regular session mode (vanilla mode automatically toggles back)
 2. Review @sec-rprofile to ensure your startup configuration is optimal
 3. Consider using `renv` for project-specific package management if reproducibility is critical
+
