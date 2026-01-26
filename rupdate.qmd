@@ -15,11 +15,12 @@ Before beginning this process, start a clean R session without your usual `.Rpro
 
 ## Overview
 
-The process has three main steps:
+The process has four main steps:
 
 1. **Identify old packages**: Get a list of packages from your previous R version
-2. **Install CRAN packages**: Reinstall binary packages from CRAN
-3. **Install GitHub packages**: Handle packages that need to be installed from GitHub
+2. **Identify GitHub packages**: Automatically detect which packages were installed from GitHub
+3. **Install CRAN packages**: Reinstall binary packages from CRAN
+4. **Install GitHub packages**: Reinstall packages that came from GitHub
 
 ## Step 1: Identify packages from your old R installation
 
@@ -65,14 +66,93 @@ if (length(packages_to_install) > 0) {
 }
 ```
 
-## Step 2: Install CRAN packages
+## Step 2: Identify packages installed from GitHub and separate CRAN packages
 
-Once you've identified the packages, install them from CRAN. The script below handles failures gracefully, skipping packages that can't be installed and logging the results.
+Before reinstalling packages, we'll automatically identify which packages in your old library were installed from GitHub. This allows us to use the appropriate installation method for each package type.
 
 ```{r}
 #| evaluate: false
 
-# Continue from Step 1—packages_to_install should be defined
+# Continue from Step 1—old_lib and packages_to_install should be defined
+
+# Function to extract GitHub repository info from old packages
+identify_github_packages <- function(lib_path, package_names) {
+  
+  github_packages <- data.frame(
+    package = character(),
+    repo = character(),
+    stringsAsFactors = FALSE
+  )
+  
+  for (pkg in package_names) {
+    pkg_dir <- file.path(lib_path, pkg)
+    
+    # Check for DESCRIPTION file
+    desc_file <- file.path(pkg_dir, "DESCRIPTION")
+    if (file.exists(desc_file)) {
+      desc <- readLines(desc_file)
+      
+      # Look for RemoteType and RemoteUrl fields (added by devtools/remotes)
+      remote_type <- grep("^RemoteType:", desc, value = TRUE)
+      remote_url <- grep("^RemoteUrl:", desc, value = TRUE)
+      
+      if (length(remote_type) > 0 && length(remote_url) > 0) {
+        # Extract repository spec from URL
+        # GitHub URLs typically end with owner/repo.git
+        if (grepl("github.com", remote_url)) {
+          # Extract "owner/repo" from URL like https://github.com/owner/repo.git
+          repo_match <- gsub(".*github.com/(.+?)(\\.git)?/?$", "\\1", remote_url)
+          
+          # Verify it looks like owner/repo format
+          if (grepl("^[^/]+/[^/]+$", repo_match)) {
+            github_packages <- rbind(
+              github_packages,
+              data.frame(package = pkg, repo = repo_match, stringsAsFactors = FALSE)
+            )
+          }
+        }
+      }
+    }
+  }
+  
+  github_packages
+}
+
+# Identify GitHub packages in old library
+cat("Identifying packages installed from GitHub...\n\n")
+github_packages_df <- identify_github_packages(old_lib, packages_to_install)
+
+if (nrow(github_packages_df) > 0) {
+  cat(sprintf("Found %d packages from GitHub:\n\n", nrow(github_packages_df)))
+  print(github_packages_df)
+  cat("\n")
+  
+  # Save as a vector for use in Step 3
+  github_packages_vector <- github_packages_df$repo
+} else {
+  cat("No GitHub packages found in old library.\n\n")
+  github_packages_vector <- character(0)
+}
+
+# Remove GitHub packages from CRAN packages list
+# (they'll be handled separately in Step 3)
+packages_to_install_cran <- setdiff(
+  packages_to_install,
+  github_packages_df$package
+)
+
+cat(sprintf("CRAN packages to install: %d\n", length(packages_to_install_cran)))
+cat(sprintf("GitHub packages to install: %d\n\n", length(github_packages_vector)))
+```
+
+## Step 3: Install CRAN packages
+
+Once you've separated the packages, install the CRAN packages. The script below handles failures gracefully, skipping packages that can't be installed and logging the results.
+
+```{r}
+#| evaluate: false
+
+# Continue from Step 2—packages_to_install_cran should be defined
 
 # Set options to avoid interactive prompts
 options(
@@ -83,15 +163,15 @@ Sys.setenv(R_INSTALL_PKG_EDIT_MODE = "never")
 
 # Track installation results
 results <- data.frame(
-  package = packages_to_install,
+  package = packages_to_install_cran,
   status = NA_character_,
   stringsAsFactors = FALSE
 )
 
 # Install each package, skipping failures
-for (i in seq_along(packages_to_install)) {
-  pkg <- packages_to_install[i]
-  cat(sprintf("[%d/%d] Installing %s... ", i, length(packages_to_install), pkg))
+for (i in seq_along(packages_to_install_cran)) {
+  pkg <- packages_to_install_cran[i]
+  cat(sprintf("[%d/%d] Installing %s... ", i, length(packages_to_install_cran), pkg))
   
   result <- tryCatch(
     {
@@ -130,16 +210,77 @@ if (length(failed) > 0) {
 }
 ```
 
-## Step 3: Install packages from GitHub
+## Step 4: Install packages from GitHub
 
-Some packages may not be available on CRAN or may require the development version from GitHub. We'll install these using base R tools (without `pak`, which may not be available in your institution).
+Packages identified as being from GitHub in Step 2 will be installed here automatically. If you have additional GitHub packages to install, you can specify them manually.
 
 ::: {.callout-note}
 ## Why not use `pak`?
 The `pak` package provides excellent package management features, but some institutions restrict its use for security reasons. The methods below use base R and `devtools`, which are more widely available.
 :::
 
-### Method 1: Using `devtools::install_github()` (Recommended)
+### Automatic installation (from Step 2)
+
+If you completed Step 2, your GitHub packages are automatically identified and can be installed here:
+
+```{r}
+#| evaluate: false
+
+# Continue from Step 2—github_packages_vector should be defined
+# (or it will be an empty vector if no GitHub packages were found)
+
+# Install devtools if not already available
+if (length(github_packages_vector) > 0 && 
+    !require("devtools", quietly = TRUE)) {
+  cat("Installing devtools for GitHub package support...\n")
+  install.packages("devtools", repos = "https://cran.rstudio.com/")
+}
+
+if (length(github_packages_vector) > 0) {
+  cat(sprintf("\nInstalling %d packages from GitHub...\n\n", 
+              length(github_packages_vector)))
+  
+  github_results <- data.frame(
+    repo = github_packages_vector,
+    status = NA_character_,
+    stringsAsFactors = FALSE
+  )
+  
+  for (i in seq_along(github_packages_vector)) {
+    repo_spec <- github_packages_vector[i]
+    cat(sprintf("[%d/%d] Installing %s... ", 
+                i, length(github_packages_vector), repo_spec))
+    
+    result <- tryCatch(
+      {
+        devtools::install_github(
+          repo_spec,
+          dependencies = FALSE,
+          type = "binary",
+          quiet = TRUE
+        )
+        "✓"
+      },
+      error = function(e) "✗"
+    )
+    
+    github_results$status[i] <- result
+    cat(result, "\n")
+  }
+  
+  cat("\n=== GitHub Installation Summary ===\n")
+  print(table(github_results$status))
+  
+} else {
+  cat("No GitHub packages to install.\n")
+}
+```
+
+### Manual installation (for additional packages)
+
+If you have additional GitHub packages not identified in Step 2, or if automatic installation fails, you can install them manually using one of these methods.
+
+#### Method 1: Using `devtools::install_github()` (Recommended)
 
 This is the most straightforward method if you have `devtools` installed.
 
@@ -151,28 +292,25 @@ if (!require("devtools", quietly = TRUE)) {
   install.packages("devtools", repos = "https://cran.rstudio.com/")
 }
 
-# List of packages to install from GitHub
+# Manually specify additional GitHub packages
 # Format: "owner/repo" or "owner/repo@branch"
-github_packages <- list(
-  # Example entries—replace with your actual packages
-  "tidyverse/ggplot2",           # Latest development version
-  "r-lib/devtools",              # From r-lib organization
-  # "hadley/ggplot2@main",       # Specific branch
-  # "owner/private-repo",        # Private repos work if you have credentials
-  NULL  # Placeholder to make it easy to add more
+manual_github_packages <- c(
+  # "tidyverse/ggplot2",           # Latest development version
+  # "r-lib/devtools",              # From r-lib organization
+  # "hadley/ggplot2@main",         # Specific branch
+  # "owner/private-repo",          # Private repos (with credentials)
 )
 
-# Remove NULL entries and duplicates
-github_packages <- Filter(Negate(is.null), github_packages)
-
-if (length(github_packages) > 0) {
-  # Install each GitHub package
-  for (i in seq_along(github_packages)) {
-    pkg_spec <- github_packages[[i]]
-    cat(sprintf("\n[%d/%d] Installing from GitHub: %s\n", 
-                i, length(github_packages), pkg_spec))
+if (length(manual_github_packages) > 0) {
+  cat(sprintf("Installing %d manually-specified packages from GitHub...\n\n",
+              length(manual_github_packages)))
+  
+  for (i in seq_along(manual_github_packages)) {
+    pkg_spec <- manual_github_packages[i]
+    cat(sprintf("[%d/%d] Installing %s... ",
+                i, length(manual_github_packages), pkg_spec))
     
-    tryCatch(
+    result <- tryCatch(
       {
         devtools::install_github(
           pkg_spec,
@@ -180,15 +318,15 @@ if (length(github_packages) > 0) {
           type = "binary",
           quiet = TRUE
         )
-        cat("✓ Successfully installed\n")
+        "✓"
       },
-      error = function(e) {
-        cat("✗ Failed to install:", e$message, "\n")
-      }
+      error = function(e) "✗"
     )
+    
+    cat(result, "\n")
   }
 } else {
-  cat("No GitHub packages specified.\n")
+  cat("No manual GitHub packages specified.\n")
 }
 ```
 
@@ -314,26 +452,28 @@ install_github_source <- function(repo, branch = "main",
 
 ## Complete workflow script
 
-Here's a complete, integrated script that combines all steps:
+Here's a complete, integrated script that combines all steps with automatic GitHub package detection:
 
 ```{r}
 #| evaluate: false
 #| code-fold: true
 
 # ==============================================================================
-# R Package Migration Script
+# R Package Migration Script (with Automatic GitHub Detection)
 # ==============================================================================
-# Migrate packages from an old R version to a new one
+# Migrate packages from an old R version to a new one, automatically
+# identifying and installing GitHub packages
 # ==============================================================================
 
 # Configuration
 OLD_VERSION <- "4.4"   # Your old R version
 NEW_VERSION <- "4.5"   # Your new R version
 
-# GitHub packages to install (if any)
-GITHUB_PACKAGES <- c(
+# Optional: Additional GitHub packages to install manually
+# Format: "owner/repo" or "owner/repo@branch"
+ADDITIONAL_GITHUB_PACKAGES <- c(
   # "tidyverse/ggplot2",
-  # "r-lib/devtools",
+  # "r-lib/devtools@main",
   NULL
 )
 
@@ -365,6 +505,74 @@ if (length(packages_to_install) == 0) {
 }
 
 # ==============================================================================
+# STEP 2b: IDENTIFY GITHUB PACKAGES AUTOMATICALLY
+# ==============================================================================
+
+cat("Step 2b: Identifying packages from GitHub...\n")
+cat("=".^50, "\n\n")
+
+# Function to extract GitHub repository info from package DESCRIPTION
+identify_github_packages <- function(lib_path, package_names) {
+  github_packages <- data.frame(
+    package = character(),
+    repo = character(),
+    stringsAsFactors = FALSE
+  )
+  
+  for (pkg in package_names) {
+    pkg_dir <- file.path(lib_path, pkg)
+    desc_file <- file.path(pkg_dir, "DESCRIPTION")
+    
+    if (file.exists(desc_file)) {
+      desc <- readLines(desc_file)
+      
+      # Look for RemoteType and RemoteUrl fields
+      remote_type <- grep("^RemoteType:", desc, value = TRUE)
+      remote_url <- grep("^RemoteUrl:", desc, value = TRUE)
+      
+      if (length(remote_type) > 0 && length(remote_url) > 0) {
+        if (grepl("github.com", remote_url)) {
+          # Extract "owner/repo" from URL
+          repo_match <- gsub(".*github.com/(.+?)(\\.git)?/?$", "\\1", remote_url)
+          
+          if (grepl("^[^/]+/[^/]+$", repo_match)) {
+            github_packages <- rbind(
+              github_packages,
+              data.frame(package = pkg, repo = repo_match, 
+                        stringsAsFactors = FALSE)
+            )
+          }
+        }
+      }
+    }
+  }
+  
+  github_packages
+}
+
+# Identify GitHub packages
+github_packages_df <- identify_github_packages(old_lib, packages_to_install)
+
+if (nrow(github_packages_df) > 0) {
+  cat(sprintf("Found %d packages from GitHub:\n\n", nrow(github_packages_df)))
+  print(github_packages_df)
+  cat("\n")
+  github_packages_auto <- github_packages_df$repo
+} else {
+  cat("No GitHub packages found in old library.\n\n")
+  github_packages_auto <- character(0)
+}
+
+# Separate CRAN and GitHub packages
+packages_to_install_cran <- setdiff(
+  packages_to_install,
+  github_packages_df$package
+)
+
+cat(sprintf("CRAN packages to install: %d\n", length(packages_to_install_cran)))
+cat(sprintf("GitHub packages to install: %d\n\n", length(github_packages_auto)))
+
+# ==============================================================================
 # STEP 2: INSTALL CRAN PACKAGES
 # ==============================================================================
 
@@ -377,69 +585,86 @@ options(
 )
 Sys.setenv(R_INSTALL_PKG_EDIT_MODE = "never")
 
-results <- data.frame(
-  package = packages_to_install,
+cran_results <- data.frame(
+  package = packages_to_install_cran,
   status = NA_character_,
   stringsAsFactors = FALSE
 )
 
-for (i in seq_along(packages_to_install)) {
-  pkg <- packages_to_install[i]
-  cat(sprintf("[%d/%d] %s... ", i, length(packages_to_install), pkg))
+if (nrow(cran_results) > 0) {
+  for (i in seq_along(packages_to_install_cran)) {
+    pkg <- packages_to_install_cran[i]
+    cat(sprintf("[%d/%d] %s... ", i, length(packages_to_install_cran), pkg))
+    
+    result <- tryCatch(
+      {
+        install.packages(
+          pkg,
+          repos = "https://cran.rstudio.com/",
+          type = "binary",
+          dependencies = FALSE,
+          verbose = FALSE,
+          quiet = TRUE
+        )
+        "✓"
+      },
+      error = function(e) "✗",
+      warning = function(w) "⚠"
+    )
+    
+    cran_results$status[i] <- result
+    cat(result, "\n")
+  }
   
-  result <- tryCatch(
-    {
-      install.packages(
-        pkg,
-        repos = "https://cran.rstudio.com/",
-        type = "binary",
-        dependencies = FALSE,
-        verbose = FALSE,
-        quiet = TRUE
-      )
-      "✓"
-    },
-    error = function(e) "✗",
-    warning = function(w) "⚠"
-  )
+  # Summary
+  cat("\n=== CRAN Installation Summary ===\n")
+  print(table(cran_results$status))
   
-  results$status[i] <- result
-  cat(result, "\n")
-}
-
-# Summary
-cat("\n=== CRAN Installation Summary ===\n")
-print(table(results$status))
-
-failed <- results$package[results$status == "✗"]
-if (length(failed) > 0) {
-  cat("\nFailed packages:\n")
-  print(failed)
+  cran_failed <- cran_results$package[cran_results$status == "✗"]
+  if (length(cran_failed) > 0) {
+    cat("\nFailed CRAN packages:\n")
+    print(cran_failed)
+  }
+} else {
+  cat("No CRAN packages to install.\n")
 }
 
 # ==============================================================================
-# STEP 3: INSTALL GITHUB PACKAGES (if specified)
+# STEP 3: INSTALL GITHUB PACKAGES (Automatic + Manual)
 # ==============================================================================
 
-GITHUB_PACKAGES <- Filter(Negate(is.null), GITHUB_PACKAGES)
+# Combine automatic and manual GitHub packages
+ADDITIONAL_GITHUB_PACKAGES <- Filter(Negate(is.null), ADDITIONAL_GITHUB_PACKAGES)
+all_github_packages <- c(github_packages_auto, ADDITIONAL_GITHUB_PACKAGES)
+all_github_packages <- unique(all_github_packages)
 
-if (length(GITHUB_PACKAGES) > 0) {
+if (length(all_github_packages) > 0) {
   cat("\n\nStep 3: Installing GitHub packages\n")
   cat("=".^50, "\n\n")
   
+  # Install devtools if needed
   if (!require("devtools", quietly = TRUE)) {
     cat("Installing devtools for GitHub package support...\n")
     install.packages("devtools", repos = "https://cran.rstudio.com/")
   }
   
-  for (i in seq_along(GITHUB_PACKAGES)) {
-    pkg_spec <- GITHUB_PACKAGES[i]
-    cat(sprintf("[%d/%d] %s... ", i, length(GITHUB_PACKAGES), pkg_spec))
+  cat(sprintf("Installing %d packages from GitHub...\n\n", 
+              length(all_github_packages)))
+  
+  github_results <- data.frame(
+    repo = all_github_packages,
+    status = NA_character_,
+    stringsAsFactors = FALSE
+  )
+  
+  for (i in seq_along(all_github_packages)) {
+    repo_spec <- all_github_packages[i]
+    cat(sprintf("[%d/%d] %s... ", i, length(all_github_packages), repo_spec))
     
     result <- tryCatch(
       {
         devtools::install_github(
-          pkg_spec,
+          repo_spec,
           dependencies = FALSE,
           type = "binary",
           quiet = TRUE
@@ -449,8 +674,20 @@ if (length(GITHUB_PACKAGES) > 0) {
       error = function(e) "✗"
     )
     
+    github_results$status[i] <- result
     cat(result, "\n")
   }
+  
+  cat("\n=== GitHub Installation Summary ===\n")
+  print(table(github_results$status))
+  
+  github_failed <- github_results$repo[github_results$status == "✗"]
+  if (length(github_failed) > 0) {
+    cat("\nFailed GitHub packages:\n")
+    print(github_failed)
+  }
+} else {
+  cat("\n\nStep 3: No GitHub packages to install.\n")
 }
 
 # ==============================================================================
@@ -461,8 +698,21 @@ cat("\n\n")
 cat("=".^50, "\n")
 cat("Package migration complete!\n")
 cat("=".^50, "\n")
-cat(sprintf("Installed %d packages from CRAN\n", 
-            sum(results$status %in% c("✓", "⚠"))))
+
+n_cran <- if (nrow(cran_results) > 0) {
+  sum(cran_results$status %in% c("✓", "⚠"))
+} else {
+  0
+}
+
+n_github <- if (exists("github_results") && length(all_github_packages) > 0) {
+  sum(github_results$status == "✓")
+} else {
+  0
+}
+
+cat(sprintf("Installed %d packages from CRAN\n", n_cran))
+cat(sprintf("Installed %d packages from GitHub\n", n_github))
 cat("Review any failed packages above and install manually if needed.\n")
 ```
 
