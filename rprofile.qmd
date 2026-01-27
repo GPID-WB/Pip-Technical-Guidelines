@@ -24,20 +24,22 @@ While `.Rprofile` is powerful, it can also cause issues if misconfigured. A brok
 
 Before we dive in, let's clarify two files that often cause confusion:
 
-- **`.Renviron`**: Sets **environment variables** before R starts. Think of it as configuration data (API keys, paths, tokens). It uses simple `KEY=value` syntax and cannot execute R code.
+-   **`.Renviron`**: Sets **environment variables** before R starts. Think of it as configuration data (API keys, paths, tokens). It uses simple `KEY=value` syntax and cannot execute R code.
 
-- **`.Rprofile`**: Runs **R code** during startup. This is where you load packages, define functions, set options, and customize your session behavior.
+-   **`.Rprofile`**: Runs **R code** during startup. This is where you load packages, define functions, set options, and customize your session behavior.
 
 **Rule of thumb**: Environment variables go in `.Renviron`, everything else goes in `.Rprofile`.
 
 Example `.Renviron`:
-```bash
+
+``` bash
 R_LIBS_USER="~/R/library"
 GITHUB_PAT="ghp_your_token_here"
 ```
 
 Example `.Rprofile`:
-```r
+
+``` r
 options(repos = c(CRAN = "https://cran.rstudio.com/"))
 library(devtools)
 ```
@@ -46,13 +48,14 @@ library(devtools)
 
 R can load `.Rprofile` from two locations:
 
-1. **User-level**: `~/.Rprofile` (your home directory) - applies to all R sessions
-2. **Project-level**: `ProjectFolder/.Rprofile` - applies only when working in that project
+1.  **User-level**: `~/.Rprofile` (your home directory) - applies to all R sessions
+2.  **Project-level**: `ProjectFolder/.Rprofile` - applies only when working in that project
 
 **In this chapter, we focus on user-level `.Rprofile`** because we want consistent behavior across all projects. Project-specific configurations are better handled through `renv` (which we'll mention briefly) or project-specific scripts.
 
-::: {.callout-note}
+::: callout-note
 ## Where is my home directory?
+
 In R, run `path.expand("~")` to see your home directory path.
 :::
 
@@ -64,7 +67,7 @@ Let's build a `.Rprofile` step by step, explaining the purpose and order of each
 
 The first and most critical piece: wrap your entire `.Rprofile` in error handling to prevent startup failures.
 
-```r
+``` r
 local({
   # Everything goes inside this local() call
   # If something breaks, R still starts
@@ -80,7 +83,7 @@ Why `local()`? It creates an isolated environment so your startup code doesn't p
 
 Before doing anything else, define helper functions you'll use throughout the file:
 
-```r
+``` r
 # Safe package loading - won't crash if package is missing
 .safe_require <- function(pkg) {
   requireNamespace(pkg, quietly = TRUE) |> 
@@ -92,7 +95,7 @@ Before doing anything else, define helper functions you'll use throughout the fi
   if (.safe_require("cli")) {
     try(cli::cli_inform(...), silent = TRUE)
   } else {
-    message(paste0(...))
+    try(message(paste0(...)), silent = TRUE)
   }
 }
 ```
@@ -103,7 +106,7 @@ These utilities are defensive: they handle missing packages gracefully and provi
 
 World Bank computers often have complex network setups. Properly configuring your library paths prevents many headaches:
 
-```r
+``` r
 # Respect R_LIBS_USER from .Renviron
 rlu <- Sys.getenv("R_LIBS_USER", unset = "")
 if (nzchar(rlu)) {
@@ -121,10 +124,12 @@ if (nzchar(rlu)) {
 
 **Why this matters**: Without proper library paths, R might try to install packages in system directories where you lack write permissions, or scatter packages across multiple locations.
 
-::: {.callout-tip}
+::: callout-tip
 ## Setting R_LIBS_USER
+
 For World Bank computers, I recommend you place your `.Renviron` in `C:\WBG\R\.Renviron` and add the following lines:
-```
+
+```         
 # C:/WBG/R/.Renviron
 R_LIBS=C:/WBG/R/r-packages/%v
 R_USER=C:/WBG/R
@@ -134,6 +139,7 @@ LANG=en_US.UTF-8
 TZ=UTC
 RENVIRON_LOADED_FROM=C:/WBG/R/.Renviron
 ```
+
 Then restart R. This tells R where to install and look for packages.
 :::
 
@@ -141,7 +147,7 @@ Then restart R. This tells R where to install and look for packages.
 
 Sometimes you need a clean R session without customizations (for debugging or reproducible testing). This toggle system lets you switch between modes:
 
-```r
+``` r
 toggle_file <- "~/.Rsession_toggle"
 
 # Function to set next session mode
@@ -203,7 +209,7 @@ if (identical(mode, "vanilla")) {
 
 Always specify your CRAN mirror to avoid being prompted:
 
-```r
+``` r
 local({
   r <- getOption("repos")
   r["CRAN"] <- "https://cran.rstudio.com/"
@@ -217,7 +223,7 @@ Using `local()` here prevents the temporary variable `r` from cluttering your gl
 
 For data-intensive work, configure parallel processing:
 
-```r
+``` r
 # Detect available cores
 ncores <- if (.safe_require("parallel")) {
   parallel::detectCores(logical = TRUE)
@@ -248,7 +254,7 @@ if (.safe_require("collapse")) {
 
 Load packages you use constantly, but only in interactive sessions:
 
-```r
+``` r
 if (interactive()) {
   # Helper to load packages safely
   lib_sup <- function(x) {
@@ -268,8 +274,9 @@ if (interactive()) {
 }
 ```
 
-::: {.callout-warning}
+::: callout-warning
 ## Don't overload packages
+
 Only load packages you use in *every* session. Loading too many slows startup and can cause conflicts.
 :::
 
@@ -277,15 +284,9 @@ Only load packages you use in *every* session. Loading too many slows startup an
 
 Stay informed about package updates without slowing down startup:
 
-```r
+``` r
 if (interactive() && .safe_require("fs") && .safe_require("qs")) {
   todays <- format(Sys.Date(), "%Y%m%d")
-  
-  # Helper function to go up directories
-  up <- function(path, n = 1) {
-    for (i in seq_len(n)) path <- fs::path_dir(path)
-    path
-  }
   
   opdir <- tryCatch(up(rlu, 2), error = function(e) NA_character_)
   
@@ -331,7 +332,7 @@ if (interactive() && .safe_require("fs") && .safe_require("qs")) {
 
 Set your preferred R options:
 
-```r
+``` r
 options(
   # Default output format
   digits = 4,
@@ -377,7 +378,7 @@ Sys.setenv(TZ = "UTC")
 
 World Bank network sometimes requires proxy settings:
 
-```r
+``` r
 # Check if behind WB proxy
 if (.Platform$OS.type == "windows") {
   # WB proxy settings (adjust as needed)
@@ -393,8 +394,9 @@ if (.Platform$OS.type == "windows") {
 }
 ```
 
-::: {.callout-note}
+::: callout-note
 ## Proxy configuration varies
+
 Check with your IT team for correct proxy settings. Many WB computers handle this automatically.
 :::
 
@@ -402,7 +404,7 @@ Check with your IT team for correct proxy settings. Many WB computers handle thi
 
 Now we can define utility functions that improve daily workflows:
 
-```r
+``` r
 # Git shortcuts (requires gert package)
 if (.safe_require("gert")) {
   gca <- function(x, ...) gert::git_commit_all(x, ...)
@@ -465,7 +467,7 @@ for (fn in c("pn", "assign_to_global", "up")) {
 
 Finally, define what happens when R starts and exits:
 
-```r
+``` r
 # .First runs after everything is loaded
 .First <- function() {
   if (!interactive()) return(invisible())
@@ -521,7 +523,7 @@ Here are important additions to consider:
 
 ### Memory Management
 
-```r
+``` r
 # Set memory limit (Windows only)
 if (.Platform$OS.type == "windows") {
   invisible(utils::memory.limit(size = 16000))  # 16GB
@@ -533,7 +535,7 @@ gcinfo(FALSE)  # Don't report GC activity
 
 ### Conflict Management
 
-```r
+``` r
 # Use conflicted package to make conflicts explicit
 if (.safe_require("conflicted")) {
   conflicted::conflict_prefer("filter", "dplyr")
@@ -543,7 +545,7 @@ if (.safe_require("conflicted")) {
 
 ### Custom Prompt with Project Info
 
-```r
+``` r
 # Dynamic prompt showing project name
 if (.safe_require("rstudioapi")) {
   options(prompt = function() {
@@ -557,7 +559,7 @@ if (.safe_require("rstudioapi")) {
 
 ### Startup Time Measurement
 
-```r
+``` r
 # Measure .Rprofile execution time
 .rprofile_start <- Sys.time()
 # ... rest of .Rprofile ...
@@ -570,7 +572,7 @@ if (interactive()) {
 
 ### Safe Sourcing of Additional Config
 
-```r
+``` r
 # Source additional config files if they exist
 additional_config <- "~/.Rprofile_local"
 if (file.exists(path.expand(additional_config))) {
@@ -587,37 +589,39 @@ if (file.exists(path.expand(additional_config))) {
 
 ### Do's ✅
 
-1. **Wrap everything in `local()`** to avoid polluting global environment
-2. **Use `.safe_require()`** for all package checks
-3. **Test your `.Rprofile`** after changes by restarting R
-4. **Keep a backup** of your working `.Rprofile`
-5. **Document complex sections** with comments
-6. **Profile startup time** if it feels slow (aim for < 2 seconds)
-7. **Use `.Renviron`** for secrets and environment variables
+1.  **Wrap everything in `local()`** to avoid polluting global environment
+2.  **Use `.safe_require()`** for all package checks
+3.  **Test your `.Rprofile`** after changes by restarting R
+4.  **Keep a backup** of your working `.Rprofile`
+5.  **Document complex sections** with comments
+6.  **Profile startup time** if it feels slow (aim for \< 2 seconds)
+7.  **Use `.Renviron`** for secrets and environment variables
 
 ### Don'ts ❌
 
-1. **Don't load too many packages** - only essentials
-2. **Don't assume packages are installed** - always check
-3. **Don't include project-specific code** - keep it general
-4. **Don't ignore errors** - handle them gracefully
-5. **Don't set `setwd()`** - this breaks projects
-6. **Don't load massive datasets** - slows startup dramatically
-7. **Don't override base functions** without careful thought
+1.  **Don't load too many packages** - only essentials
+2.  **Don't assume packages are installed** - always check
+3.  **Don't include project-specific code** - keep it general
+4.  **Don't ignore errors** - handle them gracefully
+5.  **Don't set `setwd()`** - this breaks projects
+6.  **Don't load massive datasets** - slows startup dramatically
+7.  **Don't override base functions** without careful thought
 
 ### Emergency: Bypassing .Rprofile
 
 If your `.Rprofile` breaks R startup:
 
 **Option 1**: Start R with `--vanilla` flag
-```bash
+
+``` bash
 R --vanilla
 ```
 
 **Option 2**: In RStudio, hold `Ctrl` while clicking "Restart R"
 
 **Option 3**: Rename your `.Rprofile` temporarily
-```bash
+
+``` bash
 mv ~/.Rprofile ~/.Rprofile.backup
 ```
 
@@ -625,8 +629,8 @@ mv ~/.Rprofile ~/.Rprofile.backup
 
 We haven't covered `renv` in detail, but it's worth mentioning. `renv` provides project-specific package management, creating isolated, reproducible environments for each project. It works alongside your `.Rprofile` but serves a different purpose:
 
-- **`.Rprofile`**: Personal customizations for *all* your R sessions
-- **`renv`**: Project-specific package versions for *reproducibility*
+-   **`.Rprofile`**: Personal customizations for *all* your R sessions
+-   **`renv`**: Project-specific package versions for *reproducibility*
 
 The two complement each other. Your `.Rprofile` might load development tools (like `devtools`), while `renv` ensures each project uses specific package versions.
 
@@ -983,13 +987,12 @@ local({
 
 A well-configured `.Rprofile` is like a well-tuned instrument—it makes your work smoother without getting in the way. The key principles:
 
-1. **Safety first**: Wrap everything, handle errors, provide escape hatches
-2. **Order matters**: Build utilities before using them
-3. **Be selective**: Only load what you use daily
-4. **Stay clean**: Use `local()`, avoid global pollution
-5. **Document**: Future you will thank present you
+1.  **Safety first**: Wrap everything, handle errors, provide escape hatches
+2.  **Order matters**: Build utilities before using them
+3.  **Be selective**: Only load what you use daily
+4.  **Stay clean**: Use `local()`, avoid global pollution
+5.  **Document**: Future you will thank present you
 
 Start with a minimal `.Rprofile` and gradually add features as you identify repetitive tasks. Test each addition and keep your startup time under 2 seconds for a smooth experience.
 
 Happy coding! 🚀
-
