@@ -90,7 +90,15 @@ identify_github_packages <- function(lib_path, package_names) {
     # Check for DESCRIPTION file
     desc_file <- file.path(pkg_dir, "DESCRIPTION")
     if (file.exists(desc_file)) {
-      desc <- readLines(desc_file)
+      
+      desc <- tryCatch(
+        readLines(desc_file),
+        error = function(e) {
+          warning(sprintf("Failed to read DESCRIPTION for %s: %s", pkg, e$message))
+          return(character(0))  # empty character vector if error
+          }
+        )
+
       
       # Look for RemoteType and RemoteUrl fields (added by devtools/remotes)
       remote_type <- grep("^RemoteType:", desc, value = TRUE)
@@ -250,19 +258,20 @@ if (length(github_packages_vector) > 0) {
     repo_spec <- github_packages_vector[i]
     cat(sprintf("[%d/%d] Installing %s... ", 
                 i, length(github_packages_vector), repo_spec))
-    
-    result <- tryCatch(
-      {
-        devtools::install_github(
-          repo_spec,
-          dependencies = FALSE,
-          type = "binary",
-          quiet = TRUE
-        )
-        "✓"
-      },
-      error = function(e) "✗"
-    )
+  
+    result <- tryCatch({
+    devtools::install_github(repo_spec, 
+                             dependencies = FALSE, 
+                             type         = "binary", 
+                             quiet        = TRUE)
+    "✓"
+    },
+    error = function(e) {
+      warning(sprintf("Failed to install %s from GitHub: %s", repo_spec, e$message))
+      paste("✗", e$message)
+  }
+)
+
     
     github_results$status[i] <- result
     cat(result, "\n")
