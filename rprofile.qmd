@@ -63,7 +63,7 @@ In R, run `path.expand("~")` to see your home directory path.
 
 Let's build a `.Rprofile` step by step, explaining the purpose and order of each section. The order matters because later sections often depend on earlier ones.
 
-### 1. Error-Safe Wrapper (The Safety Net)
+### Error-Safe Wrapper (The Safety Net)
 
 The first and most critical piece: wrap your entire `.Rprofile` in error handling to prevent startup failures.
 
@@ -79,7 +79,7 @@ local({
 
 Why `local()`? It creates an isolated environment so your startup code doesn't pollute the global workspace with temporary variables.
 
-### 2. Essential Utilities (Build Your Tools First)
+### Essential Utilities (Build Your Tools First)
 
 Before doing anything else, define helper functions you'll use throughout the file:
 
@@ -102,7 +102,7 @@ Before doing anything else, define helper functions you'll use throughout the fi
 
 These utilities are defensive: they handle missing packages gracefully and provide consistent messaging.
 
-### 3. Library Path Management (Critical for WB Environment)
+### Library Path Management (Critical for WB Environment)
 
 World Bank computers often have complex network setups. Properly configuring your library paths prevents many headaches:
 
@@ -143,7 +143,7 @@ RENVIRON_LOADED_FROM=C:/WBG/R/.Renviron
 Then restart R. This tells R where to install and look for packages.
 :::
 
-### 4. Session Mode Toggle (Vanilla vs Regular)
+### Session Mode Toggle (Vanilla vs Regular)
 
 Sometimes you need a clean R session without customizations (for debugging or reproducible testing). This toggle system lets you switch between modes:
 
@@ -205,7 +205,7 @@ if (identical(mode, "vanilla")) {
 
 **Usage**: Call `vanilla_next()` in R console, then restart. Next session runs without customizations.
 
-### 5. CRAN Repository (Always Set This)
+### CRAN Repository (Always Set This)
 
 Always specify your CRAN mirror to avoid being prompted:
 
@@ -219,7 +219,7 @@ local({
 
 Using `local()` here prevents the temporary variable `r` from cluttering your global environment.
 
-### 6. Performance Optimization (Threading)
+### Performance Optimization (Threading)
 
 For data-intensive work, configure parallel processing:
 
@@ -250,7 +250,7 @@ if (.safe_require("collapse")) {
 
 **Why cap at 90%?** Leaving some cores free keeps your system responsive for other tasks.
 
-### 7. Essential Package Loading (Interactive Sessions Only)
+### Essential Package Loading (Interactive Sessions Only)
 
 Load packages you use constantly, but only in interactive sessions:
 
@@ -280,7 +280,7 @@ if (interactive()) {
 Only load packages you use in *every* session. Loading too many slows startup and can cause conflicts.
 :::
 
-### 8. Daily Package Update Check (Smart Caching)
+### Daily Package Update Check (Smart Caching)
 
 Stay informed about package updates without slowing down startup:
 
@@ -328,7 +328,7 @@ if (interactive() && .safe_require("fs") && .safe_require("qs")) {
 
 **Smart design**: Only checks for updates once per day, caching results to avoid network delays on subsequent sessions.
 
-### 9. R Options (Customize Your Experience)
+### R Options (Customize Your Experience)
 
 Set your preferred R options:
 
@@ -343,15 +343,15 @@ options(
   
   # Custom prompt
   prompt = "R> ",
-  continue = "... ",
+  continue = "+... ",
   
   # Error handling
   warn = 1,  # Show warnings as they occur
   error = NULL,  # NULL = use default error handler
   
   # Browser/editor
-  browser = "firefox",  # Or your preferred browser
-  editor = "notepad",   # Fallback editor
+  browser = "Chrome",  # Or your preferred browser
+  editor = "VScode",   # Fallback editor
   
   # Network timeouts (important for WB network)
   timeout = 300,  # 5 minutes for downloads
@@ -374,7 +374,7 @@ options(
 Sys.setenv(TZ = "UTC")
 ```
 
-### 10. Network/Proxy Settings (WB Specific)
+### Network/Proxy Settings (WB Specific)
 
 World Bank network sometimes requires proxy settings:
 
@@ -400,7 +400,7 @@ if (.Platform$OS.type == "windows") {
 Check with your IT team for correct proxy settings. Many WB computers handle this automatically.
 :::
 
-### 11. Helper Functions (Productivity Boosters)
+### Helper Functions (Productivity Boosters)
 
 Now we can define utility functions that improve daily workflows:
 
@@ -463,7 +463,7 @@ for (fn in c("pn", "assign_to_global", "up")) {
 
 **Philosophy**: These are shortcuts for common tasks. Include only what you'll actually use.
 
-### 12. Startup and Exit Hooks (The Bookends)
+### Startup and Exit Hooks (The Bookends)
 
 Finally, define what happens when R starts and exits:
 
@@ -641,7 +641,7 @@ Here's a complete, production-ready `.Rprofile` that incorporates everything we'
 ```{r}
 #| eval: false
 #| code-fold: true
-#| 
+#|
 # ==============================================================================
 # .Rprofile for World Bank R Users
 # ==============================================================================
