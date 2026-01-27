@@ -53,7 +53,7 @@ R can load `.Rprofile` from two locations:
 
 **In this chapter, we focus on user-level `.Rprofile`** because we want consistent behavior across all projects. Project-specific configurations are better handled through `renv` (which we'll mention briefly) or project-specific scripts.
 
-::: callout-note
+::: {.callout-note}
 ## Where is my home directory?
 
 In R, run `path.expand("~")` to see your home directory path.
@@ -124,7 +124,7 @@ if (nzchar(rlu)) {
 
 **Why this matters**: Without proper library paths, R might try to install packages in system directories where you lack write permissions, or scatter packages across multiple locations.
 
-::: callout-tip
+::: {.callout-tip}
 ## Setting R_LIBS_USER
 
 For World Bank computers, I recommend you place your `.Renviron` in `C:\WBG\R\.Renviron` and add the following lines:
@@ -274,7 +274,7 @@ if (interactive()) {
 }
 ```
 
-::: callout-warning
+::: {.callout-warning}
 ## Don't overload packages
 
 Only load packages you use in *every* session. Loading too many slows startup and can cause conflicts.
@@ -394,7 +394,7 @@ if (.Platform$OS.type == "windows") {
 }
 ```
 
-::: callout-note
+::: {.callout-note}
 ## Proxy configuration varies
 
 Check with your IT team for correct proxy settings. Many WB computers handle this automatically.
