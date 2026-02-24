@@ -78,8 +78,7 @@ These prompts are **global tools** used in *every* GPID technical project.
 
 Each team member must clone the prompts repository locally. For the rest of this document, we assume you clone it to:
 
-```
-C:\Users\<USERNAME>\OneDrive - WBG\GPID-team\copilot-prompts
+`C:\Users\<USERNAME>\OneDrive - WBG\GPID-team\copilot-prompts`
 
 ### Registering Prompt Files and the GPID Planner Agent in VS Code / Positron
 
@@ -120,11 +119,10 @@ Every GPID task follows this workflow:
 
 ```{mermaid}
 flowchart LR
-  A(["1. Select\nGPID Planner\nagent"]) --> B["/gpid-proto-start-task\n(plan + initialize)"]
-  B --> C["Implementation\nloop"]
-  C --> D["/gpid-proto-log-update\n(after each milestone)"]
-  D --> C
-  C --> E["/gpid-proto-wrap-task\n(end of task)"]
+  A["/gpid-proto-start-task\n(plan + initialize)"] --> B["Implementation\nloop"]
+  B --> C["/gpid-proto-log-update\n(after each milestone)"]
+  C --> B
+  B --> D["/gpid-proto-wrap-task\n(end of task)"]
 ```
 
 ### What is "plan mode"?
@@ -137,13 +135,12 @@ The GPID Planner agent is read-only (no file edits allowed) and its only job is 
 
 Step-by-step:
 
-1. In Github Copilot Chat, click the agent picker dropdown (shows `Agent` by default).
-2. Select **GPID Planner**.
-3. Run `/gpid-proto-start-task` — Copilot will gather task info, produce the plan, handle the TTL approval reminder if needed, and save the log.
-4. Click **"Start Implementation"** when the plan is approved — this switches you back to `Agent` mode with `/gpid-proto-start-task` pre-loaded to confirm and begin tracking.
-5. Work through the implementation using the prompts described below.
-6. Run `/gpid-proto-log-update` after each meaningful milestone.
-7. Run `/gpid-proto-wrap-task` to close the task and produce the final validation bundle.
+1. Run `/gpid-proto-start-task` — this automatically switches to the **GPID Planner** agent (as defined in the prompt's `agent:` field), gathers task info, produces the plan, handles the TTL approval reminder if needed, and saves the log.
+   - Optionally, you can manually select **GPID Planner** from the agent picker dropdown before running the prompt — the result is the same.
+2. Click **"Start Implementation"** when the plan is approved — this switches you to `Agent` mode with the approved plan already in context.
+3. Work through the implementation using the prompts described below.
+4. Run `/gpid-proto-log-update` after each meaningful milestone.
+5. Run `/gpid-proto-wrap-task` to close the task and produce the final validation bundle.
 
 ### Model assignment
 
