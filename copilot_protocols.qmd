@@ -1,5 +1,5 @@
 ﻿---
-abstract: This document outlines **mandatory** protocols for using GitHub Copilot in technical work, explains how to use the GPID prompt files that implement these protocols, and provides guidance on installation, usage, and maintenance.
+abstract: "This document outlines mandatory protocols for using GitHub Copilot in technical work, explains how to use the GPID prompt files that implement these protocols, and provides guidance on installation, usage, and maintenance."
 execute:
   eval: true
 bibliography: AI.bib
@@ -55,6 +55,7 @@ These commands help you follow the mandatory protocols with minimal effort.
 ### Where the Prompt Files Live
 
 The shared prompts are stored in the repository [GPID-WB/copilot-prompts](https://github.com/GPID-WB/copilot-prompts).  The prompt files for these protocols are in the folder prompts/
+
 ```
 protocols/
 gpid-proto-start-task.prompt.md
@@ -95,10 +96,7 @@ After cloning, you must register two paths in your **user settings**.
 #### 2. Register the GPID Planner agent
 
 1. In the same settings, search for `chat.agentFilesLocations`.
-2. Hit "add item" and add the full path to the `.github/agents/` subfolder of your local clone:
-   ```
-   C:\Users\<USERNAME>\OneDrive - WBG\GPID-team\copilot-prompts\.github\agents
-   ```
+2. Hit "add item" and add the full path to the `.github/agents/` subfolder of your local clone above:
 3. Restart VS Code/Positron.
 
 NOW: The **GPID Planner** agent will appear in the agents dropdown in Github Copilot Chat.
@@ -128,16 +126,16 @@ flowchart LR
 ### What is "plan mode"?
 
 ::: {.callout-important}
-**“Plan mode” in the GPID system means selecting the **GPID Planner** custom agent from the agents dropdown in Github Copilot Chat** — it is not a slash command.
+
+**Plan mode** in the GPID system means selecting the **GPID Planner** custom agent from the agents dropdown in Github Copilot Chat — it is not a slash command.
 
 The GPID Planner agent is read-only (no file edits allowed) and its only job is to produce a deterministic, approved plan before any code is written. Once planning is complete, use the **"Start Implementation"** handoff button to switch to the standard implementation agent.
 :::
 
 Step-by-step:
 
-1. Run `/gpid-proto-start-task` — this automatically switches to the **GPID Planner** agent (as defined in the prompt's `agent:` field), gathers task info, produces the plan, handles the TTL approval reminder if needed, and saves the log.
-   - Optionally, you can manually select **GPID Planner** from the agent picker dropdown before running the prompt — the result is the same.
-2. Click **"Start Implementation"** when the plan is approved — this switches you to `Agent` mode with the approved plan already in context.
+1. Run `/gpid-proto-start-task` — this automatically switches to the **GPID Planner** agent (as defined in the prompt's `agent:` field), gathers task info, produces the plan, handles the TTL approval reminder if needed, and saves the log. Optionally, you can manually select **GPID Planner** from the agent picker dropdown before running the prompt; the result is the same.
+2. Click **Start Implementation** when the plan is approved — this switches you to `Agent` mode with the approved plan already in context.
 3. Work through the implementation using the prompts described below.
 4. Run `/gpid-proto-log-update` after each meaningful milestone.
 5. Run `/gpid-proto-wrap-task` to close the task and produce the final validation bundle.
@@ -218,7 +216,7 @@ embed_gpid_prompt("gpid-proto-start-task.prompt.md")
 ```
 
 :::
----
+
 
 ### Protocol  {{< protocol >}} — Logging progress of the task {.unnumbered}
 
@@ -258,7 +256,7 @@ embed_gpid_prompt("gpid-proto-log-update.prompt.md")
 
 :::
 
----
+
 
 ### Protocol  {{< protocol >}} — Making the Code Understandable {.unnumbered}
 
@@ -318,7 +316,6 @@ embed_gpid_prompt("gpid-proto-document-code.prompt.md")
 
 :::
 
----
 
 
 ### Protocol  {{< protocol >}} — Code Review {.unnumbered}
@@ -358,7 +355,6 @@ embed_gpid_prompt("gpid-proto-review-code.prompt.md")
 
 :::
 
----
 ### Protocol  {{< protocol >}} — Testing and Edge Cases {.unnumbered}
 
 **Prompt:**
@@ -394,7 +390,6 @@ embed_gpid_prompt("gpid-proto-tests-checklist.prompt.md")
 
 :::
 
----
 
 ### Protocol  {{< protocol >}} — Dependencies, Risks, and Safety {.unnumbered}
 
@@ -430,7 +425,7 @@ embed_gpid_prompt("gpid-proto-deps-risk.prompt.md")
 
 :::
 
----
+
 ### Protocol  {{< protocol >}} — Producing the Final Validation Bundle {.unnumbered}
 
 **Prompt:**
@@ -499,3 +494,32 @@ You can do it by
 • **Use Github Copilot as a tool, not a replacement**: Github Copilot accelerates your work, but it cannot replace your engineering judgment. You must understand, evaluate, and refine everything it produces.
 
 **Bottom line:** If you wouldn't put your name on it as-is, don't commit it yet. Clean it up first.
+
+
+## Full Workflow Example
+
+The diagram below shows a complete task walkthrough where all prompts are used. This is the recommended sequence when working on a non-trivial feature or bug fix.
+
+```{mermaid}
+flowchart TD
+    A(["/gpid-proto-start-task\nPlan & initialize\n(GPID Planner agent)"]) --> B["Implement\ncode changes"]
+    B --> C["/gpid-proto-explain-code\nDocument understanding\nof new/changed code"]
+    C --> D["/gpid-proto-document-code\nGenerate comments\n& Roxygen2 docs"]
+    D --> E["/gpid-proto-tests-checklist\nDefine & run\ntest cases"]
+    E --> F["/gpid-proto-deps-risk\nAssess dependency\n& security risks"]
+    F --> G["/gpid-proto-review-code\nAdversarial code\nquality review"]
+    G --> H{More work\nneeded?}
+    H -- Yes --> B
+    H -- No --> I["/gpid-proto-log-update\nLog milestone"]
+    I --> J{Task\ncomplete?}
+    J -- No --> B
+    J -- Yes --> K(["/gpid-proto-wrap-task\nFinal validation bundle\n& close task"])
+
+    style A fill:#d4edda,stroke:#28a745
+    style K fill:#d4edda,stroke:#28a745
+    style H fill:#fff3cd,stroke:#ffc107
+    style J fill:#fff3cd,stroke:#ffc107
+```
+
+> **Note:** `/gpid-proto-log-update` should be run after each meaningful milestone, not only at the end. The loop above is simplified; in practice, you may log several updates before the task is complete.
+
