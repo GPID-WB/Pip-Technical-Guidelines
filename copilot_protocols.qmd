@@ -1,4 +1,4 @@
----
+﻿---
 abstract: This document outlines **mandatory** protocols for using GitHub Copilot in technical work, explains how to use the GPID prompt files that implement these protocols, and provides guidance on installation, usage, and maintenance.
 execute:
   eval: true
@@ -40,14 +40,13 @@ Each GPID protocol prompt begins with the prefix `gpid-proto-`
 
 Examples:
 
-- `/gpid-proto-plan-task` ← **always first**  
-- `/gpid-proto-start-task`  
-- `/gpid-proto-explain-code`  
-- `/gpid-proto-document-code`  
-- `/gpid-proto-review-efficiency`  
-- `/gpid-proto-tests-checklist`  
-- `/gpid-proto-deps-risk`  
-- `/gpid-proto-self-critique`  
+- `/gpid-proto-start-task` ← **always first** (plan + initialize)
+- `/gpid-proto-log-update`
+- `/gpid-proto-explain-code`
+- `/gpid-proto-document-code`
+- `/gpid-proto-review-code`
+- `/gpid-proto-tests-checklist`
+- `/gpid-proto-deps-risk`
 - `/gpid-proto-wrap-task`
 
 These commands help you follow the mandatory protocols with minimal effort.
@@ -56,18 +55,19 @@ These commands help you follow the mandatory protocols with minimal effort.
 ### Where the Prompt Files Live
 
 The shared prompts are stored in the repository [GPID-WB/copilot-prompts](https://github.com/GPID-WB/copilot-prompts).  The prompt files for these protocols are in the folder prompts/
-
 ```
-prompts/
-gpid-proto-plan-task.prompt.md
+protocols/
 gpid-proto-start-task.prompt.md
+gpid-proto-log-update.prompt.md
 gpid-proto-explain-code.prompt.md
 gpid-proto-document-code.prompt.md
-gpid-proto-review-efficiency.prompt.md
+gpid-proto-review-code.prompt.md
 gpid-proto-tests-checklist.prompt.md
 gpid-proto-deps-risk.prompt.md
-gpid-proto-self-critique.prompt.md
 gpid-proto-wrap-task.prompt.md
+
+.github/agents/
+gpid-planner.agent.md
 
 ```
 
@@ -80,23 +80,29 @@ Each team member must clone the prompts repository locally. For the rest of this
 
 ```
 C:\Users\<USERNAME>\OneDrive - WBG\GPID-team\copilot-prompts
-```
 
-### Registering Prompt Files in VS Code / Positron
+### Registering Prompt Files and the GPID Planner Agent in VS Code / Positron
 
-After cloning, you must tell Github Copilot where to find the shared prompts by modifying the **user settings**. This can by done in multiple ways, but we recommend the following:
+After cloning, you must register two paths in your **user settings**.
+
+#### 1. Register the prompt files
 
 1. In VS Code/Positron, open settings via the gear icon in the lower left corner or by hitting `Ctrl + ,`.
-2. Search for "prompt files location" (without quotes).
-3. Hit "add item" and add the full path to the `prompts` folder in your local clone of the repository adding the `protocols/` subfolder.
-![](images/prompt_files_location.png) 
-4. Restart VS Code/Positron.
+2. Search for `chat.promptFilesLocations` (without quotes).
+3. Hit "add item" and add the full path to the `protocols/` subfolder.
+![](images/prompt_files_location.png)
+4. Typing `/` in Github Copilot Chat will now show all GPID protocol prompts.
 
+#### 2. Register the GPID Planner agent
 
-NOW: Typing `/` in Github Copilot Chat will show all GPID protocol prompts.
+1. In the same settings, search for `chat.agentFilesLocations`.
+2. Hit "add item" and add the full path to the `.github/agents/` subfolder of your local clone:
+   ```
+   C:\Users\<USERNAME>\OneDrive - WBG\GPID-team\copilot-prompts\.github\agents
+   ```
+3. Restart VS Code/Positron.
 
-
-### Updating Prompt Files
+NOW: The **GPID Planner** agent will appear in the agents dropdown in Github Copilot Chat.
 
 Whenever a prompt file changes, you will be notified. However, the best practice is to regularly update your local copy. You can do it by opening the `copilot-prompts` folder in a terminal and running `git pull`, opening the whole folder in Positron and VScode and sync the changes or by using script similar to this:
 
@@ -105,31 +111,73 @@ cd "C:\Users\USERNAME\OneDrive - WBG\GPID-team\copilot-prompts"
 git pull
 ```
 
+
+## How the GPID Copilot Workflow Works
+
+### The big picture
+
+Every GPID task follows this workflow:
+
+```{mermaid}
+flowchart LR
+  A(["1. Select\nGPID Planner\nagent"]) --> B["/gpid-proto-start-task\n(plan + initialize)"]
+  B --> C["Implementation\nloop"]
+  C --> D["/gpid-proto-log-update\n(after each milestone)"]
+  D --> C
+  C --> E["/gpid-proto-wrap-task\n(end of task)"]
+```
+
+### What is "plan mode"?
+
+::: {.callout-important}
+**“Plan mode” in the GPID system means selecting the **GPID Planner** custom agent from the agents dropdown in Github Copilot Chat** — it is not a slash command.
+
+The GPID Planner agent is read-only (no file edits allowed) and its only job is to produce a deterministic, approved plan before any code is written. Once planning is complete, use the **"Start Implementation"** handoff button to switch to the standard implementation agent.
+:::
+
+Step-by-step:
+
+1. In Github Copilot Chat, click the agent picker dropdown (shows `Agent` by default).
+2. Select **GPID Planner**.
+3. Run `/gpid-proto-start-task` — Copilot will gather task info, produce the plan, handle the TTL approval reminder if needed, and save the log.
+4. Click **"Start Implementation"** when the plan is approved — this switches you back to `Agent` mode with `/gpid-proto-start-task` pre-loaded to confirm and begin tracking.
+5. Work through the implementation using the prompts described below.
+6. Run `/gpid-proto-log-update` after each meaningful milestone.
+7. Run `/gpid-proto-wrap-task` to close the task and produce the final validation bundle.
+
+### Model assignment
+
+Some prompts are assigned a lightweight model to save cost on documentation-only tasks. Tasks requiring complex reasoning use the model you have selected in the chat picker.
+
+| Prompt | Model | Reason |
+|---|---|---|
+| `/gpid-proto-start-task` | User's selected model | Requires reasoning to produce a deterministic plan |
+| `/gpid-proto-explain-code` | Claude Haiku 4.5 → Claude Sonnet 4.5 | Linear summarisation; lightweight |
+| `/gpid-proto-document-code` | Claude Haiku 4.5 → Claude Sonnet 4.5 | Mechanical comment/Roxygen2 generation |
+| `/gpid-proto-log-update` | Claude Haiku 4.5 → Claude Sonnet 4.5 | Structured append; no reasoning required |
+| `/gpid-proto-review-code` | User's selected model | Adversarial reasoning about code quality |
+| `/gpid-proto-tests-checklist` | User's selected model | Requires reasoning about correctness and edge cases |
+| `/gpid-proto-deps-risk` | User's selected model | Security and compatibility reasoning |
+| `/gpid-proto-wrap-task` | User's selected model | Synthesises entire session; most demanding |
+
+> **To update the lightweight model:** search for `Claude Haiku 4.5` in the `protocols/` folder and replace both the primary and fallback entries in the three affected prompt files.
+
+---
+
 ## The GPID Protocol Prompts
 
-The following sections describe each mandatory protocol and the corresponding `gpid-proto-*` prompt that should be used.
+The following sections describe each mandatory protocol and the corresponding `gpid-proto-*` prompt.
 
-Using the prompts is simple. You just need to type the prompt command in Github Copilot Chat.
+### Protocol  {{< protocol >}} — Planning and Initializing the Task {.unnumbered}
 
-**Example:**
+**Prompt:**
 
 ```
 /gpid-proto-start-task
 ```
 
-Github Copilot will ask for the necessary information and then guide you through the protocol.
-
-
-### Protocol  {{< protocol >}} — Planning the Task Before Starting {.unnumbered}
-
-**Prompt:**
-
-```
-/gpid-proto-plan-task
-```
-
 ::: {.callout-important}
-This is **Protocol 0 — mandatory for every task**. It must be run before `/gpid-proto-start-task`. No task log should exist without a plan section.
+This is **Protocol 1 — mandatory for every task**. Run this inside the **GPID Planner** agent (see workflow above). No implementation should begin without a saved plan.
 :::
 
 #### Purpose {.unnumbered}
@@ -137,88 +185,28 @@ This is **Protocol 0 — mandatory for every task**. It must be run before `/gpi
 Before any implementation begins, the team must produce a detailed, deterministic plan. This ensures that:
 
 - The scope and approach are agreed upon before code is written.
-- Tasks assigned by a TTL are presented for approval before proceeding.
+- Tasks assigned by a TTL are reviewed for approval before proceeding.
 - Any deviation from the plan during implementation is **explicitly flagged and documented** with a rationale.
 
 #### What It Does {.unnumbered}
 
-When you run `/gpid-proto-plan-task`, Github Copilot:
+When you run `/gpid-proto-start-task` (inside the GPID Planner agent), Github Copilot:
 
-1. Asks for:
-   - **Task name** (used as the log file identifier)
-   - **Task description**
-   - **Whether the task is TTL-assigned**
-
-2. Produces a **numbered checklist plan** with steps specific enough to be deterministic — covering scoping, design decisions, implementation, validation, documentation, and wrap-up.
-
-3. If the task is TTL-assigned, displays a soft reminder to obtain approval before proceeding.
-
-4. Saves the full plan to `copilot_logs/LOG_${TASK_NAME}.md` under a `## PLAN` section, followed by an initially empty `## Plan Deviations` summary block.
-
-5. Creates `.current_task` for session continuity.
+1. Asks for **task name**, **description**, and **whether the task is TTL-assigned**.
+2. Produces a **numbered checklist plan** (`- [ ] Step N: ...`) covering scoping, design, implementation, validation, documentation, and wrap-up.
+3. If TTL-assigned, displays a soft approval reminder before proceeding.
+4. Saves the plan to `copilot_logs/LOG_${TASK_NAME}.md` under `## PLAN`, with an empty `## Plan Deviations` block.
+5. Creates `.current_task` and begins a **running session summary**.
 
 #### Plan Deviations {.unnumbered}
 
-If the plan needs to change during implementation, the deviation must be logged explicitly. The `/gpid-proto-log-update` prompt enforces a strict marker format:
+If the plan changes during implementation, the deviation must be logged with the strict marker:
 
 ```
 ### ⚠️ PLAN DEVIATION — YYYY-MM-DD HH:MM:SS
 ```
 
-Every deviation is also appended to the `## Plan Deviations` summary block at the top of the log, so the full deviation history is visible without scrolling through the entire log. This block is greppable: searching for `PLAN DEVIATION` in `copilot_logs/` will surface all deviations across all tasks.
-
-#### Latest GPID prompt file {.unnumbered}
-
-::: {.callout-note collapse="true" title="gpid-proto-plan-task"}
-
-```{r}
-#| echo: false
-#| results: asis
-#| code-fold: true
-embed_gpid_prompt("gpid-proto-plan-task.prompt.md")
-
-```
-
-:::
-
----
-
-### Protocol  {{< protocol >}} — Documenting Your Work With Github Copilot {.unnumbered}
-
-**Prompt:**
-
-```
-/gpid-proto-start-task
-```
-
-#### Purpose {.unnumbered}
-
-Every Copilot-assisted task must produce a clear, transparent trail of:
-
-* What was done
-* Why decisions were made
-* What dependencies were added or removed
-* How the final code works
-
-#### What It Does {.unnumbered}
-
-When you run `/gpid-proto-start-task`, Github Copilot:
-
-1. Asks you for:
-
-   * **Task name**
-   * **Short description**
-
-2. Logs these clearly and begins a **running summary** of:
-
-   * key prompts
-   * major decisions
-   * assumptions
-   * dependencies added/removed
-
-3. Keeps the summary alive throughout the task in the file `copilot_logs/LOG_${TASK_NAME}.md`.
-
-You do **not** need to structure this manually — the prompt enforces consistency.
+Every deviation is also appended to the `## Plan Deviations` block at the top of the log. This block is greppable: `git grep "PLAN DEVIATION" copilot_logs/` surfaces all deviations across all tasks.
 
 #### Latest GPID prompt file {.unnumbered}
 
@@ -233,7 +221,6 @@ embed_gpid_prompt("gpid-proto-start-task.prompt.md")
 ```
 
 :::
-
 ---
 
 ### Protocol  {{< protocol >}} — Logging progress of the task {.unnumbered}
@@ -336,47 +323,45 @@ embed_gpid_prompt("gpid-proto-document-code.prompt.md")
 
 ---
 
-### Protocol  {{< protocol >}} — Code Review and Efficiency Check {.unnumbered}
+
+### Protocol  {{< protocol >}} — Code Review {.unnumbered}
 
 **Prompt:**
 
 ```
-/gpid-proto-review-efficiency
+/gpid-proto-review-code
 ```
 
 #### Purpose {.unnumbered}
 
-Before testing, every piece of Copilot-generated code must undergo an efficiency audit.
+Before testing, every piece of Copilot-generated code must undergo a combined efficiency, complexity, and robustness review.
 
 #### What It Does {.unnumbered}
 
 The prompt reviews code for:
 
-* redundant logic
-* unnecessary copies
-* over-nested structures
-* unused variables
-* dependency creep
-* overly complex or fragile patterns
+* inefficiencies and unnecessary copies
+* complexity and dead code
+* risky assumptions and poor NA handling
+* dependency bloat and stack alignment (`data.table`, `collapse`, `rlang`)
 
-And provides clear, actionable improvements.
+It ends with a **Key strengths / Key risks / Top 3 improvements** summary.
 
 #### Latest GPID prompt file {.unnumbered}
 
-::: {.callout-note collapse="true" title="gpid-proto-review-efficiency"}
+::: {.callout-note collapse="true" title="gpid-proto-review-code"}
 
 ```{r}
 #| echo: false
 #| results: asis
 #| code-fold: true
-embed_gpid_prompt("gpid-proto-review-efficiency.prompt.md")
+embed_gpid_prompt("gpid-proto-review-code.prompt.md")
 
 ```
 
 :::
 
 ---
-
 ### Protocol  {{< protocol >}} — Testing and Edge Cases {.unnumbered}
 
 **Prompt:**
@@ -449,45 +434,6 @@ embed_gpid_prompt("gpid-proto-deps-risk.prompt.md")
 :::
 
 ---
-
-### Protocol  {{< protocol >}} — Self-Critique and Robustness Review {.unnumbered}
-
-**Prompt:**
-
-```
-/gpid-proto-self-critique
-```
-
-#### Purpose {.unnumbered}
-
-Github Copilot is surprisingly good at critiquing its own work when prompted correctly.
-
-This step often finds issues humans miss.
-
-#### What It Does {.unnumbered}
-
-* Reviews code as if performing a formal code review
-* Identifies inefficiencies
-* Points out risky assumptions
-* Suggests simplifications
-* Produces a concise summary of strengths, risks, and recommended improvements
-
-#### Latest GPID prompt file {.unnumbered}
-
-::: {.callout-note collapse="true" title="gpid-proto-self-critique"}
-
-```{r}
-#| echo: false
-#| results: asis
-#| code-fold: true
-embed_gpid_prompt("gpid-proto-self-critique.prompt.md")
-
-```
-
-:::
-
----
-
 ### Protocol  {{< protocol >}} — Producing the Final Validation Bundle {.unnumbered}
 
 **Prompt:**
@@ -515,7 +461,7 @@ copilot_logs/TASK_NAME.md
 * Unit tests and edge cases
 * Error-handling strategy
 * Dependency and risk analysis
-* Self-critique findings
+* Code review findings
 * Remaining TODOs
 
 This file must **always** be included in your PR.
