@@ -40,6 +40,7 @@ Each GPID protocol prompt begins with the prefix `gpid-proto-`
 
 Examples:
 
+- `/gpid-proto-plan-task` ← **always first**  
 - `/gpid-proto-start-task`  
 - `/gpid-proto-explain-code`  
 - `/gpid-proto-document-code`  
@@ -58,6 +59,7 @@ The shared prompts are stored in the repository [GPID-WB/copilot-prompts](https:
 
 ```
 prompts/
+gpid-proto-plan-task.prompt.md
 gpid-proto-start-task.prompt.md
 gpid-proto-explain-code.prompt.md
 gpid-proto-document-code.prompt.md
@@ -117,6 +119,69 @@ Using the prompts is simple. You just need to type the prompt command in Github 
 
 Github Copilot will ask for the necessary information and then guide you through the protocol.
 
+
+### Protocol  {{< protocol >}} — Planning the Task Before Starting {.unnumbered}
+
+**Prompt:**
+
+```
+/gpid-proto-plan-task
+```
+
+::: {.callout-important}
+This is **Protocol 0 — mandatory for every task**. It must be run before `/gpid-proto-start-task`. No task log should exist without a plan section.
+:::
+
+#### Purpose {.unnumbered}
+
+Before any implementation begins, the team must produce a detailed, deterministic plan. This ensures that:
+
+- The scope and approach are agreed upon before code is written.
+- Tasks assigned by a TTL are presented for approval before proceeding.
+- Any deviation from the plan during implementation is **explicitly flagged and documented** with a rationale.
+
+#### What It Does {.unnumbered}
+
+When you run `/gpid-proto-plan-task`, Github Copilot:
+
+1. Asks for:
+   - **Task name** (used as the log file identifier)
+   - **Task description**
+   - **Whether the task is TTL-assigned**
+
+2. Produces a **numbered checklist plan** with steps specific enough to be deterministic — covering scoping, design decisions, implementation, validation, documentation, and wrap-up.
+
+3. If the task is TTL-assigned, displays a soft reminder to obtain approval before proceeding.
+
+4. Saves the full plan to `copilot_logs/LOG_${TASK_NAME}.md` under a `## PLAN` section, followed by an initially empty `## Plan Deviations` summary block.
+
+5. Creates `.current_task` for session continuity.
+
+#### Plan Deviations {.unnumbered}
+
+If the plan needs to change during implementation, the deviation must be logged explicitly. The `/gpid-proto-log-update` prompt enforces a strict marker format:
+
+```
+### ⚠️ PLAN DEVIATION — YYYY-MM-DD HH:MM:SS
+```
+
+Every deviation is also appended to the `## Plan Deviations` summary block at the top of the log, so the full deviation history is visible without scrolling through the entire log. This block is greppable: searching for `PLAN DEVIATION` in `copilot_logs/` will surface all deviations across all tasks.
+
+#### Latest GPID prompt file {.unnumbered}
+
+::: {.callout-note collapse="true" title="gpid-proto-plan-task"}
+
+```{r}
+#| echo: false
+#| results: asis
+#| code-fold: true
+embed_gpid_prompt("gpid-proto-plan-task.prompt.md")
+
+```
+
+:::
+
+---
 
 ### Protocol  {{< protocol >}} — Documenting Your Work With Github Copilot {.unnumbered}
 
