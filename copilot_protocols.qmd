@@ -185,13 +185,13 @@ Before any implementation begins, the team must produce a detailed, deterministi
 
 #### What It Does {.unnumbered}
 
-When you run `/gpid-proto-start-task` (inside the GPID Planner agent), Github Copilot:
+When you run `/gpid-proto-start-task`, VS Code displays **input dialogs** to collect the task name and TTL-assignment status upfront, then activates the **GPID Planner** agent with that context already in place. The agent then:
 
-1. Asks for **task name**, **description**, and **whether the task is TTL-assigned**.
+1. Opens an **interactive conversation** to gather a full task description — asking clarifying questions until the scope is unambiguous.
 2. Produces a **numbered checklist plan** (`- [ ] Step N: ...`) covering scoping, design, implementation, validation, documentation, and wrap-up.
-3. If TTL-assigned, displays a soft approval reminder before proceeding.
+3. If TTL-assigned, displays an approval reminder and waits for `approved` before continuing.
 4. Saves the plan to `copilot_logs/LOG_${TASK_NAME}.md` under `## PLAN`, with an empty `## Plan Deviations` block.
-5. Creates `.current_task` and begins a **running session summary**.
+5. Creates `.current_task`, begins a **running session summary**, and asks **"Are you ready to proceed with implementation?"** before surfacing the **Start Implementation** handoff button.
 
 #### Plan Deviations {.unnumbered}
 
