@@ -54,7 +54,7 @@ These commands help you follow the mandatory protocols with minimal effort.
 
 ### Where the Prompt Files Live
 
-The shared prompts are stored in the repository [GPID-WB/copilot-prompts](https://github.com/GPID-WB/copilot-prompts).  The prompt files for these protocols are in the folder prompts/
+The shared prompts are stored in the repository [GPID-WB/copilot-prompts](https://github.com/GPID-WB/copilot-prompts).  The prompt files for these protocols are in the folder protocols/
 
 ```
 protocols/
