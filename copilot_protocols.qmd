@@ -83,7 +83,7 @@ Each team member must clone the prompts repository locally. For the rest of this
 
 ### Registering Prompt Files and the GPID Planner Agent in VS Code / Positron
 
-After cloning, you must register two paths in your **user settings**.
+After cloning, you must register the prompt files location and the GPID Planner agent in your settings. The steps below apply to both VS Code and Positron, **except for the agent registration**, where Positron currently requires a workaround.
 
 #### 1. Register the prompt files
 
@@ -95,11 +95,33 @@ After cloning, you must register two paths in your **user settings**.
 
 #### 2. Register the GPID Planner agent
 
-1. In the same settings, search for `chat.agentFilesLocations`.
-2. Hit "add item" and add the full path to the `.github/agents/` subfolder of your local clone above:
-3. Restart VS Code/Positron.
+##### In VS Code
 
-NOW: The **GPID Planner** agent will appear in the agents dropdown in Github Copilot Chat.
+1. In settings, search for `chat.agentFilesLocations`.
+2. Hit "add item" and add the full path to the `.github/agents/` subfolder of your local clone.
+3. Restart VS Code.
+
+The **GPID Planner** agent will now appear in the agents dropdown in Github Copilot Chat.
+
+##### In Positron (temporary workaround)
+
+::: {.callout-warning}
+Positron does not yet support `chat.agentFilesLocations`. The steps below are a temporary workaround until the Positron team adds support for this setting.
+:::
+
+You have two options:
+
+**Option A — Global (available in all workspaces)**
+
+Copy `.github/agents/gpid-planner.agent.md` from your local clone to Positron's global user folder:
+
+`C:\Users\<USERNAME>\AppData\Roaming\Positron\User\prompts\`
+
+After copying, restart Positron. The agent will be available globally across all workspaces. Note that you will need to re-copy this file after each `git pull` on the `copilot-prompts` repository.
+
+**Option B — Per workspace (current project only)**
+
+Copy `gpid-planner.agent.md` to `.vscode/positron/agents/` inside your project (create the folder if it does not exist).
 
 Whenever a prompt file changes, you will be notified. However, the best practice is to regularly update your local copy. You can do it by opening the `copilot-prompts` folder in a terminal and running `git pull`, opening the whole folder in Positron and VScode and sync the changes or by using script similar to this:
 
