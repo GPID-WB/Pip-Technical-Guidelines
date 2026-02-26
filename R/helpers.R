@@ -13,6 +13,7 @@ embed_gpid_prompt <- function(filename, folder = "protocols", branch = "main") {
     }
   )
 
-  # Emit Markdown code block (printed "as-is") with proper escaping
-  cat(paste(lines, collapse = "\n"), sep = "")
+  # Wrap in a fenced code block to prevent pandoc from interpreting
+  # YAML front matter or special characters in the prompt file content
+  cat("```markdown\n", paste(lines, collapse = "\n"), "\n```", sep = "")
 }
