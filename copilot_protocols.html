@@ -6,7 +6,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Create the final task summary and validation bundle">
 
 <title>6&nbsp; Mandatory Protocols for Using GitHub Copilot in Technical Work – Pip Technical Guidelines</title>
 <style>
@@ -78,7 +77,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-0dd2bd5de344125cf763a379ddc3eb04.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-00ccf60c28c3bdf2d57f5131fbf16f11.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -106,6 +105,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="css/tachyons.css">
@@ -294,21 +296,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#what-are-gpid-prompt-files" id="toc-what-are-gpid-prompt-files" class="nav-link" data-scroll-target="#what-are-gpid-prompt-files"><span class="header-section-number">6.2.1</span> What Are GPID Prompt Files?</a></li>
   <li><a href="#where-the-prompt-files-live" id="toc-where-the-prompt-files-live" class="nav-link" data-scroll-target="#where-the-prompt-files-live"><span class="header-section-number">6.2.2</span> Where the Prompt Files Live</a></li>
   <li><a href="#one-time-installation-per-developer" id="toc-one-time-installation-per-developer" class="nav-link" data-scroll-target="#one-time-installation-per-developer"><span class="header-section-number">6.2.3</span> One-Time Installation (Per Developer)</a></li>
-  <li><a href="#registering-prompt-files-in-vs-code-positron" id="toc-registering-prompt-files-in-vs-code-positron" class="nav-link" data-scroll-target="#registering-prompt-files-in-vs-code-positron"><span class="header-section-number">6.2.4</span> Registering Prompt Files in VS Code / Positron</a></li>
-  <li><a href="#updating-prompt-files" id="toc-updating-prompt-files" class="nav-link" data-scroll-target="#updating-prompt-files"><span class="header-section-number">6.2.5</span> Updating Prompt Files</a></li>
+  <li><a href="#registering-prompt-files-and-the-gpid-planner-agent-in-vs-code-positron" id="toc-registering-prompt-files-and-the-gpid-planner-agent-in-vs-code-positron" class="nav-link" data-scroll-target="#registering-prompt-files-and-the-gpid-planner-agent-in-vs-code-positron"><span class="header-section-number">6.2.4</span> Registering Prompt Files and the GPID Planner Agent in VS Code / Positron</a></li>
   </ul></li>
-  <li><a href="#the-gpid-protocol-prompts" id="toc-the-gpid-protocol-prompts" class="nav-link" data-scroll-target="#the-gpid-protocol-prompts"><span class="header-section-number">6.3</span> The GPID Protocol Prompts</a>
+  <li><a href="#how-the-gpid-copilot-workflow-works" id="toc-how-the-gpid-copilot-workflow-works" class="nav-link" data-scroll-target="#how-the-gpid-copilot-workflow-works"><span class="header-section-number">6.3</span> How the GPID Copilot Workflow Works</a>
   <ul class="collapse">
-  <li><a href="#protocol-documenting-your-work-with-github-copilot" id="toc-protocol-documenting-your-work-with-github-copilot" class="nav-link" data-scroll-target="#protocol-documenting-your-work-with-github-copilot">Protocol 1 — Documenting Your Work With Github Copilot</a></li>
+  <li><a href="#the-big-picture" id="toc-the-big-picture" class="nav-link" data-scroll-target="#the-big-picture"><span class="header-section-number">6.3.1</span> The big picture</a></li>
+  <li><a href="#what-is-plan-mode" id="toc-what-is-plan-mode" class="nav-link" data-scroll-target="#what-is-plan-mode"><span class="header-section-number">6.3.2</span> What is “plan mode”?</a></li>
+  <li><a href="#model-assignment" id="toc-model-assignment" class="nav-link" data-scroll-target="#model-assignment"><span class="header-section-number">6.3.3</span> Model assignment</a></li>
+  </ul></li>
+  <li><a href="#the-gpid-protocol-prompts" id="toc-the-gpid-protocol-prompts" class="nav-link" data-scroll-target="#the-gpid-protocol-prompts"><span class="header-section-number">6.4</span> The GPID Protocol Prompts</a>
+  <ul class="collapse">
+  <li><a href="#protocol-planning-and-initializing-the-task" id="toc-protocol-planning-and-initializing-the-task" class="nav-link" data-scroll-target="#protocol-planning-and-initializing-the-task">Protocol 1 — Planning and Initializing the Task</a></li>
   <li><a href="#protocol-logging-progress-of-the-task" id="toc-protocol-logging-progress-of-the-task" class="nav-link" data-scroll-target="#protocol-logging-progress-of-the-task">Protocol 2 — Logging progress of the task</a></li>
   <li><a href="#protocol-making-the-code-understandable" id="toc-protocol-making-the-code-understandable" class="nav-link" data-scroll-target="#protocol-making-the-code-understandable">Protocol 3 — Making the Code Understandable</a></li>
-  <li><a href="#protocol-code-review-and-efficiency-check" id="toc-protocol-code-review-and-efficiency-check" class="nav-link" data-scroll-target="#protocol-code-review-and-efficiency-check">Protocol 4 — Code Review and Efficiency Check</a></li>
+  <li><a href="#protocol-code-review" id="toc-protocol-code-review" class="nav-link" data-scroll-target="#protocol-code-review">Protocol 4 — Code Review</a></li>
   <li><a href="#protocol-testing-and-edge-cases" id="toc-protocol-testing-and-edge-cases" class="nav-link" data-scroll-target="#protocol-testing-and-edge-cases">Protocol 5 — Testing and Edge Cases</a></li>
   <li><a href="#protocol-dependencies-risks-and-safety" id="toc-protocol-dependencies-risks-and-safety" class="nav-link" data-scroll-target="#protocol-dependencies-risks-and-safety">Protocol 6 — Dependencies, Risks, and Safety</a></li>
-  <li><a href="#protocol-self-critique-and-robustness-review" id="toc-protocol-self-critique-and-robustness-review" class="nav-link" data-scroll-target="#protocol-self-critique-and-robustness-review">Protocol 7 — Self-Critique and Robustness Review</a></li>
-  <li><a href="#protocol-producing-the-final-validation-bundle" id="toc-protocol-producing-the-final-validation-bundle" class="nav-link" data-scroll-target="#protocol-producing-the-final-validation-bundle">Protocol 8 — Producing the Final Validation Bundle</a></li>
+  <li><a href="#protocol-producing-the-final-validation-bundle" id="toc-protocol-producing-the-final-validation-bundle" class="nav-link" data-scroll-target="#protocol-producing-the-final-validation-bundle">Protocol 7 — Producing the Final Validation Bundle</a></li>
   </ul></li>
-  <li><a href="#final-reminder-you-are-the-author" id="toc-final-reminder-you-are-the-author" class="nav-link" data-scroll-target="#final-reminder-you-are-the-author"><span class="header-section-number">6.10</span> Final Reminder: You Are the Author</a></li>
+  <li><a href="#final-reminder-you-are-the-author" id="toc-final-reminder-you-are-the-author" class="nav-link" data-scroll-target="#final-reminder-you-are-the-author"><span class="header-section-number">6.5</span> Final Reminder: You Are the Author</a></li>
+  <li><a href="#full-workflow-example" id="toc-full-workflow-example" class="nav-link" data-scroll-target="#full-workflow-example"><span class="header-section-number">6.6</span> Full Workflow Example</a></li>
   </ul>
 </nav>
     </div>
@@ -332,7 +339,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div>
   <div class="abstract">
     <div class="block-title">Abstract</div>
-    This document outlines <strong>mandatory</strong> protocols for using GitHub Copilot in technical work, explains how to use the GPID prompt files that implement these protocols, and provides guidance on installation, usage, and maintenance.
+    This document outlines mandatory protocols for using GitHub Copilot in technical work, explains how to use the GPID prompt files that implement these protocols, and provides guidance on installation, usage, and maintenance.
   </div>
 </div>
 
@@ -362,107 +369,254 @@ They appear in VS Code or Positron when you type <code>/</code> in Github Copilo
 <p>Each GPID protocol prompt begins with the prefix <code>gpid-proto-</code></p>
 <p>Examples:</p>
 <ul>
-<li><code>/gpid-proto-start-task</code><br>
-</li>
-<li><code>/gpid-proto-explain-code</code><br>
-</li>
-<li><code>/gpid-proto-document-code</code><br>
-</li>
-<li><code>/gpid-proto-review-efficiency</code><br>
-</li>
-<li><code>/gpid-proto-tests-checklist</code><br>
-</li>
-<li><code>/gpid-proto-deps-risk</code><br>
-</li>
-<li><code>/gpid-proto-self-critique</code><br>
-</li>
+<li><code>/gpid-proto-start-task</code> ← <strong>always first</strong> (plan + initialize)</li>
+<li><code>/gpid-proto-log-update</code></li>
+<li><code>/gpid-proto-explain-code</code></li>
+<li><code>/gpid-proto-document-code</code></li>
+<li><code>/gpid-proto-review-code</code></li>
+<li><code>/gpid-proto-tests-checklist</code></li>
+<li><code>/gpid-proto-deps-risk</code></li>
 <li><code>/gpid-proto-wrap-task</code></li>
 </ul>
 <p>These commands help you follow the mandatory protocols with minimal effort.</p>
 </section>
 <section id="where-the-prompt-files-live" class="level3" data-number="6.2.2">
 <h3 data-number="6.2.2" class="anchored" data-anchor-id="where-the-prompt-files-live"><span class="header-section-number">6.2.2</span> Where the Prompt Files Live</h3>
-<p>The shared prompts are stored in the repository <a href="https://github.com/GPID-WB/copilot-prompts">GPID-WB/copilot-prompts</a>. The prompt files for these protocols are in the folder prompts/</p>
-<pre><code>prompts/
+<p>The shared prompts are stored in the repository <a href="https://github.com/GPID-WB/copilot-prompts">GPID-WB/copilot-prompts</a>. The prompt files for these protocols are in the folder protocols/</p>
+<pre><code>protocols/
 gpid-proto-start-task.prompt.md
+gpid-proto-log-update.prompt.md
 gpid-proto-explain-code.prompt.md
 gpid-proto-document-code.prompt.md
-gpid-proto-review-efficiency.prompt.md
+gpid-proto-review-code.prompt.md
 gpid-proto-tests-checklist.prompt.md
 gpid-proto-deps-risk.prompt.md
-gpid-proto-self-critique.prompt.md
 gpid-proto-wrap-task.prompt.md
+
+.github/agents/
+gpid-planner.agent.md
 </code></pre>
 <p>These prompts are <strong>global tools</strong> used in <em>every</em> GPID technical project.</p>
 </section>
 <section id="one-time-installation-per-developer" class="level3" data-number="6.2.3">
 <h3 data-number="6.2.3" class="anchored" data-anchor-id="one-time-installation-per-developer"><span class="header-section-number">6.2.3</span> One-Time Installation (Per Developer)</h3>
 <p>Each team member must clone the prompts repository locally. For the rest of this document, we assume you clone it to:</p>
-<pre><code>C:\Users\&lt;USERNAME&gt;\OneDrive - WBG\GPID-team\copilot-prompts</code></pre>
+<p><code>C:\Users\&lt;USERNAME&gt;\OneDrive - WBG\GPID-team\copilot-prompts</code></p>
 </section>
-<section id="registering-prompt-files-in-vs-code-positron" class="level3" data-number="6.2.4">
-<h3 data-number="6.2.4" class="anchored" data-anchor-id="registering-prompt-files-in-vs-code-positron"><span class="header-section-number">6.2.4</span> Registering Prompt Files in VS Code / Positron</h3>
-<p>After cloning, you must tell Github Copilot where to find the shared prompts by modifying the <strong>user settings</strong>. This can by done in multiple ways, but we recommend the following:</p>
+<section id="registering-prompt-files-and-the-gpid-planner-agent-in-vs-code-positron" class="level3" data-number="6.2.4">
+<h3 data-number="6.2.4" class="anchored" data-anchor-id="registering-prompt-files-and-the-gpid-planner-agent-in-vs-code-positron"><span class="header-section-number">6.2.4</span> Registering Prompt Files and the GPID Planner Agent in VS Code / Positron</h3>
+<p>After cloning, you must register the prompt files location and the GPID Planner agent in your settings. The steps below apply to both VS Code and Positron, <strong>except for the agent registration</strong>, where Positron currently requires a workaround.</p>
+<section id="register-the-prompt-files" class="level4" data-number="6.2.4.1">
+<h4 data-number="6.2.4.1" class="anchored" data-anchor-id="register-the-prompt-files"><span class="header-section-number">6.2.4.1</span> 1. Register the prompt files</h4>
 <ol type="1">
 <li>In VS Code/Positron, open settings via the gear icon in the lower left corner or by hitting <code>Ctrl + ,</code>.</li>
-<li>Search for “prompt files location” (without quotes).</li>
-<li>Hit “add item” and add the full path to the <code>prompts</code> folder in your local clone of the repository adding the <code>protocols/</code> subfolder. <img src="images/prompt_files_location.png" class="img-fluid"></li>
-<li>Restart VS Code/Positron.</li>
+<li>Search for <code>chat.promptFilesLocations</code> (without quotes).</li>
+<li>Hit “add item” and add the full path to the <code>protocols/</code> subfolder. <img src="images/prompt_files_location.png" class="img-fluid"></li>
+<li>Typing <code>/</code> in Github Copilot Chat will now show all GPID protocol prompts.</li>
 </ol>
-<p>NOW: Typing <code>/</code> in Github Copilot Chat will show all GPID protocol prompts.</p>
 </section>
-<section id="updating-prompt-files" class="level3" data-number="6.2.5">
-<h3 data-number="6.2.5" class="anchored" data-anchor-id="updating-prompt-files"><span class="header-section-number">6.2.5</span> Updating Prompt Files</h3>
+<section id="register-the-gpid-planner-agent" class="level4" data-number="6.2.4.2">
+<h4 data-number="6.2.4.2" class="anchored" data-anchor-id="register-the-gpid-planner-agent"><span class="header-section-number">6.2.4.2</span> 2. Register the GPID Planner agent</h4>
+<section id="in-vs-code" class="level5" data-number="6.2.4.2.1">
+<h5 data-number="6.2.4.2.1" class="anchored" data-anchor-id="in-vs-code"><span class="header-section-number">6.2.4.2.1</span> In VS Code</h5>
+<ol type="1">
+<li>In settings, search for <code>chat.agentFilesLocations</code>.</li>
+<li>Hit “add item” and add the full path to the <code>.github/agents/</code> subfolder of your local clone.</li>
+<li>Restart VS Code.</li>
+</ol>
+<p>The <strong>GPID Planner</strong> agent will now appear in the agents dropdown in Github Copilot Chat.</p>
+</section>
+<section id="in-positron-temporary-workaround" class="level5" data-number="6.2.4.2.2">
+<h5 data-number="6.2.4.2.2" class="anchored" data-anchor-id="in-positron-temporary-workaround"><span class="header-section-number">6.2.4.2.2</span> In Positron (temporary workaround)</h5>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Positron does not yet support <code>chat.agentFilesLocations</code>. The steps below are a temporary workaround until the Positron team adds support for this setting.</p>
+</div>
+</div>
+<p>You have two options:</p>
+<p><strong>Option A — Global (available in all workspaces)</strong></p>
+<p>Copy <code>.github/agents/gpid-planner.agent.md</code> from your local clone to Positron’s global user folder:</p>
+<p><code>C:\Users\&lt;USERNAME&gt;\AppData\Roaming\Positron\User\prompts\</code></p>
+<p>After copying, restart Positron. The agent will be available globally across all workspaces. Note that you will need to re-copy this file after each <code>git pull</code> on the <code>copilot-prompts</code> repository.</p>
+<p><strong>Option B — Per workspace (current project only)</strong></p>
+<p>Copy <code>gpid-planner.agent.md</code> to <code>.vscode/positron/agents/</code> inside your project (create the folder if it does not exist).</p>
 <p>Whenever a prompt file changes, you will be notified. However, the best practice is to regularly update your local copy. You can do it by opening the <code>copilot-prompts</code> folder in a terminal and running <code>git pull</code>, opening the whole folder in Positron and VScode and sync the changes or by using script similar to this:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">"C:\Users\USERNAME\OneDrive - WBG\GPID-team\copilot-prompts"</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">"C:\Users\USERNAME\OneDrive - WBG\GPID-team\copilot-prompts"</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 </section>
-<section id="the-gpid-protocol-prompts" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="the-gpid-protocol-prompts"><span class="header-section-number">6.3</span> The GPID Protocol Prompts</h2>
-<p>The following sections describe each mandatory protocol and the corresponding <code>gpid-proto-*</code> prompt that should be used.</p>
-<p>Using the prompts is simple. You just need to type the prompt command in Github Copilot Chat.</p>
-<p><strong>Example:</strong></p>
-<pre><code>/gpid-proto-start-task</code></pre>
-<p>Github Copilot will ask for the necessary information and then guide you through the protocol.</p>
-<section id="protocol-documenting-your-work-with-github-copilot" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="protocol-documenting-your-work-with-github-copilot">Protocol 1 — Documenting Your Work With Github Copilot</h3>
+</section>
+</section>
+<section id="how-the-gpid-copilot-workflow-works" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="how-the-gpid-copilot-workflow-works"><span class="header-section-number">6.3</span> How the GPID Copilot Workflow Works</h2>
+<section id="the-big-picture" class="level3" data-number="6.3.1">
+<h3 data-number="6.3.1" class="anchored" data-anchor-id="the-big-picture"><span class="header-section-number">6.3.1</span> The big picture</h3>
+<p>Every GPID task follows this workflow:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+  A["/gpid-proto-start-task\n(plan + initialize)"] --&gt; B["Implementation\nloop"]
+  B --&gt; C["/gpid-proto-log-update\n(after each milestone)"]
+  C --&gt; B
+  B --&gt; D["/gpid-proto-wrap-task\n(end of task)"]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="what-is-plan-mode" class="level3" data-number="6.3.2">
+<h3 data-number="6.3.2" class="anchored" data-anchor-id="what-is-plan-mode"><span class="header-section-number">6.3.2</span> What is “plan mode”?</h3>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Plan mode</strong> in the GPID system means selecting the <strong>GPID Planner</strong> custom agent from the agents dropdown in Github Copilot Chat — it is not a slash command.</p>
+<p>The GPID Planner agent is read-only (no file edits allowed) and its only job is to produce a deterministic, approved plan before any code is written. Once planning is complete, use the <strong>“Start Implementation”</strong> handoff button to switch to the standard implementation agent.</p>
+</div>
+</div>
+<p>Step-by-step:</p>
+<ol type="1">
+<li>Run <code>/gpid-proto-start-task</code> — this automatically switches to the <strong>GPID Planner</strong> agent (as defined in the prompt’s <code>agent:</code> field), gathers task info, produces the plan, handles the TTL approval reminder if needed, and saves the log. Optionally, you can manually select <strong>GPID Planner</strong> from the agent picker dropdown before running the prompt; the result is the same.</li>
+<li>Click <strong>Start Implementation</strong> when the plan is approved — this switches you to <code>Agent</code> mode with the approved plan already in context.</li>
+<li>Work through the implementation using the prompts described below.</li>
+<li>Run <code>/gpid-proto-log-update</code> after each meaningful milestone.</li>
+<li>Run <code>/gpid-proto-wrap-task</code> to close the task and produce the final validation bundle.</li>
+</ol>
+</section>
+<section id="model-assignment" class="level3" data-number="6.3.3">
+<h3 data-number="6.3.3" class="anchored" data-anchor-id="model-assignment"><span class="header-section-number">6.3.3</span> Model assignment</h3>
+<p>Some prompts are assigned a lightweight model to save cost on documentation-only tasks. Tasks requiring complex reasoning use the model you have selected in the chat picker.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Prompt</th>
+<th>Model</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>/gpid-proto-start-task</code></td>
+<td>User’s selected model</td>
+<td>Requires reasoning to produce a deterministic plan</td>
+</tr>
+<tr class="even">
+<td><code>/gpid-proto-explain-code</code></td>
+<td>Claude Haiku 4.5 → Claude Sonnet 4.5</td>
+<td>Linear summarisation; lightweight</td>
+</tr>
+<tr class="odd">
+<td><code>/gpid-proto-document-code</code></td>
+<td>Claude Haiku 4.5 → Claude Sonnet 4.5</td>
+<td>Mechanical comment/Roxygen2 generation</td>
+</tr>
+<tr class="even">
+<td><code>/gpid-proto-log-update</code></td>
+<td>Claude Haiku 4.5 → Claude Sonnet 4.5</td>
+<td>Structured append; no reasoning required</td>
+</tr>
+<tr class="odd">
+<td><code>/gpid-proto-review-code</code></td>
+<td>User’s selected model</td>
+<td>Adversarial reasoning about code quality</td>
+</tr>
+<tr class="even">
+<td><code>/gpid-proto-tests-checklist</code></td>
+<td>User’s selected model</td>
+<td>Requires reasoning about correctness and edge cases</td>
+</tr>
+<tr class="odd">
+<td><code>/gpid-proto-deps-risk</code></td>
+<td>User’s selected model</td>
+<td>Security and compatibility reasoning</td>
+</tr>
+<tr class="even">
+<td><code>/gpid-proto-wrap-task</code></td>
+<td>User’s selected model</td>
+<td>Synthesises entire session; most demanding</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p><strong>To update the lightweight model:</strong> search for <code>Claude Haiku 4.5</code> in the <code>protocols/</code> folder and replace both the primary and fallback entries in the three affected prompt files.</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="the-gpid-protocol-prompts" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="the-gpid-protocol-prompts"><span class="header-section-number">6.4</span> The GPID Protocol Prompts</h2>
+<p>The following sections describe each mandatory protocol and the corresponding <code>gpid-proto-*</code> prompt.</p>
+<section id="protocol-planning-and-initializing-the-task" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="protocol-planning-and-initializing-the-task">Protocol 1 — Planning and Initializing the Task</h3>
 <p><strong>Prompt:</strong></p>
 <pre><code>/gpid-proto-start-task</code></pre>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This is <strong>Protocol 1 — mandatory for every task</strong>. Run this inside the <strong>GPID Planner</strong> agent (see workflow above). No implementation should begin without a saved plan.</p>
+</div>
+</div>
 <section id="purpose" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="purpose">Purpose</h4>
-<p>Every Copilot-assisted task must produce a clear, transparent trail of:</p>
+<p>Before any implementation begins, the team must produce a detailed, deterministic plan. This ensures that:</p>
 <ul>
-<li>What was done</li>
-<li>Why decisions were made</li>
-<li>What dependencies were added or removed</li>
-<li>How the final code works</li>
+<li>The scope and approach are agreed upon before code is written.</li>
+<li>Tasks assigned by a TTL are reviewed for approval before proceeding.</li>
+<li>Any deviation from the plan during implementation is <strong>explicitly flagged and documented</strong> with a rationale.</li>
 </ul>
 </section>
 <section id="what-it-does" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="what-it-does">What It Does</h4>
-<p>When you run <code>/gpid-proto-start-task</code>, Github Copilot:</p>
+<p>When you run <code>/gpid-proto-start-task</code>, VS Code displays <strong>input dialogs</strong> to collect the task name and TTL-assignment status upfront, then activates the <strong>GPID Planner</strong> agent with that context already in place. The agent then:</p>
 <ol type="1">
-<li><p>Asks you for:</p>
-<ul>
-<li><strong>Task name</strong></li>
-<li><strong>Short description</strong></li>
-</ul></li>
-<li><p>Logs these clearly and begins a <strong>running summary</strong> of:</p>
-<ul>
-<li>key prompts</li>
-<li>major decisions</li>
-<li>assumptions</li>
-<li>dependencies added/removed</li>
-</ul></li>
-<li><p>Keeps the summary alive throughout the task in the file <code>copilot_logs/LOG_${TASK_NAME}.md</code>.</p></li>
+<li>Opens an <strong>interactive conversation</strong> to gather a full task description — asking clarifying questions until the scope is unambiguous.</li>
+<li>Produces a <strong>numbered checklist plan</strong> (<code>- [ ] Step N: ...</code>) covering scoping, design, implementation, validation, documentation, and wrap-up.</li>
+<li>If TTL-assigned, displays an approval reminder and waits for <code>approved</code> before continuing.</li>
+<li>Saves the plan to <code>copilot_logs/LOG_${TASK_NAME}.md</code> under <code>## PLAN</code>, with an empty <code>## Plan Deviations</code> block.</li>
+<li>Creates <code>.current_task</code>, begins a <strong>running session summary</strong>, and asks <strong>“Are you ready to proceed with implementation?”</strong> before surfacing the <strong>Start Implementation</strong> handoff button.</li>
 </ol>
-<p>You do <strong>not</strong> need to structure this manually — the prompt enforces consistency.</p>
+</section>
+<section id="plan-deviations" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="plan-deviations">Plan Deviations</h4>
+<p>If the plan changes during implementation, the deviation must be logged with the strict marker:</p>
+<pre><code>### ⚠️ PLAN DEVIATION — YYYY-MM-DD HH:MM:SS</code></pre>
+<p>Every deviation is also appended to the <code>## Plan Deviations</code> block at the top of the log. This block is greppable: <code>git grep "PLAN DEVIATION" copilot_logs/</code> surfaces all deviations across all tasks.</p>
 </section>
 <section id="latest-gpid-prompt-file" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file">Latest GPID prompt file</h4>
 <div class="callout callout-style-default callout-note callout-titled" title="gpid-proto-start-task">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -471,58 +625,27 @@ gpid-proto-wrap-task.prompt.md
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>You are assisting a World Bank technical team (R + Stata) following strict Copilot protocols.</p>
-<p>We are starting a <strong>new Copilot-assisted task</strong>.</p>
-<p>Follow this protocol:</p>
-<ol type="1">
-<li>Ask me for:
-<ul>
-<li>a <strong>short task name</strong> (TASK_NAME)</li>
-<li>a <strong>one-sentence description</strong> of the task (TASK_DESCRIPTION)</li>
-</ul></li>
-<li>Once I answer, restate both clearly, but do not try to solve the task yet. Use this format:
-<ul>
-<li><code>Task name: ...</code></li>
-<li><code>Description: ...</code></li>
-</ul></li>
-<li>Create two files for task tracking:
-<ul>
-<li><strong>Task log file</strong> at <code>copilot_logs/LOG_${TASK_NAME}.md</code> containing:
-<ul>
-<li>Task name and description</li>
-<li>Initial context and relevant information you identify</li>
-<li>A timestamp for task initialization</li>
-<li>This log will be used to track progress throughout the task</li>
-<li><strong>Note:</strong> As we work, you may add a “To Do List” section to track follow-up tasks, improvements, or issues discovered during the current task</li>
-</ul></li>
-<li><strong>Current task marker</strong> at <code>.current_task</code> containing only the task name (for quick reference across the session)</li>
-</ul></li>
-<li>From that point on, keep a <strong>concise running summary</strong> of our interaction, including:
-<ul>
-<li>major prompts I send</li>
-<li>important decisions we make</li>
-<li>dependencies added or removed</li>
-<li>assumptions or limitations we identify</li>
-</ul></li>
-<li>Do <strong>not</strong> generate the final report yet.<br>
-Your role after the initial questions is, only when asked, to:
-<ul>
-<li>clarify ambiguities</li>
-<li>help design the approach</li>
-<li>generate and refine code/tests according to our protocols.</li>
-</ul></li>
-</ol>
-<p>Assume that at the end of the task I will call another prompt (<code>/wrap-task</code>) to generate the final Markdown summary under <code>copilot_logs/TASK_NAME.md</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="an">name:</span><span class="co"> gpid-proto-start-task</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "Plan and initialize a new Copilot-assisted task"</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="an">agent:</span><span class="co"> gpid-planner</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>A new task is starting. The following information has been provided upfront:</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Task name:** ${input<span class="sc">:TASK_NAME:</span>Short task name (no spaces, use underscores)}</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**TTL-assigned:** ${input<span class="sc">:TTL_ASSIGNED:</span>Was this task assigned by a TTL? (yes/no)}</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>Begin the planning protocol now.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<hr>
 </section>
 </section>
 <section id="protocol-logging-progress-of-the-task" class="level3 unnumbered">
-<h3 class="unnumbered anchored">Protocol 2 — Logging progress of the task</h3>
+<h3 class="unnumbered anchored" data-anchor-id="protocol-logging-progress-of-the-task">Protocol 2 — Logging progress of the task</h3>
 <p><strong>Prompt:</strong></p>
 <pre><code>/gpid-proto-log-update</code></pre>
 <section id="purpose-1" class="level4 unnumbered">
@@ -541,9 +664,9 @@ Your role after the initial questions is, only when asked, to:
 </ul>
 </section>
 <section id="latest-gpid-prompt-file-1" class="level4 unnumbered">
-<h4 class="unnumbered anchored">Latest GPID prompt file</h4>
+<h4 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-1">Latest GPID prompt file</h4>
 <div class="callout callout-style-default callout-note callout-titled" title="gpid-proto-log-update">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -552,52 +675,59 @@ Your role after the initial questions is, only when asked, to:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>We are updating the <strong>task progress log</strong> for an ongoing Copilot-assisted task.</p>
-<section id="retrieving-the-task-name" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="retrieving-the-task-name"><span class="header-section-number">6.4</span> Retrieving the task name</h2>
-<p>Locate the task name you provided at the start of this conversation session. Confirm it by restating: &gt; Task name: [TASK_NAME]</p>
-<p>Then proceed to update <code>copilot_logs/LOG_${TASK_NAME}.md</code> where <code>${TASK_NAME}</code> is that task name.</p>
-<p><strong>Fallback:</strong> If you cannot locate the task name in the conversation history, read <code>.current_task</code> to retrieve it. If that file doesn’t exist either, ask the user to provide the task name with a single prompt: <code>Please provide the TASK_NAME to update copilot_logs/LOG_TASK_NAME.md.</code></p>
-<p>After confirming the task name, proceed with the update:</p>
-</section>
-<section id="update-the-log-file-copilot_logslog_task_name.md" class="level2" data-number="6.5">
-<h2 data-number="6.5" class="anchored" data-anchor-id="update-the-log-file-copilot_logslog_task_name.md"><span class="header-section-number">6.5</span> Update the log file <code>copilot_logs/LOG_${TASK_NAME}.md</code>:</h2>
-<ol type="1">
-<li><p><strong>Open and review</strong> the existing log file to understand its current state and structure.</p></li>
-<li><p><strong>Append a new update section</strong> with:</p>
-<ul>
-<li><strong>Timestamp</strong>: Include the current date and time in ISO format (YYYY-MM-DD HH:MM:SS)</li>
-<li><strong>Progress summary</strong>: Key accomplishments since the last update</li>
-<li><strong>Challenges encountered</strong>: Any blockers, issues, or difficulties faced</li>
-<li><strong>Changes to plan</strong>: Deviations from the original approach or scope</li>
-<li><strong>Next steps</strong>: What will be tackled next</li>
-</ul></li>
-<li><p><strong>Update or create the To Do List section</strong>:</p>
-<ul>
-<li>Review the conversation since the last log update (or since task initialization)</li>
-<li>Identify potential follow-up tasks, improvements, technical debt, or issues discovered</li>
-<li><strong>Before adding to the log</strong>, present your suggested to-do items to the user in a clear list format</li>
-<li>Ask: “I suggest adding these items to the To Do List. Would you like me to include them, or would you like to modify/add others?”</li>
-<li>Only after user confirmation, add/update the “## To Do List” section in the log</li>
-<li>If a To Do List section already exists, preserve completed items and update with new suggestions</li>
-</ul></li>
-<li><p><strong>Maintain organization</strong> by:</p>
-<ul>
-<li>Using clear section headings for each update</li>
-<li>Keeping entries concise but informative</li>
-<li>Ensuring the log remains chronologically ordered</li>
-<li>Using consistent formatting throughout</li>
-</ul></li>
-<li><p><strong>Preserve all prior content</strong>: Do not remove or modify previous updates; only append new information.</p></li>
-</ol>
-<p>Return the updated <code>copilot_logs/LOG_${TASK_NAME}.md</code> file with the new update appended.</p>
-</section>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="an">name:</span><span class="co"> gpid-proto-log-update</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "Update the task progress log with new information"</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="an">model:</span><span class="co"> ['Claude Haiku 4.5', 'Claude Sonnet 4.5']  # lightweight model; update both entries if model is retired</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="an">argument-hint:</span><span class="co"> "TASK_NAME for copilot_logs/LOG_TASK_NAME.md"</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>We are updating the **task progress log** for an ongoing Copilot-assisted task.</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">## Retrieving the task name</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>Locate the task name you provided at the start of this conversation session. Confirm it by restating:</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Task name: </span><span class="co">[</span><span class="ot">TASK_NAME</span><span class="co">]</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>Then proceed to update <span class="in">`copilot_logs/LOG_${TASK_NAME}.md`</span> where <span class="in">`${TASK_NAME}`</span> is that task name.</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>**Fallback:** If you cannot locate the task name in the conversation history, read <span class="in">`.current_task`</span> to retrieve it. If that file doesn't exist either, ask the user to provide the task name with a single prompt: <span class="in">`Please provide the TASK_NAME to update copilot_logs/LOG_TASK_NAME.md.`</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>After confirming the task name, proceed with the update:</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## Update the log file `copilot_logs/LOG_${TASK_NAME}.md`:</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Open and review** the existing log file to understand its current state and structure.</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Append a new update section** with:</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**Timestamp**: Include the current date and time in ISO format (YYYY-MM-DD HH<span class="sc">:MM:</span>SS)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**Progress summary**: Key accomplishments since the last update</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**Challenges encountered**: Any blockers, issues, or difficulties faced</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**Changes to plan**: Deviations from the original approach or scope</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**Next steps**: What will be tackled next</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Update or create the To Do List section**:</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Review the conversation since the last log update (or since task initialization)</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Identify potential follow-up tasks, improvements, technical debt, or issues discovered</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**Before adding to the log**, present your suggested to-do items to the user in a clear list format</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Ask: "I suggest adding these items to the To Do List. Would you like me to include them, or would you like to modify/add others?"</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Only after user confirmation, add/update the "## To Do List" section in the log</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>If a To Do List section already exists, preserve completed items and update with new suggestions</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Maintain organization** by:</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Using clear section headings for each update</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Keeping entries concise but informative</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Ensuring the log remains chronologically ordered</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Using consistent formatting throughout</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Preserve all prior content**: Do not remove or modify previous log update entries; only append new information. The <span class="in">`## Plan Deviations`</span> block is the only section near the top of the log that should be modified (to accumulate deviation summaries).</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>Return the updated <span class="in">`copilot_logs/LOG_${TASK_NAME}.md`</span> file with the new update appended.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<hr>
 </section>
 </section>
 <section id="protocol-making-the-code-understandable" class="level3 unnumbered">
@@ -623,7 +753,7 @@ Your role after the initial questions is, only when asked, to:
 <section id="latest-gpid-prompt-file-2" class="level5 unnumbered">
 <h5 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-2">Latest GPID prompt file</h5>
 <div class="callout callout-style-default callout-note callout-titled" title="gpid-proto-explain-code">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -632,52 +762,48 @@ Your role after the initial questions is, only when asked, to:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>You will be asked to explain a function, test file, or script (usually R or Stata).</p>
-<p>If the context is ambiguous, first ask me <strong>what code or file you should focus on</strong> (e.g., current selection, specific function, or file).</p>
-<p>Then follow this protocol:</p>
-<ol type="1">
-<li><strong>High-level overview</strong>
-<ul>
-<li>In 3–5 sentences, explain what the code does conceptually.</li>
-</ul></li>
-<li><strong>Step-by-step explanation</strong>
-<ul>
-<li>Walk through the major blocks of the code.</li>
-<li>Focus on logic and structure rather than line-by-line commentary.</li>
-</ul></li>
-<li><strong>Assumptions</strong>
-<ul>
-<li>Explicitly list assumptions about:
-<ul>
-<li>input types, shapes, and ranges</li>
-<li>required columns / variables</li>
-<li>expected data structure (e.g., data.table, Stata dataset)</li>
-<li>external dependencies or files</li>
-</ul></li>
-</ul></li>
-<li><strong>Failure points</strong>
-<ul>
-<li>Identify where the code might break or behave incorrectly:
-<ul>
-<li>missing or malformed inputs</li>
-<li>edge cases (empty data, small N, extreme values)</li>
-<li>performance pitfalls on large data</li>
-</ul></li>
-</ul></li>
-</ol>
-<p>Return your explanation in <strong>clean Markdown</strong> with headings:</p>
-<ul>
-<li>High-level overview<br>
-</li>
-<li>Step-by-step explanation<br>
-</li>
-<li>Assumptions<br>
-</li>
-<li>Potential failure points</li>
-</ul>
-<p>This text should be ready to paste into the task summary.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="an">name:</span><span class="co"> gpid-proto-explain-code</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "Explain code step-by-step and surface assumptions"</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="an">model:</span><span class="co"> ['Claude Haiku 4.5', 'Claude Sonnet 4.5']  # lightweight model; update both entries if model is retired</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>You will be asked to explain a function, test file, or script (usually R or Stata).</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>If the context is ambiguous, first ask me **what code or file you should focus on** (e.g., current selection, specific function, or file).</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>Then follow this protocol:</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**High-level overview**</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>In 3–5 sentences, explain what the code does conceptually.</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Step-by-step explanation**</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Walk through the major blocks of the code.</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Focus on logic and structure rather than line-by-line commentary.</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Assumptions**</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Explicitly list assumptions about:</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>input types, shapes, and ranges</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>required columns / variables</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>expected data structure (e.g., data.table, Stata dataset)</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>external dependencies or files</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Failure points**</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Identify where the code might break or behave incorrectly:</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>missing or malformed inputs</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>edge cases (empty data, small N, extreme values)</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>performance pitfalls on large data</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>Return your explanation in **clean Markdown** with headings:</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>High-level overview  </span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Step-by-step explanation  </span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Assumptions  </span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Potential failure points  </span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>This text should be ready to paste into the task summary.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -693,7 +819,7 @@ Your role after the initial questions is, only when asked, to:
 <section id="latest-gpid-prompt-file-3" class="level5 unnumbered">
 <h5 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-3">Latest GPID prompt file</h5>
 <div class="callout callout-style-default callout-note callout-titled" title="gpid-proto-document-code">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -702,123 +828,140 @@ Your role after the initial questions is, only when asked, to:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>You will be given one or more functions or scripts, mainly in <strong>R</strong> (often using <code>data.table</code>, <code>collapse</code>, <code>rlang</code>) and sometimes <strong>Stata</strong>.</p>
-<p>If it is unclear what code to document, first ask me <strong>which function/file/selection</strong> to use.</p>
-<p>Then follow this protocol:</p>
-<ol type="1">
-<li><strong>In-code comments</strong>
-<ul>
-<li>Add clear, human-readable comments that explain:
-<ul>
-<li>what each major block does</li>
-<li>why this approach or pattern is appropriate</li>
-<li>important trade-offs or design decisions</li>
-</ul></li>
-<li>Avoid trivial “this line adds 1” comments. Focus on intent.</li>
-</ul></li>
-<li><strong>Roxygen2 (for R functions)</strong>
-<ul>
-<li>For each relevant R function, add or update:
-<ul>
-<li><code>@title</code></li>
-<li><code>@description</code></li>
-<li><code>@param</code></li>
-<li><code>@return</code></li>
-<li><code>@examples</code> (when helpful and not trivial)</li>
-<li><code>@import</code> / <code>@importFrom</code> only when truly needed.</li>
-</ul></li>
-<li>Prefer our usual stack (<code>data.table</code>, <code>collapse</code>, <code>rlang</code>) when appropriate.</li>
-</ul></li>
-<li><strong>Plain-language explanation</strong>
-<ul>
-<li>At the end, write a short, plain-language explanation of how the main function(s) work, suitable for a teammate reading them for the first time.</li>
-</ul></li>
-</ol>
-<p>Return: 1. The updated code (with comments and Roxygen2 tags).<br>
-2. The plain-language explanation as a separate Markdown section that can be added to the task summary.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="an">name:</span><span class="co"> gpid-proto-document-code</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "Add comments and Roxygen2 documentation for R/Stata code"</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="an">model:</span><span class="co"> ['Claude Haiku 4.5', 'Claude Sonnet 4.5']  # lightweight model; update both entries if model is retired</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>You will be given one or more functions or scripts, mainly in **R** (often using `data.table`, `collapse`, `rlang`) and sometimes **Stata**.</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>If it is unclear what code to document, first ask me **which function/file/selection** to use.</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>Then follow this protocol:</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**In-code comments**</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Add clear, human-readable comments that explain:</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>what each major block does</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>why this approach or pattern is appropriate</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>important trade-offs or design decisions</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Avoid trivial “this line adds 1” comments. Focus on intent.</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Roxygen2 (for R functions)**</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>For each relevant R function, add or update:</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span><span class="in">`@title`</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span><span class="in">`@description`</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span><span class="in">`@param`</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span><span class="in">`@return`</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span><span class="in">`@examples`</span> (when helpful and not trivial)</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span><span class="in">`@import`</span> / <span class="in">`@importFrom`</span> only when truly needed.</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Prefer our usual stack (<span class="in">`data.table`</span>, <span class="in">`collapse`</span>, <span class="in">`rlang`</span>) when appropriate.</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Plain-language explanation**</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>At the end, write a short, plain-language explanation of how the main function(s) work, suitable for a teammate reading them for the first time.</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>Return:</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>The updated code (with comments and Roxygen2 tags).  </span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>The plain-language explanation as a separate Markdown section that can be added to the task summary.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<hr>
 </section>
 </section>
 </section>
-<section id="protocol-code-review-and-efficiency-check" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="protocol-code-review-and-efficiency-check">Protocol 4 — Code Review and Efficiency Check</h3>
+<section id="protocol-code-review" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="protocol-code-review">Protocol 4 — Code Review</h3>
 <p><strong>Prompt:</strong></p>
-<pre><code>/gpid-proto-review-efficiency</code></pre>
+<pre><code>/gpid-proto-review-code</code></pre>
 <section id="purpose-3" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="purpose-3">Purpose</h4>
-<p>Before testing, every piece of Copilot-generated code must undergo an efficiency audit.</p>
+<p>Before testing, every piece of Copilot-generated code must undergo a combined efficiency, complexity, and robustness review.</p>
 </section>
 <section id="what-it-does-2" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="what-it-does-2">What It Does</h4>
 <p>The prompt reviews code for:</p>
 <ul>
-<li>redundant logic</li>
-<li>unnecessary copies</li>
-<li>over-nested structures</li>
-<li>unused variables</li>
-<li>dependency creep</li>
-<li>overly complex or fragile patterns</li>
+<li>inefficiencies and unnecessary copies</li>
+<li>complexity and dead code</li>
+<li>risky assumptions and poor NA handling</li>
+<li>dependency bloat and stack alignment (<code>data.table</code>, <code>collapse</code>, <code>rlang</code>)</li>
 </ul>
-<p>And provides clear, actionable improvements.</p>
+<p>It ends with a <strong>Key strengths / Key risks / Top 3 improvements</strong> summary.</p>
 </section>
 <section id="latest-gpid-prompt-file-4" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-4">Latest GPID prompt file</h4>
-<div class="callout callout-style-default callout-note callout-titled" title="gpid-proto-review-efficiency">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout callout-style-default callout-note callout-titled" title="gpid-proto-review-code">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>gpid-proto-review-efficiency
+<span class="screen-reader-only">Note</span>gpid-proto-review-code
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>You are reviewing Copilot-assisted code for <strong>efficiency, simplicity, and maintainability</strong>.</p>
-<p>If it is unclear what to review, first ask me <strong>which function/file/selection</strong> to analyze.</p>
-<p>Then:</p>
-<ol type="1">
-<li><strong>Scan for inefficiencies</strong>
-<ul>
-<li>redundant or duplicated logic</li>
-<li>unnecessary copies of large objects</li>
-<li>loops that could be vectorized or replaced by <code>data.table</code> / <code>collapse</code> operations</li>
-<li>deeply nested <code>if</code>/<code>else</code> or loops that could be simplified</li>
-</ul></li>
-<li><strong>Find unused or dead code</strong>
-<ul>
-<li>unused variables</li>
-<li>unreachable logic</li>
-<li>old commented-out or experimental blocks that should be removed</li>
-</ul></li>
-<li><strong>Check dependencies</strong>
-<ul>
-<li>identify new or heavy dependencies</li>
-<li>suggest removing or replacing packages that are not truly needed</li>
-<li>prefer our established stack when reasonable</li>
-</ul></li>
-<li><strong>Propose concrete improvements</strong> For each issue:
-<ul>
-<li>describe the problem</li>
-<li>propose a specific improvement</li>
-<li>briefly explain why it matters (performance, clarity, maintainability, robustness)</li>
-</ul></li>
-</ol>
-<p>Return a structured Markdown report with headings like: - Inefficiencies<br>
-- Unnecessary complexity<br>
-- Dead or unused code<br>
-- Dependency issues<br>
-- Recommended improvements</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="an">name:</span><span class="co"> gpid-proto-review-code</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "Review code for inefficiencies, complexity, risky assumptions, and stack fit"</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>You are performing a **combined code review and self-critique** of Copilot-assisted code, as if you were both an external reviewer and the original author.</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>If it is unclear what code to review, first ask: **which function, file, or selection should be reviewed?**</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1. Inefficiencies</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Redundant or duplicated logic</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Unnecessary copies of large objects</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Loops that could be vectorised or replaced by <span class="in">`data.table`</span> / <span class="in">`collapse`</span> operations</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Operations that will be slow or memory-heavy on large data</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Complexity and dead code</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Over-nested <span class="in">`if`</span>/<span class="in">`else`</span> or loops that could be simplified</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Confusing control flow or unneeded abstractions</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Unused variables, unreachable logic, or old commented-out blocks</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Risky assumptions</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Fragile expectations about input types, shapes, or ranges</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Poor handling of <span class="in">`NA`</span> / missing values</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Edge cases likely to break the code silently</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Dependency issues</span></span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>New or heavy dependencies that may not be justified</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Packages that overlap with or conflict with <span class="in">`data.table`</span>, <span class="in">`collapse`</span>, or <span class="in">`rlang`</span></span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Suggestions for removals or replacements aligned with our preferred stack</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5. Opportunities to use our preferred stack</span></span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Places where <span class="in">`data.table`</span>, <span class="in">`collapse`</span>, or <span class="in">`rlang`</span> would produce clearer or more efficient code</span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Only flag these when the improvement is material, not cosmetic</span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a><span class="fu">## Output format</span></span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>For each issue found:</span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Describe the problem</span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Propose a specific improvement</span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Explain its impact (performance, readability, robustness, maintainability)</span>
+<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a>End with a short summary:</span>
+<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a>**Key strengths:**</span>
+<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>**Key risks:**</span>
+<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a>**Top 3 improvements to implement next:**</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<hr>
 </section>
 </section>
 <section id="protocol-testing-and-edge-cases" class="level3 unnumbered">
@@ -842,7 +985,7 @@ Your role after the initial questions is, only when asked, to:
 <section id="latest-gpid-prompt-file-5" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-5">Latest GPID prompt file</h4>
 <div class="callout callout-style-default callout-note callout-titled" title="gpid-proto-tests-checklist">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -851,58 +994,52 @@ Your role after the initial questions is, only when asked, to:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>You will help design validation for a function, module, or script.</p>
-<p>If it is unclear what to validate, first ask me <strong>which function/file/selection</strong> to focus on.</p>
-<p>Then follow this protocol:</p>
-<ol type="1">
-<li><strong>Validation checklist</strong>
-<ul>
-<li>List:
-<ul>
-<li>expected inputs and outputs</li>
-<li>required dependencies</li>
-<li>main assumptions</li>
-<li>potential failure points</li>
-<li>edge cases that must be tested</li>
-</ul></li>
-</ul></li>
-<li><strong>R unit tests (<code>testthat</code>)</strong>
-<ul>
-<li>When the code is in R, generate <code>testthat</code> tests that cover:
-<ul>
-<li>normal cases</li>
-<li>edge cases</li>
-<li>wrong input types</li>
-<li>missing values</li>
-<li>extreme or unusual data scenarios</li>
-</ul></li>
-</ul></li>
-<li><strong>Stata tests</strong>
-<ul>
-<li>When the code is in Stata, generate a do-file with assertions/checks for:
-<ul>
-<li>realistic data</li>
-<li>corner cases</li>
-<li>unexpected or malformed inputs</li>
-</ul></li>
-</ul></li>
-<li><strong>Performance-sensitive checks (optional)</strong>
-<ul>
-<li>If the code is performance-critical or uses large data, propose tests that:
-<ul>
-<li>stress memory usage</li>
-<li>expose slow operations or unnecessary copies</li>
-</ul></li>
-</ul></li>
-</ol>
-<p>Return: - the validation checklist (Markdown)<br>
-- the test code (R <code>testthat</code> or Stata do-file) ready to be added to the repository</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="an">name:</span><span class="co"> gpid-proto-tests-checklist</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "Generate validation checklist and tests for a function or module"</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>You will help design validation for a function, module, or script.</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>If it is unclear what to validate, first ask me **which function/file/selection** to focus on.</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>Then follow this protocol:</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Validation checklist**</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>List:</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>expected inputs and outputs</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>required dependencies</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>main assumptions</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>potential failure points</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>edge cases that must be tested</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**R unit tests (`testthat`)**</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>When the code is in R, generate <span class="in">`testthat`</span> tests that cover:</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>normal cases</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>edge cases</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>wrong input types</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>missing values</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>extreme or unusual data scenarios</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Stata tests**</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>When the code is in Stata, generate a do-file with assertions/checks for:</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>realistic data</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>corner cases</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>unexpected or malformed inputs</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Performance-sensitive checks (optional)**</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>If the code is performance-critical or uses large data, propose tests that:</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>stress memory usage</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>expose slow operations or unnecessary copies</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>Return:</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>the validation checklist (Markdown)  </span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>the test code (R <span class="in">`testthat`</span> or Stata do-file) ready to be added to the repository  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<hr>
 </section>
 </section>
 <section id="protocol-dependencies-risks-and-safety" class="level3 unnumbered">
@@ -926,7 +1063,7 @@ Your role after the initial questions is, only when asked, to:
 <section id="latest-gpid-prompt-file-6" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-6">Latest GPID prompt file</h4>
 <div class="callout callout-style-default callout-note callout-titled" title="gpid-proto-deps-risk">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -935,146 +1072,64 @@ Your role after the initial questions is, only when asked, to:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>You are reviewing dependencies and risks for Copilot-assisted code in R or Stata.</p>
-<p>If it is unclear what code to inspect, ask me <strong>which file/selection</strong> to analyze.</p>
-<p>Then:</p>
-<ol type="1">
-<li><strong>Dependency analysis</strong>
-<ul>
-<li>List all external packages/dependencies used or introduced.</li>
-<li>For each, explain briefly <strong>why it is needed</strong>.</li>
-<li>Identify dependencies that are:
-<ul>
-<li>unnecessary</li>
-<li>overlapping/redundant</li>
-<li>heavier than needed for the task</li>
-</ul></li>
-<li>Suggest simplifications or removals where possible.</li>
-</ul></li>
-<li><strong>Compatibility with our preferred stack (R)</strong>
-<ul>
-<li>Check for conflicts or unnecessary overlaps with:
-<ul>
-<li><code>data.table</code></li>
-<li><code>collapse</code></li>
-<li><code>rlang</code></li>
-</ul></li>
-<li>When reasonable, suggest implementations that better fit this stack.</li>
-</ul></li>
-<li><strong>Security and stability</strong>
-<ul>
-<li>Flag any:
-<ul>
-<li>unsafe file I/O patterns</li>
-<li>hard-coded paths, credentials, or URLs</li>
-<li>fragile assumptions about external systems or files</li>
-</ul></li>
-<li>Provide concrete suggestions to mitigate each risk.</li>
-</ul></li>
-</ol>
-<p>Return findings in Markdown with sections: - Dependencies and justification<br>
-- Opportunities to simplify dependencies<br>
-- Compatibility with preferred stack<br>
-- Security and stability concerns<br>
-- Recommended mitigations</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="an">name:</span><span class="co"> gpid-proto-deps-risk</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "Analyze dependencies, compatibility, and security/stability risks"</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>You are reviewing dependencies and risks for Copilot-assisted code in R or Stata.</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>If it is unclear what code to inspect, ask me **which file/selection** to analyze.</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>Then:</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Dependency analysis**</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>List all external packages/dependencies used or introduced.</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>For each, explain briefly **why it is needed**.</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Identify dependencies that are:</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>unnecessary</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>overlapping/redundant</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>heavier than needed for the task</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Suggest simplifications or removals where possible.</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Compatibility with our preferred stack (R)**</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Check for conflicts or unnecessary overlaps with:</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span><span class="in">`data.table`</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span><span class="in">`collapse`</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span><span class="in">`rlang`</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>When reasonable, suggest implementations that better fit this stack.</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Security and stability**</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Flag any:</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>unsafe file I/O patterns</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>hard-coded paths, credentials, or URLs</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>fragile assumptions about external systems or files</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>Provide concrete suggestions to mitigate each risk.</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>Return findings in Markdown with sections:</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Dependencies and justification  </span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Opportunities to simplify dependencies  </span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Compatibility with preferred stack  </span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Security and stability concerns  </span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Recommended mitigations  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
-<hr>
-</section>
-</section>
-<section id="protocol-self-critique-and-robustness-review" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="protocol-self-critique-and-robustness-review">Protocol 7 — Self-Critique and Robustness Review</h3>
-<p><strong>Prompt:</strong></p>
-<pre><code>/gpid-proto-self-critique</code></pre>
-<section id="purpose-6" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="purpose-6">Purpose</h4>
-<p>Github Copilot is surprisingly good at critiquing its own work when prompted correctly.</p>
-<p>This step often finds issues humans miss.</p>
-</section>
-<section id="what-it-does-5" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="what-it-does-5">What It Does</h4>
-<ul>
-<li>Reviews code as if performing a formal code review</li>
-<li>Identifies inefficiencies</li>
-<li>Points out risky assumptions</li>
-<li>Suggests simplifications</li>
-<li>Produces a concise summary of strengths, risks, and recommended improvements</li>
-</ul>
-</section>
-<section id="latest-gpid-prompt-file-7" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-7">Latest GPID prompt file</h4>
-<div class="callout callout-style-default callout-note callout-titled" title="gpid-proto-self-critique">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>gpid-proto-self-critique
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>You are performing a <strong>self-critique</strong> of Copilot-assisted code, as if you were a human reviewer.</p>
-<p>If it is unclear what code to review, first ask me <strong>which function/file/selection</strong> to critique.</p>
-<p>Then:</p>
-<ol type="1">
-<li><strong>Identify inefficiencies</strong>
-<ul>
-<li>redundant code</li>
-<li>unnecessary work</li>
-<li>poor data handling</li>
-<li>operations that will be slow or memory-heavy on large data</li>
-</ul></li>
-<li><strong>Complexity issues</strong>
-<ul>
-<li>over-nested logic</li>
-<li>confusing control flow</li>
-<li>unneeded abstractions or indirection</li>
-</ul></li>
-<li><strong>Risky assumptions</strong>
-<ul>
-<li>fragile expectations about inputs</li>
-<li>poor handling of NA/missing values</li>
-<li>edge cases likely to break the code</li>
-</ul></li>
-<li><strong>Opportunities to use our preferred stack</strong>
-<ul>
-<li>places where <code>data.table</code>, <code>collapse</code>, or <code>rlang</code> (in R) would lead to clearer or more efficient code, when appropriate for the project.</li>
-</ul></li>
-<li><strong>Concrete improvements</strong>
-<ul>
-<li>For each issue:
-<ul>
-<li>describe the problem</li>
-<li>propose a specific improvement</li>
-<li>explain its impact (performance, readability, robustness, maintainability)</li>
-</ul></li>
-</ul></li>
-</ol>
-<p>End with a short summary: - Key strengths<br>
-- Key risks<br>
-- Top 3 improvements to implement next</p>
-</div>
-</div>
-</div>
-<hr>
 </section>
 </section>
 <section id="protocol-producing-the-final-validation-bundle" class="level3 unnumbered">
-<h3 class="unnumbered anchored">Protocol 8 — Producing the Final Validation Bundle</h3>
+<h3 class="unnumbered anchored" data-anchor-id="protocol-producing-the-final-validation-bundle">Protocol 7 — Producing the Final Validation Bundle</h3>
 <p><strong>Prompt:</strong></p>
 <pre><code>/gpid-proto-wrap-task</code></pre>
-<section id="purpose-7" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="purpose-7">Purpose</h4>
+<section id="purpose-6" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="purpose-6">Purpose</h4>
 <p>Every Copilot-assisted task ends with a <strong>final Markdown summary</strong> stored under:</p>
 <pre><code>copilot_logs/TASK_NAME.md</code></pre>
 </section>
-<section id="what-it-does-6" class="level4 unnumbered">
-<h4 class="unnumbered anchored" data-anchor-id="what-it-does-6">What It Does</h4>
+<section id="what-it-does-5" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="what-it-does-5">What It Does</h4>
 <ul>
 <li>Task overview</li>
 <li>Step-by-step technical explanation</li>
@@ -1085,15 +1140,15 @@ Your role after the initial questions is, only when asked, to:
 <li>Unit tests and edge cases</li>
 <li>Error-handling strategy</li>
 <li>Dependency and risk analysis</li>
-<li>Self-critique findings</li>
+<li>Code review findings</li>
 <li>Remaining TODOs</li>
 </ul>
 <p>This file must <strong>always</strong> be included in your PR.</p>
 </section>
-<section id="latest-gpid-prompt-file-8" class="level4 unnumbered">
-<h4 class="unnumbered anchored">Latest GPID prompt file</h4>
+<section id="latest-gpid-prompt-file-7" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="latest-gpid-prompt-file-7">Latest GPID prompt file</h4>
 <div class="callout callout-style-default callout-note callout-titled" title="gpid-proto-wrap-task">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1102,91 +1157,98 @@ Your role after the initial questions is, only when asked, to:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>We have reached the end of a Copilot-assisted task.</p>
-<section id="retrieving-the-task-name-1" class="level2" data-number="6.6">
-<h2 data-number="6.6" class="anchored" data-anchor-id="retrieving-the-task-name-1"><span class="header-section-number">6.6</span> Retrieving the task name</h2>
-<p>Locate the task name you provided at the start of this conversation session. Confirm it by restating: &gt; Task name: [TASK_NAME]</p>
-<p>Then proceed to work with <code>copilot_logs/TASK_NAME.md</code> and <code>copilot_logs/LOG_${TASK_NAME}.md</code> where <code>${TASK_NAME}</code> is that task name.</p>
-<p><strong>Fallback:</strong> If you cannot locate the task name in the conversation history, read <code>.current_task</code> to retrieve it. If that file doesn’t exist either, ask the user to provide the task name with a single prompt: <code>Please provide a short TASK_NAME to save the final report as copilot_logs/TASK_NAME.md.</code></p>
-<p>After confirming the task name, proceed with the task completion:</p>
-</section>
-<section id="step-1-review-the-task-log" class="level2" data-number="6.7">
-<h2 data-number="6.7" class="anchored" data-anchor-id="step-1-review-the-task-log"><span class="header-section-number">6.7</span> Step 1: Review the task log</h2>
-<p>Before generating the final summary, carefully review the existing task log file at <code>copilot_logs/LOG_${TASK_NAME}.md</code>. This file contains: - The task initialization details - All progress updates recorded throughout the task - Challenges encountered and solutions implemented - Changes made to the original plan</p>
-<p>Use this log to ensure that all relevant information, decisions, and important details are captured in the final summary. Verify that no critical information is overlooked.</p>
-</section>
-<section id="step-2-generate-the-final-markdown-report" class="level2" data-number="6.8">
-<h2 data-number="6.8" class="anchored" data-anchor-id="step-2-generate-the-final-markdown-report"><span class="header-section-number">6.8</span> Step 2: Generate the final Markdown report</h2>
-<p>Using our full conversation, your running summary, and the reviewed task log, generate a <strong>Markdown report</strong> suitable for saving as <code>copilot_logs/TASK_NAME.md</code>. This final report should synthesize all work completed and provide clear documentation for future reference.</p>
-<p>Include:</p>
-<ol type="1">
-<li><strong>Executive Summary</strong>
-<ul>
-<li>brief overview of what the task accomplished</li>
-<li>primary goals achieved</li>
-<li>overall status (complete, in-progress, blocked, etc.)</li>
-</ul></li>
-<li><strong>Task Overview</strong>
-<ul>
-<li>what the task was about</li>
-<li>main files/functions affected</li>
-<li>major decisions and trade-offs made</li>
-</ul></li>
-<li><strong>Technical Explanation</strong>
-<ul>
-<li>step-by-step description of how the code works</li>
-<li>important algorithmic or design choices</li>
-<li>any performance considerations</li>
-<li>rationale for technical decisions</li>
-</ul></li>
-<li><strong>Plain-Language Overview</strong>
-<ul>
-<li>why the code exists</li>
-<li>how a teammate should use it</li>
-<li>non-technical explanation of the behavior</li>
-</ul></li>
-<li><strong>Documentation and Comments</strong>
-<ul>
-<li>confirmation of in-code comments and Roxygen2 docs (for R)</li>
-<li>any important notes for future maintainers</li>
-<li>known limitations or caveats</li>
-</ul></li>
-<li><strong>Validation and Testing</strong>
-<ul>
-<li>validation checklist with status for each item</li>
-<li>unit tests and edge cases covered (summarize what is tested)</li>
-<li>error-handling strategy (how invalid or unexpected inputs are handled)</li>
-<li>performance-sensitive tests, if applicable</li>
-</ul></li>
-<li><strong>Dependencies and Risk Analysis</strong>
-<ul>
-<li>summary of dependency decisions</li>
-<li>key security/stability considerations</li>
-<li>any external factors that could affect the work</li>
-</ul></li>
-<li><strong>Self-Critique and Follow-Ups</strong>
-<ul>
-<li>main issues uncovered by reviews/self-critique</li>
-<li>remaining TODOs or recommended future improvements</li>
-<li>potential enhancements or optimizations for next iteration</li>
-<li><strong>To Do List</strong>: Extract any to-do items from the task log (<code>copilot_logs/LOG_${TASK_NAME}.md</code>)
-<ul>
-<li>Before finalizing, present the compiled to-do list to the user</li>
-<li>Ask: “Here are the to-do items identified during this task. Would you like to add, remove, or modify any items before I include them in the final report?”</li>
-<li>Wait for user confirmation or modifications before proceeding</li>
-</ul></li>
-</ul></li>
-</ol>
-<p>Return <strong>only</strong> the Markdown document, and save it as <code>copilot_logs/${input}.md</code>.</p>
-<p>This final report, combined with the task log (<code>copilot_logs/LOG_${input}.md</code>), provides a complete record of the task work and can serve as reference material for future similar tasks.</p>
-</section>
-<section id="step-3-clean-up-temporary-files" class="level2" data-number="6.9">
-<h2 data-number="6.9" class="anchored" data-anchor-id="step-3-clean-up-temporary-files"><span class="header-section-number">6.9</span> Step 3: Clean up temporary files</h2>
-<p>After creating <code>copilot_logs/TASK_NAME.md</code>, ask the user: <strong>“May I delete the temporary <code>.current_task</code> marker file to keep the project clean?”</strong></p>
-<p>If the user agrees (or does not object), delete <code>.current_task</code>. If they prefer to keep it or it doesn’t exist, proceed without action.</p>
-</section>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="an">name:</span><span class="co"> gpid-proto-wrap-task</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "Create the final task summary and validation bundle"</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="an">argument-hint:</span><span class="co"> "TASK_NAME for copilot_logs/TASK_NAME.md"</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>We have reached the end of a Copilot-assisted task.</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Retrieving the task name</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>Locate the task name you provided at the start of this conversation session. Confirm it by restating:</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Task name: </span><span class="co">[</span><span class="ot">TASK_NAME</span><span class="co">]</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>Then proceed to work with <span class="in">`copilot_logs/TASK_NAME.md`</span> and <span class="in">`copilot_logs/LOG_${TASK_NAME}.md`</span> where <span class="in">`${TASK_NAME}`</span> is that task name.</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>**Fallback:** If you cannot locate the task name in the conversation history, read <span class="in">`.current_task`</span> to retrieve it. If that file doesn't exist either, ask the user to provide the task name with a single prompt: <span class="in">`Please provide a short TASK_NAME to save the final report as copilot_logs/TASK_NAME.md.`</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>After confirming the task name, proceed with the task completion:</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 1: Review the task log</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>Before generating the final summary, carefully review the existing task log file at <span class="in">`copilot_logs/LOG_${TASK_NAME}.md`</span>. This file contains:</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The task initialization details</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>All progress updates recorded throughout the task</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Challenges encountered and solutions implemented</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Changes made to the original plan</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>Use this log to ensure that all relevant information, decisions, and important details are captured in the final summary. Verify that no critical information is overlooked.</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 2: Generate the final Markdown report</span></span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>Using our full conversation, your running summary, and the reviewed task log, generate a **Markdown report** suitable for saving as <span class="in">`copilot_logs/TASK_NAME.md`</span>. This final report should synthesize all work completed and provide clear documentation for future reference.</span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>Include:</span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Executive Summary**</span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>brief overview of what the task accomplished</span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>primary goals achieved</span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>overall status (complete, in-progress, blocked, etc.)</span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Task Overview**</span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>what the task was about</span>
+<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>main files/functions affected</span>
+<span id="cb19-44"><a href="#cb19-44" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>major decisions and trade-offs made</span>
+<span id="cb19-45"><a href="#cb19-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-46"><a href="#cb19-46" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Technical Explanation**</span>
+<span id="cb19-47"><a href="#cb19-47" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>step-by-step description of how the code works</span>
+<span id="cb19-48"><a href="#cb19-48" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>important algorithmic or design choices</span>
+<span id="cb19-49"><a href="#cb19-49" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>any performance considerations</span>
+<span id="cb19-50"><a href="#cb19-50" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>rationale for technical decisions</span>
+<span id="cb19-51"><a href="#cb19-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-52"><a href="#cb19-52" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Plain-Language Overview**</span>
+<span id="cb19-53"><a href="#cb19-53" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>why the code exists</span>
+<span id="cb19-54"><a href="#cb19-54" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>how a teammate should use it</span>
+<span id="cb19-55"><a href="#cb19-55" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>non-technical explanation of the behavior</span>
+<span id="cb19-56"><a href="#cb19-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-57"><a href="#cb19-57" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Documentation and Comments**</span>
+<span id="cb19-58"><a href="#cb19-58" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>confirmation of in-code comments and Roxygen2 docs (for R)</span>
+<span id="cb19-59"><a href="#cb19-59" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>any important notes for future maintainers</span>
+<span id="cb19-60"><a href="#cb19-60" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>known limitations or caveats</span>
+<span id="cb19-61"><a href="#cb19-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-62"><a href="#cb19-62" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>**Validation and Testing**</span>
+<span id="cb19-63"><a href="#cb19-63" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>validation checklist with status for each item</span>
+<span id="cb19-64"><a href="#cb19-64" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>unit tests and edge cases covered (summarize what is tested)</span>
+<span id="cb19-65"><a href="#cb19-65" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>error-handling strategy (how invalid or unexpected inputs are handled)</span>
+<span id="cb19-66"><a href="#cb19-66" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>performance-sensitive tests, if applicable</span>
+<span id="cb19-67"><a href="#cb19-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-68"><a href="#cb19-68" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>**Dependencies and Risk Analysis**</span>
+<span id="cb19-69"><a href="#cb19-69" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>summary of dependency decisions</span>
+<span id="cb19-70"><a href="#cb19-70" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>key security/stability considerations</span>
+<span id="cb19-71"><a href="#cb19-71" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>any external factors that could affect the work</span>
+<span id="cb19-72"><a href="#cb19-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-73"><a href="#cb19-73" aria-hidden="true" tabindex="-1"></a><span class="ss">8. </span>**Self-Critique and Follow-Ups**</span>
+<span id="cb19-74"><a href="#cb19-74" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>main issues uncovered by reviews/self-critique</span>
+<span id="cb19-75"><a href="#cb19-75" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>remaining TODOs or recommended future improvements</span>
+<span id="cb19-76"><a href="#cb19-76" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>potential enhancements or optimizations for next iteration</span>
+<span id="cb19-77"><a href="#cb19-77" aria-hidden="true" tabindex="-1"></a><span class="ss">   - </span>**To Do List**: Extract any to-do items from the task log (<span class="in">`copilot_logs/LOG_${TASK_NAME}.md`</span>)</span>
+<span id="cb19-78"><a href="#cb19-78" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>Before finalizing, present the compiled to-do list to the user</span>
+<span id="cb19-79"><a href="#cb19-79" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>Ask: "Here are the to-do items identified during this task. Would you like to add, remove, or modify any items before I include them in the final report?"</span>
+<span id="cb19-80"><a href="#cb19-80" aria-hidden="true" tabindex="-1"></a><span class="ss">     - </span>Wait for user confirmation or modifications before proceeding</span>
+<span id="cb19-81"><a href="#cb19-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-82"><a href="#cb19-82" aria-hidden="true" tabindex="-1"></a>Return **only** the Markdown document, and save it as <span class="in">`copilot_logs/${input}.md`</span>.</span>
+<span id="cb19-83"><a href="#cb19-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-84"><a href="#cb19-84" aria-hidden="true" tabindex="-1"></a>This final report, combined with the task log (<span class="in">`copilot_logs/LOG_${input}.md`</span>), provides a complete record of the task work and can serve as reference material for future similar tasks.</span>
+<span id="cb19-85"><a href="#cb19-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-86"><a href="#cb19-86" aria-hidden="true" tabindex="-1"></a><span class="fu">## Step 3: Clean up temporary files</span></span>
+<span id="cb19-87"><a href="#cb19-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-88"><a href="#cb19-88" aria-hidden="true" tabindex="-1"></a>After creating <span class="in">`copilot_logs/TASK_NAME.md`</span>, ask the user: **"May I delete the temporary `.current_task` marker file to keep the project clean?"**</span>
+<span id="cb19-89"><a href="#cb19-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-90"><a href="#cb19-90" aria-hidden="true" tabindex="-1"></a>If the user agrees (or does not object), delete <span class="in">`.current_task`</span>. If they prefer to keep it or it doesn't exist, proceed without action.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -1211,13 +1273,49 @@ Important
 </section>
 </section>
 </section>
-<section id="final-reminder-you-are-the-author" class="level2" data-number="6.10">
-<h2 data-number="6.10" class="anchored" data-anchor-id="final-reminder-you-are-the-author"><span class="header-section-number">6.10</span> Final Reminder: You Are the Author</h2>
+<section id="final-reminder-you-are-the-author" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="final-reminder-you-are-the-author"><span class="header-section-number">6.5</span> Final Reminder: You Are the Author</h2>
 <p><strong>The code produced by Github Copilot is ultimately your responsibility.</strong></p>
 <p>• <strong>Authorship means accountability</strong>: When you commit Copilot-assisted code, you are claiming authorship of it. This means you’re responsible for its correctness, efficiency, and maintainability.</p>
 <p>• <strong>Review is mandatory</strong>: Skipping the efficiency review puts the burden on your teammates during code review, slows down development, and can introduce bugs or performance issues that are hard to trace later.</p>
 <p>• <strong>Use Github Copilot as a tool, not a replacement</strong>: Github Copilot accelerates your work, but it cannot replace your engineering judgment. You must understand, evaluate, and refine everything it produces.</p>
 <p><strong>Bottom line:</strong> If you wouldn’t put your name on it as-is, don’t commit it yet. Clean it up first.</p>
+</section>
+<section id="full-workflow-example" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="full-workflow-example"><span class="header-section-number">6.6</span> Full Workflow Example</h2>
+<p>The diagram below shows a complete task walkthrough where all prompts are used. This is the recommended sequence when working on a non-trivial feature or bug fix.</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TD
+    A(["/gpid-proto-start-task\nPlan &amp; initialize\n(GPID Planner agent)"]) --&gt; B["Implement\ncode changes"]
+    B --&gt; C["/gpid-proto-explain-code\nDocument understanding\nof new/changed code"]
+    C --&gt; D["/gpid-proto-document-code\nGenerate comments\n&amp; Roxygen2 docs"]
+    D --&gt; E["/gpid-proto-tests-checklist\nDefine &amp; run\ntest cases"]
+    E --&gt; F["/gpid-proto-deps-risk\nAssess dependency\n&amp; security risks"]
+    F --&gt; G["/gpid-proto-review-code\nAdversarial code\nquality review"]
+    G --&gt; H{More work\nneeded?}
+    H -- Yes --&gt; B
+    H -- No --&gt; I["/gpid-proto-log-update\nLog milestone"]
+    I --&gt; J{Task\ncomplete?}
+    J -- No --&gt; B
+    J -- Yes --&gt; K(["/gpid-proto-wrap-task\nFinal validation bundle\n&amp; close task"])
+
+    style A fill:#d4edda,stroke:#28a745
+    style K fill:#d4edda,stroke:#28a745
+    style H fill:#fff3cd,stroke:#ffc107
+    style J fill:#fff3cd,stroke:#ffc107
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p><strong>Note:</strong> <code>/gpid-proto-log-update</code> should be run after each meaningful milestone, not only at the end. The loop above is simplified; in practice, you may log several updates before the task is complete.</p>
+</blockquote>
 
 
 </section>
