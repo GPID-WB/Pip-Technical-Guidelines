@@ -113,11 +113,18 @@ You have two options:
 
 **Option A — Global (available in all workspaces)**
 
-Copy `.github/agents/gpid-planner.agent.md` from your local clone to Positron's global user folder:
+In the menu on Positron Assistant Chat, click on "Ask" and then on "Configure Custom Agent" to create a global agent:
 
-`C:\Users\<USERNAME>\AppData\Roaming\Positron\User\prompts\`
+![](images/chat_agent.png)
 
-After copying, restart Positron. The agent will be available globally across all workspaces. Note that you will need to re-copy this file after each `git pull` on the `copilot-prompts` repository.
+1. Create a new custom agent and select `User Data`.
+2. Set the name to `gpid-planner`.
+3. Open the file `gpid-planner.agent.md` from your local clone of `copilot-prompts` in another session:
+   `copilot-prompts\.github\agents\gpid-planner.agent.md`
+4. Copy the entire file content and paste it into the new agent editor in Positron you just created, then save.
+5. Restart Positron.
+
+The agent will be available globally across all workspaces. After each `git pull` in the `copilot-prompts` repository, repeat steps 3–4 to update the agent if the file changed. 
 
 **Option B — Per workspace (current project only)**
 
