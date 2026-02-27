@@ -443,9 +443,16 @@ Warning
 </div>
 <p>You have two options:</p>
 <p><strong>Option A — Global (available in all workspaces)</strong></p>
-<p>Copy <code>.github/agents/gpid-planner.agent.md</code> from your local clone to Positron’s global user folder:</p>
-<p><code>C:\Users\&lt;USERNAME&gt;\AppData\Roaming\Positron\User\prompts\</code></p>
-<p>After copying, restart Positron. The agent will be available globally across all workspaces. Note that you will need to re-copy this file after each <code>git pull</code> on the <code>copilot-prompts</code> repository.</p>
+<p>In the menu on Positron Assistant Chat, click on “Ask” and then on “Configure Custom Agent” to create a global agent:</p>
+<p><img src="images/chat_agent.png" class="img-fluid"></p>
+<ol type="1">
+<li>Create a new custom agent and select <code>User Data</code>.</li>
+<li>Set the name to <code>gpid-planner</code>.</li>
+<li>Open the file <code>gpid-planner.agent.md</code> from your local clone of <code>copilot-prompts</code> in another session: <code>copilot-prompts\.github\agents\gpid-planner.agent.md</code></li>
+<li>Copy the entire file content and paste it into the new agent editor in Positron you just created, then save.</li>
+<li>Restart Positron.</li>
+</ol>
+<p>The agent will be available globally across all workspaces. After each <code>git pull</code> in the <code>copilot-prompts</code> repository, repeat steps 3–4 to update the agent if the file changed.</p>
 <p><strong>Option B — Per workspace (current project only)</strong></p>
 <p>Copy <code>gpid-planner.agent.md</code> to <code>.vscode/positron/agents/</code> inside your project (create the folder if it does not exist).</p>
 <p>Whenever a prompt file changes, you will be notified. However, the best practice is to regularly update your local copy. You can do it by opening the <code>copilot-prompts</code> folder in a terminal and running <code>git pull</code>, opening the whole folder in Positron and VScode and sync the changes or by using script similar to this:</p>
