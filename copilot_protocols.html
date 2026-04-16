@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.9.37">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>6&nbsp; Mandatory Protocols for Using GitHub Copilot in Technical Work – Pip Technical Guidelines</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -69,15 +72,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="./VScode_setup_for_github.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-00ccf60c28c3bdf2d57f5131fbf16f11.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-36bf55b16c7cb4b1420f41495cb5446a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -110,7 +112,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
-<link rel="stylesheet" href="css/tachyons.css">
+<link rel="stylesheet" href="css/custom.css">
 </head>
 
 <body class="nav-sidebar floating quarto-light">
@@ -306,13 +308,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#the-gpid-protocol-prompts" id="toc-the-gpid-protocol-prompts" class="nav-link" data-scroll-target="#the-gpid-protocol-prompts"><span class="header-section-number">6.4</span> The GPID Protocol Prompts</a>
   <ul class="collapse">
-  <li><a href="#protocol-planning-and-initializing-the-task" id="toc-protocol-planning-and-initializing-the-task" class="nav-link" data-scroll-target="#protocol-planning-and-initializing-the-task">Protocol 1 — Planning and Initializing the Task</a></li>
-  <li><a href="#protocol-logging-progress-of-the-task" id="toc-protocol-logging-progress-of-the-task" class="nav-link" data-scroll-target="#protocol-logging-progress-of-the-task">Protocol 2 — Logging progress of the task</a></li>
-  <li><a href="#protocol-making-the-code-understandable" id="toc-protocol-making-the-code-understandable" class="nav-link" data-scroll-target="#protocol-making-the-code-understandable">Protocol 3 — Making the Code Understandable</a></li>
-  <li><a href="#protocol-code-review" id="toc-protocol-code-review" class="nav-link" data-scroll-target="#protocol-code-review">Protocol 4 — Code Review</a></li>
-  <li><a href="#protocol-testing-and-edge-cases" id="toc-protocol-testing-and-edge-cases" class="nav-link" data-scroll-target="#protocol-testing-and-edge-cases">Protocol 5 — Testing and Edge Cases</a></li>
-  <li><a href="#protocol-dependencies-risks-and-safety" id="toc-protocol-dependencies-risks-and-safety" class="nav-link" data-scroll-target="#protocol-dependencies-risks-and-safety">Protocol 6 — Dependencies, Risks, and Safety</a></li>
-  <li><a href="#protocol-producing-the-final-validation-bundle" id="toc-protocol-producing-the-final-validation-bundle" class="nav-link" data-scroll-target="#protocol-producing-the-final-validation-bundle">Protocol 7 — Producing the Final Validation Bundle</a></li>
+  <li><a href="#protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-planning-and-initializing-the-task" id="toc-protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-planning-and-initializing-the-task" class="nav-link" data-scroll-target="#protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-planning-and-initializing-the-task">Protocol 1 — Planning and Initializing the Task</a></li>
+  <li><a href="#protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-logging-progress-of-the-task" id="toc-protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-logging-progress-of-the-task" class="nav-link" data-scroll-target="#protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-logging-progress-of-the-task">Protocol 2 — Logging progress of the task</a></li>
+  <li><a href="#protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-making-the-code-understandable" id="toc-protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-making-the-code-understandable" class="nav-link" data-scroll-target="#protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-making-the-code-understandable">Protocol 3 — Making the Code Understandable</a></li>
+  <li><a href="#protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-code-review" id="toc-protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-code-review" class="nav-link" data-scroll-target="#protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-code-review">Protocol 4 — Code Review</a></li>
+  <li><a href="#protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-testing-and-edge-cases" id="toc-protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-testing-and-edge-cases" class="nav-link" data-scroll-target="#protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-testing-and-edge-cases">Protocol 5 — Testing and Edge Cases</a></li>
+  <li><a href="#protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-dependencies-risks-and-safety" id="toc-protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-dependencies-risks-and-safety" class="nav-link" data-scroll-target="#protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-dependencies-risks-and-safety">Protocol 6 — Dependencies, Risks, and Safety</a></li>
+  <li><a href="#protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-producing-the-final-validation-bundle" id="toc-protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-producing-the-final-validation-bundle" class="nav-link" data-scroll-target="#protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-producing-the-final-validation-bundle">Protocol 7 — Producing the Final Validation Bundle</a></li>
   </ul></li>
   <li><a href="#final-reminder-you-are-the-author" id="toc-final-reminder-you-are-the-author" class="nav-link" data-scroll-target="#final-reminder-you-are-the-author"><span class="header-section-number">6.5</span> Final Reminder: You Are the Author</a></li>
   <li><a href="#full-workflow-example" id="toc-full-workflow-example" class="nav-link" data-scroll-target="#full-workflow-example"><span class="header-section-number">6.6</span> Full Workflow Example</a></li>
@@ -577,8 +579,8 @@ Important
 <section id="the-gpid-protocol-prompts" class="level2" data-number="6.4">
 <h2 data-number="6.4" class="anchored" data-anchor-id="the-gpid-protocol-prompts"><span class="header-section-number">6.4</span> The GPID Protocol Prompts</h2>
 <p>The following sections describe each mandatory protocol and the corresponding <code>gpid-proto-*</code> prompt.</p>
-<section id="protocol-planning-and-initializing-the-task" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="protocol-planning-and-initializing-the-task">Protocol 1 — Planning and Initializing the Task</h3>
+<section id="protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-planning-and-initializing-the-task" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-planning-and-initializing-the-task">Protocol 1 — Planning and Initializing the Task</h3>
 <p><strong>Prompt:</strong></p>
 <pre><code>/gpid-proto-start-task</code></pre>
 <div class="callout callout-style-default callout-important callout-titled">
@@ -651,8 +653,8 @@ Important
 </div>
 </section>
 </section>
-<section id="protocol-logging-progress-of-the-task" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="protocol-logging-progress-of-the-task">Protocol 2 — Logging progress of the task</h3>
+<section id="protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-logging-progress-of-the-task" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-logging-progress-of-the-task">Protocol 2 — Logging progress of the task</h3>
 <p><strong>Prompt:</strong></p>
 <pre><code>/gpid-proto-log-update</code></pre>
 <section id="purpose-1" class="level4 unnumbered">
@@ -737,8 +739,8 @@ Important
 </div>
 </section>
 </section>
-<section id="protocol-making-the-code-understandable" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="protocol-making-the-code-understandable">Protocol 3 — Making the Code Understandable</h3>
+<section id="protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-making-the-code-understandable" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-making-the-code-understandable">Protocol 3 — Making the Code Understandable</h3>
 <p><strong>Prompts:</strong></p>
 <pre><code>/gpid-proto-explain-code
 /gpid-proto-document-code</code></pre>
@@ -878,8 +880,8 @@ Important
 </section>
 </section>
 </section>
-<section id="protocol-code-review" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="protocol-code-review">Protocol 4 — Code Review</h3>
+<section id="protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-code-review" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-code-review">Protocol 4 — Code Review</h3>
 <p><strong>Prompt:</strong></p>
 <pre><code>/gpid-proto-review-code</code></pre>
 <section id="purpose-3" class="level4 unnumbered">
@@ -971,8 +973,8 @@ Important
 </div>
 </section>
 </section>
-<section id="protocol-testing-and-edge-cases" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="protocol-testing-and-edge-cases">Protocol 5 — Testing and Edge Cases</h3>
+<section id="protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-testing-and-edge-cases" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-testing-and-edge-cases">Protocol 5 — Testing and Edge Cases</h3>
 <p><strong>Prompt:</strong></p>
 <pre><code>/gpid-proto-tests-checklist</code></pre>
 <section id="purpose-4" class="level4 unnumbered">
@@ -1049,8 +1051,8 @@ Important
 </div>
 </section>
 </section>
-<section id="protocol-dependencies-risks-and-safety" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="protocol-dependencies-risks-and-safety">Protocol 6 — Dependencies, Risks, and Safety</h3>
+<section id="protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-dependencies-risks-and-safety" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-dependencies-risks-and-safety">Protocol 6 — Dependencies, Risks, and Safety</h3>
 <p><strong>Prompt:</strong></p>
 <pre><code>/gpid-proto-deps-risk</code></pre>
 <section id="purpose-5" class="level4 unnumbered">
@@ -1126,8 +1128,8 @@ Important
 </div>
 </section>
 </section>
-<section id="protocol-producing-the-final-validation-bundle" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="protocol-producing-the-final-validation-bundle">Protocol 7 — Producing the Final Validation Bundle</h3>
+<section id="protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-producing-the-final-validation-bundle" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="protocol-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2070726f746f636f6c203e7d7d-producing-the-final-validation-bundle">Protocol 7 — Producing the Final Validation Bundle</h3>
 <p><strong>Prompt:</strong></p>
 <pre><code>/gpid-proto-wrap-task</code></pre>
 <section id="purpose-6" class="level4 unnumbered">

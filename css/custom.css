@@ -1,0 +1,24 @@
+/*
+ * Custom CSS for Pip Technical Guidelines
+ *
+ * NOTE: tachyons.css was removed because its utility class names
+ * (.cf, .fl, .dt, .cn, .bn) collide with Pandoc/Quarto syntax
+ * highlighting class names, breaking code block formatting:
+ *
+ *   .cf (tachyons: clearfix)    vs .cf (Quarto: control flow — if, else, for, function)
+ *   .fl (tachyons: float:left)  vs .fl (Quarto: float literals — 1.5, 3.14)
+ *   .dt (tachyons: display:table) vs .dt (Quarto: data types)
+ *   .cn (tachyons: clear:none)  vs .cn (Quarto: constants — TRUE, FALSE, NULL)
+ *   .bn (tachyons: border:none) vs .bn (Quarto: base-N number literals)
+ *
+ * If you need tachyons utilities in the future, import only the
+ * specific modules you need, or add the overrides below to neutralize
+ * the collisions inside code blocks:
+ *
+ *   pre code .cf::before,
+ *   pre code .cf::after { content: none; display: none; }
+ *   pre code .fl  { float: none; }
+ *   pre code .dt  { display: inline; }
+ *   pre code .cn  { clear: unset; }
+ *   pre code .bn  { border-style: unset; border-width: unset; }
+ */

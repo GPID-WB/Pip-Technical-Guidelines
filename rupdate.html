@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.9.37">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>3&nbsp; How to update R and reinstall packages – Pip Technical Guidelines</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -69,15 +72,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="./rprofile.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-00ccf60c28c3bdf2d57f5131fbf16f11.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-36bf55b16c7cb4b1420f41495cb5446a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -107,7 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
-<link rel="stylesheet" href="css/tachyons.css">
+<link rel="stylesheet" href="css/custom.css">
 </head>
 
 <body class="nav-sidebar floating quarto-light">
@@ -364,7 +366,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="step-1-identify-packages-from-your-old-r-installation" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="step-1-identify-packages-from-your-old-r-installation"><span class="header-section-number">3.2</span> Step 1: Identify packages from your old R installation</h2>
 <p>First, we need to identify which packages were in your previous R version. The code below is generic—it will work for any two versions.</p>
-<div class="cell" data-evaluate="false">
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define your old and new R versions</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>old_version <span class="ot">&lt;-</span> <span class="st">"4.4"</span>  <span class="co"># Change to your old version (e.g., "4.3", "4.4")</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>new_version <span class="ot">&lt;-</span> <span class="st">"4.5"</span>  <span class="co"># Change to your new version (e.g., "4.5", "4.6")</span></span>
@@ -405,7 +407,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="step-2-identify-packages-installed-from-github-and-separate-cran-packages" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="step-2-identify-packages-installed-from-github-and-separate-cran-packages"><span class="header-section-number">3.3</span> Step 2: Identify packages installed from GitHub and separate CRAN packages</h2>
 <p>Before reinstalling packages, we’ll automatically identify which packages in your old library were installed from GitHub. This allows us to use the appropriate installation method for each package type.</p>
-<div class="cell" data-evaluate="false">
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Continue from Step 1—old_lib and packages_to_install should be defined</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to extract GitHub repository info from old packages</span></span>
@@ -489,7 +491,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="step-3-install-cran-packages" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="step-3-install-cran-packages"><span class="header-section-number">3.4</span> Step 3: Install CRAN packages</h2>
 <p>Once you’ve separated the packages, install the CRAN packages. The script below handles failures gracefully, skipping packages that can’t be installed and logging the results.</p>
-<div class="cell" data-evaluate="false">
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Continue from Step 2—packages_to_install_cran should be defined</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set options to avoid interactive prompts</span></span>
@@ -567,7 +569,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="automatic-installation-from-step-2" class="level3" data-number="3.5.1">
 <h3 data-number="3.5.1" class="anchored" data-anchor-id="automatic-installation-from-step-2"><span class="header-section-number">3.5.1</span> Automatic installation (from Step 2)</h3>
 <p>If you completed Step 2, your GitHub packages are automatically identified and can be installed here:</p>
-<div class="cell" data-evaluate="false">
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Continue from Step 2—github_packages_vector should be defined</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (or it will be an empty vector if no GitHub packages were found)</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -625,7 +627,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="method-1-using-devtoolsinstall_github-recommended" class="level4" data-number="3.5.2.1">
 <h4 data-number="3.5.2.1" class="anchored" data-anchor-id="method-1-using-devtoolsinstall_github-recommended"><span class="header-section-number">3.5.2.1</span> Method 1: Using <code>devtools::install_github()</code> (Recommended)</h4>
 <p>This is the most straightforward method if you have <code>devtools</code> installed.</p>
-<div class="cell" data-evaluate="false">
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install devtools if not already available</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"devtools"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) {</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">"devtools"</span>, <span class="at">repos =</span> <span class="st">"https://cran.rstudio.com/"</span>)</span>
@@ -673,7 +675,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="method-2-direct-download-and-installation" class="level3" data-number="3.5.3">
 <h3 data-number="3.5.3" class="anchored" data-anchor-id="method-2-direct-download-and-installation"><span class="header-section-number">3.5.3</span> Method 2: Direct download and installation</h3>
 <p>If <code>devtools</code> is unavailable or GitHub packages have dependencies, you can download and install directly:</p>
-<div class="cell" data-evaluate="false">
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a temporary directory for downloads</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>temp_dir <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="fu">tempdir</span>(), <span class="st">"gh_packages"</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(temp_dir, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
@@ -733,7 +735,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="method-3-from-source-using-r-cmd-install" class="level3" data-number="3.5.4">
 <h3 data-number="3.5.4" class="anchored" data-anchor-id="method-3-from-source-using-r-cmd-install"><span class="header-section-number">3.5.4</span> Method 3: From source using R CMD INSTALL</h3>
 <p>For maximum compatibility, you can use R’s built-in source installation:</p>
-<div class="cell" data-evaluate="false">
+<div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to install GitHub package from source</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>install_github_source <span class="ot">&lt;-</span> <span class="cf">function</span>(repo, <span class="at">branch =</span> <span class="st">"main"</span>, </span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">install_dir =</span> <span class="fu">tempdir</span>()) {</span>
@@ -788,7 +790,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="complete-workflow-script" class="level2" data-number="3.6">
 <h2 data-number="3.6" class="anchored" data-anchor-id="complete-workflow-script"><span class="header-section-number">3.6</span> Complete workflow script</h2>
 <p>Here’s a complete, integrated script that combines all steps with automatic GitHub package detection:</p>
-<div class="cell" data-evaluate="false">
+<div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ==============================================================================</span></span>
