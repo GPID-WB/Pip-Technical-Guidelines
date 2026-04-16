@@ -46,7 +46,7 @@ format:
     theme:
       - cosmo
       - brand
-    css: css/tachyons.css
+    css: css/custom.css
   # pdf:
   #   documentclass: scrreprt
 

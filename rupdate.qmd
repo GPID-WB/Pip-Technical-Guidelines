@@ -27,7 +27,7 @@ The process has four main steps:
 First, we need to identify which packages were in your previous R version. The code below is generic—it will work for any two versions.
 
 ```{r}
-#| evaluate: false
+#| eval: false
 
 # Define your old and new R versions
 old_version <- "4.4"  # Change to your old version (e.g., "4.3", "4.4")
@@ -71,7 +71,7 @@ if (length(packages_to_install) > 0) {
 Before reinstalling packages, we'll automatically identify which packages in your old library were installed from GitHub. This allows us to use the appropriate installation method for each package type.
 
 ```{r}
-#| evaluate: false
+#| eval: false
 
 # Continue from Step 1—old_lib and packages_to_install should be defined
 
@@ -158,7 +158,7 @@ cat(sprintf("GitHub packages to install: %d\n\n", length(github_packages_vector)
 Once you've separated the packages, install the CRAN packages. The script below handles failures gracefully, skipping packages that can't be installed and logging the results.
 
 ```{r}
-#| evaluate: false
+#| eval: false
 
 # Continue from Step 2—packages_to_install_cran should be defined
 
@@ -232,7 +232,7 @@ The `pak` package provides excellent package management features, but some insti
 If you completed Step 2, your GitHub packages are automatically identified and can be installed here:
 
 ```{r}
-#| evaluate: false
+#| eval: false
 
 # Continue from Step 2—github_packages_vector should be defined
 # (or it will be an empty vector if no GitHub packages were found)
@@ -294,7 +294,7 @@ If you have additional GitHub packages not identified in Step 2, or if automatic
 This is the most straightforward method if you have `devtools` installed.
 
 ```{r}
-#| evaluate: false
+#| eval: false
 
 # Install devtools if not already available
 if (!require("devtools", quietly = TRUE)) {
@@ -344,7 +344,7 @@ if (length(manual_github_packages) > 0) {
 If `devtools` is unavailable or GitHub packages have dependencies, you can download and install directly:
 
 ```{r}
-#| evaluate: false
+#| eval: false
 
 # Create a temporary directory for downloads
 temp_dir <- file.path(tempdir(), "gh_packages")
@@ -407,7 +407,7 @@ if (length(github_packages) > 0) {
 For maximum compatibility, you can use R's built-in source installation:
 
 ```{r}
-#| evaluate: false
+#| eval: false
 
 # Function to install GitHub package from source
 install_github_source <- function(repo, branch = "main", 
@@ -464,7 +464,7 @@ install_github_source <- function(repo, branch = "main",
 Here's a complete, integrated script that combines all steps with automatic GitHub package detection:
 
 ```{r}
-#| evaluate: false
+#| eval: false
 #| code-fold: true
 
 # ==============================================================================
