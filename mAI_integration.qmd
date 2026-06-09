@@ -1,5 +1,5 @@
 ---
-title: "Querying OpenAI Inside the World Bank Network: mAI Factory Integration in R"
+title: "Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R"
 author: "Ronak Shah"
 date: today
 format:
@@ -12,15 +12,12 @@ format:
 
 ## Introduction
 
-The [Poverty and Inequality Platform (PIP)](https://pip.worldbank.org/) is the World Bank's primary tool for measuring global poverty. `pip_GPT` is a Shiny chatbot that lets analysts query PIP data in plain English — asking questions like *"What was India's headcount poverty rate at $2.15 in 2019?"* and getting a direct, data-backed answer.
+**Standard OpenAI API calls are not permitted from inside the World Bank's network.** Instead, the Bank provides an internal gateway called the **mAI Factory** — an Azure API Management (APIM) layer that proxies Azure OpenAI deployments, enforces access controls, and adds required audit headers.
 
-Building a conversational interface over an internal dataset is straightforward enough. The more interesting challenge is the AI backend: **standard OpenAI API calls are not permitted from inside the World Bank's network.** Instead, the Bank provides an internal gateway called the **mAI Factory** — an Azure API Management (APIM) layer that proxies Azure OpenAI deployments, enforces access controls, and adds required audit headers.
-
-This post documents the integration pattern so other World Bank developers can replicate it in their own R/Shiny projects. The key moving parts are:
+This article documents the integration pattern so World Bank developers can use mAI Factory in their own R/Shiny projects. The two key steps are:
 
 1. Acquiring an Azure AD Bearer token via Posit Connect's OAuth integration
 2. Structuring HTTP requests for the mAI Factory endpoint
-3. Routing user questions through a two-stage classifier before calling the LLM
 
 ---
 
@@ -50,7 +47,7 @@ So a call to `gpt-4o-mini` on DEV resolves to:
 https://azapimdev.worldbank.org/conversationalai/v2/openai/deployments/gpt-4o-mini/chat/completions?api-version=2025-01-01-preview
 ```
 
-This means any code already targeting the Azure OpenAI API can be pointed at the mAI Factory with minimal changes — you only swap the base URL and switch from an `api-key` header to a Bearer token.
+Any code already targeting the Azure OpenAI API can be pointed at the mAI Factory with minimal changes — you only swap the base URL and switch from an `api-key` header to a Bearer token.
 
 ---
 
@@ -60,11 +57,9 @@ This is the part that trips most developers up. You cannot interactively log in 
 
 ### How it works
 
-When `pip_GPT` is deployed on the internal Posit Connect server, Connect can exchange credentials on behalf of the running content. The `connectapi` package exposes this via `get_oauth_content_credentials()`, which takes an `audience` argument — the GUID of the registered OAuth integration for mAI.
+When an app is deployed on the internal Posit Connect server, Connect can exchange credentials on behalf of the running content. The `connectapi` package exposes this via `get_oauth_content_credentials()`, which takes an `audience` argument — the GUID of the registered OAuth integration for mAI.
 
 ```r
-OAUTH_INTEGRATION_GUID <- "20c434c5-78f1-431f-a286-76980748bc93"
-
 get_azure_token <- function() {
   connect_server  <- "https://datanalytics-int.worldbank.org/"
   connect_api_key <- Sys.getenv('API_KEY') # Posit Connect API key set as env var
@@ -73,10 +68,14 @@ get_azure_token <- function() {
     stop("This app must run on Posit Connect. CONNECT_SERVER / CONNECT_API_KEY not set.")
   }
 
+  # OAUTH_INTEGRATION_GUID: add the mAI OAuth integration on datanalytics-int.worldbank.org;
+  # the GUID is auto-generated and can be copied from there.
+  oauth_guid <- Sys.getenv("OAUTH_INTEGRATION_GUID")
+
   client      <- connectapi::connect(server = connect_server, api_key = connect_api_key)
   credentials <- connectapi::get_oauth_content_credentials(
     connect  = client,
-    audience = OAUTH_INTEGRATION_GUID
+    audience = oauth_guid
   )
   credentials$access_token
 }
@@ -84,9 +83,9 @@ get_azure_token <- function() {
 
 The returned `access_token` is a short-lived Azure AD Bearer token that can be used in the `Authorization` header of any mAI Factory request.
 
-### Reactive token in the Shiny server
+### Reactive token in a Shiny app
 
-Because the token is tied to the user session, `pip_GPT` retrieves it once per session using a Shiny `reactive()`:
+Because the token is tied to the user session, retrieve it once per session using a Shiny `reactive()`:
 
 ```r
 azure_token <- shiny::reactive({
@@ -100,15 +99,15 @@ azure_token <- shiny::reactive({
 })
 ```
 
-Any handler that calls the LLM simply calls `azure_token()` to get a valid token, and Shiny's reactivity ensures the retrieval runs at most once per session.
+Any handler that calls the LLM simply calls `azure_token()`, and Shiny's reactivity ensures the retrieval runs at most once per session.
 
-### Prerequisites for replication
+### Prerequisites
 
 To use this pattern in your own app you need:
 
 - The app deployed on the internal Posit Connect instance (`datanalytics-int.worldbank.org`)
 - `API_KEY` set as a Posit Connect environment variable (the Connect API key, not an OpenAI key)
-- The `OAUTH_INTEGRATION_GUID` for the mAI integration — add the mAI OAuth integration on `datanalytics-int.worldbank.org`; the GUID is auto-generated and can be copied from there
+- `OAUTH_INTEGRATION_GUID` set as a Posit Connect environment variable — add the mAI OAuth integration on `datanalytics-int.worldbank.org`; the GUID is auto-generated and can be copied from there
 
 ---
 
@@ -164,192 +163,9 @@ A few design decisions worth noting:
 
 ---
 
-## A Two-Stage Query Classifier
+## Summary
 
-`pip_GPT` handles two types of questions: those about PIP poverty data, and everything else. This distinction matters because data questions require several extra LLM calls (parameter extraction, result summarisation) and a database lookup, whereas general questions can be answered directly.
-
-A naive approach would be to send every question to the LLM with a classification prompt. This adds latency and token cost to every interaction — including simple greetings or general knowledge questions. Instead, `pip_GPT` uses a **two-stage classifier** that avoids LLM calls whenever possible.
-
-```{mermaid}
-flowchart TD
-    A([User sends question]) --> B{Stage 1<br/>Keyword check}
-    B -->|Match found| C[is_data_query = yes]
-    B -->|No match| D[Stage 2<br/>LLM classifier]
-    D -->|yes| C
-    D -->|no| E[is_data_query = no]
-    C --> F[Extract params via LLM<br/>Fetch & filter data<br/>Optional: build plot<br/>Summarise via LLM]
-    E --> G[Direct LLM answer]
-    F --> H([Display response])
-    G --> H
-```
-
-### Stage 1: Fast keyword detection (zero LLM cost)
-
-`is_data_keyword()` uses regex to detect poverty-domain signals in the question. If any pattern matches, the question is classified as a data query immediately — no API call needed.
-
-```r
-is_data_keyword <- function(question) {
-  # Core PIP / poverty-domain keywords
-  pip_keywords <- c(
-    "PIP",                        # explicit PIP data reference
-    "poverty line",
-    "poverty gap",
-    "poverty rate",
-    "poverty data",
-    "headcount",
-    "welfare",
-    "povline",
-    "\\$\\s*\\d",                 # dollar poverty lines: $2.15, $3.65 etc.
-    "\\d+\\.?\\d*\\s*(usd|\\$)", # amount + USD/$ anywhere
-    "gini",
-    "inequality",
-    "mean consumption",
-    "mean income",
-    "income distribution",
-    "consumption distribution",
-    "reporting level",
-    "welfare type",
-    "fill.?gaps",
-    "nowcast",
-    "\\bget_stats\\b",
-    "\\bpipapi\\b",
-    "\\bpip\\b"                   # standalone "pip" (case-insensitive below)
-  )
-
-  any(grepl(
-    paste(pip_keywords, collapse = "|"),
-    question,
-    ignore.case = TRUE,
-    perl = TRUE
-  ))
-}
-```
-
-### Stage 2: LLM binary classification (only when keywords are inconclusive)
-
-For questions that slip past keyword detection — e.g. *"How poor is Sub-Saharan Africa compared to South Asia?"* — a second stage sends the question to the LLM with a carefully constrained prompt. The prompt provides the full data dictionary and `get_stats()` function signature as context, and strictly requires a single-word `yes` or `no` response.
-
-```r
-build_classify_prompt <- function(dict_text, get_stats_args, user_question) {
-  paste0(
-    "You are a classifier. Your only job is to answer 'yes' or 'no'.\n",
-    "Answer 'yes' if the question asks about ANY of the following:\n",
-    "  - PIP data, poverty data, or World Bank poverty statistics\n",
-    "  - Variables in the poverty dataset listed below\n",
-    "  - Arguments to the get_stats function listed below\n",
-    "  - Country-level poverty, welfare, inequality, or consumption data\n",
-    "  - Headcount ratios, poverty gaps, poverty lines (e.g. $2.15, $3.65)\n",
-    "  - Gini coefficients, mean income, mean consumption\n",
-    "  - Any question naming a specific country AND a poverty-related concept\n",
-    "  - Trends, comparisons, or time-series of the above\n",
-    "Answer 'no' for all other questions (weather, sports, general knowledge, etc.).\n",
-    "Respond with ONLY the single word 'yes' or 'no'. No explanation.\n\n",
-    "Variables and descriptions:\n",
-    dict_text,
-    "\n",
-    get_stats_args,
-    "\nQuestion: ",
-    user_question
-  )
-}
-```
-
-Providing the data dictionary as context is important here: without it, the LLM has no way to know that terms like `headcount`, `welfare_type`, or `decile3` are domain-specific and should trigger a `yes`.
-
-### Dispatch in the server
-
-The two stages are wired together in the `observeEvent` handler:
-
-```r
-# Stage 1: fast keyword check (no LLM call, zero latency)
-keyword_hit <- is_data_keyword(user_question)
-
-if (keyword_hit) {
-  is_data_query <- "yes"
-} else {
-  # Stage 2: LLM classify (only when keywords are inconclusive)
-  classify_prompt <- build_classify_prompt(dict_text, get_stats_args, user_question)
-  is_data_query   <- tolower(trimws(openai_chat_response(classify_prompt, token)))
-}
-```
-
----
-
-## The Full Data Query Pipeline
-
-When `is_data_query == "yes"`, the server runs a four-step pipeline before returning an answer.
-
-### Step 1 — Extract filter parameters from natural language
-
-The LLM is prompted to parse the user's question into a named R list of filter parameters. The prompt includes a country name-to-ISO3 code mapping (180+ countries) to ensure valid codes are returned.
-
-```r
-build_param_prompt <- function(country_map, user_question) {
-  paste0(
-    "Given the following user question, extract only the specified values for the poverty data columns as a named R list. For country_code, use ONLY the valid codes from this mapping: ",
-    country_map,
-    ". Only include columns that are explicitly mentioned or implied in the question. Only return the R list, no explanation. If the value is empty or NULL don't return them.\n",
-    "Columns: country_code, year, reporting_level, welfare_type, region_code, poverty_line.\n",
-    "Question: ",
-    user_question
-  )
-}
-```
-
-The returned code string is cleaned of any markdown fences and evaluated with `eval(parse(...))`:
-
-```r
-param_code_clean <- clean_code(param_code)   # strips ```r ... ``` fences
-params <- tryCatch(
-  eval(parse(text = param_code_clean)),
-  error = function(e) list()
-)
-```
-
-### Step 2 — Fetch and filter local data
-
-Poverty data is pre-cached in FST format (`data/pov_3.fst`), a binary columnar format that loads ~10x faster than CSV. The extracted parameters are applied as successive `dplyr::filter()` calls:
-
-```r
-pov_data <- get_poverty_data(povline)   # reads FST cache
-
-filtered <- pov_data
-for (nm in names(params)) {
-  if (nm != "poverty_line") {
-    filtered <- dplyr::filter(filtered, .data[[nm]] %in% params[[nm]])
-  }
-}
-```
-
-### Step 3 — Generate a plot (optional)
-
-If the question contains plot-related keywords (`"plot"`, `"visualize"`, `"chart"`, `"trend"`, etc.), a `ggplot2` chart is built automatically. `build_chat_plot()` infers the y-axis variable by scoring each column's dictionary description against the words in the user's question, then falls back to a priority list (`headcount` > `poverty_gap` > `pop` > `mean` > `gini`) if no strong match is found. When multiple countries are present in the filtered data, the chart colours by country.
-
-### Step 4 — Summarise the result in plain language
-
-The filtered data is serialised to JSON and sent back to the LLM with a final extraction prompt:
-
-```r
-build_extract_prompt <- function(user_question, result_json) {
-  paste0(
-    "Given the following user question and the filtered data in JSON format, extract and present only the relevant information that answers the question.\n",
-    "User question: ",
-    user_question,
-    "\n",
-    "Filtered data (JSON): ",
-    result_json,
-    "\nRespond concisely."
-  )
-}
-```
-
-The LLM's plain-language answer is rendered as markdown in the chat UI.
-
----
-
-## Key Takeaways and Replication Notes
-
-The integration pattern used in `pip_GPT` can be summarised as:
+The full integration pattern looks like this:
 
 ```{mermaid}
 flowchart LR
@@ -358,16 +174,14 @@ flowchart LR
     C -->|Azure OpenAI API| D[GPT-4o-mini<br/>deployment]
 ```
 
-To replicate this in your own R Shiny project:
+To replicate this in your own R project:
 
 | Requirement | Detail |
 |---|---|
 | Posit Connect deployment | App must run on the internal Connect server (`datanalytics-int.worldbank.org`) |
 | `API_KEY` env var | Your Posit Connect API key, set in the app's environment variables on Connect |
-| OAuth integration GUID | Add the mAI OAuth integration on `datanalytics-int.worldbank.org`; the GUID is auto-generated when the integration is added and can be copied from there |
+| `OAUTH_INTEGRATION_GUID` env var | Add the mAI OAuth integration on `datanalytics-int.worldbank.org`; the GUID is auto-generated and can be copied from there |
 | `x-team-name` header | Set to your team's identifier for usage attribution |
 | Environment choice | Start with DEV; graduate to QA/PROD when ready for production traffic |
 
-The `connectapi` and `httr` packages are the only non-standard dependencies for the integration itself. The rest of the stack — Shiny, `dplyr`, `ggplot2` — is standard R.
-
-One aspect worth emphasising for prompt engineering: **always provide domain context in classification prompts.** In `pip_GPT`, the full data dictionary is injected into the classifier prompt. Without it, the LLM cannot reliably distinguish `"What is India's headcount?"` (a data query) from `"What is a headcount?"` (a general question). The more precisely you define the boundaries of your domain, the more reliably the classifier performs.
+The `connectapi` and `httr` packages are the only non-standard dependencies for the integration itself.
