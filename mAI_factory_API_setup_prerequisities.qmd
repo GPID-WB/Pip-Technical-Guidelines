@@ -1,0 +1,63 @@
+:::{.text-center}
+
+# mAI Factory Setup
+
+These instructions walk you through setting up a local instance (Desktop Access) of **mAI Factory**, which gives you access to the company's internal models — ranging from GPT-4o mini to Claude Sonnet 5.
+
+mAI Factory provides a single, secure gateway to a growing catalog of internal and third-party AI models, so teams can experiment and build without managing separate accounts, keys, or billing for each provider. Setting up a local instance lets you integrate these models directly into tools like `survey-scribe` for tasks such as document parsing, extraction, and classification.
+
+For more information on mAI Factory, visit: <https://ai.worldbankgroup.org/maifactory/>
+
+> **Note:** The tasks in this guide are written for **Windows** users.
+:::
+
+## Prerequisites
+
+Before starting the setup steps in this guide, make sure the following are in place. These instructions assume you are using VS Code on Windows.
+
+### Python 3.12
+
+Install Python, or update your existing installation, to a version up to and including **3.12**. You can download the latest compatible installer from the [official Python website](https://www.python.org/downloads/) and verify your version with:
+
+```powershell
+python --version
+```
+
+### Connected to the World Bank GlobalProtect VPN
+
+You must be connected to the World Bank **GlobalProtect VPN**, on the **US East** gateway.
+
+- If you are in the DC office and connected to the **bluemarlin** WiFi network, you do not need to worry about which region the gateway is on — as long as the GlobalProtect client shows the connection status as **"Connected"**, you're good to go.
+- If you are outside the DC office (or not on bluemarlin), connect to GlobalProtect and select the **US East** gateway explicitly.
+
+![GlobalProtect showing a connected status](images/globalprotect-connected.png)
+
+### Install `uv`
+
+`uv` is used to manage the Python environment and dependencies for this project. To install it on Windows:
+
+1. Visit the [UV releases page](https://github.com/astral-sh/uv/releases).
+2. Download the latest `uv-x86_64-pc-windows-msvc.zip` file.
+3. Create a `bin` folder in your home directory:
+
+   ```
+   C:\Users\<wbupi>\bin
+   ```
+
+4. Extract the contents of the zip file and move them into the `bin` folder you just created.
+
+
+5. Configure VS Code so its integrated terminal can find `uv` on `PATH`. Open the VS Code settings (JSON) file — `Ctrl+Shift+P` → **Preferences: Open User Settings (JSON)** — and add the following:
+
+   ```json
+   {
+     "terminal.integrated.env.windows": {
+       "PATH": "${env:PATH};C://Users//wbupi//bin"
+     }
+   }
+   ```
+
+  ![Where to add the PATH configuration in VS Code settings.json](images/settings.png)
+
+   Replace `wbupi` with your own Windows username, then restart any open terminals in VS Code for the change to take effect.
+
