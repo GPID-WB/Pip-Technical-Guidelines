@@ -36,11 +36,15 @@ book:
         - github_actions.qmd
         - Increase_performance_WB_laptop.qmd
         - interact_vm.qmd
-    - part: "mAI Factory API Desktop Setup"
+    - part: "mAI Factory"
       chapters:
         - mAI_factory_API_setup_prerequisities.qmd
         - mAI_factory_setup_access_request.qmd
         - mAI_factory_environment_setup.qmd
+        - mAI_integration.qmd
+    - part: "Shiny Apps with Posit Connect"
+      chapters:
+        - shiny_github_posit_connect.qmd
   appendices:
     - references.qmd
 

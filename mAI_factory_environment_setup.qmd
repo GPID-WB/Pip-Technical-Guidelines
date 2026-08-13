@@ -1,6 +1,22 @@
+---
+title: "Environment Setup and Configuration"
+author:
+  - Stephen Obundah Nwobike
+  - R.Andres Castaneda
+---
+
 # Environment Setup and Configuration
 
-Once your ITSAI on-boarding request has been approved and `uv` is set up on your machine, it's time to generate the access token that lets you authenticate against mAI Factory.
+Once your [ITSAI on-boarding request](mAI_factory_setup_access_request.qmd) has been approved and [`uv` is installed](mAI_factory_API_setup_prerequisities.qmd), it's time to configure credentials and verify your first API call.
+
+> **Reminder — two different credentials:**
+>
+> 1. **Artifactory identity token** — used only to download the `itsai-platform` SDK from the internal package repository.
+> 2. **mAI Factory access token** — used to call the AI models. For Desktop Access there is no static key; the SDK obtains it via an interactive browser login (covered below).
+
+## Step 1: Generate Your Artifactory Token
+
+This token lets `uv` install packages from the World Bank's internal JFrog repository.
 
 ### Access the Artifactory Login Page
 
@@ -23,47 +39,133 @@ Once your ITSAI on-boarding request has been approved and `uv` is set up on your
 - You may see the message **"You do not have deploy permissions to this repository."** You can safely ignore it because deploy permissions are not required to generate a token or install the package.
 - Generate a new token using **"Get token & Generate Instructions"**.
 
-### Configure the Artifactory Index URL
+## Step 2: Configure the Artifactory Index URL
 
-- Copy `your-username` and `your-access-token` from your JFrog setup.
-- In `your-username`, replace spaces with `%20`. Example: `John Doe` → `john%20doe`.
-- In your project IDE, create a `.env` file and add the URL from the JFrog setup as `UV_INDEX`:
+Copy `your-username` and `your-access-token` from your JFrog setup. In `your-username`, replace spaces with `%20` (e.g., `John Doe` → `john%20doe`).
 
-```dotenv
-UV_INDEX="https://your-username:your-access-token@artifactory.worldbank.org/artifactory/api/pypi/itsdt-pypi-virtual/simple"
-```
+The `UV_INDEX` environment variable tells `uv` where to find the internal package repository. You can set it **temporarily** (per terminal session) or **permanently** (in your shell profile).
 
-### Install the `itsai-platform` Package
+::: {.panel-tabset}
 
-Open a terminal in your project directory and run the following commands:
+#### Windows — temporary
 
 ```powershell
-uv init # if there is no pyproject.toml file in the current directory
-uv sync
-# With pip (using uv's pip wrapper):
-uv pip install --extra-index-url https://your-username:your-access-token@artifactory.worldbank.org/artifactory/api/pypi/itsdt-pypi-virtual/simple "itsai-platform"
+$env:UV_INDEX = "https://your-username:your-access-token@artifactory.worldbank.org/artifactory/api/pypi/itsdt-pypi-virtual/simple"
 ```
 
-### Verify Desktop Authentication (WAM)
+Verify:
+
+```powershell
+echo $env:UV_INDEX
+```
+
+#### Windows — permanent (PowerShell profile)
+
+To persist across terminal sessions, add the `$env:UV_INDEX = ...` line to your PowerShell profile:
+
+```powershell
+notepad $PROFILE
+```
+
+Paste the `$env:UV_INDEX` line, save, and restart your terminal.
+
+#### macOS — temporary
+
+```bash
+export UV_INDEX="https://your-username:your-access-token@artifactory.worldbank.org/artifactory/api/pypi/itsdt-pypi-virtual/simple"
+```
+
+Verify (the `export` command produces no visible output on success):
+
+```bash
+echo $UV_INDEX
+```
+
+#### macOS — permanent (shell profile)
+
+To persist across terminal sessions:
+
+1. Open your shell profile: `nano ~/.zshrc`
+2. Paste the `export` line at the bottom of the file.
+3. Save and exit: `Ctrl+O`, then `Enter`, then `Ctrl+X`.
+4. Reload in the current terminal: `source ~/.zshrc`
+
+From now on, every new terminal window will automatically have `UV_INDEX` set.
+
+:::
+
+> **Security note:** Your shell profile (or `.env` file) will contain the token in plain text. Do not share your user account, and never commit the token into any code repository. Regenerate the token in Artifactory if you ever suspect it has been exposed.
+
+## Step 3: Install the `itsai-platform` Package
+
+With `UV_INDEX` set, create a project environment and install the SDK:
+
+::: {.panel-tabset}
+
+#### Windows
+
+```powershell
+uv init          # if there is no pyproject.toml in the current directory
+uv add itsai-platform pyjwt
+```
+
+#### macOS
+
+```bash
+uv init          # if there is no pyproject.toml in the current directory
+uv add itsai-platform pyjwt
+```
+
+:::
+
+## Step 4: Verify Desktop Authentication
 
 This is the natural next step after installing `itsai-platform`. Once this runs successfully, you are onboarded and authenticated, and ready to use mAI Factory APIs.
 
-Before running the authentication script, make sure your Python virtual environment is activated. In your Windows terminal, run:
+Before running the authentication script, make sure your Python virtual environment is activated:
+
+::: {.panel-tabset}
+
+#### Windows
 
 ```powershell
 venv\Scripts\activate
 ```
+
+#### macOS
+
+```bash
+source .venv/bin/activate
+```
+
+:::
+
+Then run:
 
 ```python
 # desktop_auth.py
 from itsai.platform.authentication import DesktopToken
 
 token_provider = DesktopToken()
-access_token = token_provider.get_token(env="DEV")  # "DEV", "QA", "PROD"
+access_token = token_provider.get_token(env="DEV_DESKTOP")  # "DEV_DESKTOP", "QA_DESKTOP", "PROD_DESKTOP"
 print("Authentication successful!")
 ```
 
-### Test an mAI Factory API Call
+The first call opens a browser window prompting you to log in with your WBG credentials. Once authenticated, the token is cached and auto-refreshes on later calls.
+
+> **Environment strings:** Use `"DEV_DESKTOP"` for testing and proof-of-concept work. The QA and PROD equivalents (`"QA_DESKTOP"`, `"PROD_DESKTOP"`) require additional app registration under an ACN.
+
+## Step 5: Health Check
+
+Before making a real model call, confirm the gateway is reachable:
+
+```
+GET https://azapimdev.worldbank.org/conversationalai/platform/health/
+```
+
+Expected response: `{"status": "healthy"}`
+
+## Step 6: Test an mAI Factory API Call
 
 After the authentication test prints `Authentication successful!`, run this small end-to-end request to confirm that your account can call a model through mAI Factory:
 
@@ -100,4 +202,117 @@ If the request succeeds, the response should be:
 mAI Factory API call successful
 ```
 
-This confirms both desktop authentication and model access. If authentication succeeds in step 5 but this request fails, record the HTTP status code and error message when contacting the ITSAI platform team; never include the access token.
+This confirms both desktop authentication and model access. If authentication succeeds in Step 4 but this request fails, record the HTTP status code and error message when contacting the ITSAI platform team; never include the access token.
+
+## Keeping API Access Persistent
+
+The setup above works per-project. If you want mAI Factory access available **automatically in every new project** without repeating the configuration, you can make the environment persistent.
+
+### Option A: Shell profile (recommended)
+
+Add the `UV_INDEX` export to your shell profile so `uv` can always find the internal package repository (see [Step 2](#step-2-configure-the-artifactory-index-url) above). Then install `itsai-platform` globally or in a shared virtual environment that you activate in each project.
+
+::: {.panel-tabset}
+
+#### Windows (PowerShell profile)
+
+```powershell
+# Add to $PROFILE — runs on every new terminal
+$env:UV_INDEX = "https://your-username:your-access-token@artifactory.worldbank.org/artifactory/api/pypi/itsdt-pypi-virtual/simple"
+```
+
+#### macOS (~/.zshrc)
+
+```bash
+# Add to ~/.zshrc — runs on every new terminal
+export UV_INDEX="https://your-username:your-access-token@artifactory.worldbank.org/artifactory/api/pypi/itsdt-pypi-virtual/simple"
+```
+
+:::
+
+### Option B: Shared virtual environment
+
+Create a single virtual environment outside any project folder and activate it whenever you need mAI Factory access:
+
+::: {.panel-tabset}
+
+#### Windows
+
+```powershell
+python -m venv C:\Users\<username>\venvs\mai-factory
+C:\Users\<username>\venvs\mai-factory\Scripts\activate
+uv pip install --extra-index-url $env:UV_INDEX itsai-platform pyjwt openai
+```
+
+#### macOS
+
+```bash
+python3 -m venv ~/venvs/mai-factory
+source ~/venvs/mai-factory/bin/activate
+uv pip install --extra-index-url "$UV_INDEX" itsai-platform pyjwt openai
+```
+
+:::
+
+You can add the `activate` line to your shell profile to have it load automatically, or create a short alias:
+
+::: {.panel-tabset}
+
+#### Windows (PowerShell alias in `$PROFILE`)
+
+```powershell
+function mai-activate { & "C:\Users\<username>\venvs\mai-factory\Scripts\activate" }
+```
+
+#### macOS (alias in `~/.zshrc`)
+
+```bash
+alias mai-activate="source ~/venvs/mai-factory/bin/activate"
+```
+
+:::
+
+## Making API Calls Outside the SDK
+
+Once authenticated, you can also call the mAI Factory API directly with `httr` (R), `requests` (Python), or any HTTP client. The key elements are:
+
+| Component | Value |
+|---|---|
+| Base URL (DEV) | `https://azapimdev.worldbank.org/conversationalai/v2/openai/deployments` |
+| URL structure | `{base_url}/{model}/chat/completions?api-version={version}` |
+| Auth header | `Authorization: Bearer {your-access-token}` |
+| Required audit headers | `x-source-type: interactive`, `x-team-name: pip` |
+| API version | `2025-01-01-preview` (or `2025-04-01-preview`) |
+
+For a first test, `gpt-4.1-mini` is a lightweight, low-cost model to verify your pipeline works end to end.
+
+Example endpoints beyond Azure OpenAI:
+
+- **Gemini chat:** `/platform/gemini/chat/`
+- **Claude via Bedrock:** `/bedrock/model/{model_id}/converse`
+
+## Troubleshooting Checklist
+
+If a call fails, check:
+
+- [ ] `UV_INDEX` is set correctly (`echo $UV_INDEX` shows the expected value)
+- [ ] `itsai-platform` is installed in your active virtual environment
+- [ ] You used the string `"DEV_DESKTOP"` (not `"DEV"` or a raw scope/GUID) as the `env` argument
+- [ ] You are connected to VPN in the **US East** region
+- [ ] The health endpoint returns `{"status": "healthy"}` (see [Step 5](#step-5-health-check))
+
+If everything checks out and it's still failing, this likely points to an onboarding/permissions issue rather than a code issue.
+
+## Getting Further Help
+
+- **Onboarding or authentication issues:** [itsai_platform_admin@worldbankgroup.org](mailto:itsai_platform_admin@worldbankgroup.org)
+- **Full documentation:** [mAI Factory Documentation](https://ai.worldbank.org/platform/documentation)
+- **Risk-free experimentation before writing code:** [Model Garden Sandbox](https://ai.worldbank.org/platform/modelgarden)
+
+## Related chapters
+
+| Topic | Chapter |
+|---|---|
+| Install Python and `uv` | [Prerequisites](mAI_factory_API_setup_prerequisities.qmd) |
+| Request ITSAI platform access | [On-Boarding Request](mAI_factory_setup_access_request.qmd) |
+| R/Shiny integration via Posit Connect | [R/Shiny Integration](mAI_integration.qmd) |
