@@ -23,12 +23,13 @@ This book focuses on **technical infrastructure and development practices**, not
 - Integrating Git and GitHub into daily work with proper authentication and branching strategies
 - Implementing GitHub Actions for continuous integration and automated deployment
 - Using GitHub Copilot responsibly and effectively, with mandatory protocols for code quality
+- Setting up secure access to mAI Factory APIs, from prerequisites and ITSAI onboarding through local Python environment configuration
 - Optimizing performance on World Bank laptops and virtual machines
 - Managing code coverage, testing frameworks, and documentation standards
 
 ## Audience
 
-This guide is written for PIP team members; data scientists, economists, and developers working with R, Stata, and related tools. While many sections assume familiarity with programming concepts, we provide step-by-step instructions designed to work in the World Bank's computing environment.
+This guide is written for PIP team members, including data scientists, economists, and developers working with R, Stata, AI-assisted development tools, and mAI Factory APIs. It supports both colleagues configuring their core development environment and those requesting access to and setting up the mAI Factory API on a World Bank desktop. While many sections assume familiarity with programming concepts, we provide step-by-step instructions designed to work in the World Bank's computing environment.
 
 ## A Living Document
 

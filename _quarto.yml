@@ -36,6 +36,11 @@ book:
         - github_actions.qmd
         - Increase_performance_WB_laptop.qmd
         - interact_vm.qmd
+    - part: "mAI Factory API Desktop Setup"
+      chapters:
+        - mAI_factory_API_setup_prerequisities.qmd
+        - mAI_factory_setup_access_request.qmd
+        - mAI_factory_environment_setup.qmd
   appendices:
     - references.qmd
 
