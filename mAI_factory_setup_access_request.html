@@ -6,6 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Stephen Obundah Nwobike">
+<meta name="author" content="R.Andres Castaneda">
 
 <title>13&nbsp; ITSAI Platform On-Boarding Request – Pip Technical Guidelines</title>
 <style>
@@ -89,7 +91,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./mAI_factory_API_setup_prerequisities.html">mAI Factory API Desktop Setup</a></li><li class="breadcrumb-item"><a href="./mAI_factory_setup_access_request.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">ITSAI Platform On-Boarding Request</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./mAI_factory_API_setup_prerequisities.html">mAI Factory</a></li><li class="breadcrumb-item"><a href="./mAI_factory_setup_access_request.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">ITSAI Platform On-Boarding Request</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -233,7 +235,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
- <span class="menu-text">mAI Factory API Desktop Setup</span></a>
+ <span class="menu-text">mAI Factory</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -242,7 +244,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./mAI_factory_API_setup_prerequisities.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">mAI Factory Setup</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">mAI Factory Desktop Setup — Prerequisites</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -257,17 +259,40 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Environment Setup and Configuration</span></span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mAI_integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R</span></span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
- <span class="menu-text">Appendices</span></a>
+ <span class="menu-text">Shiny Apps with Posit Connect</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./shiny_github_posit_connect.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Building a Shiny App with GitHub and Posit Connect</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
@@ -286,16 +311,20 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#why-this-step-matters" id="toc-why-this-step-matters" class="nav-link active" data-scroll-target="#why-this-step-matters"><span class="header-section-number">13.1</span> Why this step matters</a></li>
-  <li><a href="#how-to-request-access" id="toc-how-to-request-access" class="nav-link" data-scroll-target="#how-to-request-access"><span class="header-section-number">13.2</span> How to request access</a></li>
-  <li><a href="#what-to-do-while-you-wait" id="toc-what-to-do-while-you-wait" class="nav-link" data-scroll-target="#what-to-do-while-you-wait"><span class="header-section-number">13.3</span> What to do while you wait</a></li>
+  <li><a href="#itsai-platform-on-boarding-request" id="toc-itsai-platform-on-boarding-request" class="nav-link active" data-scroll-target="#itsai-platform-on-boarding-request"><span class="header-section-number">14</span> ITSAI Platform On-Boarding Request</a>
+  <ul class="collapse">
+  <li><a href="#why-this-step-matters" id="toc-why-this-step-matters" class="nav-link" data-scroll-target="#why-this-step-matters"><span class="header-section-number">14.1</span> Why this step matters</a></li>
+  <li><a href="#how-to-request-access" id="toc-how-to-request-access" class="nav-link" data-scroll-target="#how-to-request-access"><span class="header-section-number">14.2</span> How to request access</a></li>
+  <li><a href="#what-to-do-while-you-wait" id="toc-what-to-do-while-you-wait" class="nav-link" data-scroll-target="#what-to-do-while-you-wait"><span class="header-section-number">14.3</span> What to do while you wait</a></li>
+  <li><a href="#related-chapters" id="toc-related-chapters" class="nav-link" data-scroll-target="#related-chapters"><span class="header-section-number">14.4</span> Related chapters</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./mAI_factory_API_setup_prerequisities.html">mAI Factory API Desktop Setup</a></li><li class="breadcrumb-item"><a href="./mAI_factory_setup_access_request.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">ITSAI Platform On-Boarding Request</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./mAI_factory_API_setup_prerequisities.html">mAI Factory</a></li><li class="breadcrumb-item"><a href="./mAI_factory_setup_access_request.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">ITSAI Platform On-Boarding Request</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">ITSAI Platform On-Boarding Request</span></h1>
 </div>
@@ -304,6 +333,13 @@ ul.task-list li input[type="checkbox"] {
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Authors</div>
+    <div class="quarto-title-meta-contents">
+             <p>Stephen Obundah Nwobike </p>
+             <p>R.Andres Castaneda </p>
+          </div>
+  </div>
     
   
     
@@ -314,17 +350,22 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="itsai-platform-on-boarding-request" class="level1" data-number="14">
+<h1 data-number="14"><span class="header-section-number">14</span> ITSAI Platform On-Boarding Request</h1>
 <p>Before you can call any model through mAI Factory, you first need access to the <strong>ITSAI platform</strong>. This is the identity and access layer that issues the credentials — an API token and a base URL — required to authenticate every request the pipeline makes. Without completing this step, none of the later configuration (environment variables, client setup, test calls) will work, so treat this as the mandatory starting point.</p>
-<section id="why-this-step-matters" class="level2" data-number="13.1">
-<h2 data-number="13.1" class="anchored" data-anchor-id="why-this-step-matters"><span class="header-section-number">13.1</span> Why this step matters</h2>
+<blockquote class="blockquote">
+<p><strong>Already have access?</strong> Skip ahead to <a href="./mAI_factory_environment_setup.html">Environment Setup and Configuration</a>.</p>
+</blockquote>
+<section id="why-this-step-matters" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="why-this-step-matters"><span class="header-section-number">14.1</span> Why this step matters</h2>
 <ul>
 <li>The ITSAI platform manages who is allowed to consume internal AI models.</li>
 <li>Access is granted per-user, so each team member running this pipeline needs their own on-boarding request.</li>
 <li>The token you receive is tied to your account and should be treated like a password — never commit it to source control or share it over chat/email.</li>
 </ul>
 </section>
-<section id="how-to-request-access" class="level2" data-number="13.2">
-<h2 data-number="13.2" class="anchored" data-anchor-id="how-to-request-access"><span class="header-section-number">13.2</span> How to request access</h2>
+<section id="how-to-request-access" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="how-to-request-access"><span class="header-section-number">14.2</span> How to request access</h2>
 <p><strong>If you are a World Bank staff member:</strong></p>
 <ol type="1">
 <li>Open the onboarding request form: <a href="https://worldbankgroup.service-now.com/wbg/en/itsai-platform-on-boarding-request?id=wbg_sc_catalog&amp;sys_id=7715cc6d93ac96d0a2f6fd647aba1042">mAI Factory Onboarding Request</a>.</li>
@@ -340,18 +381,44 @@ ul.task-list li input[type="checkbox"] {
 <p><strong>If you are an IFC user:</strong></p>
 <p>Do <strong>not</strong> use the standard ServiceNow form above — it is not configured for IFC accounts. Instead, email <a href="mailto:itsai_platform_admin@worldbankgroup.org">itsai_platform_admin@worldbankgroup.org</a> directly to request the IFC-specific onboarding form.</p>
 </section>
-<section id="what-to-do-while-you-wait" class="level2" data-number="13.3">
-<h2 data-number="13.3" class="anchored" data-anchor-id="what-to-do-while-you-wait"><span class="header-section-number">13.3</span> What to do while you wait</h2>
+<section id="what-to-do-while-you-wait" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="what-to-do-while-you-wait"><span class="header-section-number">14.3</span> What to do while you wait</h2>
 <p>Approval isn’t instant, so while your request is pending you can:</p>
 <ul>
 <li>Read ahead to <a href="./mAI_factory_environment_setup.html">Environment Setup and Configuration</a> to understand what you’ll do with the token once it arrives.</li>
-<li>Confirm you have a working Python/Windows environment set up (see the <a href="./mAI_factory_API_setup_prerequisities.html">Prerequisites</a>) so you’re ready to configure credentials as soon as access is granted.</li>
+<li>Confirm you have a working Python environment set up (see the <a href="./mAI_factory_API_setup_prerequisities.html">Prerequisites</a>) so you’re ready to configure credentials as soon as access is granted.</li>
 </ul>
 <blockquote class="blockquote">
 <p><strong>Tip:</strong> Keep the ticket number from your request handy — you may need it if you have to follow up on a delayed approval.</p>
 </blockquote>
+</section>
+<section id="related-chapters" class="level2" data-number="14.4">
+<h2 data-number="14.4" class="anchored" data-anchor-id="related-chapters"><span class="header-section-number">14.4</span> Related chapters</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Topic</th>
+<th>Chapter</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Install Python and <code>uv</code></td>
+<td><a href="./mAI_factory_API_setup_prerequisities.html">Prerequisites</a></td>
+</tr>
+<tr class="even">
+<td>Configure credentials and test your first call</td>
+<td><a href="./mAI_factory_environment_setup.html">Environment Setup and Configuration</a></td>
+</tr>
+<tr class="odd">
+<td>R/Shiny integration via Posit Connect (no ITSAI on-boarding needed)</td>
+<td><a href="./mAI_integration.html">R/Shiny Integration</a></td>
+</tr>
+</tbody>
+</table>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -757,8 +824,8 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./mAI_factory_API_setup_prerequisities.html" class="pagination-link" aria-label="mAI Factory Setup">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">mAI Factory Setup</span></span>
+      <a href="./mAI_factory_API_setup_prerequisities.html" class="pagination-link" aria-label="mAI Factory Desktop Setup — Prerequisites">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">mAI Factory Desktop Setup — Prerequisites</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

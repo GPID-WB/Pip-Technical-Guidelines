@@ -24,7 +24,7 @@
     "href": "index.html#scope",
     "title": "Pip Technical Guidelines",
     "section": "Scope",
-    "text": "Scope\nThis book focuses on technical infrastructure and development practices, not statistical methodologies or economic theory. You’ll find guidance on:\n\nSetting up R, RStudio, and Positron with unified configurations\nConfiguring VS Code for Stata development with automated workflows\nIntegrating Git and GitHub into daily work with proper authentication and branching strategies\nImplementing GitHub Actions for continuous integration and automated deployment\nUsing GitHub Copilot responsibly and effectively, with mandatory protocols for code quality\nSetting up secure access to mAI Factory APIs, from prerequisites and ITSAI onboarding through local Python environment configuration\nOptimizing performance on World Bank laptops and virtual machines\nManaging code coverage, testing frameworks, and documentation standards",
+    "text": "Scope\nThis book focuses on technical infrastructure and development practices, not statistical methodologies or economic theory. You’ll find guidance on:\n\nSetting up R, RStudio, and Positron with unified configurations\nConfiguring VS Code for Stata development with automated workflows\nIntegrating Git and GitHub into daily work with proper authentication and branching strategies\nImplementing GitHub Actions for continuous integration and automated deployment\nUsing GitHub Copilot responsibly and effectively, with mandatory protocols for code quality\nSetting up secure access to mAI Factory APIs, from prerequisites and ITSAI onboarding through local Python environment configuration, and integrating Azure OpenAI into R/Shiny applications via Posit Connect OAuth\nOptimizing performance on World Bank laptops and virtual machines\nManaging code coverage, testing frameworks, and documentation standards",
     "crumbs": [
       "Preface"
     ]
@@ -34,7 +34,7 @@
     "href": "index.html#audience",
     "title": "Pip Technical Guidelines",
     "section": "Audience",
-    "text": "Audience\nThis guide is written for PIP team members, including data scientists, economists, and developers working with R, Stata, AI-assisted development tools, and mAI Factory APIs. It supports both colleagues configuring their core development environment and those requesting access to and setting up the mAI Factory API on a World Bank desktop. While many sections assume familiarity with programming concepts, we provide step-by-step instructions designed to work in the World Bank’s computing environment.",
+    "text": "Audience\nThis guide is written for PIP team members, including data scientists, economists, and developers working with R, Stata, AI-assisted development tools, and mAI Factory APIs. It supports both colleagues configuring their core development environment, those requesting access to and setting up the mAI Factory API on a World Bank desktop, and those integrating Azure OpenAI into R/Shiny applications via Posit Connect. While many sections assume familiarity with programming concepts, we provide step-by-step instructions designed to work in the World Bank’s computing environment.",
     "crumbs": [
       "Preface"
     ]
@@ -899,23 +899,56 @@
   {
     "objectID": "mAI_factory_API_setup_prerequisities.html",
     "href": "mAI_factory_API_setup_prerequisities.html",
-    "title": "12  mAI Factory Setup",
+    "title": "12  mAI Factory Desktop Setup — Prerequisites",
     "section": "",
-    "text": "12.1 Prerequisites\nBefore starting the setup steps in this guide, make sure the following are in place. These instructions assume you are using VS Code on Windows.",
+    "text": "13 mAI Factory Setup\nThese instructions walk you through setting up a local instance (Desktop Access) of mAI Factory, which gives you access to the company’s internal models — ranging from GPT-4o mini to Claude Sonnet 5.\nmAI Factory provides a single, secure gateway to a growing catalog of internal and third-party AI models, so teams can experiment and build without managing separate accounts, keys, or billing for each provider. Setting up a local instance lets you integrate these models directly into tools like survey-scribe for tasks such as document parsing, extraction, and classification.\nFor more information on mAI Factory, visit: https://ai.worldbankgroup.org/maifactory/",
     "crumbs": [
-      "mAI Factory API Desktop Setup",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>mAI Factory Setup</span>"
+      "mAI Factory",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>mAI Factory Desktop Setup — Prerequisites</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_API_setup_prerequisities.html#overview",
+    "href": "mAI_factory_API_setup_prerequisities.html#overview",
+    "title": "12  mAI Factory Desktop Setup — Prerequisites",
+    "section": "13.1 Overview",
+    "text": "13.1 Overview\nSetting up Desktop Access to mAI Factory involves three stages:\n\nPrerequisites (this chapter) — install the required tools on your machine\nOn-Boarding Request — request access to the ITSAI platform\nEnvironment Setup and Configuration — configure credentials and verify your first API call\n\nIf you plan to call mAI Factory from an R/Shiny app deployed on Posit Connect (rather than from a local Python script), see the separate R/Shiny integration guide instead.",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>mAI Factory Desktop Setup — Prerequisites</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_API_setup_prerequisities.html#understand-the-two-credentials",
+    "href": "mAI_factory_API_setup_prerequisities.html#understand-the-two-credentials",
+    "title": "12  mAI Factory Desktop Setup — Prerequisites",
+    "section": "13.2 Understand the Two Credentials",
+    "text": "13.2 Understand the Two Credentials\nThere are two separate credentials involved in this setup. It is important not to confuse them:\n\nArtifactory identity token (username + reference token generated in JFrog) — used only to authenticate to the World Bank’s internal package repository so you can download the itsai-platform SDK. It is not used to call the AI models.\nmAI Factory access token — this is what actually authenticates your calls to the AI models. For Desktop Access, there is no static key to generate; it comes from an interactive browser login handled by the SDK itself (covered in Environment Setup).",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>mAI Factory Desktop Setup — Prerequisites</span>"
     ]
   },
   {
     "objectID": "mAI_factory_API_setup_prerequisities.html#prerequisites",
     "href": "mAI_factory_API_setup_prerequisities.html#prerequisites",
-    "title": "12  mAI Factory Setup",
-    "section": "",
-    "text": "12.1.1 Python 3.12\nInstall Python, or update your existing installation, to a version up to and including 3.12. You can download the latest compatible installer from the official Python website and verify your version with:\npython --version\n\n\n12.1.2 Connected to the World Bank GlobalProtect VPN\nYou must be connected to the World Bank GlobalProtect VPN, on the US East gateway.\n\nIf you are in the DC office and connected to the bluemarlin WiFi network, you do not need to worry about which region the gateway is on — as long as the GlobalProtect client shows the connection status as “Connected”, you’re good to go.\nIf you are outside the DC office (or not on bluemarlin), connect to GlobalProtect and select the US East gateway explicitly.\n\n\n\n\nGlobalProtect showing a connected status\n\n\n\n\n12.1.3 Install uv\nuv is used to manage the Python environment and dependencies for this project. To install it on Windows:\n\nVisit the UV releases page.\nDownload the latest uv-x86_64-pc-windows-msvc.zip file.\nCreate a bin folder in your home directory:\nC:\\Users\\&lt;wbupi&gt;\\bin\nExtract the contents of the zip file and move them into the bin folder you just created.\nConfigure VS Code so its integrated terminal can find uv on PATH. Open the VS Code settings (JSON) file — Ctrl+Shift+P → Preferences: Open User Settings (JSON) — and add the following:\n{\n  \"terminal.integrated.env.windows\": {\n    \"PATH\": \"${env:PATH};C://Users//wbupi//bin\"\n  }\n}\n\n\n\n\nWhere to add the PATH configuration in VS Code settings.json\n\n\nReplace wbupi with your own Windows username, then restart any open terminals in VS Code for the change to take effect.",
+    "title": "12  mAI Factory Desktop Setup — Prerequisites",
+    "section": "13.3 Prerequisites",
+    "text": "13.3 Prerequisites\nBefore starting the setup steps in this guide, make sure the following are in place.\n\n13.3.1 Python 3.12\nInstall Python, or update your existing installation, to a version up to and including 3.12. You can download the latest compatible installer from the official Python website and verify your version with:\n\nWindowsmacOS\n\n\npython --version\n\n\npython3 --version\n\n\n\n\n\n13.3.2 Connected to the World Bank GlobalProtect VPN\nYou must be connected to the World Bank GlobalProtect VPN, on the US East gateway.\n\nIf you are in the DC office and connected to the bluemarlin WiFi network, you do not need to worry about which region the gateway is on — as long as the GlobalProtect client shows the connection status as “Connected”, you’re good to go.\nIf you are outside the DC office (or not on bluemarlin), connect to GlobalProtect and select the US East gateway explicitly.\n\n\n\n\nGlobalProtect showing a connected status\n\n\n\n\n13.3.3 Install uv\nuv is used to manage the Python environment and dependencies for this project.\n\nWindowsmacOS\n\n\n\nVisit the UV releases page.\nDownload the latest uv-x86_64-pc-windows-msvc.zip file.\nCreate a bin folder in your home directory:\nC:\\Users\\&lt;wbupi&gt;\\bin\nExtract the contents of the zip file and move them into the bin folder you just created.\nConfigure VS Code so its integrated terminal can find uv on PATH. Open the VS Code settings (JSON) file — Ctrl+Shift+P → Preferences: Open User Settings (JSON) — and add the following:\n{\n  \"terminal.integrated.env.windows\": {\n    \"PATH\": \"${env:PATH};C://Users//wbupi//bin\"\n  }\n}\n\n\n\n\nWhere to add the PATH configuration in VS Code settings.json\n\n\nReplace wbupi with your own Windows username, then restart any open terminals in VS Code for the change to take effect.\n\n\nThe recommended way to install uv on macOS is via Homebrew:\nbrew install uv\nIf Homebrew itself is not installed, install it first from https://brew.sh, then run the command above.\nAlternative — standalone installer (if you prefer not to use Homebrew):\ncurl -LsSf https://astral.sh/uv/install.sh | sh\nVerify the installation by opening a new terminal window and running:\nuv --version\nYou should see a version number returned.",
     "crumbs": [
-      "mAI Factory API Desktop Setup",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>mAI Factory Setup</span>"
+      "mAI Factory",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>mAI Factory Desktop Setup — Prerequisites</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_API_setup_prerequisities.html#next-steps",
+    "href": "mAI_factory_API_setup_prerequisities.html#next-steps",
+    "title": "12  mAI Factory Desktop Setup — Prerequisites",
+    "section": "13.4 Next Steps",
+    "text": "13.4 Next Steps\nOnce the prerequisites above are in place:\n\nSubmit your ITSAI Platform On-Boarding Request if you have not already done so.\nAfter approval, continue with Environment Setup and Configuration to configure credentials, install the SDK, and verify your first API call.",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>mAI Factory Desktop Setup — Prerequisites</span>"
     ]
   },
   {
@@ -923,9 +956,9 @@
     "href": "mAI_factory_setup_access_request.html",
     "title": "13  ITSAI Platform On-Boarding Request",
     "section": "",
-    "text": "13.1 Why this step matters\nBefore you can call any model through mAI Factory, you first need access to the ITSAI platform. This is the identity and access layer that issues the credentials — an API token and a base URL — required to authenticate every request the pipeline makes. Without completing this step, none of the later configuration (environment variables, client setup, test calls) will work, so treat this as the mandatory starting point.",
+    "text": "14 ITSAI Platform On-Boarding Request\nBefore you can call any model through mAI Factory, you first need access to the ITSAI platform. This is the identity and access layer that issues the credentials — an API token and a base URL — required to authenticate every request the pipeline makes. Without completing this step, none of the later configuration (environment variables, client setup, test calls) will work, so treat this as the mandatory starting point.",
     "crumbs": [
-      "mAI Factory API Desktop Setup",
+      "mAI Factory",
       "<span class='chapter-number'>13</span>  <span class='chapter-title'>ITSAI Platform On-Boarding Request</span>"
     ]
   },
@@ -933,10 +966,10 @@
     "objectID": "mAI_factory_setup_access_request.html#why-this-step-matters",
     "href": "mAI_factory_setup_access_request.html#why-this-step-matters",
     "title": "13  ITSAI Platform On-Boarding Request",
-    "section": "",
-    "text": "The ITSAI platform manages who is allowed to consume internal AI models.\nAccess is granted per-user, so each team member running this pipeline needs their own on-boarding request.\nThe token you receive is tied to your account and should be treated like a password — never commit it to source control or share it over chat/email.",
+    "section": "14.1 Why this step matters",
+    "text": "14.1 Why this step matters\n\nThe ITSAI platform manages who is allowed to consume internal AI models.\nAccess is granted per-user, so each team member running this pipeline needs their own on-boarding request.\nThe token you receive is tied to your account and should be treated like a password — never commit it to source control or share it over chat/email.",
     "crumbs": [
-      "mAI Factory API Desktop Setup",
+      "mAI Factory",
       "<span class='chapter-number'>13</span>  <span class='chapter-title'>ITSAI Platform On-Boarding Request</span>"
     ]
   },
@@ -944,10 +977,10 @@
     "objectID": "mAI_factory_setup_access_request.html#how-to-request-access",
     "href": "mAI_factory_setup_access_request.html#how-to-request-access",
     "title": "13  ITSAI Platform On-Boarding Request",
-    "section": "13.2 How to request access",
-    "text": "13.2 How to request access\nIf you are a World Bank staff member:\n\nOpen the onboarding request form: mAI Factory Onboarding Request.\nOn the form, go to the Access field and select Access to mAI Factory from the drop-down.\nUnder Accessibility, select Desktop from the drop-down.\n\n\n\nFill in the Purpose field based on the project you’re working on (e.g., “Access needed to integrate internal LLMs into the survey-scribe extraction pipeline”).\nSubmit the request and wait for approval. Processing is handled through the standard ServiceNow ticket workflow, so approval time can vary.\nOnce approved, move on to Environment Setup and Configuration.\n\nIf you are an IFC user:\nDo not use the standard ServiceNow form above — it is not configured for IFC accounts. Instead, email itsai_platform_admin@worldbankgroup.org directly to request the IFC-specific onboarding form.",
+    "section": "14.2 How to request access",
+    "text": "14.2 How to request access\nIf you are a World Bank staff member:\n\nOpen the onboarding request form: mAI Factory Onboarding Request.\nOn the form, go to the Access field and select Access to mAI Factory from the drop-down.\nUnder Accessibility, select Desktop from the drop-down.\n\n\n\nFill in the Purpose field based on the project you’re working on (e.g., “Access needed to integrate internal LLMs into the survey-scribe extraction pipeline”).\nSubmit the request and wait for approval. Processing is handled through the standard ServiceNow ticket workflow, so approval time can vary.\nOnce approved, move on to Environment Setup and Configuration.\n\nIf you are an IFC user:\nDo not use the standard ServiceNow form above — it is not configured for IFC accounts. Instead, email itsai_platform_admin@worldbankgroup.org directly to request the IFC-specific onboarding form.",
     "crumbs": [
-      "mAI Factory API Desktop Setup",
+      "mAI Factory",
       "<span class='chapter-number'>13</span>  <span class='chapter-title'>ITSAI Platform On-Boarding Request</span>"
     ]
   },
@@ -955,10 +988,21 @@
     "objectID": "mAI_factory_setup_access_request.html#what-to-do-while-you-wait",
     "href": "mAI_factory_setup_access_request.html#what-to-do-while-you-wait",
     "title": "13  ITSAI Platform On-Boarding Request",
-    "section": "13.3 What to do while you wait",
-    "text": "13.3 What to do while you wait\nApproval isn’t instant, so while your request is pending you can:\n\nRead ahead to Environment Setup and Configuration to understand what you’ll do with the token once it arrives.\nConfirm you have a working Python/Windows environment set up (see the Prerequisites) so you’re ready to configure credentials as soon as access is granted.\n\n\nTip: Keep the ticket number from your request handy — you may need it if you have to follow up on a delayed approval.",
+    "section": "14.3 What to do while you wait",
+    "text": "14.3 What to do while you wait\nApproval isn’t instant, so while your request is pending you can:\n\nRead ahead to Environment Setup and Configuration to understand what you’ll do with the token once it arrives.\nConfirm you have a working Python environment set up (see the Prerequisites) so you’re ready to configure credentials as soon as access is granted.\n\n\nTip: Keep the ticket number from your request handy — you may need it if you have to follow up on a delayed approval.",
     "crumbs": [
-      "mAI Factory API Desktop Setup",
+      "mAI Factory",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>ITSAI Platform On-Boarding Request</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_setup_access_request.html#related-chapters",
+    "href": "mAI_factory_setup_access_request.html#related-chapters",
+    "title": "13  ITSAI Platform On-Boarding Request",
+    "section": "14.4 Related chapters",
+    "text": "14.4 Related chapters\n\n\n\nTopic\nChapter\n\n\n\n\nInstall Python and uv\nPrerequisites\n\n\nConfigure credentials and test your first call\nEnvironment Setup and Configuration\n\n\nR/Shiny integration via Posit Connect (no ITSAI on-boarding needed)\nR/Shiny Integration",
+    "crumbs": [
+      "mAI Factory",
       "<span class='chapter-number'>13</span>  <span class='chapter-title'>ITSAI Platform On-Boarding Request</span>"
     ]
   },
@@ -967,10 +1011,395 @@
     "href": "mAI_factory_environment_setup.html",
     "title": "14  Environment Setup and Configuration",
     "section": "",
-    "text": "Once your ITSAI on-boarding request has been approved and uv is set up on your machine, it’s time to generate the access token that lets you authenticate against mAI Factory.\n\n14.0.1 Access the Artifactory Login Page\n\nNavigate to JFrog Artifactory Login.\nSelect “OpenID OAuth” to log in.\n\n\nTroubleshooting: HTTP 400 Bad Request\nIf the OpenID OAuth login returns an HTTP 400 Bad Request error:\n\nConfirm that GlobalProtect is connected to the correct VPN gateway. Unless you are in the DC office and connected to the bluemarlin WiFi network, use the US East gateway.\nConfirm that your ITSAI platform onboarding request has been approved. Access may not work while the request is still pending.\nClear your browser’s temporary files and cookies, close the browser, and try signing in again.\nIf the error persists after completing these checks, contact ITS for assistance and include the error message and your onboarding request or ticket number.\n\n\n\n\n14.0.2 Generate Your Access Token\n\nNavigate to the itsai-platform repository.\nClick “Set Me Up”, locate the Client drop-down, and change the selection from Poetry to Pip.\nYou may see the message “You do not have deploy permissions to this repository.” You can safely ignore it because deploy permissions are not required to generate a token or install the package.\nGenerate a new token using “Get token & Generate Instructions”.\n\n\n\n14.0.3 Configure the Artifactory Index URL\n\nCopy your-username and your-access-token from your JFrog setup.\nIn your-username, replace spaces with %20. Example: John Doe → john%20doe.\nIn your project IDE, create a .env file and add the URL from the JFrog setup as UV_INDEX:\n\nUV_INDEX=\"https://your-username:your-access-token@artifactory.worldbank.org/artifactory/api/pypi/itsdt-pypi-virtual/simple\"\n\n\n14.0.4 Install the itsai-platform Package\nOpen a terminal in your project directory and run the following commands:\nuv init # if there is no pyproject.toml file in the current directory\nuv sync\n# With pip (using uv's pip wrapper):\nuv pip install --extra-index-url https://your-username:your-access-token@artifactory.worldbank.org/artifactory/api/pypi/itsdt-pypi-virtual/simple \"itsai-platform\"\n\n\n14.0.5 Verify Desktop Authentication (WAM)\nThis is the natural next step after installing itsai-platform. Once this runs successfully, you are onboarded and authenticated, and ready to use mAI Factory APIs.\nBefore running the authentication script, make sure your Python virtual environment is activated. In your Windows terminal, run:\nvenv\\Scripts\\activate\n# desktop_auth.py\nfrom itsai.platform.authentication import DesktopToken\n\ntoken_provider = DesktopToken()\naccess_token = token_provider.get_token(env=\"DEV\")  # \"DEV\", \"QA\", \"PROD\"\nprint(\"Authentication successful!\")\n\n\n14.0.6 Test an mAI Factory API Call\nAfter the authentication test prints Authentication successful!, run this small end-to-end request to confirm that your account can call a model through mAI Factory:\n# test_maifactory.py\nfrom itsai.platform.authentication import DesktopToken\nfrom openai import AzureOpenAI\n\ntoken_provider = DesktopToken()\n\nclient = AzureOpenAI(\n    azure_endpoint=\"https://azapimdev.worldbank.org/conversationalai/v2/\",\n    api_version=\"2025-04-01-preview\",\n    azure_ad_token_provider=lambda: token_provider.get_token(env=\"DEV_DESKTOP\"),\n)\n\nresponse = client.chat.completions.create(\n    model=\"gpt-4.1-mini\",\n    messages=[\n        {\n            \"role\": \"user\",\n            \"content\": \"Reply with exactly: mAI Factory API call successful\",\n        }\n    ],\n    max_tokens=20,\n)\n\nprint(response.choices[0].message.content)\nIf the request succeeds, the response should be:\nmAI Factory API call successful\nThis confirms both desktop authentication and model access. If authentication succeeds in step 5 but this request fails, record the HTTP status code and error message when contacting the ITSAI platform team; never include the access token.",
+    "text": "15 Environment Setup and Configuration\nOnce your ITSAI on-boarding request has been approved and uv is installed, it’s time to configure credentials and verify your first API call.",
     "crumbs": [
-      "mAI Factory API Desktop Setup",
+      "mAI Factory",
       "<span class='chapter-number'>14</span>  <span class='chapter-title'>Environment Setup and Configuration</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_environment_setup.html#step-1-generate-your-artifactory-token",
+    "href": "mAI_factory_environment_setup.html#step-1-generate-your-artifactory-token",
+    "title": "14  Environment Setup and Configuration",
+    "section": "15.1 Step 1: Generate Your Artifactory Token",
+    "text": "15.1 Step 1: Generate Your Artifactory Token\nThis token lets uv install packages from the World Bank’s internal JFrog repository.\n\n15.1.1 Access the Artifactory Login Page\n\nNavigate to JFrog Artifactory Login.\nSelect “OpenID OAuth” to log in.\n\n\nTroubleshooting: HTTP 400 Bad Request\nIf the OpenID OAuth login returns an HTTP 400 Bad Request error:\n\nConfirm that GlobalProtect is connected to the correct VPN gateway. Unless you are in the DC office and connected to the bluemarlin WiFi network, use the US East gateway.\nConfirm that your ITSAI platform onboarding request has been approved. Access may not work while the request is still pending.\nClear your browser’s temporary files and cookies, close the browser, and try signing in again.\nIf the error persists after completing these checks, contact ITS for assistance and include the error message and your onboarding request or ticket number.\n\n\n\n\n15.1.2 Generate Your Access Token\n\nNavigate to the itsai-platform repository.\nClick “Set Me Up”, locate the Client drop-down, and change the selection from Poetry to Pip.\nYou may see the message “You do not have deploy permissions to this repository.” You can safely ignore it because deploy permissions are not required to generate a token or install the package.\nGenerate a new token using “Get token & Generate Instructions”.",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Environment Setup and Configuration</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_environment_setup.html#step-2-configure-the-artifactory-index-url",
+    "href": "mAI_factory_environment_setup.html#step-2-configure-the-artifactory-index-url",
+    "title": "14  Environment Setup and Configuration",
+    "section": "15.2 Step 2: Configure the Artifactory Index URL",
+    "text": "15.2 Step 2: Configure the Artifactory Index URL\nCopy your-username and your-access-token from your JFrog setup. In your-username, replace spaces with %20 (e.g., John Doe → john%20doe).\nThe UV_INDEX environment variable tells uv where to find the internal package repository. You can set it temporarily (per terminal session) or permanently (in your shell profile).\n\nWindows — temporaryWindows — permanent (PowerShell profile)macOS — temporarymacOS — permanent (shell profile)\n\n\n$env:UV_INDEX = \"https://your-username:your-access-token@artifactory.worldbank.org/artifactory/api/pypi/itsdt-pypi-virtual/simple\"\nVerify:\necho $env:UV_INDEX\n\n\nTo persist across terminal sessions, add the $env:UV_INDEX = ... line to your PowerShell profile:\nnotepad $PROFILE\nPaste the $env:UV_INDEX line, save, and restart your terminal.\n\n\nexport UV_INDEX=\"https://your-username:your-access-token@artifactory.worldbank.org/artifactory/api/pypi/itsdt-pypi-virtual/simple\"\nVerify (the export command produces no visible output on success):\necho $UV_INDEX\n\n\nTo persist across terminal sessions:\n\nOpen your shell profile: nano ~/.zshrc\nPaste the export line at the bottom of the file.\nSave and exit: Ctrl+O, then Enter, then Ctrl+X.\nReload in the current terminal: source ~/.zshrc\n\nFrom now on, every new terminal window will automatically have UV_INDEX set.\n\n\n\n\nSecurity note: Your shell profile (or .env file) will contain the token in plain text. Do not share your user account, and never commit the token into any code repository. Regenerate the token in Artifactory if you ever suspect it has been exposed.",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Environment Setup and Configuration</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_environment_setup.html#step-3-install-the-itsai-platform-package",
+    "href": "mAI_factory_environment_setup.html#step-3-install-the-itsai-platform-package",
+    "title": "14  Environment Setup and Configuration",
+    "section": "15.3 Step 3: Install the itsai-platform Package",
+    "text": "15.3 Step 3: Install the itsai-platform Package\nWith UV_INDEX set, create a project environment and install the SDK:\n\nWindowsmacOS\n\n\nuv init          # if there is no pyproject.toml in the current directory\nuv add itsai-platform pyjwt\n\n\nuv init          # if there is no pyproject.toml in the current directory\nuv add itsai-platform pyjwt",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Environment Setup and Configuration</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_environment_setup.html#step-4-verify-desktop-authentication",
+    "href": "mAI_factory_environment_setup.html#step-4-verify-desktop-authentication",
+    "title": "14  Environment Setup and Configuration",
+    "section": "15.4 Step 4: Verify Desktop Authentication",
+    "text": "15.4 Step 4: Verify Desktop Authentication\nThis is the natural next step after installing itsai-platform. Once this runs successfully, you are onboarded and authenticated, and ready to use mAI Factory APIs.\nBefore running the authentication script, make sure your Python virtual environment is activated:\n\nWindowsmacOS\n\n\nvenv\\Scripts\\activate\n\n\nsource .venv/bin/activate\n\n\n\nThen run:\n# desktop_auth.py\nfrom itsai.platform.authentication import DesktopToken\n\ntoken_provider = DesktopToken()\naccess_token = token_provider.get_token(env=\"DEV_DESKTOP\")  # \"DEV_DESKTOP\", \"QA_DESKTOP\", \"PROD_DESKTOP\"\nprint(\"Authentication successful!\")\nThe first call opens a browser window prompting you to log in with your WBG credentials. Once authenticated, the token is cached and auto-refreshes on later calls.\n\nEnvironment strings: Use \"DEV_DESKTOP\" for testing and proof-of-concept work. The QA and PROD equivalents (\"QA_DESKTOP\", \"PROD_DESKTOP\") require additional app registration under an ACN.",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Environment Setup and Configuration</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_environment_setup.html#step-5-health-check",
+    "href": "mAI_factory_environment_setup.html#step-5-health-check",
+    "title": "14  Environment Setup and Configuration",
+    "section": "15.5 Step 5: Health Check",
+    "text": "15.5 Step 5: Health Check\nBefore making a real model call, confirm the gateway is reachable:\nGET https://azapimdev.worldbank.org/conversationalai/platform/health/\nExpected response: {\"status\": \"healthy\"}",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Environment Setup and Configuration</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_environment_setup.html#step-6-test-an-mai-factory-api-call",
+    "href": "mAI_factory_environment_setup.html#step-6-test-an-mai-factory-api-call",
+    "title": "14  Environment Setup and Configuration",
+    "section": "15.6 Step 6: Test an mAI Factory API Call",
+    "text": "15.6 Step 6: Test an mAI Factory API Call\nAfter the authentication test prints Authentication successful!, run this small end-to-end request to confirm that your account can call a model through mAI Factory:\n# test_maifactory.py\nfrom itsai.platform.authentication import DesktopToken\nfrom openai import AzureOpenAI\n\ntoken_provider = DesktopToken()\n\nclient = AzureOpenAI(\n    azure_endpoint=\"https://azapimdev.worldbank.org/conversationalai/v2/\",\n    api_version=\"2025-04-01-preview\",\n    azure_ad_token_provider=lambda: token_provider.get_token(env=\"DEV_DESKTOP\"),\n)\n\nresponse = client.chat.completions.create(\n    model=\"gpt-4.1-mini\",\n    messages=[\n        {\n            \"role\": \"user\",\n            \"content\": \"Reply with exactly: mAI Factory API call successful\",\n        }\n    ],\n    max_tokens=20,\n)\n\nprint(response.choices[0].message.content)\nIf the request succeeds, the response should be:\nmAI Factory API call successful\nThis confirms both desktop authentication and model access. If authentication succeeds in Step 4 but this request fails, record the HTTP status code and error message when contacting the ITSAI platform team; never include the access token.",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Environment Setup and Configuration</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_environment_setup.html#keeping-api-access-persistent",
+    "href": "mAI_factory_environment_setup.html#keeping-api-access-persistent",
+    "title": "14  Environment Setup and Configuration",
+    "section": "15.7 Keeping API Access Persistent",
+    "text": "15.7 Keeping API Access Persistent\nThe setup above works per-project. If you want mAI Factory access available automatically in every new project without repeating the configuration, you can make the environment persistent.\n\n15.7.1 Option A: Shell profile (recommended)\nAdd the UV_INDEX export to your shell profile so uv can always find the internal package repository (see Step 2 above). Then install itsai-platform globally or in a shared virtual environment that you activate in each project.\n\nWindows (PowerShell profile)macOS (~/.zshrc)\n\n\n# Add to $PROFILE — runs on every new terminal\n$env:UV_INDEX = \"https://your-username:your-access-token@artifactory.worldbank.org/artifactory/api/pypi/itsdt-pypi-virtual/simple\"\n\n\n# Add to ~/.zshrc — runs on every new terminal\nexport UV_INDEX=\"https://your-username:your-access-token@artifactory.worldbank.org/artifactory/api/pypi/itsdt-pypi-virtual/simple\"\n\n\n\n\n\n15.7.2 Option B: Shared virtual environment\nCreate a single virtual environment outside any project folder and activate it whenever you need mAI Factory access:\n\nWindowsmacOS\n\n\npython -m venv C:\\Users\\&lt;username&gt;\\venvs\\mai-factory\nC:\\Users\\&lt;username&gt;\\venvs\\mai-factory\\Scripts\\activate\nuv pip install --extra-index-url $env:UV_INDEX itsai-platform pyjwt openai\n\n\npython3 -m venv ~/venvs/mai-factory\nsource ~/venvs/mai-factory/bin/activate\nuv pip install --extra-index-url \"$UV_INDEX\" itsai-platform pyjwt openai\n\n\n\nYou can add the activate line to your shell profile to have it load automatically, or create a short alias:\n\nWindows (PowerShell alias in $PROFILE)macOS (alias in ~/.zshrc)\n\n\nfunction mai-activate { & \"C:\\Users\\&lt;username&gt;\\venvs\\mai-factory\\Scripts\\activate\" }\n\n\nalias mai-activate=\"source ~/venvs/mai-factory/bin/activate\"",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Environment Setup and Configuration</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_environment_setup.html#making-api-calls-outside-the-sdk",
+    "href": "mAI_factory_environment_setup.html#making-api-calls-outside-the-sdk",
+    "title": "14  Environment Setup and Configuration",
+    "section": "15.8 Making API Calls Outside the SDK",
+    "text": "15.8 Making API Calls Outside the SDK\nOnce authenticated, you can also call the mAI Factory API directly with httr (R), requests (Python), or any HTTP client. The key elements are:\n\n\n\n\n\n\n\nComponent\nValue\n\n\n\n\nBase URL (DEV)\nhttps://azapimdev.worldbank.org/conversationalai/v2/openai/deployments\n\n\nURL structure\n{base_url}/{model}/chat/completions?api-version={version}\n\n\nAuth header\nAuthorization: Bearer {your-access-token}\n\n\nRequired audit headers\nx-source-type: interactive, x-team-name: pip\n\n\nAPI version\n2025-01-01-preview (or 2025-04-01-preview)\n\n\n\nFor a first test, gpt-4.1-mini is a lightweight, low-cost model to verify your pipeline works end to end.\nExample endpoints beyond Azure OpenAI:\n\nGemini chat: /platform/gemini/chat/\nClaude via Bedrock: /bedrock/model/{model_id}/converse",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Environment Setup and Configuration</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_environment_setup.html#troubleshooting-checklist",
+    "href": "mAI_factory_environment_setup.html#troubleshooting-checklist",
+    "title": "14  Environment Setup and Configuration",
+    "section": "15.9 Troubleshooting Checklist",
+    "text": "15.9 Troubleshooting Checklist\nIf a call fails, check:\n\nUV_INDEX is set correctly (echo $UV_INDEX shows the expected value)\nitsai-platform is installed in your active virtual environment\nYou used the string \"DEV_DESKTOP\" (not \"DEV\" or a raw scope/GUID) as the env argument\nYou are connected to VPN in the US East region\nThe health endpoint returns {\"status\": \"healthy\"} (see Step 5)\n\nIf everything checks out and it’s still failing, this likely points to an onboarding/permissions issue rather than a code issue.",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Environment Setup and Configuration</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_environment_setup.html#getting-further-help",
+    "href": "mAI_factory_environment_setup.html#getting-further-help",
+    "title": "14  Environment Setup and Configuration",
+    "section": "15.10 Getting Further Help",
+    "text": "15.10 Getting Further Help\n\nOnboarding or authentication issues: itsai_platform_admin@worldbankgroup.org\nFull documentation: mAI Factory Documentation\nRisk-free experimentation before writing code: Model Garden Sandbox",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Environment Setup and Configuration</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_environment_setup.html#related-chapters",
+    "href": "mAI_factory_environment_setup.html#related-chapters",
+    "title": "14  Environment Setup and Configuration",
+    "section": "15.11 Related chapters",
+    "text": "15.11 Related chapters\n\n\n\nTopic\nChapter\n\n\n\n\nInstall Python and uv\nPrerequisites\n\n\nRequest ITSAI platform access\nOn-Boarding Request\n\n\nR/Shiny integration via Posit Connect\nR/Shiny Integration",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Environment Setup and Configuration</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_integration.html",
+    "href": "mAI_integration.html",
+    "title": "15  Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R",
+    "section": "",
+    "text": "15.1 Introduction\nStandard OpenAI API calls are not permitted from inside the World Bank’s network. Instead, the Bank provides an internal gateway called the mAI Factory — an Azure API Management (APIM) layer that proxies Azure OpenAI deployments, enforces access controls, and adds required audit headers.\nThis article documents the integration pattern for calling mAI Factory from R/Shiny apps deployed on Posit Connect. If you need to call mAI Factory from a local Python script instead, see the Desktop Setup guide.\nThe two key steps for the R/Shiny pattern are:",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_integration.html#introduction",
+    "href": "mAI_integration.html#introduction",
+    "title": "15  Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R",
+    "section": "",
+    "text": "Acquiring an Azure AD Bearer token via Posit Connect’s OAuth integration\nStructuring HTTP requests for the mAI Factory endpoint",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_integration.html#what-is-world-bank-mai-factory",
+    "href": "mAI_integration.html#what-is-world-bank-mai-factory",
+    "title": "15  Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R",
+    "section": "15.2 What is World Bank mAI Factory?",
+    "text": "15.2 What is World Bank mAI Factory?\nThe mAI Factory exposes Azure OpenAI deployments (including gpt-4o-mini, gpt-4o, gpt-4.1-mini, etc.) behind Azure API Management. Developers never call OpenAI’s public endpoints; instead they call internal APIM endpoints, authenticated with an Azure AD Bearer token.\nThree environments are available:\nAPI_BASE_URLS &lt;- list(\n  DEV  = \"https://azapimdev.worldbank.org/conversationalai/v2/openai/deployments\",\n  QA   = \"https://azapimqa.worldbank.org/conversationalai/v2/openai/deployments\",\n  PROD = \"https://azapim.worldbank.org/conversationalai/v2/openai/deployments\"\n)\nThe URL structure mirrors the Azure OpenAI REST API:\n{base_url}/{model}/chat/completions?api-version={version}\nSo a call to gpt-4.1-mini on DEV resolves to:\nhttps://azapimdev.worldbank.org/conversationalai/v2/openai/deployments/gpt-4.1-mini/chat/completions?api-version=2025-04-01-preview\nAny code already targeting the Azure OpenAI API can be pointed at the mAI Factory with minimal changes — you only swap the base URL and switch from an api-key header to a Bearer token.\n\nDifferent authentication paths: The Desktop Setup guide authenticates via the itsai-platform SDK’s interactive browser login (DesktopToken). This chapter uses Posit Connect’s OAuth integration instead, which is the right approach for headless Shiny apps that cannot open a browser.",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_integration.html#authentication-azure-ad-via-posit-connect-oauth",
+    "href": "mAI_integration.html#authentication-azure-ad-via-posit-connect-oauth",
+    "title": "15  Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R",
+    "section": "15.3 Authentication: Azure AD via Posit Connect OAuth",
+    "text": "15.3 Authentication: Azure AD via Posit Connect OAuth\nThis is the part that trips most developers up. You cannot interactively log in to Azure AD from a headless Shiny app. The solution is to delegate credential acquisition to Posit Connect, which maintains an OAuth integration with the World Bank’s Azure AD tenant.\n\n15.3.1 How it works\nWhen an app is deployed on the internal Posit Connect server, Connect can exchange credentials on behalf of the running content. The connectapi package exposes this via get_oauth_content_credentials(), which takes an audience argument — the GUID of the registered OAuth integration for mAI.\nget_azure_token &lt;- function() {\n  connect_server  &lt;- \"https://datanalytics-int.worldbank.org/\"\n  connect_api_key &lt;- Sys.getenv('API_KEY') # Posit Connect API key set as env var\n\n  if (connect_server == \"\" || connect_api_key == \"\") {\n    stop(\"This app must run on Posit Connect. CONNECT_SERVER / CONNECT_API_KEY not set.\")\n  }\n\n  # OAUTH_INTEGRATION_GUID: add the mAI OAuth integration on datanalytics-int.worldbank.org;\n  # the GUID is auto-generated and can be copied from there.\n  oauth_guid &lt;- Sys.getenv(\"OAUTH_INTEGRATION_GUID\")\n\n  client      &lt;- connectapi::connect(server = connect_server, api_key = connect_api_key)\n  credentials &lt;- connectapi::get_oauth_content_credentials(\n    connect  = client,\n    audience = oauth_guid\n  )\n  credentials$access_token\n}\nThe returned access_token is a short-lived Azure AD Bearer token that can be used in the Authorization header of any mAI Factory request.\n\n\n15.3.2 Reactive token in a Shiny app\nBecause the token is tied to the user session, retrieve it once per session using a Shiny reactive():\nazure_token &lt;- shiny::reactive({\n  tryCatch(\n    get_azure_token(),\n    error = function(e) {\n      shiny::showNotification(paste(\"Token error:\", e$message), type = \"error\")\n      NULL\n    }\n  )\n})\nAny handler that calls the LLM simply calls azure_token(), and Shiny’s reactivity ensures the retrieval runs at most once per session.\n\n\n15.3.3 Prerequisites\nTo use this pattern in your own app you need:\n\nThe app deployed on the internal Posit Connect instance (datanalytics-int.worldbank.org)\nAPI_KEY set as a Posit Connect environment variable (the Connect API key, not an OpenAI key)\nOAUTH_INTEGRATION_GUID set as a Posit Connect environment variable — add the mAI OAuth integration on datanalytics-int.worldbank.org; the GUID is auto-generated and can be copied from there\n\n\nNote: This authentication path does not require the ITSAI on-boarding request described in the Desktop Setup guide. Posit Connect handles identity through its own OAuth integration.",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_integration.html#making-the-api-call",
+    "href": "mAI_integration.html#making-the-api-call",
+    "title": "15  Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R",
+    "section": "15.4 Making the API Call",
+    "text": "15.4 Making the API Call\nWith a valid token in hand, calling the mAI Factory looks nearly identical to a standard OpenAI chat completions call. The differences are the endpoint URL, the Bearer token in the Authorization header, and two extra audit headers (x-source-type and x-team-name) that mAI requires.\nAPI_VERSION     &lt;- \"2025-04-01-preview\"\nREQUEST_TIMEOUT &lt;- 120\nDEFAULT_MODEL   &lt;- \"gpt-4.1-mini\"\n\nopenai_chat_response &lt;- function(prompt, token, model = DEFAULT_MODEL) {\n  api_url &lt;- paste0(API_BASE_URLS$DEV, \"/\", model, \"/chat/completions\")\n\n  headers &lt;- c(\n    \"Authorization\" = paste(\"Bearer\", token),\n    \"x-source-type\" = \"interactive\",\n    \"x-team-name\"   = \"pip\",\n    \"Content-Type\"  = \"application/json\"\n  )\n\n  payload &lt;- list(\n    messages   = list(list(role = \"user\", content = prompt)),\n    max_tokens = 1000\n  )\n\n  response &lt;- httr::POST(\n    url    = api_url,\n    query  = list(`api-version` = API_VERSION),\n    httr::add_headers(.headers = headers),\n    body   = payload,\n    encode = \"json\",\n    httr::timeout(REQUEST_TIMEOUT)\n  )\n\n  if (httr::http_status(response)$category != \"Success\") {\n    stop(\"mAI Factory API error: \", httr::status_code(response), \" - \",\n         httr::content(response, \"text\", encoding = \"UTF-8\"))\n  }\n\n  parsed &lt;- httr::content(response, \"parsed\", \"application/json\")\n  parsed$choices[[1]]$message$content\n}\nA few design decisions worth noting:\n\nx-team-name: pip — mAI uses this for usage attribution. Set it to your team’s identifier.\nx-source-type: interactive — signals that the call is user-driven, as opposed to a batch job.\n120-second timeout — LLM responses can be slow, especially for longer prompts. The default httr timeout is too short.\nResponse extraction follows the standard Azure OpenAI JSON structure: choices[[1]]$message$content.",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_integration.html#summary",
+    "href": "mAI_integration.html#summary",
+    "title": "15  Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R",
+    "section": "15.5 Summary",
+    "text": "15.5 Summary\nThe full integration pattern looks like this:\n\n\n\n\n\nflowchart LR\n    A[Shiny app&lt;br/&gt;on Posit Connect] --&gt;|connectapi OAuth| B[Azure AD&lt;br/&gt;Bearer token]\n    B --&gt;|Authorization: Bearer| C[mAI Factory APIM&lt;br/&gt;azapimdev.worldbank.org]\n    C --&gt;|Azure OpenAI API| D[GPT-4.1-mini&lt;br/&gt;deployment]\n\n\n\n\n\n\nTo replicate this in your own R project:\n\n\n\n\n\n\n\nRequirement\nDetail\n\n\n\n\nPosit Connect deployment\nApp must run on the internal Connect server (datanalytics-int.worldbank.org)\n\n\nAPI_KEY env var\nYour Posit Connect API key, set in the app’s environment variables on Connect\n\n\nOAUTH_INTEGRATION_GUID env var\nAdd the mAI OAuth integration on datanalytics-int.worldbank.org; the GUID is auto-generated and can be copied from there\n\n\nx-team-name header\nSet to your team’s identifier for usage attribution\n\n\nEnvironment choice\nStart with DEV; graduate to QA/PROD when ready for production traffic\n\n\n\nThe connectapi and httr packages are the only non-standard dependencies for the integration itself.",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_integration.html#related-chapters",
+    "href": "mAI_integration.html#related-chapters",
+    "title": "15  Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R",
+    "section": "15.6 Related chapters",
+    "text": "15.6 Related chapters\n\n\n\nTopic\nChapter\n\n\n\n\nInstall Python and uv\nPrerequisites\n\n\nRequest ITSAI platform access (Desktop)\nOn-Boarding Request\n\n\nConfigure credentials and test a Python call\nEnvironment Setup",
+    "crumbs": [
+      "mAI Factory",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R</span>"
+    ]
+  },
+  {
+    "objectID": "shiny_github_posit_connect.html",
+    "href": "shiny_github_posit_connect.html",
+    "title": "16  Building a Shiny App with GitHub and Posit Connect",
+    "section": "",
+    "text": "16.1 Introduction\nThis chapter describes a complete, reusable pattern for building Shiny for R applications that:\nThe pattern comes from the GMD Human Review Application, but the instructions are written so you can adapt them to any similar project. Whenever you see an example name, swap it for the values that match your own application, repository, GitHub App, branch, and Posit Connect content item.",
+    "crumbs": [
+      "Shiny Apps with Posit Connect",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Building a Shiny App with GitHub and Posit Connect</span>"
+    ]
+  },
+  {
+    "objectID": "shiny_github_posit_connect.html#introduction",
+    "href": "shiny_github_posit_connect.html#introduction",
+    "title": "16  Building a Shiny App with GitHub and Posit Connect",
+    "section": "",
+    "text": "live in a GitHub repository,\nauthenticate users through Posit Connect, and\nread and write repository data at runtime through a GitHub App.",
+    "crumbs": [
+      "Shiny Apps with Posit Connect",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Building a Shiny App with GitHub and Posit Connect</span>"
+    ]
+  },
+  {
+    "objectID": "shiny_github_posit_connect.html#the-important-distinction",
+    "href": "shiny_github_posit_connect.html#the-important-distinction",
+    "title": "16  Building a Shiny App with GitHub and Posit Connect",
+    "section": "16.2 The Important Distinction",
+    "text": "16.2 The Important Distinction\nThere are three separate connections in this architecture. They are related, but configuring one does not automatically configure the others.\n\n\n\n\n\n\n\n\n\nConnection\nPurpose\nAuthentication\nConfigured where\n\n\n\n\nDeveloper to GitHub\nCommit and review application source\nGit credentials or SSH\nDeveloper machine\n\n\nPosit Connect to GitHub\nFetch source code for Git-backed deployment\nConnect Git credentials or OAuth integration\nConnect administrator settings\n\n\nRunning Shiny app to GitHub\nRead and write application data at runtime\nGitHub App installation token\nConnect content secrets and app code\n\n\n\nThe third connection — the running Shiny app to GitHub — is the one that lets your app read and write data while it is serving users. It uses a GitHub App installation token, not a personal access token.\n\n16.2.1 A note on deployment methods\nThe pattern described here was initially deployed as a manual bundle with rsconnect::deployApp(). A git push to GitHub did not update that running bundle. The application became current only after a new bundle was uploaded to the existing Connect content item.\nGit-backed content is a separate deployment option. When it is enabled and configured, Connect fetches the repository itself and can deploy changes after new commits. However, it does not replace the runtime GitHub App if the Shiny process must access GitHub while serving users.",
+    "crumbs": [
+      "Shiny Apps with Posit Connect",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Building a Shiny App with GitHub and Posit Connect</span>"
+    ]
+  },
+  {
+    "objectID": "shiny_github_posit_connect.html#target-architecture",
+    "href": "shiny_github_posit_connect.html#target-architecture",
+    "title": "16  Building a Shiny App with GitHub and Posit Connect",
+    "section": "16.3 Target Architecture",
+    "text": "16.3 Target Architecture\nThe reusable architecture has these components:\n\nA GitHub repository stores the application source, configuration, tests, and application data (or references to it).\nA Shiny for R application provides the browser interface.\nPosit Connect authenticates users, controls content access, hosts the app, stores deployment configuration, and supplies runtime secrets.\nA GitHub App supplies a non-personal service identity for the running app.\nGitHub branch protection and repository permissions constrain what the app can change.\n\n\n16.3.1 Recommended branch pattern\nFor a review workflow, we recommend the following branch model:\n\n\n\n\n\n\n\n\nBranch\nPurpose\nApp behavior\n\n\n\n\nmain\nSource drafts and application code\nRead-only source context\n\n\nreview or review/&lt;name&gt;\nReview records and approved outputs\nApp writes here\n\n\n\nFor other applications, use names that match your data lifecycle. The important idea is that source content and application-generated output have an explicit ownership and protection model.",
+    "crumbs": [
+      "Shiny Apps with Posit Connect",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Building a Shiny App with GitHub and Posit Connect</span>"
+    ]
+  },
+  {
+    "objectID": "shiny_github_posit_connect.html#responsibilities",
+    "href": "shiny_github_posit_connect.html#responsibilities",
+    "title": "16  Building a Shiny App with GitHub and Posit Connect",
+    "section": "16.4 Responsibilities",
+    "text": "16.4 Responsibilities\nSuccessful deployment normally requires three kinds of authority:\n\n\n\n\n\n\n\nResponsibility\nTypical owner\n\n\n\n\nCreate and install the GitHub App\nGitHub or organization administrator\n\n\nConfigure Connect integrations, Git credentials, and content access\nPosit Connect administrator\n\n\nDevelop, test, and deploy the application bundle\nApplication maintainer with Connect publisher access\n\n\n\n\n\n\n\n\n\nWarning\n\n\n\nNever put GitHub private keys or Connect API keys in the repository. A maintainer can deploy code without being given the GitHub App private key. The key belongs in Connect secret storage and is consumed by the application at runtime.",
+    "crumbs": [
+      "Shiny Apps with Posit Connect",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Building a Shiny App with GitHub and Posit Connect</span>"
+    ]
+  },
+  {
+    "objectID": "shiny_github_posit_connect.html#create-the-shiny-application",
+    "href": "shiny_github_posit_connect.html#create-the-shiny-application",
+    "title": "16  Building a Shiny App with GitHub and Posit Connect",
+    "section": "16.5 Create the Shiny Application",
+    "text": "16.5 Create the Shiny Application\n\n16.5.1 Choose the application structure\nFor a small prototype, a single app.R file may be enough. For a maintained application, we recommend using an R package structure, preferably with Golem conventions.\nHere is the structure used by the GMD review application:\nreview-app/\n├── app.R                       # Posit Connect entry point\n├── DESCRIPTION                 # R package metadata and dependencies\n├── NAMESPACE                   # Generated package namespace\n├── R/\n│   ├── app_ui.R                # Top-level UI\n│   ├── app_server.R            # Top-level server wiring\n│   ├── run.R                   # run_app() entry point\n│   ├── mod_dashboard.R         # Dashboard module\n│   ├── mod_detail.R            # Detail/editor module\n│   ├── github_adapter.R        # Runtime GitHub API adapter\n│   ├── github_auth.R           # GitHub App JWT and token exchange\n│   ├── identity.R              # Connect identity resolution\n│   ├── authorization.R         # Role checks\n│   ├── state_machine.R         # Domain state transitions\n│   └── recovery.R              # Safe multi-step write recovery\n├── inst/\n│   ├── golem-config.yml        # Golem profiles\n│   └── app/www/                # CSS and JavaScript assets\n├── config/\n│   └── roles.yml               # Repository-managed application roles\n├── tests/testthat/             # Unit and integration tests\n├── renv.lock                   # Reproducible dependency versions\n├── manifest.json               # Required for Git-backed content\n└── .Rbuildignore               # Package/build exclusions\nYour exact modules will differ across applications. Keep the same separation of concerns:\n\nUI files compose pages and controls.\nServer files wire modules and reactive state.\nAdapter files isolate external APIs from business logic.\nAuthentication files handle credentials and token lifetime.\nAuthorization files decide what the authenticated user may do.\nDomain files implement state transitions without depending on Shiny.\nRecovery files make external writes observable and safe to retry.\n\n\n\n16.5.2 Create a Golem project\nFor a brand-new project, create the package from a parent directory. Do not create a new project inside an existing application directory unless that is intentional.\ngolem::create_golem(\"my-review-app\")\nUseful Golem setup operations include:\nusethis::use_golem_config()\ngolem::add_module(\"dashboard\")\ngolem::add_module(\"detail\")\ngolem::add_css_file(\"custom\")\ngolem::use_dev_routine()\nIf an existing R package already contains the application, it can be adapted to Golem conventions instead of recreated. The GMD application retained its existing package and documented the applied setup in review-app/dev/01_start.R.\n\n\n16.5.3 Use a Connect-safe entry point\nThe entry point must return the Shiny application object. A Golem-style package application can use:\n# app.R\noptions(\"golem.app.prod\" = TRUE)\n\npkgload::load_all(\".\")\nrun_app()\nThis pattern is important when the application package is project-local. Posit Connect installs packages recorded in the deployment environment; it does not automatically install the local package from the source bundle. pkgload::load_all(\".\") loads the bundled package source instead.\n\n\n\n\n\n\nImportant\n\n\n\nIf app.R uses pkgload::load_all(), then pkgload must be listed in DESCRIPTION and in renv.lock. The bundle must include at least:\n\napp.R\nDESCRIPTION\nNAMESPACE\nthe complete R/ directory\nthe complete inst/ directory\nany runtime configuration such as config/roles.yml\nthe dependency lockfile or generated deployment manifest\n\nAn incomplete bundle can produce errors such as there is no package called 'reviewapp', missing configuration files, or missing functions at startup.\n\n\n\n\n16.5.4 Keep runtime configuration separate from code\nUse repository files for non-secret, reviewable configuration:\n\nBranch names and repository paths can be Connect environment variables or deployment configuration.\nRole maps can be versioned in the repository.\nUser-specific or deployment-specific overrides can be supplied by an environment variable such as REVIEW_APP_ROLES.\nPrivate keys and API keys must not be repository files.\n\nThe application should fail loudly when required configuration is missing. Do not silently start with an empty queue or an unauthenticated write path.\n\n\n16.5.5 Implement Connect user authentication\nConnect authentication should be the only user login layer unless there is a specific security requirement for another identity provider.\nIn a Shiny session, Connect exposes the authenticated user through session$user. Resolve that exact value against a role map:\nroles:\n  - identity: reviewer-username\n    role: reviewer\n  - identity: approver-username\n    role: approver\n  - identity: administrator-username\n    role: administrator\nBefore deploying, confirm whether session$user contains usernames, email addresses, or another identifier in the target Connect configuration. The role map must contain the exact returned strings.\nKeep these controls separate:\n\nConnect content access controls who can open the app.\nThe repository role map controls what an authenticated user can do inside it.\nAn authenticated user absent from the role map must receive no application role, never a default role.\nA local-only override such as REVIEW_APP_USER must be unset in production.\n\n\n\n16.5.6 Add an external-service adapter\nDo not call GitHub directly throughout UI modules. Define a small adapter with operations such as:\nfetch source index\nfetch artifact\nfetch review record\ncreate or update review record\nwrite approved artifact\nread branch head\nThe UI should depend on the adapter interface, not on HTTP URLs, JWT details, or Git tree mechanics. Tests can then inject an in-memory GitHub double without network access.\nFor a write workflow, make the logical operation explicit. A safe sequence is:\n\nRead the current branch head and the blobs being edited.\nReject the operation if the remote state has changed since the user loaded it.\nCreate blobs for changed files.\nCreate one Git tree.\nCreate one Git commit.\nMove the branch reference without force-pushing.\nReport the commit SHA and completed steps.\n\n\n\n\n\n\n\nWarning\n\n\n\nIf any step fails, the UI must not claim that the logical transition succeeded. This is especially important when a GitHub API request fails after a commit was created but before the branch reference moves.\n\n\n\n\n16.5.7 Manage dependencies with renv\nFrom the application directory:\nrenv::init()\nrenv::restore()\nAfter changing DESCRIPTION or adding a dependency:\nrenv::snapshot()\nCommit renv.lock. On another development machine or on Connect, restore from the lockfile rather than relying on whatever happens to be installed globally.\n\n\n\n\n\n\nTip\n\n\n\nRecord the R version used to generate the lockfile and compare it with the R runtime available on Connect. A version mismatch may be supported, but matching versions reduce deployment surprises.\n\n\n\n\n16.5.8 Test before deployment\nRun the unit and integration suite from the application directory:\nRscript -e 'pkgload::load_all(\".\"); testthat::test_dir(\"tests/testthat\")'\nFor the GMD review application, the integration test exercises the lifecycle against an in-memory GitHub double and does not require a Connect server or network access.\nRun a local offline boot when the application supports it:\nREVIEW_APP_OFFLINE=1 REVIEW_APP_USER=reviewer-username \\\n  Rscript -e 'pkgload::load_all(\".\"); reviewapp::run_app()'\nUse local offline mode to test UI and domain behavior. It does not prove that Connect can read the secrets or that the GitHub App can exchange a token.",
+    "crumbs": [
+      "Shiny Apps with Posit Connect",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Building a Shiny App with GitHub and Posit Connect</span>"
+    ]
+  },
+  {
+    "objectID": "shiny_github_posit_connect.html#configure-the-github-repository",
+    "href": "shiny_github_posit_connect.html#configure-the-github-repository",
+    "title": "16  Building a Shiny App with GitHub and Posit Connect",
+    "section": "16.6 Configure the GitHub Repository",
+    "text": "16.6 Configure the GitHub Repository\n\n16.6.1 Create and initialize branches\nCreate the source and output branches before deploying the application:\ngit clone https://github.com/&lt;owner&gt;/&lt;repository&gt;.git\ncd &lt;repository&gt;\ngit checkout -b review\ngit push -u origin review\ngit checkout main\nFor an existing repository, create the output branch from the current source branch tip so the files the app expects are present.\nThe branch names must match the application configuration. In the GMD pattern, the application reads drafts from main and writes review records and approved artifacts to review.\n\n\n16.6.2 Create a GitHub App\nCreate the app under the GitHub organization or account that owns the target repository:\n\nOpen Settings &gt; Developer settings &gt; GitHub Apps &gt; New GitHub App.\nSet the name and homepage URL.\nDisable the webhook unless the application needs webhooks.\nGrant only the repository permissions required by the application.\nInstall the app on the target repository.\nGenerate a private key and store the downloaded .pem securely.\n\nFor the review application, the minimum practical repository permissions are:\n\nContents: Read and write — because the app creates Git objects and moves the review branch reference.\nMetadata: Read.\n\nIf your application only reads repository content, use Contents: Read and do not grant write access.\n\n\n16.6.3 Record the three different GitHub identifiers\nGitHub exposes several identifiers. Do not substitute one for another.\n\n\n\n\n\n\n\n\n\nValue\nMeaning\nTypical form\nUsed by\n\n\n\n\nApp ID\nNumeric identifier of the GitHub App\nNumeric, e.g. 123456\nJWT iss claim and direct app code\n\n\nClient ID\nOAuth-style identifier of the GitHub App\nUsually starts with Iv\nPosit Connect native GitHub App integration\n\n\nInstallation ID\nInstallation of the App on an account/repository\nNumeric\nInstallation token exchange\n\n\nPrivate key\nPEM contents generated by GitHub\n-----BEGIN ... PRIVATE KEY-----\nJWT signing\n\n\n\n\n\n\n\n\n\nImportant\n\n\n\nThe numeric App ID and the Iv... Client ID are not interchangeable. The current direct runtime implementation uses the numeric App ID. The native Posit Connect GitHub App integration documentation asks for the Client ID.\n\n\n\n\n16.6.4 Install and scope the App\nInstall the GitHub App on the smallest possible repository set. If GitHub offers the choice, select only the target repository rather than all repositories in the organization.\nConfigure branch protection on the output branch:\n\nBlock force-pushes.\nBlock branch deletion.\nRequire the appropriate administrator or status checks if the workflow needs them.\nAllow the GitHub App installation to perform the intended write operation.\nPrevent ordinary users from bypassing the review application.\n\nTest a non-administrator direct push and confirm that branch protection rejects it. The application should use force = FALSE when updating a branch reference.",
+    "crumbs": [
+      "Shiny Apps with Posit Connect",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Building a Shiny App with GitHub and Posit Connect</span>"
+    ]
+  },
+  {
+    "objectID": "shiny_github_posit_connect.html#configure-runtime-github-authentication",
+    "href": "shiny_github_posit_connect.html#configure-runtime-github-authentication",
+    "title": "16  Building a Shiny App with GitHub and Posit Connect",
+    "section": "16.7 Configure Runtime GitHub Authentication",
+    "text": "16.7 Configure Runtime GitHub Authentication\n\n16.7.1 Use Connect secrets for the runtime app\nThe direct runtime pattern uses these variables:\n\n\n\n\n\n\n\nVariable\nValue\n\n\n\n\nREVIEW_APP_GH_OWNER\nGitHub owner or organization\n\n\nREVIEW_APP_GH_REPO\nGitHub repository name\n\n\nREVIEW_APP_GH_DEFAULT_BRANCH\nSource branch, normally main\n\n\nREVIEW_APP_GH_REVIEW_BRANCH\nProtected output branch\n\n\nGITHUB_APP_ID\nNumeric GitHub App ID\n\n\nGITHUB_APP_INSTALLATION_ID\nInstallation ID for the target repository\n\n\nGITHUB_APP_PRIVATE_KEY\nComplete PEM private-key contents\n\n\n\n\n\n\n\n\n\nWarning\n\n\n\nUse the exact names expected by the deployed code. A previous draft of the GMD operator guide used REVIEW_APP_GH_APP_ID, REVIEW_APP_GH_PRIVATE_KEY, and REVIEW_APP_GH_INSTALLATION_ID, but the adapter reads the GITHUB_APP_* names. Naming drift is a common deployment failure.\n\n\nSet the variables in the Connect content item’s environment-variable or secret configuration. Store GITHUB_APP_PRIVATE_KEY as a Connect secret or through the configured Vault integration. Do not expose its value in ordinary environment-variable displays, logs, screenshots, or documentation.\n\n\n16.7.2 Store the PEM correctly\nGITHUB_APP_PRIVATE_KEY must contain the complete contents of the generated .pem file, including both boundary lines:\n-----BEGIN PRIVATE KEY-----\nbase64-content...\n-----END PRIVATE KEY-----\nDo not store any of the following as the private-key value:\n\nThe filename, such as private-key.pem\nA filesystem path\nThe numeric App ID\nThe Iv... Client ID\nA GitHub personal access token\nA base64 encoding of the entire PEM file\nA PEM with the BEGIN or END line removed\n\nSome secret-entry fields collapse newlines or preserve them as the literal two characters \\ and n. A robust application should normalize CRLF/CR line endings, escaped newlines, and a single-line PEM before passing it to the key parser. It must never log the key while diagnosing this problem.\nThe GMD implementation normalizes the value in R/github_auth.R, signs the JWT with openssl, and tests normal PEM, single-line PEM, escaped-newline PEM, and invalid-key cases in tests/testthat/test-github-auth.R.\n\n\n16.7.3 Understand the token flow\nThe application does not use reviewer personal access tokens. At runtime it:\n\nReads the App ID, installation ID, and private key from Connect.\nSigns a short-lived RS256 JWT with the numeric App ID as iss.\nSends the JWT to GitHub’s installation token endpoint.\nReceives a short-lived installation access token.\nUses that token for repository API calls.\nRefreshes the token before expiry.\n\nThe implementation should enforce these safeguards:\n\nInteger JWT timestamps.\nAn expiration no more than the GitHub App JWT limit.\nBounded HTTP timeouts.\nBounded retries only for transient HTTP responses.\nUseful GitHub error messages without credential values.\nA per-session token cache.\nNo token or private key persistence in Connect storage.\n\n\n\n16.7.4 Native Posit Connect GitHub App integration\nPosit Connect also has a native GitHub App integration under System &gt; Integrations. Use this option when the application is designed to obtain GitHub credentials through Connect’s OAuth Credentials API or when Connect features such as private-repository credential integration require it.\nThe native integration uses fields similar to:\n{\n  \"template\": \"github\",\n  \"config\": {\n    \"auth_type\": \"GitHub App\",\n    \"client_id\": \"&lt;Iv-client-id&gt;\",\n    \"installation_id\": \"&lt;installation-id&gt;\",\n    \"private_key\": \"&lt;complete-pem-contents&gt;\"\n  }\n}\nFor GitHub Enterprise Server, also configure the GitHub host. Optionally scope the integration to specific repositories and permissions.\n\n\n\n\n\n\nNote\n\n\n\nCreating this native integration does not automatically populate arbitrary environment variables such as GITHUB_APP_PRIVATE_KEY inside an existing Shiny application. The application must be written to request credentials from the Connect OAuth Credentials API. If the application instead reads direct environment variables, configure those variables as described above.",
+    "crumbs": [
+      "Shiny Apps with Posit Connect",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Building a Shiny App with GitHub and Posit Connect</span>"
+    ]
+  },
+  {
+    "objectID": "shiny_github_posit_connect.html#configure-posit-connect",
+    "href": "shiny_github_posit_connect.html#configure-posit-connect",
+    "title": "16  Building a Shiny App with GitHub and Posit Connect",
+    "section": "16.8 Configure Posit Connect",
+    "text": "16.8 Configure Posit Connect\n\n16.8.1 Create deployment credentials\nThe maintainer needs publisher access to the target Connect content item and a Connect API key for deployment tooling.\nIn the Connect user interface, create a personal API key under the user’s API keys settings. Store it in the local credential configuration used by rsconnect. Never commit it to the repository or put it in a shell script that will be shared.\nThe local rsconnect profile normally records:\n\nThe Connect server URL\nA server nickname such as wbconnect\nThe Connect account name\nThe API key in local credential storage\n\nCheck the profile before deploying. If the server is intranet-only, run the deployment from a machine that can reach the Connect hostname. A GitHub-hosted runner cannot deploy to an intranet-only Connect server unless a suitable self-hosted runner is available inside the network.\n\n\n16.8.2 Create the Connect content item\nFor a new manual deployment, publish the application directory:\nrsconnect::deployApp(\n  appDir = \".\",\n  appName = \"my-review-app\",\n  account = \"&lt;connect-account&gt;\",\n  server = \"&lt;connect-server&gt;\"\n)\nRun this command from the application directory. For an existing content item, the local rsconnect deployment record can associate subsequent deployments with the same item. Confirm the content GUID and bundle ID in Connect after the upload.\nThe current GMD deployment is recorded in:\nreview-app/rsconnect/wbconnect/&lt;account&gt;/review-app.dcf\nThe bundle ID in that file is an audit reference. The Connect UI’s current bundle is the authoritative runtime state.\n\n\n16.8.3 Configure content access\nIn Connect, restrict the content item to the intended group or users. This is the outer access boundary. It is not a replacement for application roles.\nAfter deployment, verify both layers:\n\nAn intended user can open the content item.\nThe same user’s exact session$user identity resolves to the intended app role.\n\n\n\n16.8.4 Configure environment variables and restart\nSet the runtime repository and GitHub App variables on the Connect content item. After changing a secret or environment variable, restart or redeploy the content so new Shiny processes receive it. A browser refresh alone does not necessarily restart the server process.\n\n\n\n\n\n\nWarning\n\n\n\nProduction must not set local development overrides such as:\nREVIEW_APP_OFFLINE=1\nREVIEW_APP_USER=some-user\nIf REVIEW_APP_OFFLINE=1 remains set, the app may intentionally skip GitHub and show an empty or local test state.\n\n\n\n\n16.8.5 Verify the deployed bundle, not only the source branch\nWhen code changes, verify all of the following:\n\nThe commit exists on the intended GitHub branch.\nA new Connect bundle was created.\nThe new bundle is the current bundle for the content item.\nThe app process restarted from that bundle.\nThe Connect logs show the new content GUID/bundle ID.\nThe browser session has been fully refreshed.\n\nAn error from a function that no longer exists in the repository usually means that an old bundle or process is still running. Deploying a commit to GitHub is not proof that Connect is executing that commit.",
+    "crumbs": [
+      "Shiny Apps with Posit Connect",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Building a Shiny App with GitHub and Posit Connect</span>"
+    ]
+  },
+  {
+    "objectID": "shiny_github_posit_connect.html#optional-use-git-backed-content-deployment",
+    "href": "shiny_github_posit_connect.html#optional-use-git-backed-content-deployment",
+    "title": "16  Building a Shiny App with GitHub and Posit Connect",
+    "section": "16.9 Optional: Use Git-Backed Content Deployment",
+    "text": "16.9 Optional: Use Git-Backed Content Deployment\nGit-backed content is the preferred deployment model when the Connect administrator has enabled it and the Connect server can reach the Git remote. It is not the same as the runtime GitHub API connection.\n\n16.9.1 Prepare a manifest\nThe directory deployed as content must contain a manifest.json. Generate it from the target content directory:\ncd my-repository/my-review-app\nRscript -e 'rsconnect::writeManifest()'\nFor an R Shiny directory containing a single app.R, the manifest can normally be inferred. If the directory contains multiple possible entry points, specify the primary document or content category as appropriate.\nInspect the generated file, then commit and push it:\ngit add manifest.json\ngit commit -m \"Add Connect deployment manifest\"\ngit push origin main\n\n\n\n\n\n\nTip\n\n\n\nThe manifest belongs in the directory that will be selected as the Connect target directory. Do not generate it only at the repository root if the app is under a subdirectory.\n\n\n\n\n16.9.2 Configure private repository access\nIn Connect, repository URLs should use HTTPS and must not include credentials. For a private GitHub repository, the Connect administrator must configure the appropriate Git credential settings for the GitHub host:\n\nGit credential host\nUsername\nPassword/token or OAuth integration\nAny required repository scope\n\nConnect supports one credential set per host, although different hosts can use different credentials. SSH repository authentication is not supported by the Git-backed content workflow described here.\nThe Connect server must also have:\n\nNetwork access to the remote repository\nA supported Git executable installed in the deployment environment\nPermission to fetch the selected branch\n\n\n\n16.9.3 Link the repository in Connect\nFrom the Connect content page:\n\nSelect Publish &gt; Import from Git.\nEnter the HTTPS repository URL without authorization information.\nSelect the branch, normally main.\nSelect the target directory containing manifest.json.\nSet the content title and deploy.\n\nFor a repository containing several apps, each app must have its own directory and its own manifest.json. Connect creates a separate content item for each selected target directory.\n\n\n16.9.4 Update Git-backed content\nAfter changing code:\n\nRegenerate the manifest if dependencies or deployment metadata changed.\nCommit the code and manifest.\nPush to the configured branch.\nWait for Connect’s polling interval or select Settings &gt; Current Bundle &gt; Update Now.\n\nAutomatic polling is commonly configured at 15 minutes, but the administrator may change it. The Git Details section in Connect shows the remote, branch, path, and update behavior.\n\n\n\n\n\n\nImportant\n\n\n\nGit-backed content cannot be updated using a different publishing mechanism. Do not alternate between Git-backed updates and rsconnect::deployApp() for the same content item unless the Connect administrator explicitly changes the content configuration.\n\n\n\n\n16.9.5 Git-backed limitations\nBefore choosing this model, confirm that the application does not depend on:\n\nGit LFS files\nGit submodules\nSymbolic links\nA repository URL that requires SSH\nA Connect server without Git or remote-network access\n\nConnect obtains the content from the selected target directory and requires the manifest there. It does not use the manifest as a file allowlist when archiving the Git directory.\n\n\n16.9.6 Current GMD deployment lesson\nThe GMD Connect server is intranet-only. A normal GitHub-hosted Actions runner cannot reach it for direct deployment. The practical choices are:\n\nUse a manual rsconnect deployment from a machine inside the intranet.\nUse a self-hosted runner inside the intranet.\nAsk the Connect administrator to enable and configure Git-backed content so Connect pulls from GitHub itself.\n\nThe last option requires administrator configuration and is not achieved by adding manifest.json alone.",
+    "crumbs": [
+      "Shiny Apps with Posit Connect",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Building a Shiny App with GitHub and Posit Connect</span>"
+    ]
+  },
+  {
+    "objectID": "shiny_github_posit_connect.html#deployment-workflow-for-future-applications",
+    "href": "shiny_github_posit_connect.html#deployment-workflow-for-future-applications",
+    "title": "16  Building a Shiny App with GitHub and Posit Connect",
+    "section": "16.10 Deployment Workflow for Future Applications",
+    "text": "16.10 Deployment Workflow for Future Applications\n\n16.10.1 One-time project setup\n\nCreate the GitHub repository and branch model.\nCreate the Shiny/Golem project.\nAdd DESCRIPTION, NAMESPACE, R/, app.R, inst/, tests, and renv.lock.\nAdd a local offline mode and an injectable external-service adapter.\nCreate the GitHub App and install it on the target repository.\nProtect the application output branch.\nCreate the Connect content item or obtain administrator approval for Git-backed content.\nConfigure Connect content access and the runtime secrets.\nGenerate and commit manifest.json if Git-backed deployment will be used.\n\n\n\n16.10.2 Every code change\n\nPull the current target branch.\nMake the smallest correct code change.\nRun unit and integration tests.\nRun a local offline boot if the UI or startup path changed.\nInspect git diff and confirm no secret or generated private file is present.\nCommit and push the source change.\nDeploy a new bundle manually, or use Git-backed Update Now.\nVerify the current Connect bundle ID.\nOpen a fresh browser session and run a smoke test.\n\n\n\n16.10.3 Every dependency change\n\nUpdate DESCRIPTION.\nInstall or restore the dependency locally.\nRun renv::snapshot().\nRegenerate manifest.json for Git-backed content.\nRun the complete test suite.\nDeploy and inspect server-side package installation logs.\n\n\n\n16.10.4 Credential rotation\n\nGenerate a replacement GitHub App private key.\nStore it securely and verify the App and installation identifiers.\nReplace GITHUB_APP_PRIVATE_KEY in Connect secret storage.\nRestart or redeploy the content.\nTest queue loading and one safe API operation.\nRevoke the old key according to the GitHub App’s key-management behavior.\nReview GitHub and Connect logs for unexpected use.\n\n\n\n\n\n\n\nWarning\n\n\n\nIf a private key may have been exposed, rotate it immediately and audit recent repository history and branch activity.",
+    "crumbs": [
+      "Shiny Apps with Posit Connect",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Building a Shiny App with GitHub and Posit Connect</span>"
+    ]
+  },
+  {
+    "objectID": "shiny_github_posit_connect.html#verification-checklist",
+    "href": "shiny_github_posit_connect.html#verification-checklist",
+    "title": "16  Building a Shiny App with GitHub and Posit Connect",
+    "section": "16.11 Verification Checklist",
+    "text": "16.11 Verification Checklist\n\n16.11.1 Local checks\n\nrenv::restore() completes.\npkgload::load_all(\".\") completes.\nThe offline app boots.\nUnit tests pass.\nThe integration test passes without network access.\nThe app contains no hard-coded secret or personal access token.\nThe configured role map has valid identities and roles.\nmanifest.json exists in the Git-backed target directory.\n\n\n\n16.11.2 GitHub checks\n\nThe GitHub App is installed on the intended repository.\nThe numeric App ID is recorded separately from the Iv... Client ID.\nThe installation ID belongs to the target repository installation.\nThe App has the minimum required repository permissions.\nThe output branch exists and is protected.\nForce-push and deletion are blocked where required.\nDirect writes by ordinary users are rejected.\n\n\n\n16.11.3 Connect checks\n\nThe Connect server is reachable from the deployment machine or has Git remote access for Git-backed deployment.\nThe content item is private and has the intended access group.\nThe deployed bundle includes app.R, DESCRIPTION, NAMESPACE, R/, inst/, and runtime configuration.\nThe exact runtime environment variable names are configured.\nThe private key is stored as a secret and contains the full PEM.\nLocal-only variables are unset in production.\nThe current bundle ID is newer than the previous deployment.\nThe Connect logs show a successful application launch.\n\n\n\n16.11.4 Application checks\n\nA mapped reviewer can load the queue.\nAn artifact opens with the expected read-only and editable fields.\nA reviewer can perform the intended reviewer action.\nAn approver can perform the intended approval or revision action.\nAn administrator-only action is denied to other roles.\nA write creates the expected GitHub commit on the protected output branch.\nAn unmapped Connect identity receives no write permissions.\nA stale write is rejected rather than silently overwriting another change.",
+    "crumbs": [
+      "Shiny Apps with Posit Connect",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Building a Shiny App with GitHub and Posit Connect</span>"
+    ]
+  },
+  {
+    "objectID": "shiny_github_posit_connect.html#troubleshooting",
+    "href": "shiny_github_posit_connect.html#troubleshooting",
+    "title": "16  Building a Shiny App with GitHub and Posit Connect",
+    "section": "16.12 Troubleshooting",
+    "text": "16.12 Troubleshooting\n\n16.12.1 failed to parse GitHub App private key\nLikely causes:\n\nThe secret contains a filename or path rather than PEM contents.\nThe BEGIN or END boundary is missing.\nConnect collapsed newlines and the application does not normalize them.\nThe value is a base64 encoding of the whole file.\nThe key belongs to a different GitHub App.\nThe running bundle still contains an older parser.\n\nFix sequence:\n\nConfirm the secret contains the complete PEM without displaying it in logs.\nConfirm that the code accepts the representation used by the Connect secret field.\nDeploy a new bundle containing the parser fix.\nVerify the new bundle is current in Connect.\nRestart the content and retry.\n\n\n\n\n\n\n\nWarning\n\n\n\nDo not add diagnostics that print the first characters or any portion of the private key. Even a partial key can be sensitive.\n\n\n\n\n16.12.2 could not find function \"gregmanager\" or another removed function\nThis means the running Connect process is using an old bundle. Search the current repository first:\ngit grep -n \"gregmanager\"\nIf the function is absent locally, do not change the secret. Upload a new bundle to the existing content item, confirm its bundle ID, restart the content, and open a fresh browser session.\nThis exact failure occurred when a temporary diagnostic commit had been deployed and a later code fix had only been pushed to GitHub, not yet uploaded to the manual Connect content item.\n\n\n16.12.3 review app adapter not configured\nOne or more required variables are absent or empty. Verify the exact names:\nREVIEW_APP_GH_OWNER\nREVIEW_APP_GH_REPO\nREVIEW_APP_GH_DEFAULT_BRANCH\nREVIEW_APP_GH_REVIEW_BRANCH\nGITHUB_APP_ID\nGITHUB_APP_INSTALLATION_ID\nGITHUB_APP_PRIVATE_KEY\nDo not assume REVIEW_APP_GH_APP_ID or another similarly named variable is read by the code.\n\n\n16.12.4 401 Bad credentials or JWT authentication errors\nCheck:\n\nNumeric App ID versus Iv... Client ID.\nInteger JWT timestamps.\nThe private key matches the GitHub App.\nThe installation ID is current.\nThe App is installed on the target repository.\nThe Connect host can reach the GitHub API.\nThe server clock is reasonably synchronized.\n\n\n\n16.12.5 403 or write failures\nCheck:\n\nContents permission is sufficient.\nThe App installation has access to the repository.\nThe output branch protection allows the intended App operation.\nThe application is writing the configured branch.\nThe token is not expired.\nThe branch was not moved by another writer after the artifact was loaded.\n\n\n\n16.12.6 404 Not Found\nCheck the owner, repository, branch, and path. A GitHub App can authenticate successfully and still receive 404 when its installation does not have access to a private repository.\n\n\n16.12.7 The app boots but shows no role or no action buttons\nConfirm that:\n\nConnect authentication is enabled.\nsession$user returns the field used in config/roles.yml.\nThe identity matches exactly, including case and domain where applicable.\nThe role value is one of the supported roles.\nThe role map was included in the current bundle.\n\n\n\n16.12.8 Git push succeeds but the live app is unchanged\nThis is expected for manual bundle deployment. git push updates GitHub only. Run rsconnect::deployApp() from a machine that can reach Connect, or configure Git-backed content and use Update Now.\n\n\n16.12.9 Connect’s Deploy button appears to do nothing\nFor manual content, the UI may re-run the existing bundle rather than upload your local working tree. A new source commit is not automatically present in that bundle. Upload a new bundle with deployment tooling.\nFor Git-backed content, use the Git Details panel and Update Now. Confirm that the content item actually says it is from Git and displays the expected remote, branch, and path.\n\n\n16.12.10 Git-backed import cannot find the app\nCheck:\n\nmanifest.json is committed and pushed.\nIt is in the selected target directory.\nThe repository URL uses HTTPS and contains no credentials.\nConnect has Git credentials for the host.\nConnect can reach the Git server.\nThe selected branch contains the manifest.\nThe target directory is not hidden behind a submodule or symlink.\n\n\n\n16.12.11 The bundle fails because of missing package files\nInspect the bundle file list. A Golem-style source-loaded application requires DESCRIPTION, NAMESPACE, R/, and inst/. If the app reads a repository configuration file such as config/roles.yml, include that directory too.\nDo not assume package build exclusions and Connect publishing exclusions behave identically; verify the actual uploaded bundle.\n\n\n16.12.12 R and renv.lock versions differ\nCompare the R runtime named in the lockfile with the R version available on Connect. Restore or regenerate the lockfile with a supported R version, or confirm that the dependency set is compatible with the Connect runtime. Treat warnings about lockfile generation versions as deployment risks, not as proof that the application is healthy.",
+    "crumbs": [
+      "Shiny Apps with Posit Connect",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Building a Shiny App with GitHub and Posit Connect</span>"
+    ]
+  },
+  {
+    "objectID": "shiny_github_posit_connect.html#security-rules",
+    "href": "shiny_github_posit_connect.html#security-rules",
+    "title": "16  Building a Shiny App with GitHub and Posit Connect",
+    "section": "16.13 Security Rules",
+    "text": "16.13 Security Rules\n\nNever commit GitHub App private keys, Connect API keys, personal access tokens, or copied secret values.\nStore runtime secrets in Connect secret storage or the approved Vault path.\nUse a GitHub App installation token instead of a reviewer’s personal token.\nGrant the minimum repository and organization permissions.\nInstall the GitHub App only on repositories it needs.\nProtect output branches against force-push and deletion.\nDo not log private keys, JWTs, installation tokens, or environment-variable values.\nKeep local identity overrides disabled in production.\nUse bounded HTTP timeouts and retries so a GitHub outage does not exhaust a Connect Shiny process.\nRotate credentials immediately after suspected exposure.\nTreat the repository history and protected output branch as the durable application ledger when Connect storage is disposable.",
+    "crumbs": [
+      "Shiny Apps with Posit Connect",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Building a Shiny App with GitHub and Posit Connect</span>"
+    ]
+  },
+  {
+    "objectID": "shiny_github_posit_connect.html#reference-files",
+    "href": "shiny_github_posit_connect.html#reference-files",
+    "title": "16  Building a Shiny App with GitHub and Posit Connect",
+    "section": "16.14 Reference Files",
+    "text": "16.14 Reference Files\nThe working implementation can be used as a concrete example:\n\n\n\n\n\n\n\nTopic\nFile\n\n\n\n\nShiny entry point\nreview-app/app.R\n\n\nPackage metadata\nreview-app/DESCRIPTION\n\n\nUI composition\nreview-app/R/app_ui.R\n\n\nServer wiring\nreview-app/R/app_server.R\n\n\nGitHub adapter factory\nreview-app/R/github_adapter.R\n\n\nGitHub App authentication\nreview-app/R/github_auth.R\n\n\nConnect identity\nreview-app/R/identity.R\n\n\nRole and authorization logic\nreview-app/R/authorization.R and review-app/config/roles.yml\n\n\nSafe Git writes\nreview-app/R/recovery.R\n\n\nDependency lockfile\nreview-app/renv.lock\n\n\nGit-backed manifest\nreview-app/manifest.json\n\n\nConnect operator runbook\nreview-app/docs/operator-guide.md\n\n\nDeployment helper notes\nreview-app/dev/03_deploy.R\n\n\nConnect deployment record\nreview-app/rsconnect/wbconnect/&lt;account&gt;/review-app.dcf\n\n\nGitHub authentication tests\nreview-app/tests/testthat/test-github-auth.R\n\n\nFull integration test\nreview-app/tests/testthat/test-integration.R",
+    "crumbs": [
+      "Shiny Apps with Posit Connect",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Building a Shiny App with GitHub and Posit Connect</span>"
+    ]
+  },
+  {
+    "objectID": "shiny_github_posit_connect.html#official-documentation",
+    "href": "shiny_github_posit_connect.html#official-documentation",
+    "title": "16  Building a Shiny App with GitHub and Posit Connect",
+    "section": "16.15 Official Documentation",
+    "text": "16.15 Official Documentation\n\nPosit Connect Git-backed content\nPosit Connect GitHub App integration\nPosit Connect API documentation\nGitHub Apps documentation\nGitHub App installation authentication\n\n\n\n\n\n\n\nNote\n\n\n\nThe Connect URLs above are internal documentation URLs for the World Bank Connect installation. The corresponding topics in the public Posit Connect administrator and user guides apply to other Connect installations, but server URLs, authentication policy, Git credentials, and available product features must be confirmed with the local Connect administrator.",
+    "crumbs": [
+      "Shiny Apps with Posit Connect",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Building a Shiny App with GitHub and Posit Connect</span>"
+    ]
+  },
+  {
+    "objectID": "shiny_github_posit_connect.html#final-reusable-checklist",
+    "href": "shiny_github_posit_connect.html#final-reusable-checklist",
+    "title": "16  Building a Shiny App with GitHub and Posit Connect",
+    "section": "16.16 Final Reusable Checklist",
+    "text": "16.16 Final Reusable Checklist\nBefore calling a new application production-ready, confirm:\n\nThe application has a clear source branch and output/data branch model.\nThe Shiny entry point boots from a clean checkout.\nThe deployment bundle contains every source and runtime configuration file.\nDependencies are captured in renv.lock.\nUnit, integration, and offline boot tests pass.\nThe GitHub App is installed only where needed.\nThe numeric App ID, Client ID, installation ID, and private key are recorded separately.\nThe private key is stored only in Connect secret storage.\nRuntime variable names match the code exactly.\nThe output branch is protected.\nConnect content access is limited to intended users.\nConnect identity values match the role map exactly.\nThe deployment model is documented as manual or Git-backed.\nIf Git-backed, manifest.json, HTTPS credentials, Git availability, and server network access have all been verified.\nThe current Connect bundle ID has been recorded after deployment.\nA fresh browser smoke test verifies both read and write behavior.\nThe rollback and credential-rotation procedures are known to the operator.",
+    "crumbs": [
+      "Shiny Apps with Posit Connect",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Building a Shiny App with GitHub and Posit Connect</span>"
     ]
   }
 ]

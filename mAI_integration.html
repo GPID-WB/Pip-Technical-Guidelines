@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Ronak Shah">
+<meta name="dcterms.date" content="2026-06-09">
 
-<title>5&nbsp; SetUp Git &amp; GitHub in VS Code – Pip Technical Guidelines</title>
+<title>15&nbsp; Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R – Pip Technical Guidelines</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -71,18 +73,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./copilot_protocols.html" rel="next">
-<link href="./VScode_Setup_for_stata.html" rel="prev">
+<link href="./shiny_github_posit_connect.html" rel="next">
+<link href="./mAI_factory_environment_setup.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bb62276ab45c84d9efd712f51ff97b5a.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-3d497cff885f6278d37568d0ef0763f8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-d4a8b15a3225db039fdc9185e4bb97cd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -110,6 +112,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="css/custom.css">
@@ -124,7 +129,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./VScode_Setup_for_stata.html">VSCode Setup</a></li><li class="breadcrumb-item"><a href="./VScode_setup_for_github.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./mAI_factory_API_setup_prerequisities.html">mAI Factory</a></li><li class="breadcrumb-item"><a href="./mAI_integration.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -201,7 +206,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./VScode_setup_for_github.html" class="sidebar-item-text sidebar-link active">
+  <a href="./VScode_setup_for_github.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></span></a>
   </div>
 </li>
@@ -294,7 +299,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./mAI_integration.html" class="sidebar-item-text sidebar-link">
+  <a href="./mAI_integration.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R</span></span></a>
   </div>
 </li>
@@ -344,212 +349,266 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link active" data-scroll-target="#prerequisites"><span class="header-section-number">5.1</span> Prerequisites</a></li>
-  <li><a href="#install-vscode-and-stata-extensions" id="toc-install-vscode-and-stata-extensions" class="nav-link" data-scroll-target="#install-vscode-and-stata-extensions"><span class="header-section-number">5.2</span> Install VScode and Stata Extensions</a></li>
-  <li><a href="#first-time-git-configuration-one-time" id="toc-first-time-git-configuration-one-time" class="nav-link" data-scroll-target="#first-time-git-configuration-one-time"><span class="header-section-number">5.3</span> First-time Git configuration (one-time)</a></li>
-  <li><a href="#authenticate-to-github" id="toc-authenticate-to-github" class="nav-link" data-scroll-target="#authenticate-to-github"><span class="header-section-number">5.4</span> Authenticate to GitHub</a></li>
-  <li><a href="#clone-or-publish-a-repository-in-vs-code" id="toc-clone-or-publish-a-repository-in-vs-code" class="nav-link" data-scroll-target="#clone-or-publish-a-repository-in-vs-code"><span class="header-section-number">5.5</span> Clone or publish a repository in VS Code</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">15.1</span> Introduction</a></li>
+  <li><a href="#what-is-world-bank-mai-factory" id="toc-what-is-world-bank-mai-factory" class="nav-link" data-scroll-target="#what-is-world-bank-mai-factory"><span class="header-section-number">15.2</span> What is World Bank mAI Factory?</a></li>
+  <li><a href="#authentication-azure-ad-via-posit-connect-oauth" id="toc-authentication-azure-ad-via-posit-connect-oauth" class="nav-link" data-scroll-target="#authentication-azure-ad-via-posit-connect-oauth"><span class="header-section-number">15.3</span> Authentication: Azure AD via Posit Connect OAuth</a>
   <ul class="collapse">
-  <li><a href="#clone-an-existing-repository" id="toc-clone-an-existing-repository" class="nav-link" data-scroll-target="#clone-an-existing-repository"><span class="header-section-number">5.5.1</span> Clone an existing repository</a></li>
-  <li><a href="#publish-create-a-new-github-repo-from-a-local-folder" id="toc-publish-create-a-new-github-repo-from-a-local-folder" class="nav-link" data-scroll-target="#publish-create-a-new-github-repo-from-a-local-folder"><span class="header-section-number">5.5.2</span> Publish (create a new GitHub repo from a local folder)</a></li>
+  <li><a href="#how-it-works" id="toc-how-it-works" class="nav-link" data-scroll-target="#how-it-works"><span class="header-section-number">15.3.1</span> How it works</a></li>
+  <li><a href="#reactive-token-in-a-shiny-app" id="toc-reactive-token-in-a-shiny-app" class="nav-link" data-scroll-target="#reactive-token-in-a-shiny-app"><span class="header-section-number">15.3.2</span> Reactive token in a Shiny app</a></li>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites"><span class="header-section-number">15.3.3</span> Prerequisites</a></li>
   </ul></li>
-  <li><a href="#power-ups" id="toc-power-ups" class="nav-link" data-scroll-target="#power-ups"><span class="header-section-number">5.6</span> Power-ups</a>
-  <ul class="collapse">
-  <li><a href="#gitlens-highlights" id="toc-gitlens-highlights" class="nav-link" data-scroll-target="#gitlens-highlights"><span class="header-section-number">5.6.1</span> GitLens highlights</a></li>
-  <li><a href="#git-graph-highlights" id="toc-git-graph-highlights" class="nav-link" data-scroll-target="#git-graph-highlights"><span class="header-section-number">5.6.2</span> Git Graph highlights</a></li>
-  <li><a href="#copilot-copilot-chat" id="toc-copilot-copilot-chat" class="nav-link" data-scroll-target="#copilot-copilot-chat"><span class="header-section-number">5.6.3</span> Copilot &amp; Copilot Chat</a></li>
-  </ul></li>
-  <li><a href="#team-conventions-recommended" id="toc-team-conventions-recommended" class="nav-link" data-scroll-target="#team-conventions-recommended"><span class="header-section-number">5.7</span> Team conventions (recommended)</a></li>
-  <li><a href="#quick-reference-commands" id="toc-quick-reference-commands" class="nav-link" data-scroll-target="#quick-reference-commands"><span class="header-section-number">5.8</span> Quick reference (commands)</a></li>
-  <li><a href="#suggested-vs-code-settings-optional" id="toc-suggested-vs-code-settings-optional" class="nav-link" data-scroll-target="#suggested-vs-code-settings-optional"><span class="header-section-number">5.9</span> Suggested VS Code settings (optional)</a></li>
+  <li><a href="#making-the-api-call" id="toc-making-the-api-call" class="nav-link" data-scroll-target="#making-the-api-call"><span class="header-section-number">15.4</span> Making the API Call</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">15.5</span> Summary</a></li>
+  <li><a href="#related-chapters" id="toc-related-chapters" class="nav-link" data-scroll-target="#related-chapters"><span class="header-section-number">15.6</span> Related chapters</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./VScode_Setup_for_stata.html">VSCode Setup</a></li><li class="breadcrumb-item"><a href="./VScode_setup_for_github.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./mAI_factory_API_setup_prerequisities.html">mAI Factory</a></li><li class="breadcrumb-item"><a href="./mAI_integration.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">SetUp Git &amp; GitHub in VS Code</span></h1>
+<h1 class="title"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Ronak Shah </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 9, 2026</p>
+    </div>
+  </div>
   
     
   </div>
   
-<div>
-  <div class="abstract">
-    <div class="block-title">Abstract</div>
-    Practical steps to integrate Git and GitHub in VS Code using first-party and helper extensions.
-  </div>
-</div>
 
 
 </header>
 
 
-<section id="prerequisites" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="prerequisites"><span class="header-section-number">5.1</span> Prerequisites</h2>
-<ul>
-<li><strong>Git for Windows</strong> installed (includes Git Credential Manager).</li>
-<li><strong>VS Code</strong> installed.</li>
-<li>Make sure you’re added to the <a href="https://worldbankgroup.service-now.com/wbg?id=wbg_sc_catalog&amp;sys_id=910e1739db1a54903c5960ab13961912">World Bank GitHub organization</a> using eservices/ request.</li>
-</ul>
-<hr>
-</section>
-<section id="install-vscode-and-stata-extensions" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="install-vscode-and-stata-extensions"><span class="header-section-number">5.2</span> Install VScode and Stata Extensions</h2>
+<section id="introduction" class="level2" data-number="15.1">
+<h2 data-number="15.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">15.1</span> Introduction</h2>
+<p><strong>Standard OpenAI API calls are not permitted from inside the World Bank’s network.</strong> Instead, the Bank provides an internal gateway called the <strong>mAI Factory</strong> — an Azure API Management (APIM) layer that proxies Azure OpenAI deployments, enforces access controls, and adds required audit headers.</p>
+<p>This article documents the integration pattern for calling mAI Factory from <strong>R/Shiny apps deployed on Posit Connect</strong>. If you need to call mAI Factory from a <strong>local Python script</strong> instead, see the <a href="./mAI_factory_API_setup_prerequisities.html">Desktop Setup guide</a>.</p>
+<p>The two key steps for the R/Shiny pattern are:</p>
 <ol type="1">
-<li><p>Open “Company Portal” app on your computer.</p></li>
-<li><p>Search for <a href="companyportal:ApplicationId=d5aba730-00d4-4a78-a224-7b8170ac0eb0">VS Code</a> and install it.</p></li>
-<li><p>Search for <a href="companyportal:ApplicationId=b9da6be7-f510-438d-9fd0-b1df8213b3c6">GitForWindows</a> and install it. (Make sure Git Credential Manager is selected)</p></li>
-<li><p>Open VS Code → Extensions (left sidebar), and install:</p>
-<ul>
-<li><strong>Stata Enhanced</strong> (syntax highlighting).</li>
-<li><strong>Git Graph</strong> (visualize branches).</li>
-<li><strong>GitLens</strong> (blame/insight).</li>
-<li><strong>GitHub Pull Requests and Issues</strong>.</li>
-<li><strong>GitHub Copilot</strong> (optional).</li>
-<li><strong>GitHub Copilot Chat</strong> (optional).</li>
-</ul></li>
+<li>Acquiring an Azure AD Bearer token via Posit Connect’s OAuth integration</li>
+<li>Structuring HTTP requests for the mAI Factory endpoint</li>
 </ol>
 <hr>
 </section>
-<section id="first-time-git-configuration-one-time" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="first-time-git-configuration-one-time"><span class="header-section-number">5.3</span> First-time Git configuration (one-time)</h2>
-<p>Open <strong>Terminal</strong> in VS Code (Ctrl+`) and run:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify yourself in commits</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.name  <span class="st">"Your Name"</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> user.email <span class="st">"your_email@domain.com"</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Use main as default branch for new repos</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> init.defaultBranch main</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Line endings: recommended on Windows</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> core.autocrlf true  <span class="co"># checkout CRLF, commit LF</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Improve diffs for common texty files</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> diff.renameLimit 99999</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config <span class="at">--global</span> fetch.prune true</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="what-is-world-bank-mai-factory" class="level2" data-number="15.2">
+<h2 data-number="15.2" class="anchored" data-anchor-id="what-is-world-bank-mai-factory"><span class="header-section-number">15.2</span> What is World Bank mAI Factory?</h2>
+<p>The mAI Factory exposes Azure OpenAI deployments (including <code>gpt-4o-mini</code>, <code>gpt-4o</code>, <code>gpt-4.1-mini</code>, etc.) behind Azure API Management. Developers never call OpenAI’s public endpoints; instead they call internal APIM endpoints, authenticated with an Azure AD Bearer token.</p>
+<p>Three environments are available:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>API_BASE_URLS <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">DEV  =</span> <span class="st">"https://azapimdev.worldbank.org/conversationalai/v2/openai/deployments"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">QA   =</span> <span class="st">"https://azapimqa.worldbank.org/conversationalai/v2/openai/deployments"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">PROD =</span> <span class="st">"https://azapim.worldbank.org/conversationalai/v2/openai/deployments"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The URL structure mirrors the <a href="https://learn.microsoft.com/en-us/azure/ai-services/openai/reference">Azure OpenAI REST API</a>:</p>
+<pre><code>{base_url}/{model}/chat/completions?api-version={version}</code></pre>
+<p>So a call to <code>gpt-4.1-mini</code> on DEV resolves to:</p>
+<pre><code>https://azapimdev.worldbank.org/conversationalai/v2/openai/deployments/gpt-4.1-mini/chat/completions?api-version=2025-04-01-preview</code></pre>
+<p>Any code already targeting the Azure OpenAI API can be pointed at the mAI Factory with minimal changes — you only swap the base URL and switch from an <code>api-key</code> header to a Bearer token.</p>
+<blockquote class="blockquote">
+<p><strong>Different authentication paths:</strong> The <a href="./mAI_factory_environment_setup.html">Desktop Setup guide</a> authenticates via the <code>itsai-platform</code> SDK’s interactive browser login (<code>DesktopToken</code>). This chapter uses Posit Connect’s OAuth integration instead, which is the right approach for headless Shiny apps that cannot open a browser.</p>
+</blockquote>
 <hr>
 </section>
-<section id="authenticate-to-github" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="authenticate-to-github"><span class="header-section-number">5.4</span> Authenticate to GitHub</h2>
-<p>Go to your profile on VScode and login to GitHub.</p>
-<p>Trying to <strong>clone/push</strong> over HTTPS will trigger a secure web flow:</p>
-<ol type="1">
-<li>Use a GitHub <strong>personal access token (PAT)</strong> or organization SSO as prompted.</li>
-<li>Git Credential Manager securely stores/refreshes credentials.</li>
-</ol>
+<section id="authentication-azure-ad-via-posit-connect-oauth" class="level2" data-number="15.3">
+<h2 data-number="15.3" class="anchored" data-anchor-id="authentication-azure-ad-via-posit-connect-oauth"><span class="header-section-number">15.3</span> Authentication: Azure AD via Posit Connect OAuth</h2>
+<p>This is the part that trips most developers up. You cannot interactively log in to Azure AD from a headless Shiny app. The solution is to delegate credential acquisition to <strong>Posit Connect</strong>, which maintains an OAuth integration with the World Bank’s Azure AD tenant.</p>
+<section id="how-it-works" class="level3" data-number="15.3.1">
+<h3 data-number="15.3.1" class="anchored" data-anchor-id="how-it-works"><span class="header-section-number">15.3.1</span> How it works</h3>
+<p>When an app is deployed on the internal Posit Connect server, Connect can exchange credentials on behalf of the running content. The <code>connectapi</code> package exposes this via <code>get_oauth_content_credentials()</code>, which takes an <code>audience</code> argument — the GUID of the registered OAuth integration for mAI.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>get_azure_token <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  connect_server  <span class="ot">&lt;-</span> <span class="st">"https://datanalytics-int.worldbank.org/"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  connect_api_key <span class="ot">&lt;-</span> <span class="fu">Sys.getenv</span>(<span class="st">'API_KEY'</span>) <span class="co"># Posit Connect API key set as env var</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (connect_server <span class="sc">==</span> <span class="st">""</span> <span class="sc">||</span> connect_api_key <span class="sc">==</span> <span class="st">""</span>) {</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"This app must run on Posit Connect. CONNECT_SERVER / CONNECT_API_KEY not set."</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># OAUTH_INTEGRATION_GUID: add the mAI OAuth integration on datanalytics-int.worldbank.org;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># the GUID is auto-generated and can be copied from there.</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  oauth_guid <span class="ot">&lt;-</span> <span class="fu">Sys.getenv</span>(<span class="st">"OAUTH_INTEGRATION_GUID"</span>)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  client      <span class="ot">&lt;-</span> connectapi<span class="sc">::</span><span class="fu">connect</span>(<span class="at">server =</span> connect_server, <span class="at">api_key =</span> connect_api_key)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  credentials <span class="ot">&lt;-</span> connectapi<span class="sc">::</span><span class="fu">get_oauth_content_credentials</span>(</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">connect  =</span> client,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">audience =</span> oauth_guid</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  credentials<span class="sc">$</span>access_token</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The returned <code>access_token</code> is a short-lived Azure AD Bearer token that can be used in the <code>Authorization</code> header of any mAI Factory request.</p>
 </section>
-<section id="clone-or-publish-a-repository-in-vs-code" class="level2" data-number="5.5">
-<h2 data-number="5.5" class="anchored" data-anchor-id="clone-or-publish-a-repository-in-vs-code"><span class="header-section-number">5.5</span> Clone or publish a repository in VS Code</h2>
-<section id="clone-an-existing-repository" class="level3" data-number="5.5.1">
-<h3 data-number="5.5.1" class="anchored" data-anchor-id="clone-an-existing-repository"><span class="header-section-number">5.5.1</span> Clone an existing repository</h3>
+<section id="reactive-token-in-a-shiny-app" class="level3" data-number="15.3.2">
+<h3 data-number="15.3.2" class="anchored" data-anchor-id="reactive-token-in-a-shiny-app"><span class="header-section-number">15.3.2</span> Reactive token in a Shiny app</h3>
+<p>Because the token is tied to the user session, retrieve it once per session using a Shiny <code>reactive()</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>azure_token <span class="ot">&lt;-</span> shiny<span class="sc">::</span><span class="fu">reactive</span>({</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tryCatch</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">get_azure_token</span>(),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">error =</span> <span class="cf">function</span>(e) {</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>      shiny<span class="sc">::</span><span class="fu">showNotification</span>(<span class="fu">paste</span>(<span class="st">"Token error:"</span>, e<span class="sc">$</span>message), <span class="at">type =</span> <span class="st">"error"</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>      <span class="cn">NULL</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Any handler that calls the LLM simply calls <code>azure_token()</code>, and Shiny’s reactivity ensures the retrieval runs at most once per session.</p>
+</section>
+<section id="prerequisites" class="level3" data-number="15.3.3">
+<h3 data-number="15.3.3" class="anchored" data-anchor-id="prerequisites"><span class="header-section-number">15.3.3</span> Prerequisites</h3>
+<p>To use this pattern in your own app you need:</p>
 <ul>
-<li>Command Palette → <strong>Git: Clone</strong> → paste repo URL (HTTPS or SSH).</li>
-<li>Choose a local folder → VS Code offers to open the folder.</li>
+<li>The app deployed on the internal Posit Connect instance (<code>datanalytics-int.worldbank.org</code>)</li>
+<li><code>API_KEY</code> set as a Posit Connect environment variable (the Connect API key, not an OpenAI key)</li>
+<li><code>OAUTH_INTEGRATION_GUID</code> set as a Posit Connect environment variable — add the mAI OAuth integration on <code>datanalytics-int.worldbank.org</code>; the GUID is auto-generated and can be copied from there</li>
 </ul>
+<blockquote class="blockquote">
+<p><strong>Note:</strong> This authentication path does <strong>not</strong> require the ITSAI on-boarding request described in the <a href="./mAI_factory_setup_access_request.html">Desktop Setup guide</a>. Posit Connect handles identity through its own OAuth integration.</p>
+</blockquote>
+<hr>
 </section>
-<section id="publish-create-a-new-github-repo-from-a-local-folder" class="level3" data-number="5.5.2">
-<h3 data-number="5.5.2" class="anchored" data-anchor-id="publish-create-a-new-github-repo-from-a-local-folder"><span class="header-section-number">5.5.2</span> Publish (create a new GitHub repo from a local folder)</h3>
-<ol type="1">
-<li><p>Open your project folder in VS Code.</p></li>
-<li><p>Source Control view → <strong>Initialize Repository</strong>.</p></li>
-<li><p>Commit initial files.</p></li>
-<li><p>Click <strong>Publish to GitHub</strong> (or run Command Palette → <strong>Publish to GitHub</strong>).</p>
+</section>
+<section id="making-the-api-call" class="level2" data-number="15.4">
+<h2 data-number="15.4" class="anchored" data-anchor-id="making-the-api-call"><span class="header-section-number">15.4</span> Making the API Call</h2>
+<p>With a valid token in hand, calling the mAI Factory looks nearly identical to a standard OpenAI chat completions call. The differences are the endpoint URL, the Bearer token in the <code>Authorization</code> header, and two extra audit headers (<code>x-source-type</code> and <code>x-team-name</code>) that mAI requires.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>API_VERSION     <span class="ot">&lt;-</span> <span class="st">"2025-04-01-preview"</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>REQUEST_TIMEOUT <span class="ot">&lt;-</span> <span class="dv">120</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>DEFAULT_MODEL   <span class="ot">&lt;-</span> <span class="st">"gpt-4.1-mini"</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>openai_chat_response <span class="ot">&lt;-</span> <span class="cf">function</span>(prompt, token, <span class="at">model =</span> DEFAULT_MODEL) {</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  api_url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(API_BASE_URLS<span class="sc">$</span>DEV, <span class="st">"/"</span>, model, <span class="st">"/chat/completions"</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  headers <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Authorization"</span> <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"Bearer"</span>, token),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"x-source-type"</span> <span class="ot">=</span> <span class="st">"interactive"</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"x-team-name"</span>   <span class="ot">=</span> <span class="st">"pip"</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Content-Type"</span>  <span class="ot">=</span> <span class="st">"application/json"</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  payload <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">messages   =</span> <span class="fu">list</span>(<span class="fu">list</span>(<span class="at">role =</span> <span class="st">"user"</span>, <span class="at">content =</span> prompt)),</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_tokens =</span> <span class="dv">1000</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  response <span class="ot">&lt;-</span> httr<span class="sc">::</span><span class="fu">POST</span>(</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">url    =</span> api_url,</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">query  =</span> <span class="fu">list</span>(<span class="st">`</span><span class="at">api-version</span><span class="st">`</span> <span class="ot">=</span> API_VERSION),</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    httr<span class="sc">::</span><span class="fu">add_headers</span>(<span class="at">.headers =</span> headers),</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">body   =</span> payload,</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">encode =</span> <span class="st">"json"</span>,</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    httr<span class="sc">::</span><span class="fu">timeout</span>(REQUEST_TIMEOUT)</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (httr<span class="sc">::</span><span class="fu">http_status</span>(response)<span class="sc">$</span>category <span class="sc">!=</span> <span class="st">"Success"</span>) {</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"mAI Factory API error: "</span>, httr<span class="sc">::</span><span class="fu">status_code</span>(response), <span class="st">" - "</span>,</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>         httr<span class="sc">::</span><span class="fu">content</span>(response, <span class="st">"text"</span>, <span class="at">encoding =</span> <span class="st">"UTF-8"</span>))</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  parsed <span class="ot">&lt;-</span> httr<span class="sc">::</span><span class="fu">content</span>(response, <span class="st">"parsed"</span>, <span class="st">"application/json"</span>)</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>  parsed<span class="sc">$</span>choices[[<span class="dv">1</span>]]<span class="sc">$</span>message<span class="sc">$</span>content</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>A few design decisions worth noting:</p>
 <ul>
-<li>Choose a name, visibility (private/public), and org/user.</li>
-</ul></li>
-</ol>
-</section>
-</section>
-<section id="power-ups" class="level2" data-number="5.6">
-<h2 data-number="5.6" class="anchored" data-anchor-id="power-ups"><span class="header-section-number">5.6</span> Power-ups</h2>
-<section id="gitlens-highlights" class="level3" data-number="5.6.1">
-<h3 data-number="5.6.1" class="anchored" data-anchor-id="gitlens-highlights"><span class="header-section-number">5.6.1</span> GitLens highlights</h3>
-<ul>
-<li><strong>Inline blame</strong> (who/when changed this line)</li>
-<li><strong>File &amp; line history</strong> with rich diffs</li>
-<li><strong>Visualize &amp; compare branches</strong>; open <strong>Repositories</strong> view</li>
-<li><strong>Open PR associated with a line/commit</strong></li>
-<li><strong>Code authorship heatmaps</strong> and <strong>commit search</strong> by message, author, time</li>
+<li><strong><code>x-team-name: pip</code></strong> — mAI uses this for usage attribution. Set it to your team’s identifier.</li>
+<li><strong><code>x-source-type: interactive</code></strong> — signals that the call is user-driven, as opposed to a batch job.</li>
+<li><strong>120-second timeout</strong> — LLM responses can be slow, especially for longer prompts. The default <code>httr</code> timeout is too short.</li>
+<li><strong>Response extraction</strong> follows the standard Azure OpenAI JSON structure: <code>choices[[1]]$message$content</code>.</li>
 </ul>
+<hr>
 </section>
-<section id="git-graph-highlights" class="level3" data-number="5.6.2">
-<h3 data-number="5.6.2" class="anchored" data-anchor-id="git-graph-highlights"><span class="header-section-number">5.6.2</span> Git Graph highlights</h3>
-<ul>
-<li><strong>Graph view</strong> of all branches/tags</li>
-<li><strong>Drag &amp; drop merges/rebases</strong> (careful: follow team policy)</li>
-<li>Quick <strong>reset</strong>, <strong>cherry-pick</strong>, <strong>revert</strong> from context menu</li>
-</ul>
+<section id="summary" class="level2" data-number="15.5">
+<h2 data-number="15.5" class="anchored" data-anchor-id="summary"><span class="header-section-number">15.5</span> Summary</h2>
+<p>The full integration pattern looks like this:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    A[Shiny app&lt;br/&gt;on Posit Connect] --&gt;|connectapi OAuth| B[Azure AD&lt;br/&gt;Bearer token]
+    B --&gt;|Authorization: Bearer| C[mAI Factory APIM&lt;br/&gt;azapimdev.worldbank.org]
+    C --&gt;|Azure OpenAI API| D[GPT-4.1-mini&lt;br/&gt;deployment]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>To replicate this in your own R project:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Requirement</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Posit Connect deployment</td>
+<td>App must run on the internal Connect server (<code>datanalytics-int.worldbank.org</code>)</td>
+</tr>
+<tr class="even">
+<td><code>API_KEY</code> env var</td>
+<td>Your Posit Connect API key, set in the app’s environment variables on Connect</td>
+</tr>
+<tr class="odd">
+<td><code>OAUTH_INTEGRATION_GUID</code> env var</td>
+<td>Add the mAI OAuth integration on <code>datanalytics-int.worldbank.org</code>; the GUID is auto-generated and can be copied from there</td>
+</tr>
+<tr class="even">
+<td><code>x-team-name</code> header</td>
+<td>Set to your team’s identifier for usage attribution</td>
+</tr>
+<tr class="odd">
+<td>Environment choice</td>
+<td>Start with DEV; graduate to QA/PROD when ready for production traffic</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>connectapi</code> and <code>httr</code> packages are the only non-standard dependencies for the integration itself.</p>
 </section>
-<section id="copilot-copilot-chat" class="level3" data-number="5.6.3">
-<h3 data-number="5.6.3" class="anchored" data-anchor-id="copilot-copilot-chat"><span class="header-section-number">5.6.3</span> Copilot &amp; Copilot Chat</h3>
-<p>In order to access Copilot and Copilot Chat, You need to be added to the <a href="https://worldbankgroup.service-now.com/wbg?id=wbg_sc_catalog&amp;sys_id=910e1739db1a54903c5960ab13961912">World Bank GitHub organization</a> using eservices/ request.</p>
-<p>Make sure you read the <a href="https://github.com/worldbank/ospo/blob/main/guidelines/Copilot%20Getting%20started.md">Getting Started Guide</a> with GIthub Copilot.</p>
-<p>Also, make sure you understand and follow the instructions in the General <a href="https://github.com/worldbank/ospo/blob/main/guidelines/copilot.md">Github Copilot Usage Policy and guide</a>.</p>
-<ul>
-<li><p>Copilot inline suggestions: code, tests, small refactors</p></li>
-<li><p>Copilot Chat for:</p>
-<ul>
-<li>“Explain this diff” / “Write a PR description”</li>
-<li>“Generate a <code>.gitignore</code> for Stata + VS Code”</li>
-<li>“Draft a release note from merged PRs since vX.Y”</li>
-</ul></li>
-</ul>
-</section>
-</section>
-<section id="team-conventions-recommended" class="level2" data-number="5.7">
-<h2 data-number="5.7" class="anchored" data-anchor-id="team-conventions-recommended"><span class="header-section-number">5.7</span> Team conventions (recommended)</h2>
-<ul>
-<li><strong>Branching</strong>: feature branches from <code>main</code>; short, descriptive names.</li>
-<li><strong>Commits</strong>: small, frequent, imperative subject line; reference issues (<code>#123</code>).</li>
-<li><strong>PRs</strong>: clear description (what/why), checklist, reviewers; keep PRs small.</li>
-<li><strong>Merging</strong>: prefer <strong>squash</strong> to keep history clean (unless you need merge commits).</li>
-<li><strong>CI</strong>: make PR green before merge; don’t push directly to <code>main</code>.</li>
-</ul>
-</section>
-<section id="quick-reference-commands" class="level2" data-number="5.8">
-<h2 data-number="5.8" class="anchored" data-anchor-id="quick-reference-commands"><span class="header-section-number">5.8</span> Quick reference (commands)</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start a repo</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> init</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Initial commit"</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch <span class="at">-M</span> main</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> remote add origin <span class="op">&lt;</span>ssh-or-https-url<span class="op">&gt;</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin main</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Typical feature flow</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> feature/my-change</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># ...edit...</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add <span class="at">-A</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Implement my change"</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin feature/my-change</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># open PR in VS Code (GitHub PRs extension)</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Sync main</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout main</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull <span class="at">--ff-only</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="suggested-vs-code-settings-optional" class="level2" data-number="5.9">
-<h2 data-number="5.9" class="anchored" data-anchor-id="suggested-vs-code-settings-optional"><span class="header-section-number">5.9</span> Suggested VS Code settings (optional)</h2>
-<p>Create <code>.vscode/settings.json</code> in your repo to nudge consistent behavior:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"git.enableSmartCommit"</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"git.confirmSync"</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"git.autofetch"</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"git.openRepositoryInParentFolders"</span><span class="fu">:</span> <span class="st">"always"</span><span class="fu">,</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"files.eol"</span><span class="fu">:</span> <span class="st">"</span><span class="ch">\n</span><span class="st">"</span><span class="fu">,</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"editor.renderWhitespace"</span><span class="fu">:</span> <span class="st">"boundary"</span><span class="fu">,</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"editor.rulers"</span><span class="fu">:</span> <span class="ot">[</span><span class="dv">100</span><span class="ot">]</span><span class="fu">,</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"diffEditor.ignoreTrimWhitespace"</span><span class="fu">:</span> <span class="kw">false</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="related-chapters" class="level2" data-number="15.6">
+<h2 data-number="15.6" class="anchored" data-anchor-id="related-chapters"><span class="header-section-number">15.6</span> Related chapters</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Topic</th>
+<th>Chapter</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Install Python and <code>uv</code></td>
+<td><a href="./mAI_factory_API_setup_prerequisities.html">Prerequisites</a></td>
+</tr>
+<tr class="even">
+<td>Request ITSAI platform access (Desktop)</td>
+<td><a href="./mAI_factory_setup_access_request.html">On-Boarding Request</a></td>
+</tr>
+<tr class="odd">
+<td>Configure credentials and test a Python call</td>
+<td><a href="./mAI_factory_environment_setup.html">Environment Setup</a></td>
+</tr>
+</tbody>
+</table>
 
 
 </section>
@@ -957,13 +1016,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./VScode_Setup_for_stata.html" class="pagination-link" aria-label="SetUp Vscode to work with Stata">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">SetUp Vscode to work with Stata</span></span>
+      <a href="./mAI_factory_environment_setup.html" class="pagination-link" aria-label="Environment Setup and Configuration">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Environment Setup and Configuration</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./copilot_protocols.html" class="pagination-link" aria-label="Mandatory Protocols for Using GitHub Copilot in Technical Work">
-        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Mandatory Protocols for Using GitHub Copilot in Technical Work</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./shiny_github_posit_connect.html" class="pagination-link" aria-label="Building a Shiny App with GitHub and Posit Connect">
+        <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Building a Shiny App with GitHub and Posit Connect</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
