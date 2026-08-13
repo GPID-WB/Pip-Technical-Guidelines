@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="PIP Technical Team">
-<meta name="dcterms.date" content="2025-11-03">
 
-<title>1&nbsp; Setting Up R, RStudio, and Positron to Use the Same Configuration Files – Pip Technical Guidelines</title>
+<title>13&nbsp; ITSAI Platform On-Boarding Request – Pip Technical Guidelines</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -28,41 +26,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -73,8 +36,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./rprofile.html" rel="next">
-<link href="./index.html" rel="prev">
+<link href="./mAI_factory_environment_setup.html" rel="next">
+<link href="./mAI_factory_API_setup_prerequisities.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -126,7 +89,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./setupR.html">R Setup and efficiency</a></li><li class="breadcrumb-item"><a href="./setupR.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./mAI_factory_API_setup_prerequisities.html">mAI Factory API Desktop Setup</a></li><li class="breadcrumb-item"><a href="./mAI_factory_setup_access_request.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">ITSAI Platform On-Boarding Request</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -168,7 +131,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./setupR.html" class="sidebar-item-text sidebar-link active">
+  <a href="./setupR.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></span></a>
   </div>
 </li>
@@ -284,7 +247,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./mAI_factory_setup_access_request.html" class="sidebar-item-text sidebar-link">
+  <a href="./mAI_factory_setup_access_request.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">ITSAI Platform On-Boarding Request</span></span></a>
   </div>
 </li>
@@ -323,45 +286,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro"><span class="header-section-number">1.1</span> Intro</a></li>
-  <li><a href="#step-1.-choose-a-canonical-r-configuration-directory" id="toc-step-1.-choose-a-canonical-r-configuration-directory" class="nav-link" data-scroll-target="#step-1.-choose-a-canonical-r-configuration-directory"><span class="header-section-number">1.2</span> Step 1. Choose a canonical R configuration directory</a></li>
-  <li><a href="#step-2.-create-or-update-your-configuration-files" id="toc-step-2.-create-or-update-your-configuration-files" class="nav-link" data-scroll-target="#step-2.-create-or-update-your-configuration-files"><span class="header-section-number">1.3</span> Step 2. Create (or update) your configuration files</a>
-  <ul class="collapse">
-  <li><a href="#renviron" id="toc-renviron" class="nav-link" data-scroll-target="#renviron"><span class="header-section-number">1.3.1</span> <code>.Renviron</code></a></li>
-  <li><a href="#rprofile" id="toc-rprofile" class="nav-link" data-scroll-target="#rprofile"><span class="header-section-number">1.3.2</span> <code>.Rprofile</code></a></li>
-  </ul></li>
-  <li><a href="#step-3.-tell-windows-and-r-where-to-find-these-files" id="toc-step-3.-tell-windows-and-r-where-to-find-these-files" class="nav-link" data-scroll-target="#step-3.-tell-windows-and-r-where-to-find-these-files"><span class="header-section-number">1.4</span> Step 3. Tell Windows and R where to find these files</a></li>
-  <li><a href="#step-4.-verify-the-configuration" id="toc-step-4.-verify-the-configuration" class="nav-link" data-scroll-target="#step-4.-verify-the-configuration"><span class="header-section-number">1.5</span> Step 4. Verify the configuration</a></li>
-  <li><a href="#step-5.-optional-cleanup" id="toc-step-5.-optional-cleanup" class="nav-link" data-scroll-target="#step-5.-optional-cleanup"><span class="header-section-number">1.6</span> Step 5. Optional cleanup</a></li>
+  <li><a href="#why-this-step-matters" id="toc-why-this-step-matters" class="nav-link active" data-scroll-target="#why-this-step-matters"><span class="header-section-number">13.1</span> Why this step matters</a></li>
+  <li><a href="#how-to-request-access" id="toc-how-to-request-access" class="nav-link" data-scroll-target="#how-to-request-access"><span class="header-section-number">13.2</span> How to request access</a></li>
+  <li><a href="#what-to-do-while-you-wait" id="toc-what-to-do-while-you-wait" class="nav-link" data-scroll-target="#what-to-do-while-you-wait"><span class="header-section-number">13.3</span> What to do while you wait</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./setupR.html">R Setup and efficiency</a></li><li class="breadcrumb-item"><a href="./setupR.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./mAI_factory_API_setup_prerequisities.html">mAI Factory API Desktop Setup</a></li><li class="breadcrumb-item"><a href="./mAI_factory_setup_access_request.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">ITSAI Platform On-Boarding Request</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Setting Up R, RStudio, and Positron to Use the Same Configuration Files</span></h1>
-<p class="subtitle lead">A unified and robust configuration setup for consistent R behavior across IDEs</p>
+<h1 class="title"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">ITSAI Platform On-Boarding Request</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>PIP Technical Team </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">November 3, 2025</p>
-    </div>
-  </div>
   
     
   </div>
@@ -371,89 +314,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="intro" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="intro"><span class="header-section-number">1.1</span> Intro</h2>
-<p>When working with R, <strong>your environment files</strong> (<code>.Renviron</code> and <code>.Rprofile</code>) control how R behaves on startup—what packages it loads, what paths it uses, and how it connects to external resources (like CRAN mirrors or proxies).<br>
-However, depending on which IDE you use (RStudio, Positron, VS Code, or command-line R), these files might not always point to the same location.</p>
-<p>A clean, unified setup ensures: - Reproducible environments across IDEs.<br>
-- Consistent library paths (<code>.libPaths()</code> output).<br>
-- Fewer surprises when running automated scripts, R Markdown documents, or package builds.<br>
-- Fewer “it works on my RStudio but not on Positron” headaches.</p>
-<p>This guide describes the <strong>recommended setup</strong> for aligning your R environment across IDEs, including RStudio and Positron.</p>
-<hr>
-</section>
-<section id="step-1.-choose-a-canonical-r-configuration-directory" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="step-1.-choose-a-canonical-r-configuration-directory"><span class="header-section-number">1.2</span> Step 1. Choose a canonical R configuration directory</h2>
-<p>Decide on a single folder that will store your personal R configuration files.<br>
-We recommend creating a dedicated folder at the root of your working directory, for example:</p>
-<pre><code>C:\WBG\R
-</code></pre>
-<p>Inside that folder, you’ll have:</p>
-<pre><code>C:\WBG\R.Renviron
-C:\WBG\R.Rprofile</code></pre>
-<hr>
-</section>
-<section id="step-2.-create-or-update-your-configuration-files" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="step-2.-create-or-update-your-configuration-files"><span class="header-section-number">1.3</span> Step 2. Create (or update) your configuration files</h2>
-<section id="renviron" class="level3" data-number="1.3.1">
-<h3 data-number="1.3.1" class="anchored" data-anchor-id="renviron"><span class="header-section-number">1.3.1</span> <code>.Renviron</code></h3>
-<p>Create a text file named <code>.Renviron</code> at <code>C:\WBG\R\.Renviron</code> and add your preferred settings:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># C:/WBG/R/.Renviron</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">R_LIBS</span><span class="op">=</span>C:/WBG/R/r-packages/%v</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="va">R_USER</span><span class="op">=</span>C:/WBG/R</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="va">R_LIBS_USER</span><span class="op">=</span>C:/WBG/R/r-packages/%v</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="va">RENV_PATHS_LIBRARY_ROOT</span><span class="op">=</span>C:/WBG/R/r-packages/.renv/library</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="va">LANG</span><span class="op">=</span>en_US.UTF-8</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="va">TZ</span><span class="op">=</span>UTC</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="va">RENVIRON_LOADED_FROM</span><span class="op">=</span>C:/WBG/R/.Renviron</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This file defines <strong>environment variables</strong> that R reads at startup — for example, custom library locations, locale settings, or proxy credentials.</p>
-</section>
-<section id="rprofile" class="level3" data-number="1.3.2">
-<h3 data-number="1.3.2" class="anchored" data-anchor-id="rprofile"><span class="header-section-number">1.3.2</span> <code>.Rprofile</code></h3>
-<p>Create a text file named <code>.Rprofile</code> at <code>C:\WBG\R\.Rprofile</code> and add the R code that should run automatically at startup:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># C:/WBG/R/.Rprofile</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">local</span>({</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  r <span class="ot">&lt;-</span> <span class="fu">getOption</span>(<span class="st">"repos"</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  r[<span class="st">"CRAN"</span>] <span class="ot">&lt;-</span> <span class="st">"https://cran.rstudio.com/"</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">options</span>(<span class="at">repos =</span> r)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: print which file was loaded (for debugging)</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"[.Rprofile loaded from: %s]</span><span class="sc">\n</span><span class="st">"</span>, <span class="fu">normalizePath</span>(<span class="fu">sys.frame</span>(<span class="dv">1</span>)<span class="sc">$</span>ofile, <span class="at">mustWork =</span> <span class="cn">FALSE</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<hr>
-</section>
-</section>
-<section id="step-3.-tell-windows-and-r-where-to-find-these-files" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="step-3.-tell-windows-and-r-where-to-find-these-files"><span class="header-section-number">1.4</span> Step 3. Tell Windows and R where to find these files</h2>
-<p>The most reliable method is to set <strong>persistent user environment variables</strong> using <code>setx</code>, which works even in secure or constrained PowerShell environments (like corporate devices).</p>
-<p>Open <strong>PowerShell</strong> or <strong>Command Prompt</strong> or <strong>Terminal in Vscode</strong> (no admin rights needed) and run:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bat code-with-copy"><code class="sourceCode dosbat"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>setx R_ENVIRON_USER <span class="st">"C:\WBG\R\.Renviron"</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>setx R_PROFILE_USER <span class="st">"C:\WBG\R\.Rprofile"</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>setx HOME <span class="st">"C:\WBG\R"</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>setx R_USER <span class="st">"C:\WBG\R"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>These commands instruct R to always look for <code>.Renviron</code> and <code>.Rprofile</code> in that directory, no matter which IDE you open.</p>
-<p>Then <strong>close and reopen</strong> RStudio, Positron, or any terminal using R.</p>
-<hr>
-</section>
-<section id="step-4.-verify-the-configuration" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="step-4.-verify-the-configuration"><span class="header-section-number">1.5</span> Step 4. Verify the configuration</h2>
-<p>After restarting R (in any IDE), run the following to confirm the setup:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">path.expand</span>(<span class="st">"~"</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">normalizePath</span>(<span class="st">"~/.Renviron"</span>, <span class="at">mustWork =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">normalizePath</span>(<span class="st">"~/.Rprofile"</span>, <span class="at">mustWork =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.getenv</span>(<span class="fu">c</span>(<span class="st">"R_ENVIRON_USER"</span>, <span class="st">"R_PROFILE_USER"</span>, <span class="st">"R_LIBS_USER"</span>, <span class="st">"LANG"</span>, <span class="st">"TZ"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Expected results:</p>
+<p>Before you can call any model through mAI Factory, you first need access to the <strong>ITSAI platform</strong>. This is the identity and access layer that issues the credentials — an API token and a base URL — required to authenticate every request the pipeline makes. Without completing this step, none of the later configuration (environment variables, client setup, test calls) will work, so treat this as the mandatory starting point.</p>
+<section id="why-this-step-matters" class="level2" data-number="13.1">
+<h2 data-number="13.1" class="anchored" data-anchor-id="why-this-step-matters"><span class="header-section-number">13.1</span> Why this step matters</h2>
 <ul>
-<li><code>~</code> resolves to <code>C:/WBG/R</code></li>
-<li><code>.Renviron</code> and <code>.Rprofile</code> point to the same files in that folder</li>
-<li>Your environment variables (<code>R_LIBS_USER</code>, etc.) are correctly loaded</li>
+<li>The ITSAI platform manages who is allowed to consume internal AI models.</li>
+<li>Access is granted per-user, so each team member running this pipeline needs their own on-boarding request.</li>
+<li>The token you receive is tied to your account and should be treated like a password — never commit it to source control or share it over chat/email.</li>
 </ul>
-<hr>
 </section>
-<section id="step-5.-optional-cleanup" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="step-5.-optional-cleanup"><span class="header-section-number">1.6</span> Step 5. Optional cleanup</h2>
-<p>If you previously had <code>.Rprofile</code> files in other locations (like your <code>Documents</code> or <code>OneDrive</code> folder), remove or rename them by adding a <code>.bak</code> at the end (e.g., <code>.Rprofile.bak</code>). R automatically runs the <strong>first <code>.Rprofile</code></strong> it finds, so duplicate files can cause confusion or run twice.</p>
-<p>By following this setup, your R environment becomes predictable, portable, and IDE-agnostic — a professional-grade configuration for serious R development.</p>
+<section id="how-to-request-access" class="level2" data-number="13.2">
+<h2 data-number="13.2" class="anchored" data-anchor-id="how-to-request-access"><span class="header-section-number">13.2</span> How to request access</h2>
+<p><strong>If you are a World Bank staff member:</strong></p>
+<ol type="1">
+<li>Open the onboarding request form: <a href="https://worldbankgroup.service-now.com/wbg/en/itsai-platform-on-boarding-request?id=wbg_sc_catalog&amp;sys_id=7715cc6d93ac96d0a2f6fd647aba1042">mAI Factory Onboarding Request</a>.</li>
+<li>On the form, go to the <strong>Access</strong> field and select <strong>Access to mAI Factory</strong> from the drop-down.</li>
+<li>Under <strong>Accessibility</strong>, select <strong>Desktop</strong> from the drop-down.</li>
+</ol>
+<p><img src="images/dropdown.png" class="img-fluid"></p>
+<ol start="4" type="1">
+<li>Fill in the <strong>Purpose</strong> field based on the project you’re working on (e.g., “Access needed to integrate internal LLMs into the <code>survey-scribe</code> extraction pipeline”).</li>
+<li>Submit the request and wait for approval. Processing is handled through the standard ServiceNow ticket workflow, so approval time can vary.</li>
+<li>Once approved, move on to <a href="./mAI_factory_environment_setup.html">Environment Setup and Configuration</a>.</li>
+</ol>
+<p><strong>If you are an IFC user:</strong></p>
+<p>Do <strong>not</strong> use the standard ServiceNow form above — it is not configured for IFC accounts. Instead, email <a href="mailto:itsai_platform_admin@worldbankgroup.org">itsai_platform_admin@worldbankgroup.org</a> directly to request the IFC-specific onboarding form.</p>
+</section>
+<section id="what-to-do-while-you-wait" class="level2" data-number="13.3">
+<h2 data-number="13.3" class="anchored" data-anchor-id="what-to-do-while-you-wait"><span class="header-section-number">13.3</span> What to do while you wait</h2>
+<p>Approval isn’t instant, so while your request is pending you can:</p>
+<ul>
+<li>Read ahead to <a href="./mAI_factory_environment_setup.html">Environment Setup and Configuration</a> to understand what you’ll do with the token once it arrives.</li>
+<li>Confirm you have a working Python/Windows environment set up (see the <a href="./mAI_factory_API_setup_prerequisities.html">Prerequisites</a>) so you’re ready to configure credentials as soon as access is granted.</li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>Tip:</strong> Keep the ticket number from your request handy — you may need it if you have to follow up on a delayed approval.</p>
+</blockquote>
 
 
 </section>
@@ -861,13 +757,13 @@ C:\WBG\R.Rprofile</code></pre>
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./index.html" class="pagination-link" aria-label="Preface">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
+      <a href="./mAI_factory_API_setup_prerequisities.html" class="pagination-link" aria-label="mAI Factory Setup">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">mAI Factory Setup</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./rprofile.html" class="pagination-link" aria-label="How to set up .Rprofile properly">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">How to set up .Rprofile properly</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./mAI_factory_environment_setup.html" class="pagination-link" aria-label="Environment Setup and Configuration">
+        <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Environment Setup and Configuration</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

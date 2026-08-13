@@ -24,7 +24,7 @@
     "href": "index.html#scope",
     "title": "Pip Technical Guidelines",
     "section": "Scope",
-    "text": "Scope\nThis book focuses on technical infrastructure and development practices, not statistical methodologies or economic theory. You’ll find guidance on:\n\nSetting up R, RStudio, and Positron with unified configurations\nConfiguring VS Code for Stata development with automated workflows\nIntegrating Git and GitHub into daily work with proper authentication and branching strategies\nImplementing GitHub Actions for continuous integration and automated deployment\nUsing GitHub Copilot responsibly and effectively, with mandatory protocols for code quality\nOptimizing performance on World Bank laptops and virtual machines\nManaging code coverage, testing frameworks, and documentation standards",
+    "text": "Scope\nThis book focuses on technical infrastructure and development practices, not statistical methodologies or economic theory. You’ll find guidance on:\n\nSetting up R, RStudio, and Positron with unified configurations\nConfiguring VS Code for Stata development with automated workflows\nIntegrating Git and GitHub into daily work with proper authentication and branching strategies\nImplementing GitHub Actions for continuous integration and automated deployment\nUsing GitHub Copilot responsibly and effectively, with mandatory protocols for code quality\nSetting up secure access to mAI Factory APIs, from prerequisites and ITSAI onboarding through local Python environment configuration\nOptimizing performance on World Bank laptops and virtual machines\nManaging code coverage, testing frameworks, and documentation standards",
     "crumbs": [
       "Preface"
     ]
@@ -34,7 +34,7 @@
     "href": "index.html#audience",
     "title": "Pip Technical Guidelines",
     "section": "Audience",
-    "text": "Audience\nThis guide is written for PIP team members; data scientists, economists, and developers working with R, Stata, and related tools. While many sections assume familiarity with programming concepts, we provide step-by-step instructions designed to work in the World Bank’s computing environment.",
+    "text": "Audience\nThis guide is written for PIP team members, including data scientists, economists, and developers working with R, Stata, AI-assisted development tools, and mAI Factory APIs. It supports both colleagues configuring their core development environment and those requesting access to and setting up the mAI Factory API on a World Bank desktop. While many sections assume familiarity with programming concepts, we provide step-by-step instructions designed to work in the World Bank’s computing environment.",
     "crumbs": [
       "Preface"
     ]
@@ -894,6 +894,83 @@
     "crumbs": [
       "MISC Tools and Tips",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>How to interact with the Virtual Machine (VM) that hosts PIP</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_API_setup_prerequisities.html",
+    "href": "mAI_factory_API_setup_prerequisities.html",
+    "title": "12  mAI Factory Setup",
+    "section": "",
+    "text": "12.1 Prerequisites\nBefore starting the setup steps in this guide, make sure the following are in place. These instructions assume you are using VS Code on Windows.",
+    "crumbs": [
+      "mAI Factory API Desktop Setup",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>mAI Factory Setup</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_API_setup_prerequisities.html#prerequisites",
+    "href": "mAI_factory_API_setup_prerequisities.html#prerequisites",
+    "title": "12  mAI Factory Setup",
+    "section": "",
+    "text": "12.1.1 Python 3.12\nInstall Python, or update your existing installation, to a version up to and including 3.12. You can download the latest compatible installer from the official Python website and verify your version with:\npython --version\n\n\n12.1.2 Connected to the World Bank GlobalProtect VPN\nYou must be connected to the World Bank GlobalProtect VPN, on the US East gateway.\n\nIf you are in the DC office and connected to the bluemarlin WiFi network, you do not need to worry about which region the gateway is on — as long as the GlobalProtect client shows the connection status as “Connected”, you’re good to go.\nIf you are outside the DC office (or not on bluemarlin), connect to GlobalProtect and select the US East gateway explicitly.\n\n\n\n\nGlobalProtect showing a connected status\n\n\n\n\n12.1.3 Install uv\nuv is used to manage the Python environment and dependencies for this project. To install it on Windows:\n\nVisit the UV releases page.\nDownload the latest uv-x86_64-pc-windows-msvc.zip file.\nCreate a bin folder in your home directory:\nC:\\Users\\&lt;wbupi&gt;\\bin\nExtract the contents of the zip file and move them into the bin folder you just created.\nConfigure VS Code so its integrated terminal can find uv on PATH. Open the VS Code settings (JSON) file — Ctrl+Shift+P → Preferences: Open User Settings (JSON) — and add the following:\n{\n  \"terminal.integrated.env.windows\": {\n    \"PATH\": \"${env:PATH};C://Users//wbupi//bin\"\n  }\n}\n\n\n\n\nWhere to add the PATH configuration in VS Code settings.json\n\n\nReplace wbupi with your own Windows username, then restart any open terminals in VS Code for the change to take effect.",
+    "crumbs": [
+      "mAI Factory API Desktop Setup",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>mAI Factory Setup</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_setup_access_request.html",
+    "href": "mAI_factory_setup_access_request.html",
+    "title": "13  ITSAI Platform On-Boarding Request",
+    "section": "",
+    "text": "13.1 Why this step matters\nBefore you can call any model through mAI Factory, you first need access to the ITSAI platform. This is the identity and access layer that issues the credentials — an API token and a base URL — required to authenticate every request the pipeline makes. Without completing this step, none of the later configuration (environment variables, client setup, test calls) will work, so treat this as the mandatory starting point.",
+    "crumbs": [
+      "mAI Factory API Desktop Setup",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>ITSAI Platform On-Boarding Request</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_setup_access_request.html#why-this-step-matters",
+    "href": "mAI_factory_setup_access_request.html#why-this-step-matters",
+    "title": "13  ITSAI Platform On-Boarding Request",
+    "section": "",
+    "text": "The ITSAI platform manages who is allowed to consume internal AI models.\nAccess is granted per-user, so each team member running this pipeline needs their own on-boarding request.\nThe token you receive is tied to your account and should be treated like a password — never commit it to source control or share it over chat/email.",
+    "crumbs": [
+      "mAI Factory API Desktop Setup",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>ITSAI Platform On-Boarding Request</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_setup_access_request.html#how-to-request-access",
+    "href": "mAI_factory_setup_access_request.html#how-to-request-access",
+    "title": "13  ITSAI Platform On-Boarding Request",
+    "section": "13.2 How to request access",
+    "text": "13.2 How to request access\nIf you are a World Bank staff member:\n\nOpen the onboarding request form: mAI Factory Onboarding Request.\nOn the form, go to the Access field and select Access to mAI Factory from the drop-down.\nUnder Accessibility, select Desktop from the drop-down.\n\n\n\nFill in the Purpose field based on the project you’re working on (e.g., “Access needed to integrate internal LLMs into the survey-scribe extraction pipeline”).\nSubmit the request and wait for approval. Processing is handled through the standard ServiceNow ticket workflow, so approval time can vary.\nOnce approved, move on to Environment Setup and Configuration.\n\nIf you are an IFC user:\nDo not use the standard ServiceNow form above — it is not configured for IFC accounts. Instead, email itsai_platform_admin@worldbankgroup.org directly to request the IFC-specific onboarding form.",
+    "crumbs": [
+      "mAI Factory API Desktop Setup",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>ITSAI Platform On-Boarding Request</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_setup_access_request.html#what-to-do-while-you-wait",
+    "href": "mAI_factory_setup_access_request.html#what-to-do-while-you-wait",
+    "title": "13  ITSAI Platform On-Boarding Request",
+    "section": "13.3 What to do while you wait",
+    "text": "13.3 What to do while you wait\nApproval isn’t instant, so while your request is pending you can:\n\nRead ahead to Environment Setup and Configuration to understand what you’ll do with the token once it arrives.\nConfirm you have a working Python/Windows environment set up (see the Prerequisites) so you’re ready to configure credentials as soon as access is granted.\n\n\nTip: Keep the ticket number from your request handy — you may need it if you have to follow up on a delayed approval.",
+    "crumbs": [
+      "mAI Factory API Desktop Setup",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>ITSAI Platform On-Boarding Request</span>"
+    ]
+  },
+  {
+    "objectID": "mAI_factory_environment_setup.html",
+    "href": "mAI_factory_environment_setup.html",
+    "title": "14  Environment Setup and Configuration",
+    "section": "",
+    "text": "Once your ITSAI on-boarding request has been approved and uv is set up on your machine, it’s time to generate the access token that lets you authenticate against mAI Factory.\n\n14.0.1 Access the Artifactory Login Page\n\nNavigate to JFrog Artifactory Login.\nSelect “OpenID OAuth” to log in.\n\n\nTroubleshooting: HTTP 400 Bad Request\nIf the OpenID OAuth login returns an HTTP 400 Bad Request error:\n\nConfirm that GlobalProtect is connected to the correct VPN gateway. Unless you are in the DC office and connected to the bluemarlin WiFi network, use the US East gateway.\nConfirm that your ITSAI platform onboarding request has been approved. Access may not work while the request is still pending.\nClear your browser’s temporary files and cookies, close the browser, and try signing in again.\nIf the error persists after completing these checks, contact ITS for assistance and include the error message and your onboarding request or ticket number.\n\n\n\n\n14.0.2 Generate Your Access Token\n\nNavigate to the itsai-platform repository.\nClick “Set Me Up”, locate the Client drop-down, and change the selection from Poetry to Pip.\nYou may see the message “You do not have deploy permissions to this repository.” You can safely ignore it because deploy permissions are not required to generate a token or install the package.\nGenerate a new token using “Get token & Generate Instructions”.\n\n\n\n14.0.3 Configure the Artifactory Index URL\n\nCopy your-username and your-access-token from your JFrog setup.\nIn your-username, replace spaces with %20. Example: John Doe → john%20doe.\nIn your project IDE, create a .env file and add the URL from the JFrog setup as UV_INDEX:\n\nUV_INDEX=\"https://your-username:your-access-token@artifactory.worldbank.org/artifactory/api/pypi/itsdt-pypi-virtual/simple\"\n\n\n14.0.4 Install the itsai-platform Package\nOpen a terminal in your project directory and run the following commands:\nuv init # if there is no pyproject.toml file in the current directory\nuv sync\n# With pip (using uv's pip wrapper):\nuv pip install --extra-index-url https://your-username:your-access-token@artifactory.worldbank.org/artifactory/api/pypi/itsdt-pypi-virtual/simple \"itsai-platform\"\n\n\n14.0.5 Verify Desktop Authentication (WAM)\nThis is the natural next step after installing itsai-platform. Once this runs successfully, you are onboarded and authenticated, and ready to use mAI Factory APIs.\nBefore running the authentication script, make sure your Python virtual environment is activated. In your Windows terminal, run:\nvenv\\Scripts\\activate\n# desktop_auth.py\nfrom itsai.platform.authentication import DesktopToken\n\ntoken_provider = DesktopToken()\naccess_token = token_provider.get_token(env=\"DEV\")  # \"DEV\", \"QA\", \"PROD\"\nprint(\"Authentication successful!\")\n\n\n14.0.6 Test an mAI Factory API Call\nAfter the authentication test prints Authentication successful!, run this small end-to-end request to confirm that your account can call a model through mAI Factory:\n# test_maifactory.py\nfrom itsai.platform.authentication import DesktopToken\nfrom openai import AzureOpenAI\n\ntoken_provider = DesktopToken()\n\nclient = AzureOpenAI(\n    azure_endpoint=\"https://azapimdev.worldbank.org/conversationalai/v2/\",\n    api_version=\"2025-04-01-preview\",\n    azure_ad_token_provider=lambda: token_provider.get_token(env=\"DEV_DESKTOP\"),\n)\n\nresponse = client.chat.completions.create(\n    model=\"gpt-4.1-mini\",\n    messages=[\n        {\n            \"role\": \"user\",\n            \"content\": \"Reply with exactly: mAI Factory API call successful\",\n        }\n    ],\n    max_tokens=20,\n)\n\nprint(response.choices[0].message.content)\nIf the request succeeds, the response should be:\nmAI Factory API call successful\nThis confirms both desktop authentication and model access. If authentication succeeds in step 5 but this request fails, record the HTTP status code and error message when contacting the ITSAI platform team; never include the access token.",
+    "crumbs": [
+      "mAI Factory API Desktop Setup",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Environment Setup and Configuration</span>"
     ]
   }
 ]
