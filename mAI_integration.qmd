@@ -1,0 +1,187 @@
+---
+title: "Calling Azure OpenAI Inside the World Bank Network: mAI Factory Integration in R"
+author: "Ronak Shah"
+date: "2026-06-09"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    highlight-style: github
+---
+
+## Introduction
+
+**Standard OpenAI API calls are not permitted from inside the World Bank's network.** Instead, the Bank provides an internal gateway called the **mAI Factory** — an Azure API Management (APIM) layer that proxies Azure OpenAI deployments, enforces access controls, and adds required audit headers.
+
+This article documents the integration pattern so World Bank developers can use mAI Factory in their own R/Shiny projects. The two key steps are:
+
+1. Acquiring an Azure AD Bearer token via Posit Connect's OAuth integration
+2. Structuring HTTP requests for the mAI Factory endpoint
+
+---
+
+## What is World Bank mAI Factory?
+
+The mAI Factory exposes Azure OpenAI deployments (including `gpt-4o-mini`, `gpt-4o`, etc.) behind Azure API Management. Developers never call OpenAI's public endpoints; instead they call internal APIM endpoints, authenticated with an Azure AD Bearer token.
+
+Three environments are available:
+
+```r
+API_BASE_URLS <- list(
+  DEV  = "https://<azapim-dev-host>/conversationalai/v2/openai/deployments",
+  QA   = "https://<azapim-qa-host>/conversationalai/v2/openai/deployments",
+  PROD = "https://<azapim-prod-host>/conversationalai/v2/openai/deployments"
+)
+```
+
+The URL structure mirrors the [Azure OpenAI REST API](https://learn.microsoft.com/en-us/azure/ai-services/openai/reference):
+
+```
+{base_url}/{model}/chat/completions?api-version={version}
+```
+
+So a call to `gpt-4o-mini` on DEV resolves to:
+
+```
+https://<azapim-dev-host>/conversationalai/v2/openai/deployments/gpt-4o-mini/chat/completions?api-version=2025-01-01-preview
+```
+
+Any code already targeting the Azure OpenAI API can be pointed at the mAI Factory with minimal changes — you only swap the base URL and switch from an `api-key` header to a Bearer token.
+
+---
+
+## Authentication: Azure AD via Posit Connect OAuth
+
+This is the part that trips most developers up. You cannot interactively log in to Azure AD from a headless Shiny app. The solution is to delegate credential acquisition to **Posit Connect**, which maintains an OAuth integration with the World Bank's Azure AD tenant.
+
+### How it works
+
+When an app is deployed on the internal Posit Connect server, Connect can exchange credentials on behalf of the running content. The `connectapi` package exposes this via `get_oauth_content_credentials()`, which takes an `audience` argument — the GUID of the registered OAuth integration for mAI.
+
+```r
+get_azure_token <- function() {
+  connect_server  <- "https://datanalytics-int.worldbank.org/"
+  connect_api_key <- Sys.getenv('API_KEY') # Posit Connect API key set as env var
+
+  if (connect_server == "" || connect_api_key == "") {
+    stop("This app must run on Posit Connect. CONNECT_SERVER / CONNECT_API_KEY not set.")
+  }
+
+  # OAUTH_INTEGRATION_GUID: add the mAI OAuth integration on datanalytics-int.worldbank.org;
+  # the GUID is auto-generated and can be copied from there.
+  oauth_guid <- Sys.getenv("OAUTH_INTEGRATION_GUID")
+
+  client      <- connectapi::connect(server = connect_server, api_key = connect_api_key)
+  credentials <- connectapi::get_oauth_content_credentials(
+    connect  = client,
+    audience = oauth_guid
+  )
+  credentials$access_token
+}
+```
+
+The returned `access_token` is a short-lived Azure AD Bearer token that can be used in the `Authorization` header of any mAI Factory request.
+
+### Reactive token in a Shiny app
+
+Because the token is tied to the user session, retrieve it once per session using a Shiny `reactive()`:
+
+```r
+azure_token <- shiny::reactive({
+  tryCatch(
+    get_azure_token(),
+    error = function(e) {
+      shiny::showNotification(paste("Token error:", e$message), type = "error")
+      NULL
+    }
+  )
+})
+```
+
+Any handler that calls the LLM simply calls `azure_token()`, and Shiny's reactivity ensures the retrieval runs at most once per session.
+
+### Prerequisites
+
+To use this pattern in your own app you need:
+
+- The app deployed on the internal Posit Connect instance (`datanalytics-int.worldbank.org`)
+- `API_KEY` set as a Posit Connect environment variable (the Connect API key, not an OpenAI key)
+- `OAUTH_INTEGRATION_GUID` set as a Posit Connect environment variable — add the mAI OAuth integration on `datanalytics-int.worldbank.org`; the GUID is auto-generated and can be copied from there
+
+---
+
+## Making the API Call
+
+With a valid token in hand, calling the mAI Factory looks nearly identical to a standard OpenAI chat completions call. The differences are the endpoint URL, the Bearer token in the `Authorization` header, and two extra audit headers (`x-source-type` and `x-team-name`) that mAI requires.
+
+```r
+API_VERSION     <- "2025-01-01-preview"
+REQUEST_TIMEOUT <- 120
+DEFAULT_MODEL   <- "gpt-4o-mini"
+
+openai_chat_response <- function(prompt, token, model = DEFAULT_MODEL) {
+  api_url <- paste0(API_BASE_URLS$DEV, "/", model, "/chat/completions")
+
+  headers <- c(
+    "Authorization" = paste("Bearer", token),
+    "x-source-type" = "interactive",
+    "x-team-name"   = "pip",
+    "Content-Type"  = "application/json"
+  )
+
+  payload <- list(
+    messages   = list(list(role = "user", content = prompt)),
+    max_tokens = 1000
+  )
+
+  response <- httr::POST(
+    url    = api_url,
+    query  = list(`api-version` = API_VERSION),
+    httr::add_headers(.headers = headers),
+    body   = payload,
+    encode = "json",
+    httr::timeout(REQUEST_TIMEOUT)
+  )
+
+  if (httr::http_status(response)$category != "Success") {
+    stop("mAI Factory API error: ", httr::status_code(response), " - ",
+         httr::content(response, "text", encoding = "UTF-8"))
+  }
+
+  parsed <- httr::content(response, "parsed", "application/json")
+  parsed$choices[[1]]$message$content
+}
+```
+
+A few design decisions worth noting:
+
+- **`x-team-name: pip`** — mAI uses this for usage attribution. Set it to your team's identifier.
+- **`x-source-type: interactive`** — signals that the call is user-driven, as opposed to a batch job.
+- **120-second timeout** — LLM responses can be slow, especially for longer prompts. The default `httr` timeout is too short.
+- **Response extraction** follows the standard Azure OpenAI JSON structure: `choices[[1]]$message$content`.
+
+---
+
+## Summary
+
+The full integration pattern looks like this:
+
+```{mermaid}
+flowchart LR
+    A[Shiny app<br/>on Posit Connect] -->|connectapi OAuth| B[Azure AD<br/>Bearer token]
+    B -->|Authorization: Bearer| C[mAI Factory APIM<br/><apim-host>]
+    C -->|Azure OpenAI API| D[GPT-4o-mini<br/>deployment]
+```
+
+To replicate this in your own R project:
+
+| Requirement | Detail |
+|---|---|
+| Posit Connect deployment | App must run on the internal Connect server (`datanalytics-int.worldbank.org`) |
+| `API_KEY` env var | Your Posit Connect API key, set in the app's environment variables on Connect |
+| `OAUTH_INTEGRATION_GUID` env var | Add the mAI OAuth integration on `datanalytics-int.worldbank.org`; the GUID is auto-generated and can be copied from there |
+| `x-team-name` header | Set to your team's identifier for usage attribution |
+| Environment choice | Start with DEV; graduate to QA/PROD when ready for production traffic |
+
+The `connectapi` and `httr` packages are the only non-standard dependencies for the integration itself.

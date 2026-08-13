@@ -30,6 +30,7 @@ book:
       chapters:
         - copilot_protocols.qmd
         - copilot_guidelines.qmd
+        - mAI_integration.qmd
     - part: "MISC Tools and Tips"
       chapters:
         - code_coverage.qmd
