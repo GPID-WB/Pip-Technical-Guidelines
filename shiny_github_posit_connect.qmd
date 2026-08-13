@@ -1,0 +1,916 @@
+---
+title: "Building a Shiny App with GitHub and Posit Connect"
+author: "R.Andres Castenada"
+date: "2026-08-13"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: false
+    highlight-style: github
+---
+
+## Introduction
+
+This chapter describes a complete, reusable pattern for building **Shiny for R applications** that:
+
+- live in a **GitHub** repository,
+- authenticate users through **Posit Connect**, and
+- read and write repository data at runtime through a **GitHub App**.
+
+The pattern comes from the GMD Human Review Application, but the instructions are written so you can adapt them to any similar project. Whenever you see an example name, swap it for the values that match your own application, repository, GitHub App, branch, and Posit Connect content item.
+
+---
+
+## The Important Distinction
+
+There are **three separate connections** in this architecture. They are related, but configuring one does **not** automatically configure the others.
+
+| Connection | Purpose | Authentication | Configured where |
+|---|---|---|---|
+| Developer to GitHub | Commit and review application source | Git credentials or SSH | Developer machine |
+| Posit Connect to GitHub | Fetch source code for Git-backed deployment | Connect Git credentials or OAuth integration | Connect administrator settings |
+| Running Shiny app to GitHub | Read and write application data at runtime | GitHub App installation token | Connect content secrets and app code |
+
+The third connection — the running Shiny app to GitHub — is the one that lets your app read and write data while it is serving users. It uses a **GitHub App installation token**, not a personal access token.
+
+### A note on deployment methods
+
+The pattern described here was initially deployed as a **manual bundle** with `rsconnect::deployApp()`. A `git push` to GitHub did **not** update that running bundle. The application became current only after a new bundle was uploaded to the existing Connect content item.
+
+**Git-backed content** is a separate deployment option. When it is enabled and configured, Connect fetches the repository itself and can deploy changes after new commits. However, it does **not** replace the runtime GitHub App if the Shiny process must access GitHub while serving users.
+
+---
+
+## Target Architecture
+
+The reusable architecture has these components:
+
+1. **A GitHub repository** stores the application source, configuration, tests, and application data (or references to it).
+2. **A Shiny for R application** provides the browser interface.
+3. **Posit Connect** authenticates users, controls content access, hosts the app, stores deployment configuration, and supplies runtime secrets.
+4. **A GitHub App** supplies a non-personal service identity for the running app.
+5. **GitHub branch protection and repository permissions** constrain what the app can change.
+
+### Recommended branch pattern
+
+For a review workflow, we recommend the following branch model:
+
+| Branch | Purpose | App behavior |
+|---|---|---|
+| `main` | Source drafts and application code | Read-only source context |
+| `review` or `review/<name>` | Review records and approved outputs | App writes here |
+
+For other applications, use names that match your data lifecycle. The important idea is that **source content** and **application-generated output** have an explicit ownership and protection model.
+
+---
+
+## Responsibilities
+
+Successful deployment normally requires three kinds of authority:
+
+| Responsibility | Typical owner |
+|---|---|
+| Create and install the GitHub App | GitHub or organization administrator |
+| Configure Connect integrations, Git credentials, and content access | Posit Connect administrator |
+| Develop, test, and deploy the application bundle | Application maintainer with Connect publisher access |
+
+::: {.callout-warning}
+Never put GitHub private keys or Connect API keys in the repository. A maintainer can deploy code without being given the GitHub App private key. The key belongs in **Connect secret storage** and is consumed by the application at runtime.
+:::
+
+---
+
+## Create the Shiny Application
+
+### Choose the application structure
+
+For a small prototype, a single `app.R` file may be enough. For a maintained application, we recommend using an **R package structure**, preferably with **Golem** conventions.
+
+Here is the structure used by the GMD review application:
+
+```text
+review-app/
+├── app.R                       # Posit Connect entry point
+├── DESCRIPTION                 # R package metadata and dependencies
+├── NAMESPACE                   # Generated package namespace
+├── R/
+│   ├── app_ui.R                # Top-level UI
+│   ├── app_server.R            # Top-level server wiring
+│   ├── run.R                   # run_app() entry point
+│   ├── mod_dashboard.R         # Dashboard module
+│   ├── mod_detail.R            # Detail/editor module
+│   ├── github_adapter.R        # Runtime GitHub API adapter
+│   ├── github_auth.R           # GitHub App JWT and token exchange
+│   ├── identity.R              # Connect identity resolution
+│   ├── authorization.R         # Role checks
+│   ├── state_machine.R         # Domain state transitions
+│   └── recovery.R              # Safe multi-step write recovery
+├── inst/
+│   ├── golem-config.yml        # Golem profiles
+│   └── app/www/                # CSS and JavaScript assets
+├── config/
+│   └── roles.yml               # Repository-managed application roles
+├── tests/testthat/             # Unit and integration tests
+├── renv.lock                   # Reproducible dependency versions
+├── manifest.json               # Required for Git-backed content
+└── .Rbuildignore               # Package/build exclusions
+```
+
+Your exact modules will differ across applications. Keep the same **separation of concerns**:
+
+- **UI files** compose pages and controls.
+- **Server files** wire modules and reactive state.
+- **Adapter files** isolate external APIs from business logic.
+- **Authentication files** handle credentials and token lifetime.
+- **Authorization files** decide what the authenticated user may do.
+- **Domain files** implement state transitions without depending on Shiny.
+- **Recovery files** make external writes observable and safe to retry.
+
+### Create a Golem project
+
+For a brand-new project, create the package from a parent directory. Do not create a new project inside an existing application directory unless that is intentional.
+
+```r
+golem::create_golem("my-review-app")
+```
+
+Useful Golem setup operations include:
+
+```r
+usethis::use_golem_config()
+golem::add_module("dashboard")
+golem::add_module("detail")
+golem::add_css_file("custom")
+golem::use_dev_routine()
+```
+
+If an existing R package already contains the application, it can be adapted to Golem conventions instead of recreated. The GMD application retained its existing package and documented the applied setup in `review-app/dev/01_start.R`.
+
+### Use a Connect-safe entry point
+
+The entry point must return the Shiny application object. A Golem-style package application can use:
+
+```r
+# app.R
+options("golem.app.prod" = TRUE)
+
+pkgload::load_all(".")
+run_app()
+```
+
+This pattern is important when the application package is project-local. Posit Connect installs packages recorded in the deployment environment; it does **not** automatically install the local package from the source bundle. `pkgload::load_all(".")` loads the bundled package source instead.
+
+::: {.callout-important}
+If `app.R` uses `pkgload::load_all()`, then `pkgload` must be listed in `DESCRIPTION` **and** in `renv.lock`. The bundle must include at least:
+
+- `app.R`
+- `DESCRIPTION`
+- `NAMESPACE`
+- the complete `R/` directory
+- the complete `inst/` directory
+- any runtime configuration such as `config/roles.yml`
+- the dependency lockfile or generated deployment manifest
+
+An incomplete bundle can produce errors such as `there is no package called 'reviewapp'`, missing configuration files, or missing functions at startup.
+:::
+
+### Keep runtime configuration separate from code
+
+Use repository files for non-secret, reviewable configuration:
+
+- Branch names and repository paths can be Connect environment variables or deployment configuration.
+- Role maps can be versioned in the repository.
+- User-specific or deployment-specific overrides can be supplied by an environment variable such as `REVIEW_APP_ROLES`.
+- **Private keys and API keys must not be repository files.**
+
+The application should **fail loudly** when required configuration is missing. Do not silently start with an empty queue or an unauthenticated write path.
+
+### Implement Connect user authentication
+
+Connect authentication should be the only user login layer unless there is a specific security requirement for another identity provider.
+
+In a Shiny session, Connect exposes the authenticated user through `session$user`. Resolve that exact value against a role map:
+
+```yaml
+roles:
+  - identity: reviewer-username
+    role: reviewer
+  - identity: approver-username
+    role: approver
+  - identity: administrator-username
+    role: administrator
+```
+
+Before deploying, confirm whether `session$user` contains usernames, email addresses, or another identifier in the target Connect configuration. The role map must contain the **exact returned strings**.
+
+Keep these controls separate:
+
+- **Connect content access** controls who can open the app.
+- **The repository role map** controls what an authenticated user can do inside it.
+- An authenticated user absent from the role map must receive **no application role**, never a default role.
+- A local-only override such as `REVIEW_APP_USER` must be unset in production.
+
+### Add an external-service adapter
+
+Do not call GitHub directly throughout UI modules. Define a small adapter with operations such as:
+
+```text
+fetch source index
+fetch artifact
+fetch review record
+create or update review record
+write approved artifact
+read branch head
+```
+
+The UI should depend on the adapter interface, not on HTTP URLs, JWT details, or Git tree mechanics. Tests can then inject an in-memory GitHub double without network access.
+
+For a write workflow, make the logical operation explicit. A safe sequence is:
+
+1. Read the current branch head and the blobs being edited.
+2. Reject the operation if the remote state has changed since the user loaded it.
+3. Create blobs for changed files.
+4. Create one Git tree.
+5. Create one Git commit.
+6. Move the branch reference without force-pushing.
+7. Report the commit SHA and completed steps.
+
+::: {.callout-warning}
+If any step fails, the UI must **not** claim that the logical transition succeeded. This is especially important when a GitHub API request fails after a commit was created but before the branch reference moves.
+:::
+
+### Manage dependencies with `renv`
+
+From the application directory:
+
+```r
+renv::init()
+renv::restore()
+```
+
+After changing `DESCRIPTION` or adding a dependency:
+
+```r
+renv::snapshot()
+```
+
+Commit `renv.lock`. On another development machine or on Connect, restore from the lockfile rather than relying on whatever happens to be installed globally.
+
+::: {.callout-tip}
+Record the R version used to generate the lockfile and compare it with the R runtime available on Connect. A version mismatch may be supported, but matching versions reduce deployment surprises.
+:::
+
+### Test before deployment
+
+Run the unit and integration suite from the application directory:
+
+```bash
+Rscript -e 'pkgload::load_all("."); testthat::test_dir("tests/testthat")'
+```
+
+For the GMD review application, the integration test exercises the lifecycle against an in-memory GitHub double and does not require a Connect server or network access.
+
+Run a local offline boot when the application supports it:
+
+```bash
+REVIEW_APP_OFFLINE=1 REVIEW_APP_USER=reviewer-username \
+  Rscript -e 'pkgload::load_all("."); reviewapp::run_app()'
+```
+
+Use local offline mode to test UI and domain behavior. It does **not** prove that Connect can read the secrets or that the GitHub App can exchange a token.
+
+---
+
+## Configure the GitHub Repository
+
+### Create and initialize branches
+
+Create the source and output branches before deploying the application:
+
+```bash
+git clone https://github.com/<owner>/<repository>.git
+cd <repository>
+git checkout -b review
+git push -u origin review
+git checkout main
+```
+
+For an existing repository, create the output branch from the current source branch tip so the files the app expects are present.
+
+The branch names must match the application configuration. In the GMD pattern, the application reads drafts from `main` and writes review records and approved artifacts to `review`.
+
+### Create a GitHub App
+
+Create the app under the GitHub organization or account that owns the target repository:
+
+1. Open **Settings > Developer settings > GitHub Apps > New GitHub App**.
+2. Set the name and homepage URL.
+3. Disable the webhook unless the application needs webhooks.
+4. Grant only the repository permissions required by the application.
+5. Install the app on the target repository.
+6. Generate a private key and store the downloaded `.pem` securely.
+
+For the review application, the minimum practical repository permissions are:
+
+- **Contents: Read and write** — because the app creates Git objects and moves the review branch reference.
+- **Metadata: Read**.
+
+If your application only reads repository content, use **Contents: Read** and do not grant write access.
+
+### Record the three different GitHub identifiers
+
+GitHub exposes several identifiers. **Do not substitute one for another.**
+
+| Value | Meaning | Typical form | Used by |
+|---|---|---|---|
+| App ID | Numeric identifier of the GitHub App | Numeric, e.g. `123456` | JWT `iss` claim and direct app code |
+| Client ID | OAuth-style identifier of the GitHub App | Usually starts with `Iv` | Posit Connect native GitHub App integration |
+| Installation ID | Installation of the App on an account/repository | Numeric | Installation token exchange |
+| Private key | PEM contents generated by GitHub | `-----BEGIN ... PRIVATE KEY-----` | JWT signing |
+
+::: {.callout-important}
+The numeric App ID and the `Iv...` Client ID are **not interchangeable**. The current direct runtime implementation uses the numeric App ID. The native Posit Connect GitHub App integration documentation asks for the Client ID.
+:::
+
+### Install and scope the App
+
+Install the GitHub App on the **smallest possible repository set**. If GitHub offers the choice, select only the target repository rather than all repositories in the organization.
+
+Configure branch protection on the output branch:
+
+- Block force-pushes.
+- Block branch deletion.
+- Require the appropriate administrator or status checks if the workflow needs them.
+- Allow the GitHub App installation to perform the intended write operation.
+- Prevent ordinary users from bypassing the review application.
+
+Test a non-administrator direct push and confirm that branch protection rejects it. The application should use `force = FALSE` when updating a branch reference.
+
+---
+
+## Configure Runtime GitHub Authentication
+
+### Use Connect secrets for the runtime app
+
+The direct runtime pattern uses these variables:
+
+| Variable | Value |
+|---|---|
+| `REVIEW_APP_GH_OWNER` | GitHub owner or organization |
+| `REVIEW_APP_GH_REPO` | GitHub repository name |
+| `REVIEW_APP_GH_DEFAULT_BRANCH` | Source branch, normally `main` |
+| `REVIEW_APP_GH_REVIEW_BRANCH` | Protected output branch |
+| `GITHUB_APP_ID` | Numeric GitHub App ID |
+| `GITHUB_APP_INSTALLATION_ID` | Installation ID for the target repository |
+| `GITHUB_APP_PRIVATE_KEY` | Complete PEM private-key contents |
+
+::: {.callout-warning}
+Use the **exact names** expected by the deployed code. A previous draft of the GMD operator guide used `REVIEW_APP_GH_APP_ID`, `REVIEW_APP_GH_PRIVATE_KEY`, and `REVIEW_APP_GH_INSTALLATION_ID`, but the adapter reads the `GITHUB_APP_*` names. Naming drift is a common deployment failure.
+:::
+
+Set the variables in the Connect content item's environment-variable or secret configuration. Store `GITHUB_APP_PRIVATE_KEY` as a Connect secret or through the configured Vault integration. Do not expose its value in ordinary environment-variable displays, logs, screenshots, or documentation.
+
+### Store the PEM correctly
+
+`GITHUB_APP_PRIVATE_KEY` must contain the **complete contents** of the generated `.pem` file, including both boundary lines:
+
+```text
+-----BEGIN PRIVATE KEY-----
+base64-content...
+-----END PRIVATE KEY-----
+```
+
+Do **not** store any of the following as the private-key value:
+
+- The filename, such as `private-key.pem`
+- A filesystem path
+- The numeric App ID
+- The `Iv...` Client ID
+- A GitHub personal access token
+- A base64 encoding of the entire PEM file
+- A PEM with the `BEGIN` or `END` line removed
+
+Some secret-entry fields collapse newlines or preserve them as the literal two characters `\` and `n`. A robust application should normalize CRLF/CR line endings, escaped newlines, and a single-line PEM before passing it to the key parser. It must **never** log the key while diagnosing this problem.
+
+The GMD implementation normalizes the value in `R/github_auth.R`, signs the JWT with `openssl`, and tests normal PEM, single-line PEM, escaped-newline PEM, and invalid-key cases in `tests/testthat/test-github-auth.R`.
+
+### Understand the token flow
+
+The application does **not** use reviewer personal access tokens. At runtime it:
+
+1. Reads the App ID, installation ID, and private key from Connect.
+2. Signs a short-lived RS256 JWT with the numeric App ID as `iss`.
+3. Sends the JWT to GitHub's installation token endpoint.
+4. Receives a short-lived installation access token.
+5. Uses that token for repository API calls.
+6. Refreshes the token before expiry.
+
+The implementation should enforce these safeguards:
+
+- Integer JWT timestamps.
+- An expiration no more than the GitHub App JWT limit.
+- Bounded HTTP timeouts.
+- Bounded retries only for transient HTTP responses.
+- Useful GitHub error messages without credential values.
+- A per-session token cache.
+- No token or private key persistence in Connect storage.
+
+### Native Posit Connect GitHub App integration
+
+Posit Connect also has a native GitHub App integration under **System > Integrations**. Use this option when the application is designed to obtain GitHub credentials through Connect's OAuth Credentials API or when Connect features such as private-repository credential integration require it.
+
+The native integration uses fields similar to:
+
+```json
+{
+  "template": "github",
+  "config": {
+    "auth_type": "GitHub App",
+    "client_id": "<Iv-client-id>",
+    "installation_id": "<installation-id>",
+    "private_key": "<complete-pem-contents>"
+  }
+}
+```
+
+For GitHub Enterprise Server, also configure the GitHub host. Optionally scope the integration to specific repositories and permissions.
+
+::: {.callout-note}
+Creating this native integration does **not** automatically populate arbitrary environment variables such as `GITHUB_APP_PRIVATE_KEY` inside an existing Shiny application. The application must be written to request credentials from the Connect OAuth Credentials API. If the application instead reads direct environment variables, configure those variables as described above.
+:::
+
+---
+
+## Configure Posit Connect
+
+### Create deployment credentials
+
+The maintainer needs publisher access to the target Connect content item and a Connect API key for deployment tooling.
+
+In the Connect user interface, create a personal API key under the user's API keys settings. Store it in the local credential configuration used by `rsconnect`. Never commit it to the repository or put it in a shell script that will be shared.
+
+The local `rsconnect` profile normally records:
+
+- The Connect server URL
+- A server nickname such as `wbconnect`
+- The Connect account name
+- The API key in local credential storage
+
+Check the profile before deploying. If the server is intranet-only, run the deployment from a machine that can reach the Connect hostname. A GitHub-hosted runner cannot deploy to an intranet-only Connect server unless a suitable self-hosted runner is available inside the network.
+
+### Create the Connect content item
+
+For a new manual deployment, publish the application directory:
+
+```r
+rsconnect::deployApp(
+  appDir = ".",
+  appName = "my-review-app",
+  account = "<connect-account>",
+  server = "<connect-server>"
+)
+```
+
+Run this command from the application directory. For an existing content item, the local `rsconnect` deployment record can associate subsequent deployments with the same item. Confirm the content GUID and bundle ID in Connect after the upload.
+
+The current GMD deployment is recorded in:
+
+```text
+review-app/rsconnect/wbconnect/<account>/review-app.dcf
+```
+
+The bundle ID in that file is an audit reference. The Connect UI's current bundle is the authoritative runtime state.
+
+### Configure content access
+
+In Connect, restrict the content item to the intended group or users. This is the **outer access boundary**. It is not a replacement for application roles.
+
+After deployment, verify both layers:
+
+1. An intended user can open the content item.
+2. The same user's exact `session$user` identity resolves to the intended app role.
+
+### Configure environment variables and restart
+
+Set the runtime repository and GitHub App variables on the Connect content item. After changing a secret or environment variable, **restart or redeploy** the content so new Shiny processes receive it. A browser refresh alone does not necessarily restart the server process.
+
+::: {.callout-warning}
+Production must **not** set local development overrides such as:
+
+```text
+REVIEW_APP_OFFLINE=1
+REVIEW_APP_USER=some-user
+```
+
+If `REVIEW_APP_OFFLINE=1` remains set, the app may intentionally skip GitHub and show an empty or local test state.
+:::
+
+### Verify the deployed bundle, not only the source branch
+
+When code changes, verify **all** of the following:
+
+- The commit exists on the intended GitHub branch.
+- A new Connect bundle was created.
+- The new bundle is the current bundle for the content item.
+- The app process restarted from that bundle.
+- The Connect logs show the new content GUID/bundle ID.
+- The browser session has been fully refreshed.
+
+An error from a function that no longer exists in the repository usually means that an old bundle or process is still running. Deploying a commit to GitHub is **not** proof that Connect is executing that commit.
+
+---
+
+## Optional: Use Git-Backed Content Deployment
+
+Git-backed content is the preferred deployment model when the Connect administrator has enabled it and the Connect server can reach the Git remote. It is **not** the same as the runtime GitHub API connection.
+
+### Prepare a manifest
+
+The directory deployed as content must contain a `manifest.json`. Generate it from the target content directory:
+
+```bash
+cd my-repository/my-review-app
+Rscript -e 'rsconnect::writeManifest()'
+```
+
+For an R Shiny directory containing a single `app.R`, the manifest can normally be inferred. If the directory contains multiple possible entry points, specify the primary document or content category as appropriate.
+
+Inspect the generated file, then commit and push it:
+
+```bash
+git add manifest.json
+git commit -m "Add Connect deployment manifest"
+git push origin main
+```
+
+::: {.callout-tip}
+The manifest belongs in the directory that will be selected as the Connect target directory. Do not generate it only at the repository root if the app is under a subdirectory.
+:::
+
+### Configure private repository access
+
+In Connect, repository URLs should use HTTPS and must not include credentials. For a private GitHub repository, the Connect administrator must configure the appropriate Git credential settings for the GitHub host:
+
+- Git credential host
+- Username
+- Password/token or OAuth integration
+- Any required repository scope
+
+Connect supports one credential set per host, although different hosts can use different credentials. SSH repository authentication is not supported by the Git-backed content workflow described here.
+
+The Connect server must also have:
+
+- Network access to the remote repository
+- A supported Git executable installed in the deployment environment
+- Permission to fetch the selected branch
+
+### Link the repository in Connect
+
+From the Connect content page:
+
+1. Select **Publish > Import from Git**.
+2. Enter the HTTPS repository URL without authorization information.
+3. Select the branch, normally `main`.
+4. Select the target directory containing `manifest.json`.
+5. Set the content title and deploy.
+
+For a repository containing several apps, each app must have its own directory and its own `manifest.json`. Connect creates a separate content item for each selected target directory.
+
+### Update Git-backed content
+
+After changing code:
+
+1. Regenerate the manifest if dependencies or deployment metadata changed.
+2. Commit the code and manifest.
+3. Push to the configured branch.
+4. Wait for Connect's polling interval or select **Settings > Current Bundle > Update Now**.
+
+Automatic polling is commonly configured at 15 minutes, but the administrator may change it. The Git Details section in Connect shows the remote, branch, path, and update behavior.
+
+::: {.callout-important}
+Git-backed content **cannot** be updated using a different publishing mechanism. Do not alternate between Git-backed updates and `rsconnect::deployApp()` for the same content item unless the Connect administrator explicitly changes the content configuration.
+:::
+
+### Git-backed limitations
+
+Before choosing this model, confirm that the application does **not** depend on:
+
+- Git LFS files
+- Git submodules
+- Symbolic links
+- A repository URL that requires SSH
+- A Connect server without Git or remote-network access
+
+Connect obtains the content from the selected target directory and requires the manifest there. It does not use the manifest as a file allowlist when archiving the Git directory.
+
+### Current GMD deployment lesson
+
+The GMD Connect server is intranet-only. A normal GitHub-hosted Actions runner cannot reach it for direct deployment. The practical choices are:
+
+- Use a manual `rsconnect` deployment from a machine inside the intranet.
+- Use a self-hosted runner inside the intranet.
+- Ask the Connect administrator to enable and configure Git-backed content so Connect pulls from GitHub itself.
+
+The last option requires administrator configuration and is not achieved by adding `manifest.json` alone.
+
+---
+
+## Deployment Workflow for Future Applications
+
+### One-time project setup
+
+1. Create the GitHub repository and branch model.
+2. Create the Shiny/Golem project.
+3. Add `DESCRIPTION`, `NAMESPACE`, `R/`, `app.R`, `inst/`, tests, and `renv.lock`.
+4. Add a local offline mode and an injectable external-service adapter.
+5. Create the GitHub App and install it on the target repository.
+6. Protect the application output branch.
+7. Create the Connect content item or obtain administrator approval for Git-backed content.
+8. Configure Connect content access and the runtime secrets.
+9. Generate and commit `manifest.json` if Git-backed deployment will be used.
+
+### Every code change
+
+1. Pull the current target branch.
+2. Make the smallest correct code change.
+3. Run unit and integration tests.
+4. Run a local offline boot if the UI or startup path changed.
+5. Inspect `git diff` and confirm no secret or generated private file is present.
+6. Commit and push the source change.
+7. Deploy a new bundle manually, or use Git-backed **Update Now**.
+8. Verify the current Connect bundle ID.
+9. Open a fresh browser session and run a smoke test.
+
+### Every dependency change
+
+1. Update `DESCRIPTION`.
+2. Install or restore the dependency locally.
+3. Run `renv::snapshot()`.
+4. Regenerate `manifest.json` for Git-backed content.
+5. Run the complete test suite.
+6. Deploy and inspect server-side package installation logs.
+
+### Credential rotation
+
+1. Generate a replacement GitHub App private key.
+2. Store it securely and verify the App and installation identifiers.
+3. Replace `GITHUB_APP_PRIVATE_KEY` in Connect secret storage.
+4. Restart or redeploy the content.
+5. Test queue loading and one safe API operation.
+6. Revoke the old key according to the GitHub App's key-management behavior.
+7. Review GitHub and Connect logs for unexpected use.
+
+::: {.callout-warning}
+If a private key may have been exposed, rotate it **immediately** and audit recent repository history and branch activity.
+:::
+
+---
+
+## Verification Checklist
+
+### Local checks
+
+- [ ] `renv::restore()` completes.
+- [ ] `pkgload::load_all(".")` completes.
+- [ ] The offline app boots.
+- [ ] Unit tests pass.
+- [ ] The integration test passes without network access.
+- [ ] The app contains no hard-coded secret or personal access token.
+- [ ] The configured role map has valid identities and roles.
+- [ ] `manifest.json` exists in the Git-backed target directory.
+
+### GitHub checks
+
+- [ ] The GitHub App is installed on the intended repository.
+- [ ] The numeric App ID is recorded separately from the `Iv...` Client ID.
+- [ ] The installation ID belongs to the target repository installation.
+- [ ] The App has the minimum required repository permissions.
+- [ ] The output branch exists and is protected.
+- [ ] Force-push and deletion are blocked where required.
+- [ ] Direct writes by ordinary users are rejected.
+
+### Connect checks
+
+- [ ] The Connect server is reachable from the deployment machine or has Git remote access for Git-backed deployment.
+- [ ] The content item is private and has the intended access group.
+- [ ] The deployed bundle includes `app.R`, `DESCRIPTION`, `NAMESPACE`, `R/`, `inst/`, and runtime configuration.
+- [ ] The exact runtime environment variable names are configured.
+- [ ] The private key is stored as a secret and contains the full PEM.
+- [ ] Local-only variables are unset in production.
+- [ ] The current bundle ID is newer than the previous deployment.
+- [ ] The Connect logs show a successful application launch.
+
+### Application checks
+
+- [ ] A mapped reviewer can load the queue.
+- [ ] An artifact opens with the expected read-only and editable fields.
+- [ ] A reviewer can perform the intended reviewer action.
+- [ ] An approver can perform the intended approval or revision action.
+- [ ] An administrator-only action is denied to other roles.
+- [ ] A write creates the expected GitHub commit on the protected output branch.
+- [ ] An unmapped Connect identity receives no write permissions.
+- [ ] A stale write is rejected rather than silently overwriting another change.
+
+---
+
+## Troubleshooting
+
+### `failed to parse GitHub App private key`
+
+Likely causes:
+
+- The secret contains a filename or path rather than PEM contents.
+- The `BEGIN` or `END` boundary is missing.
+- Connect collapsed newlines and the application does not normalize them.
+- The value is a base64 encoding of the whole file.
+- The key belongs to a different GitHub App.
+- The running bundle still contains an older parser.
+
+Fix sequence:
+
+1. Confirm the secret contains the complete PEM without displaying it in logs.
+2. Confirm that the code accepts the representation used by the Connect secret field.
+3. Deploy a new bundle containing the parser fix.
+4. Verify the new bundle is current in Connect.
+5. Restart the content and retry.
+
+::: {.callout-warning}
+Do **not** add diagnostics that print the first characters or any portion of the private key. Even a partial key can be sensitive.
+:::
+
+### `could not find function "gregmanager"` or another removed function
+
+This means the running Connect process is using an old bundle. Search the current repository first:
+
+```bash
+git grep -n "gregmanager"
+```
+
+If the function is absent locally, do not change the secret. Upload a new bundle to the existing content item, confirm its bundle ID, restart the content, and open a fresh browser session.
+
+This exact failure occurred when a temporary diagnostic commit had been deployed and a later code fix had only been pushed to GitHub, not yet uploaded to the manual Connect content item.
+
+### `review app adapter not configured`
+
+One or more required variables are absent or empty. Verify the exact names:
+
+```text
+REVIEW_APP_GH_OWNER
+REVIEW_APP_GH_REPO
+REVIEW_APP_GH_DEFAULT_BRANCH
+REVIEW_APP_GH_REVIEW_BRANCH
+GITHUB_APP_ID
+GITHUB_APP_INSTALLATION_ID
+GITHUB_APP_PRIVATE_KEY
+```
+
+Do not assume `REVIEW_APP_GH_APP_ID` or another similarly named variable is read by the code.
+
+### `401 Bad credentials` or JWT authentication errors
+
+Check:
+
+- Numeric App ID versus `Iv...` Client ID.
+- Integer JWT timestamps.
+- The private key matches the GitHub App.
+- The installation ID is current.
+- The App is installed on the target repository.
+- The Connect host can reach the GitHub API.
+- The server clock is reasonably synchronized.
+
+### `403` or write failures
+
+Check:
+
+- Contents permission is sufficient.
+- The App installation has access to the repository.
+- The output branch protection allows the intended App operation.
+- The application is writing the configured branch.
+- The token is not expired.
+- The branch was not moved by another writer after the artifact was loaded.
+
+### `404 Not Found`
+
+Check the owner, repository, branch, and path. A GitHub App can authenticate successfully and still receive `404` when its installation does not have access to a private repository.
+
+### The app boots but shows no role or no action buttons
+
+Confirm that:
+
+- Connect authentication is enabled.
+- `session$user` returns the field used in `config/roles.yml`.
+- The identity matches exactly, including case and domain where applicable.
+- The role value is one of the supported roles.
+- The role map was included in the current bundle.
+
+### Git push succeeds but the live app is unchanged
+
+This is expected for manual bundle deployment. `git push` updates GitHub only. Run `rsconnect::deployApp()` from a machine that can reach Connect, or configure Git-backed content and use **Update Now**.
+
+### Connect's Deploy button appears to do nothing
+
+For manual content, the UI may re-run the existing bundle rather than upload your local working tree. A new source commit is not automatically present in that bundle. Upload a new bundle with deployment tooling.
+
+For Git-backed content, use the Git Details panel and **Update Now**. Confirm that the content item actually says it is from Git and displays the expected remote, branch, and path.
+
+### Git-backed import cannot find the app
+
+Check:
+
+- `manifest.json` is committed and pushed.
+- It is in the selected target directory.
+- The repository URL uses HTTPS and contains no credentials.
+- Connect has Git credentials for the host.
+- Connect can reach the Git server.
+- The selected branch contains the manifest.
+- The target directory is not hidden behind a submodule or symlink.
+
+### The bundle fails because of missing package files
+
+Inspect the bundle file list. A Golem-style source-loaded application requires `DESCRIPTION`, `NAMESPACE`, `R/`, and `inst/`. If the app reads a repository configuration file such as `config/roles.yml`, include that directory too.
+
+Do not assume package build exclusions and Connect publishing exclusions behave identically; verify the actual uploaded bundle.
+
+### R and `renv.lock` versions differ
+
+Compare the R runtime named in the lockfile with the R version available on Connect. Restore or regenerate the lockfile with a supported R version, or confirm that the dependency set is compatible with the Connect runtime. Treat warnings about lockfile generation versions as deployment risks, not as proof that the application is healthy.
+
+---
+
+## Security Rules
+
+1. **Never** commit GitHub App private keys, Connect API keys, personal access tokens, or copied secret values.
+2. Store runtime secrets in Connect secret storage or the approved Vault path.
+3. Use a GitHub App installation token instead of a reviewer's personal token.
+4. Grant the minimum repository and organization permissions.
+5. Install the GitHub App only on repositories it needs.
+6. Protect output branches against force-push and deletion.
+7. Do **not** log private keys, JWTs, installation tokens, or environment-variable values.
+8. Keep local identity overrides disabled in production.
+9. Use bounded HTTP timeouts and retries so a GitHub outage does not exhaust a Connect Shiny process.
+10. Rotate credentials immediately after suspected exposure.
+11. Treat the repository history and protected output branch as the durable application ledger when Connect storage is disposable.
+
+---
+
+## Reference Files
+
+The working implementation can be used as a concrete example:
+
+| Topic | File |
+|---|---|
+| Shiny entry point | `review-app/app.R` |
+| Package metadata | `review-app/DESCRIPTION` |
+| UI composition | `review-app/R/app_ui.R` |
+| Server wiring | `review-app/R/app_server.R` |
+| GitHub adapter factory | `review-app/R/github_adapter.R` |
+| GitHub App authentication | `review-app/R/github_auth.R` |
+| Connect identity | `review-app/R/identity.R` |
+| Role and authorization logic | `review-app/R/authorization.R` and `review-app/config/roles.yml` |
+| Safe Git writes | `review-app/R/recovery.R` |
+| Dependency lockfile | `review-app/renv.lock` |
+| Git-backed manifest | `review-app/manifest.json` |
+| Connect operator runbook | `review-app/docs/operator-guide.md` |
+| Deployment helper notes | `review-app/dev/03_deploy.R` |
+| Connect deployment record | `review-app/rsconnect/wbconnect/<account>/review-app.dcf` |
+| GitHub authentication tests | `review-app/tests/testthat/test-github-auth.R` |
+| Full integration test | `review-app/tests/testthat/test-integration.R` |
+
+---
+
+## Official Documentation
+
+- [Posit Connect Git-backed content](https://datanalytics-int.worldbank.org/__docs__/user/git-backed/)
+- [Posit Connect GitHub App integration](https://datanalytics-int.worldbank.org/__docs__/admin/integrations/oauth-integrations/github/#github-app-integration)
+- [Posit Connect API documentation](https://docs.posit.co/connect/api/)
+- [GitHub Apps documentation](https://docs.github.com/en/apps/creating-github-apps)
+- [GitHub App installation authentication](https://docs.github.com/en/apps/creating-github-apps/authenticating-with-a-github-app/authenticating-as-a-github-app-installation)
+
+::: {.callout-note}
+The Connect URLs above are internal documentation URLs for the World Bank Connect installation. The corresponding topics in the public Posit Connect administrator and user guides apply to other Connect installations, but server URLs, authentication policy, Git credentials, and available product features must be confirmed with the local Connect administrator.
+:::
+
+---
+
+## Final Reusable Checklist
+
+Before calling a new application production-ready, confirm:
+
+- [ ] The application has a clear source branch and output/data branch model.
+- [ ] The Shiny entry point boots from a clean checkout.
+- [ ] The deployment bundle contains every source and runtime configuration file.
+- [ ] Dependencies are captured in `renv.lock`.
+- [ ] Unit, integration, and offline boot tests pass.
+- [ ] The GitHub App is installed only where needed.
+- [ ] The numeric App ID, Client ID, installation ID, and private key are recorded separately.
+- [ ] The private key is stored only in Connect secret storage.
+- [ ] Runtime variable names match the code exactly.
+- [ ] The output branch is protected.
+- [ ] Connect content access is limited to intended users.
+- [ ] Connect identity values match the role map exactly.
+- [ ] The deployment model is documented as manual or Git-backed.
+- [ ] If Git-backed, `manifest.json`, HTTPS credentials, Git availability, and server network access have all been verified.
+- [ ] The current Connect bundle ID has been recorded after deployment.
+- [ ] A fresh browser smoke test verifies both read and write behavior.
+- [ ] The rollback and credential-rotation procedures are known to the operator.
