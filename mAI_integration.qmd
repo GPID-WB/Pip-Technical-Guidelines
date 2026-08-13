@@ -14,7 +14,9 @@ format:
 
 **Standard OpenAI API calls are not permitted from inside the World Bank's network.** Instead, the Bank provides an internal gateway called the **mAI Factory** — an Azure API Management (APIM) layer that proxies Azure OpenAI deployments, enforces access controls, and adds required audit headers.
 
-This article documents the integration pattern so World Bank developers can use mAI Factory in their own R/Shiny projects. The two key steps are:
+This article documents the integration pattern for calling mAI Factory from **R/Shiny apps deployed on Posit Connect**. If you need to call mAI Factory from a **local Python script** instead, see the [Desktop Setup guide](mAI_factory_API_setup_prerequisities.qmd).
+
+The two key steps for the R/Shiny pattern are:
 
 1. Acquiring an Azure AD Bearer token via Posit Connect's OAuth integration
 2. Structuring HTTP requests for the mAI Factory endpoint
@@ -23,15 +25,15 @@ This article documents the integration pattern so World Bank developers can use 
 
 ## What is World Bank mAI Factory?
 
-The mAI Factory exposes Azure OpenAI deployments (including `gpt-4o-mini`, `gpt-4o`, etc.) behind Azure API Management. Developers never call OpenAI's public endpoints; instead they call internal APIM endpoints, authenticated with an Azure AD Bearer token.
+The mAI Factory exposes Azure OpenAI deployments (including `gpt-4o-mini`, `gpt-4o`, `gpt-4.1-mini`, etc.) behind Azure API Management. Developers never call OpenAI's public endpoints; instead they call internal APIM endpoints, authenticated with an Azure AD Bearer token.
 
 Three environments are available:
 
 ```r
 API_BASE_URLS <- list(
-  DEV  = "https://<azapim-dev-host>/conversationalai/v2/openai/deployments",
-  QA   = "https://<azapim-qa-host>/conversationalai/v2/openai/deployments",
-  PROD = "https://<azapim-prod-host>/conversationalai/v2/openai/deployments"
+  DEV  = "https://azapimdev.worldbank.org/conversationalai/v2/openai/deployments",
+  QA   = "https://azapimqa.worldbank.org/conversationalai/v2/openai/deployments",
+  PROD = "https://azapim.worldbank.org/conversationalai/v2/openai/deployments"
 )
 ```
 
@@ -41,13 +43,16 @@ The URL structure mirrors the [Azure OpenAI REST API](https://learn.microsoft.co
 {base_url}/{model}/chat/completions?api-version={version}
 ```
 
-So a call to `gpt-4o-mini` on DEV resolves to:
+So a call to `gpt-4.1-mini` on DEV resolves to:
 
 ```
-https://<azapim-dev-host>/conversationalai/v2/openai/deployments/gpt-4o-mini/chat/completions?api-version=2025-01-01-preview
+https://azapimdev.worldbank.org/conversationalai/v2/openai/deployments/gpt-4.1-mini/chat/completions?api-version=2025-04-01-preview
 ```
 
 Any code already targeting the Azure OpenAI API can be pointed at the mAI Factory with minimal changes — you only swap the base URL and switch from an `api-key` header to a Bearer token.
+
+> **Different authentication paths:**
+> The [Desktop Setup guide](mAI_factory_environment_setup.qmd) authenticates via the `itsai-platform` SDK's interactive browser login (`DesktopToken`). This chapter uses Posit Connect's OAuth integration instead, which is the right approach for headless Shiny apps that cannot open a browser.
 
 ---
 
@@ -109,6 +114,8 @@ To use this pattern in your own app you need:
 - `API_KEY` set as a Posit Connect environment variable (the Connect API key, not an OpenAI key)
 - `OAUTH_INTEGRATION_GUID` set as a Posit Connect environment variable — add the mAI OAuth integration on `datanalytics-int.worldbank.org`; the GUID is auto-generated and can be copied from there
 
+> **Note:** This authentication path does **not** require the ITSAI on-boarding request described in the [Desktop Setup guide](mAI_factory_setup_access_request.qmd). Posit Connect handles identity through its own OAuth integration.
+
 ---
 
 ## Making the API Call
@@ -116,9 +123,9 @@ To use this pattern in your own app you need:
 With a valid token in hand, calling the mAI Factory looks nearly identical to a standard OpenAI chat completions call. The differences are the endpoint URL, the Bearer token in the `Authorization` header, and two extra audit headers (`x-source-type` and `x-team-name`) that mAI requires.
 
 ```r
-API_VERSION     <- "2025-01-01-preview"
+API_VERSION     <- "2025-04-01-preview"
 REQUEST_TIMEOUT <- 120
-DEFAULT_MODEL   <- "gpt-4o-mini"
+DEFAULT_MODEL   <- "gpt-4.1-mini"
 
 openai_chat_response <- function(prompt, token, model = DEFAULT_MODEL) {
   api_url <- paste0(API_BASE_URLS$DEV, "/", model, "/chat/completions")
@@ -170,8 +177,8 @@ The full integration pattern looks like this:
 ```{mermaid}
 flowchart LR
     A[Shiny app<br/>on Posit Connect] -->|connectapi OAuth| B[Azure AD<br/>Bearer token]
-    B -->|Authorization: Bearer| C[mAI Factory APIM<br/><apim-host>]
-    C -->|Azure OpenAI API| D[GPT-4o-mini<br/>deployment]
+    B -->|Authorization: Bearer| C[mAI Factory APIM<br/>azapimdev.worldbank.org]
+    C -->|Azure OpenAI API| D[GPT-4.1-mini<br/>deployment]
 ```
 
 To replicate this in your own R project:
@@ -185,3 +192,11 @@ To replicate this in your own R project:
 | Environment choice | Start with DEV; graduate to QA/PROD when ready for production traffic |
 
 The `connectapi` and `httr` packages are the only non-standard dependencies for the integration itself.
+
+## Related chapters
+
+| Topic | Chapter |
+|---|---|
+| Install Python and `uv` | [Prerequisites](mAI_factory_API_setup_prerequisities.qmd) |
+| Request ITSAI platform access (Desktop) | [On-Boarding Request](mAI_factory_setup_access_request.qmd) |
+| Configure credentials and test a Python call | [Environment Setup](mAI_factory_environment_setup.qmd) |

@@ -1,6 +1,15 @@
+---
+title: "ITSAI Platform On-Boarding Request"
+author:
+  - Stephen Obundah Nwobike
+  - R.Andres Castaneda
+---
+
 # ITSAI Platform On-Boarding Request
 
 Before you can call any model through mAI Factory, you first need access to the **ITSAI platform**. This is the identity and access layer that issues the credentials — an API token and a base URL — required to authenticate every request the pipeline makes. Without completing this step, none of the later configuration (environment variables, client setup, test calls) will work, so treat this as the mandatory starting point.
+
+> **Already have access?** Skip ahead to [Environment Setup and Configuration](mAI_factory_environment_setup.qmd).
 
 ## Why this step matters
 
@@ -32,7 +41,14 @@ Do **not** use the standard ServiceNow form above — it is not configured for I
 Approval isn't instant, so while your request is pending you can:
 
 - Read ahead to [Environment Setup and Configuration](mAI_factory_environment_setup.qmd) to understand what you'll do with the token once it arrives.
-- Confirm you have a working Python/Windows environment set up (see the [Prerequisites](mAI_factory_API_setup_prerequisities.qmd)) so you're ready to configure credentials as soon as access is granted.
+- Confirm you have a working Python environment set up (see the [Prerequisites](mAI_factory_API_setup_prerequisities.qmd)) so you're ready to configure credentials as soon as access is granted.
 
 > **Tip:** Keep the ticket number from your request handy — you may need it if you have to follow up on a delayed approval.
 
+## Related chapters
+
+| Topic | Chapter |
+|---|---|
+| Install Python and `uv` | [Prerequisites](mAI_factory_API_setup_prerequisities.qmd) |
+| Configure credentials and test your first call | [Environment Setup and Configuration](mAI_factory_environment_setup.qmd) |
+| R/Shiny integration via Posit Connect (no ITSAI on-boarding needed) | [R/Shiny Integration](mAI_integration.qmd) |
