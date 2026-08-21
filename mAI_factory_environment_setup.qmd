@@ -1,11 +1,10 @@
 ---
 title: "Environment Setup and Configuration"
+abstract: "Once your [ITSAI on-boarding request](mAI_factory_setup_access_request.qmd) has been approved and [`uv` is installed](mAI_factory_API_setup_prerequisities.qmd), it's time to configure credentials and verify your first API call."
 author:
   - Stephen Obundah Nwobike
   - R.Andres Castaneda
 ---
-
-# Environment Setup and Configuration
 
 Once your [ITSAI on-boarding request](mAI_factory_setup_access_request.qmd) has been approved and [`uv` is installed](mAI_factory_API_setup_prerequisities.qmd), it's time to configure credentials and verify your first API call.
 
