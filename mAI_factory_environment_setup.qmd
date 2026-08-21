@@ -6,8 +6,6 @@ author:
   - R.Andres Castaneda
 ---
 
-Once your [ITSAI on-boarding request](mAI_factory_setup_access_request.qmd) has been approved and [`uv` is installed](mAI_factory_API_setup_prerequisities.qmd), it's time to configure credentials and verify your first API call.
-
 > **Reminder — two different credentials:**
 >
 > 1. **Artifactory identity token** — used only to download the `itsai-platform` SDK from the internal package repository.
