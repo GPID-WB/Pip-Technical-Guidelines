@@ -1,21 +1,10 @@
 ---
 title: "mAI Factory Desktop Setup — Prerequisites"
+abstract: "These instructions walk you through setting up a local instance (Desktop Access) of **mAI Factory**, which gives you access to the company's internal models — ranging from GPT-4o mini to Claude Sonnet 5. mAI Factory provides a single, secure gateway to a growing catalog of internal and third-party AI models, so teams can experiment and build without managing separate accounts, keys, or billing for each provider. Setting up a local instance lets you integrate these models directly into tools like `survey-scribe` for tasks such as document parsing, extraction, and classification. For more information on mAI Factory, visit: <https://ai.worldbankgroup.org/maifactory/>"
 author:
   - Stephen Obundah Nwobike
   - R.Andres Castaneda
 ---
-
-:::{.text-center}
-
-# mAI Factory Setup
-
-These instructions walk you through setting up a local instance (Desktop Access) of **mAI Factory**, which gives you access to the company's internal models — ranging from GPT-4o mini to Claude Sonnet 5.
-
-mAI Factory provides a single, secure gateway to a growing catalog of internal and third-party AI models, so teams can experiment and build without managing separate accounts, keys, or billing for each provider. Setting up a local instance lets you integrate these models directly into tools like `survey-scribe` for tasks such as document parsing, extraction, and classification.
-
-For more information on mAI Factory, visit: <https://ai.worldbankgroup.org/maifactory/>
-
-:::
 
 ## Overview
 
